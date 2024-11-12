@@ -1,0 +1,11 @@
+rootProject.name = 'bandit-backend'
+
+include 'application'
+include 'common'
+
+include 'chatbot'
+include 'gameLibrary'
+include 'gameplay'
+include 'player'
+include 'statistics'
+include 'storefront'

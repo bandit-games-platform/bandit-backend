@@ -1,0 +1,14 @@
+plugins {
+    id 'module-config'
+    id 'spring-conventions'
+}
+
+dependencies {
+    implementation project(":common")
+    implementation project(':chatbot')
+    implementation project(':gameLibrary')
+    implementation project(':gameplay')
+    implementation project(':player')
+    implementation project(':statistics')
+    implementation project(':storefront')
+}

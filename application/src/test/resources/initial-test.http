@@ -1,0 +1,17 @@
+### Call Chatbot context
+GET http://localhost:8090/api/hello/chatbot
+
+### Call Game Library context
+GET http://localhost:8090/api/hello/game-library
+
+### Call Gameplay context
+GET http://localhost:8090/api/hello/gameplay
+
+### Call Player context
+GET http://localhost:8090/api/hello/player
+
+### Call Statistics context
+GET http://localhost:8090/api/hello/statistics
+
+### Call Storefront context
+GET http://localhost:8090/api/hello/storefront
