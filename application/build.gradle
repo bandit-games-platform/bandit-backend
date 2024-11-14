@@ -6,7 +6,7 @@ plugins {
 dependencies {
     implementation project(":common")
     implementation project(':chatbot')
-    implementation project(':gameLibrary')
+    implementation project(':gameRegistry')
     implementation project(':gameplay')
     implementation project(':player')
     implementation project(':statistics')

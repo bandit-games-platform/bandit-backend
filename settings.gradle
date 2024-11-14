@@ -4,7 +4,7 @@ include 'application'
 include 'common'
 
 include 'chatbot'
-include 'gameLibrary'
+include 'gameRegistry'
 include 'gameplay'
 include 'player'
 include 'statistics'
