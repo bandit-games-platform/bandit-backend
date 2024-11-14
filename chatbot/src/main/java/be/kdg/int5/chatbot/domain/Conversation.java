@@ -1,4 +1,4 @@
-package be.kdg.int5.chatbot.adapters.domain;
+package be.kdg.int5.chatbot.domain;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

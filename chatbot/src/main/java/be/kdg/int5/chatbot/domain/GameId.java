@@ -1,4 +1,4 @@
-package be.kdg.int5.chatbot.adapters.domain;
+package be.kdg.int5.chatbot.domain;
 
 import java.util.Objects;
 import java.util.UUID;
