@@ -11,4 +11,8 @@ dependencies {
     implementation project(':player')
     implementation project(':statistics')
     implementation project(':storefront')
+
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
 }
