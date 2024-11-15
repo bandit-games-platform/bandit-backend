@@ -1,13 +1,12 @@
 package be.kdg.int5.player.domain;
 
 public enum Country {
-    USA("United States of America"),
     AFGHANISTAN("Afghanistan"),
     ALBANIA("Albania"),
     ALGERIA("Algeria"),
     ANDORRA("Andorra"),
     ANGOLA("Angola"),
-    ANTIGUA_DEPS("Antigua & Deps"),
+    ANTIGUA_AND_BARBUDA("Antigua & Barbuda"),
     ARGENTINA("Argentina"),
     ARMENIA("Armenia"),
     AUSTRALIA("Australia"),
@@ -38,7 +37,7 @@ public enum Country {
     CENTRAL_AFRICAN_REP("Central African Rep"),
     CHAD("Chad"),
     CHILE("Chile"),
-    CHINA("Republic of China"),
+    PEOPLE_REPUBLIC_OF_CHINA("People Republic of China"),
     REPUBLIC_OF_CHINA("Republic of China"),
     COLOMBIA("Colombia"),
     COMOROS("Comoros"),
@@ -78,7 +77,6 @@ public enum Country {
     GUINEA_BISSAU("Guinea-Bissau"),
     GUYANA("Guyana"),
     HAITI("Haiti"),
-    HOLY_ROMAN_EMPIRE("Holy Roman Empire"),
     HONDURAS("Honduras"),
     HUNGARY("Hungary"),
     ICELAND("Iceland"),
@@ -92,7 +90,6 @@ public enum Country {
     IVORY_COAST("Ivory Coast"),
     JAMAICA("Jamaica"),
     JAPAN("Japan"),
-    JONATHANLAND("Jonathanland"),
     JORDAN("Jordan"),
     KAZAKHSTAN("Kazakhstan"),
     KENYA("Kenya"),
@@ -128,12 +125,10 @@ public enum Country {
     MONGOLIA("Mongolia"),
     MONTENEGRO("Montenegro"),
     MOROCCO("Morocco"),
-    MOUNT_ATHOS("Mount Athos"),
     MOZAMBIQUE("Mozambique"),
     NAMIBIA("Namibia"),
     NAURU("Nauru"),
     NEPAL("Nepal"),
-    NEWFOUNDLAND("Newfoundland"),
     NETHERLANDS("Netherlands"),
     NEW_ZEALAND("New Zealand"),
     NICARAGUA("Nicaragua"),
@@ -141,7 +136,6 @@ public enum Country {
     NIGERIA("Nigeria"),
     NORWAY("Norway"),
     OMAN("Oman"),
-    OTTOMAN_EMPIRE("Ottoman Empire"),
     PAKISTAN("Pakistan"),
     PALAU("Palau"),
     PANAMA("Panama"),
@@ -154,7 +148,6 @@ public enum Country {
     PRUSSIA("Prussia"),
     QATAR("Qatar"),
     ROMANIA("Romania"),
-    ROME("Rome"),
     RUSSIAN_FEDERATION("Russian Federation"),
     RWANDA("Rwanda"),
     GRENADINES("Grenadines"),
@@ -194,6 +187,7 @@ public enum Country {
     UKRAINE("Ukraine"),
     UNITED_ARAB_EMIRATES("United Arab Emirates"),
     UNITED_KINGDOM("United Kingdom"),
+    USA("United States of America"),
     URUGUAY("Uruguay"),
     UZBEKISTAN("Uzbekistan"),
     VANUATU("Vanuatu"),
@@ -204,13 +198,13 @@ public enum Country {
     ZAMBIA("Zambia"),
     ZIMBABWE("Zimbabwe");
 
-    private String country;
+    private final String country;
 
     Country(String country) {
         this.country = country;
     }
 
-    public String getUrl() {
+    public String getCountry() {
         return country;
     }
 
