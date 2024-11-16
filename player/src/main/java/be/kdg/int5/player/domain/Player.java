@@ -9,7 +9,7 @@ public class Player {
     private final PlayerId id;
     private String displayName;
     private Gender gender;
-    private CountryName location;
+    private Country location;
     private LocalDate birthdate;
     private ImageResource avatar;
     private List<Player> friendsList;
