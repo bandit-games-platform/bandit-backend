@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface LoadGamesPort {
 
-    Optional<List<Game>> loadAllGames();
+    List<Game> loadAllGamesByTitleWithIcon(String title);
 }

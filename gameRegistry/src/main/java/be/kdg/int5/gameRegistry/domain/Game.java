@@ -2,6 +2,10 @@ package be.kdg.int5.gameRegistry.domain;
 
 import be.kdg.int5.common.domain.ImageResource;
 import be.kdg.int5.common.domain.ResourceURL;
+import be.kdg.int5.gameRegistry.adapters.out.db.achievement.AchievementJpaEntity;
+import be.kdg.int5.gameRegistry.adapters.out.db.game.GameScreenshotJpaEntity;
+import be.kdg.int5.gameRegistry.adapters.out.db.game.ImageResourceJpaEntity;
+import be.kdg.int5.gameRegistry.adapters.out.db.rule.RuleJpaEntity;
 
 import java.util.*;
 
@@ -17,6 +21,10 @@ public class Game {
     private List<ImageResource> screenshots;
     private Set<Achievement> achievements;
 
+    public Game( String title, String description, ImageResource icon, ImageResource background, Set<Rule> rules, ResourceURL currentHost, List<ImageResource> screenshots, Set<Achievement> achievements) {
+        this(new GameId(UUID.randomUUID()),title, description, icon, background, rules, currentHost, screenshots,achievements);
+    }
+
     public Game(GameId id, String title, String description, ImageResource icon, ImageResource background, Set<Rule> rules, ResourceURL currentHost, List<ImageResource> screenshots, Set<Achievement> achievements) {
         this.id = Objects.requireNonNull(id);
         this.title = Objects.requireNonNull(title);
@@ -29,6 +37,8 @@ public class Game {
         this.screenshots = Objects.requireNonNullElse(screenshots, new ArrayList<>());
         this.achievements = Objects.requireNonNullElse(achievements, new HashSet<>());
     }
+
+
 
 
     public GameId getId() {
