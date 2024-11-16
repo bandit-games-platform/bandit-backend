@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class AchievementProgress {
     private final AchievementId achievementId;
-    private final int counterValue;
+    private int counterValue;
 
     public AchievementProgress(final AchievementId achievementId, final int counterValue) {
         this.achievementId = achievementId;
@@ -17,6 +17,10 @@ public class AchievementProgress {
 
     public int getCounterValue() {
         return counterValue;
+    }
+
+    public void setCounterValue(int counterValue) {
+        this.counterValue = counterValue;
     }
 
     @Override
