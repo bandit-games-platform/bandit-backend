@@ -27,14 +27,14 @@ public class GameJpaEntity {
     private String currentHost;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "game")
-    private List<GameScreenshotJpaEntity> screenshots;
+    private Set<GameScreenshotJpaEntity> screenshots;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "game")
     private Set<AchievementJpaEntity> achievements;
 
     public GameJpaEntity() {
     }
 
-    public GameJpaEntity(UUID gameId, String title, String description, ImageResourceJpaEntity icon, ImageResourceJpaEntity background, Set<RuleJpaEntity> rules, String currentHost, List<GameScreenshotJpaEntity> screenshots, Set<AchievementJpaEntity> achievements) {
+    public GameJpaEntity(UUID gameId, String title, String description, ImageResourceJpaEntity icon, ImageResourceJpaEntity background, Set<RuleJpaEntity> rules, String currentHost, Set<GameScreenshotJpaEntity> screenshots, Set<AchievementJpaEntity> achievements) {
         this.gameId = gameId;
         this.title = title;
         this.description = description;
@@ -102,11 +102,11 @@ public class GameJpaEntity {
         this.currentHost = currentHost;
     }
 
-    public List<GameScreenshotJpaEntity> getScreenshots() {
+    public Set<GameScreenshotJpaEntity> getScreenshots() {
         return screenshots;
     }
 
-    public void setScreenshots(List<GameScreenshotJpaEntity> screenshots) {
+    public void setScreenshots(Set<GameScreenshotJpaEntity> screenshots) {
         this.screenshots = screenshots;
     }
 

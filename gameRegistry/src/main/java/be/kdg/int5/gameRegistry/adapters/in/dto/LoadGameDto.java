@@ -33,6 +33,10 @@ public class LoadGameDto {
                 ,Set.of());
     }
 
+    public LoadGameDto(UUID id, String title, String description, String background, List<String> screenshots) {
+        this(id, title, description, null, background, null, null, screenshots, null);
+    }
+
     public LoadGameDto(UUID id, String title, String description, String icon, String background, Set<LoadRuleDto> rules, String currentHost, List<String> screenshots, Set<LoadAchievementDto> achievements) {
         this.id = id;
         this.title = title;

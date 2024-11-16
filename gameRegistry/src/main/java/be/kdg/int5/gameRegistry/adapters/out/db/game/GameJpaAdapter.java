@@ -9,13 +9,15 @@ import be.kdg.int5.gameRegistry.port.out.LoadGamesPort;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
-@Component
+@Repository
 public class GameJpaAdapter implements LoadGamesPort {
     private static final Logger LOGGER = LoggerFactory.getLogger(GameJpaAdapter.class);
 
@@ -23,6 +25,16 @@ public class GameJpaAdapter implements LoadGamesPort {
 
     public GameJpaAdapter(GameJpaRepository gameJpaRepository) {
         this.gameJpaRepository = gameJpaRepository;
+    }
+
+    @Override
+    public Game loadGameByIdWithDetails(UUID gameId) {
+        GameJpaEntity gameJpaEntity = gameJpaRepository.findByIdWithAllRelationships(gameId);
+
+        if (gameJpaEntity == null) return null;
+        Game game = toGame(gameJpaEntity);
+        LOGGER.info("Loaded game: {}", game.getTitle());
+        return game;
     }
 
     @Override
