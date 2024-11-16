@@ -15,9 +15,11 @@ public class Player {
     private List<Player> friendsList;
 
     public Player(final PlayerId id, final String displayName) {
+        requireNonNull(id);
         requireNonNull(displayName);
 
         this.id = id;
         this.displayName = displayName;
     }
+
 }
