@@ -11,19 +11,14 @@ public class Achievement {
     private String description;
 
     public Achievement(AchievementId id, String title, int counterTotal, String description) {
-        Objects.requireNonNull(id);
+        this.id = Objects.requireNonNull(id);
+        this.title = Objects.requireNonNull(title);
+        this.counterTotal = counterTotal;
+        this.description = Objects.requireNonNull(description);
 
-        Objects.requireNonNull(title);
         assert !title.isEmpty() && title.length() < MAX_TITLE_LENGTH;
 
         assert counterTotal > 0;
-
-        Objects.requireNonNull(description);
-
-        this.id = id;
-        this.title = title;
-        this.counterTotal = counterTotal;
-        this.description = description;
     }
 
 
