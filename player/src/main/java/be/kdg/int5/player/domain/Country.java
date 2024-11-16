@@ -198,14 +198,13 @@ public enum Country {
     ZAMBIA("Zambia"),
     ZIMBABWE("Zimbabwe");
 
-    private final String country;
+    private final String countryName;
 
-    Country(String country) {
-        this.country = country;
+    Country(String countryName) {
+        this.countryName = countryName;
     }
 
-    public String getCountry() {
-        return country;
+    public String getCountryName() {
+        return countryName;
     }
-
 }

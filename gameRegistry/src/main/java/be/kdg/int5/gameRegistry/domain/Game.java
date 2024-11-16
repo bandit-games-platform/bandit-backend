@@ -7,12 +7,14 @@ import be.kdg.int5.gameRegistry.adapters.out.db.game.GameScreenshotJpaEntity;
 import be.kdg.int5.gameRegistry.adapters.out.db.game.ImageResourceJpaEntity;
 import be.kdg.int5.gameRegistry.adapters.out.db.rule.RuleJpaEntity;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 public class Game {
     private final GameId id;
     private final String title;
     private String description;
+    private BigDecimal currentPrice;
     private ImageResource icon;
     private ImageResource background;
     private final Set<Rule> rules;
@@ -22,13 +24,14 @@ public class Game {
     private Set<Achievement> achievements;
 
     public Game( String title, String description, ImageResource icon, ImageResource background, Set<Rule> rules, ResourceURL currentHost, List<ImageResource> screenshots, Set<Achievement> achievements) {
-        this(new GameId(UUID.randomUUID()),title, description, icon, background, rules, currentHost, screenshots,achievements);
+        this(new GameId(UUID.randomUUID()),title, description, null, icon, background, rules, currentHost, screenshots,achievements);
     }
 
-    public Game(GameId id, String title, String description, ImageResource icon, ImageResource background, Set<Rule> rules, ResourceURL currentHost, List<ImageResource> screenshots, Set<Achievement> achievements) {
+    public Game(GameId id, String title, String description, BigDecimal currentPrice, ImageResource icon, ImageResource background, Set<Rule> rules, ResourceURL currentHost, List<ImageResource> screenshots, Set<Achievement> achievements) {
         this.id = Objects.requireNonNull(id);
         this.title = Objects.requireNonNull(title);
         this.description = Objects.requireNonNull(description);
+        this.currentPrice = Objects.requireNonNullElse(currentPrice, BigDecimal.ZERO);
         this.icon = Objects.requireNonNull(icon);
         this.background = Objects.requireNonNull(background);
         this.rules = Objects.requireNonNull(rules);
@@ -55,6 +58,14 @@ public class Game {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public BigDecimal getCurrentPrice() {
+        return currentPrice;
+    }
+
+    public void setCurrentPrice(BigDecimal currentPrice) {
+        this.currentPrice = currentPrice;
     }
 
     public ImageResource getIcon() {
