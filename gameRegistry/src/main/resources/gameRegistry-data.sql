@@ -1,0 +1,12 @@
+SELECT *
+
+
+-- INSERT INTO warehouse_db.customer (customer_id,customer_type) VALUES
+--     (UNHEX(REPLACE('123e4567-e89b-12d3-a456-426614174000', '-', '')),'SELLER'),
+--     (UNHEX(REPLACE('123e4567-e89b-12d3-a456-426614174001', '-', '')),'SELLER'),
+--     (UNHEX(REPLACE('123e4567-e89b-12d3-a456-426614174002', '-', '')),'SELLER'),
+--     (UNHEX(REPLACE('333e4567-e89b-12d3-a456-426614174112', '-', '')),'SELLER'),
+--
+--     (UNHEX(REPLACE('999e4567-e89b-12d3-a456-426614174000', '-', '')),'BUYER'),
+--     (UNHEX(REPLACE('998e4567-e89b-12d3-a456-426614174001', '-', '')),'BUYER'),
+--     (UNHEX(REPLACE('997e4567-e89b-12d3-a456-426614174002', '-', '')),'BUYER');
