@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -44,8 +43,8 @@ public class GameJpaAdapter implements LoadGamesPort {
     }
 
     @Override
-    public List<Game> loadAllGamesByTitleWithIcon(String title) {
-        return gameJpaRepository.findAllByTitleWithIcon(title)
+    public List<Game> loadAllGamesByTitleLikeWithIcon(String title) {
+        return gameJpaRepository.findAllByTitleLikeWithIcon("%" + title + "%")
                 .stream()
                 .map(this::toGame)
                 .toList();

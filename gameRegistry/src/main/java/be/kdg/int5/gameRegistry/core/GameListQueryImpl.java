@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class GameListQueryImpl implements GameListQuery {
@@ -34,9 +33,9 @@ public class GameListQueryImpl implements GameListQuery {
     //TODO remove transactional
     @Transactional
     @Override
-    public List<Game> retrieveGamesByTitleWithIcon(String title) {
+    public List<Game> retrieveGamesByTitleLikeWithIcon(String title) {
 
         LOGGER.info("Retrieving all games...");
-        return loadGamesPort.loadAllGamesByTitleWithIcon(title);
+        return loadGamesPort.loadAllGamesByTitleLikeWithIcon(title);
     }
 }

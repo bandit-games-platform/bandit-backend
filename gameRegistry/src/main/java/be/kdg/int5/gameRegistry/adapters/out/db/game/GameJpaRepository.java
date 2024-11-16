@@ -38,8 +38,8 @@ public interface GameJpaRepository extends JpaRepository<GameJpaEntity, UUID> {
     @Query("""
     SELECT game FROM GameJpaEntity game
     LEFT JOIN FETCH game.icon
-    WHERE lower(game.title) = lower(:title)
+    WHERE lower(game.title) LIKE lower(:title)
     """)
-    List<GameJpaEntity> findAllByTitleWithIcon(String title);
+    List<GameJpaEntity> findAllByTitleLikeWithIcon(String title);
 
 }

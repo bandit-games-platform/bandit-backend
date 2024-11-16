@@ -11,6 +11,6 @@ public interface LoadGamesPort {
 
     List<Game> loadAllGamesWithIcon();
 
-    List<Game> loadAllGamesByTitleWithIcon(String title);
+    List<Game> loadAllGamesByTitleLikeWithIcon(String title);
 }
 

@@ -1,8 +1,6 @@
 package be.kdg.int5.gameRegistry.adapters.in;
 
-import be.kdg.int5.gameRegistry.adapters.in.dto.LoadAchievementDto;
 import be.kdg.int5.gameRegistry.adapters.in.dto.LoadGameDto;
-import be.kdg.int5.gameRegistry.adapters.in.dto.LoadRuleDto;
 import be.kdg.int5.gameRegistry.domain.Game;
 import be.kdg.int5.gameRegistry.port.in.query.GameListQuery;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +30,7 @@ public class GamesOverviewRestController {
 
 
         if (title != null && !title.isEmpty()) {
-            games = gameListQuery.retrieveGamesByTitleWithIcon(title);
+            games = gameListQuery.retrieveGamesByTitleLikeWithIcon(title);
         } else {
             games = gameListQuery.retrieveGamesWithIcon();
         }

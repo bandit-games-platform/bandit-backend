@@ -2,6 +2,6 @@
 
 GET http://localhost:8092/game-registry/games/overview
 
-### get all games with icon by title
+### get all games with icon by title like ch
 
-GET http://localhost:8092/game-registry/games/overview?title=chess
+GET http://localhost:8092/game-registry/games/overview?title=che
