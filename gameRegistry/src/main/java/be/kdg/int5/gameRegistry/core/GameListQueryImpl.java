@@ -22,9 +22,9 @@ public class GameListQueryImpl implements GameListQuery {
     }
 
     @Override
-    public Optional<List<Game>> retrieveGameList() {
+    public List<Game> retrieveGamesWithIcon() {
 
         LOGGER.info("Retrieving all games...");
-        return loadGamesPort.loadAllGames();
+        return loadGamesPort.loadAllGamesWithIcon();
     }
 }

@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface GameListQuery {
 
-    Optional<List<Game>> retrieveGameList();
+    List<Game> retrieveGamesWithIcon();
 }
