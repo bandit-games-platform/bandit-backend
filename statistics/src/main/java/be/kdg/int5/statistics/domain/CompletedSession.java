@@ -17,17 +17,19 @@ public class CompletedSession {
     private final String character;
     private final Boolean wasFirstToGo;
 
-    public CompletedSession(final SessionId sessionId,
-                            final LocalDateTime startTime,
-                            final LocalDateTime endTime,
-                            final GameEndState endState,
-                            final Integer turnsTaken,
-                            final Double avgSecondsPerTurn,
-                            final Integer playerScore,
-                            final Integer opponentScore,
-                            final Integer clicks,
-                            final String character,
-                            final Boolean wasFirstToGo) {
+    public CompletedSession(
+            final SessionId sessionId,
+            final LocalDateTime startTime,
+            final LocalDateTime endTime,
+            final GameEndState endState,
+            final Integer turnsTaken,
+            final Double avgSecondsPerTurn,
+            final Integer playerScore,
+            final Integer opponentScore,
+            final Integer clicks,
+            final String character,
+            final Boolean wasFirstToGo
+    ) {
         this.sessionId = Objects.requireNonNull(sessionId);
         this.startTime = Objects.requireNonNull(startTime);
         this.endTime = Objects.requireNonNull(endTime);
@@ -83,5 +85,17 @@ public class CompletedSession {
 
     public Boolean getWasFirstToGo() {
         return wasFirstToGo;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CompletedSession that)) return false;
+        return Objects.equals(sessionId, that.sessionId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(sessionId);
     }
 }
