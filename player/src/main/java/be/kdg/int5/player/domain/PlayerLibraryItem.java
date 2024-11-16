@@ -5,7 +5,7 @@ public class PlayerLibraryItem {
     private boolean favourite;
     private boolean hidden;
 
-    public PlayerLibraryItem(GameId gameId) {
+    public PlayerLibraryItem(final GameId gameId) {
         this.gameId = gameId;
     }
 }

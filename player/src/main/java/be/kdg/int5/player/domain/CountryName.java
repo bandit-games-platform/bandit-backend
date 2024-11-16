@@ -1,6 +1,6 @@
 package be.kdg.int5.player.domain;
 
-public enum Country {
+public enum CountryName {
     AFGHANISTAN("Afghanistan"),
     ALBANIA("Albania"),
     ALGERIA("Algeria"),
@@ -200,7 +200,7 @@ public enum Country {
 
     private final String country;
 
-    Country(String country) {
+    CountryName(String country) {
         this.country = country;
     }
 
