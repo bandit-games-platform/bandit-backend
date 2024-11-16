@@ -43,6 +43,14 @@ public class GameJpaAdapter implements LoadGamesPort {
                 .toList();
     }
 
+    @Override
+    public List<Game> loadAllGamesByTitleWithIcon(String title) {
+        return gameJpaRepository.findAllByTitleWithIcon(title)
+                .stream()
+                .map(this::toGame)
+                .toList();
+    }
+
 
     public Game toGame(GameJpaEntity gameJpa) {
 

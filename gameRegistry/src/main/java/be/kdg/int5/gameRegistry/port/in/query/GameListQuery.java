@@ -8,4 +8,6 @@ import java.util.Optional;
 public interface GameListQuery {
 
     List<Game> retrieveGamesWithIcon();
+
+    List<Game> retrieveGamesByTitleWithIcon(String title);
 }

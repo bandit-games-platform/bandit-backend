@@ -30,4 +30,13 @@ public class GameListQueryImpl implements GameListQuery {
         LOGGER.info("Retrieving all games...");
         return loadGamesPort.loadAllGamesWithIcon();
     }
+
+    //TODO remove transactional
+    @Transactional
+    @Override
+    public List<Game> retrieveGamesByTitleWithIcon(String title) {
+
+        LOGGER.info("Retrieving all games...");
+        return loadGamesPort.loadAllGamesByTitleWithIcon(title);
+    }
 }

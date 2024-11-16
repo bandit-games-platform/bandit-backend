@@ -10,4 +10,7 @@ public interface LoadGamesPort {
     Game loadGameByIdWithDetails(UUID gameId);
 
     List<Game> loadAllGamesWithIcon();
+
+    List<Game> loadAllGamesByTitleWithIcon(String title);
 }
+

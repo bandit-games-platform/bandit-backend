@@ -1,1 +1,7 @@
+### get all games with icon
+
 GET http://localhost:8092/game-registry/games/overview
+
+### get all games with icon by title
+
+GET http://localhost:8092/game-registry/games/overview?title=chess
