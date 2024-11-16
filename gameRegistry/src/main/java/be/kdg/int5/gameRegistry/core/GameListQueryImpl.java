@@ -3,6 +3,7 @@ package be.kdg.int5.gameRegistry.core;
 import be.kdg.int5.gameRegistry.domain.Game;
 import be.kdg.int5.gameRegistry.port.in.query.GameListQuery;
 import be.kdg.int5.gameRegistry.port.out.LoadGamesPort;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,8 @@ public class GameListQueryImpl implements GameListQuery {
         this.loadGamesPort = loadGamesPort;
     }
 
+    //TODO remove transactional
+    @Transactional
     @Override
     public List<Game> retrieveGamesWithIcon() {
 
