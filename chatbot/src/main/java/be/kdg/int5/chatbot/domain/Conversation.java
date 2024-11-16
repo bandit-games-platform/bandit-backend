@@ -12,12 +12,7 @@ public abstract class Conversation {
     private List<Question> questions;
 
     public Conversation(UserId userId, LocalDateTime lastMessageTime, LocalDateTime startTime) {
-        Objects.requireNonNull(userId);
-        Objects.requireNonNull(startTime);
-
-        this.userId = userId;
-        this.startTime = startTime;
-        this.lastMessageTime = Objects.requireNonNullElse(lastMessageTime, startTime);
+        this(userId, startTime, lastMessageTime, null);
     }
 
     public Conversation(UserId userId, LocalDateTime startTime, LocalDateTime lastMessageTime, List<Question> questions) {
@@ -27,7 +22,7 @@ public abstract class Conversation {
         this.userId = userId;
         this.startTime = startTime;
         this.lastMessageTime = Objects.requireNonNullElse(lastMessageTime, startTime);
-        this.questions = questions;
+        this.questions = Objects.requireNonNullElse(questions, new ArrayList<>());
     }
 
     public UserId getUserId() {

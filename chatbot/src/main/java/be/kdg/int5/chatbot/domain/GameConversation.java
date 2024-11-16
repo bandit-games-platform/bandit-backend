@@ -7,8 +7,7 @@ public class GameConversation extends Conversation {
     private final GameId gameId;
 
     public GameConversation(UserId userId, LocalDateTime lastMessageTime, LocalDateTime startTime, GameId gameId) {
-        super(userId, lastMessageTime, startTime);
-        this.gameId = gameId;
+        this(userId, startTime, lastMessageTime, null, gameId);
     }
 
     public GameConversation(UserId userId, LocalDateTime startTime, LocalDateTime lastMessageTime, List<Question> questions, GameId gameId) {
