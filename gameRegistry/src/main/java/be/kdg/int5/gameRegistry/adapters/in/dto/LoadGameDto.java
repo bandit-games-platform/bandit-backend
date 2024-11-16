@@ -1,6 +1,7 @@
 package be.kdg.int5.gameRegistry.adapters.in.dto;
 import jakarta.validation.constraints.NotNull;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -13,6 +14,7 @@ public class LoadGameDto {
     private String title;
     @NotNull
     private String description;
+    private BigDecimal price;
     private String icon;
     private String background;
     private Set<LoadRuleDto> rules;
@@ -33,14 +35,19 @@ public class LoadGameDto {
                 ,Set.of());
     }
 
-    public LoadGameDto(UUID id, String title, String description, String background, List<String> screenshots) {
-        this(id, title, description, null, background, null, null, screenshots, null);
+    public LoadGameDto(UUID id, String title, String description, BigDecimal price,  String background, List<String> screenshots) {
+        this(id, title, description, price, null, background, null, null, screenshots, null);
     }
 
     public LoadGameDto(UUID id, String title, String description, String icon, String background, Set<LoadRuleDto> rules, String currentHost, List<String> screenshots, Set<LoadAchievementDto> achievements) {
+        this(id, title, description, null, icon, background, rules, currentHost, screenshots, achievements);
+    }
+
+    public LoadGameDto(UUID id, String title, String description, BigDecimal price, String icon, String background, Set<LoadRuleDto> rules, String currentHost, List<String> screenshots, Set<LoadAchievementDto> achievements) {
         this.id = id;
         this.title = title;
         this.description = description;
+        this.price = price;
         this.icon = icon;
         this.background = background;
         this.rules = rules;
@@ -71,6 +78,14 @@ public class LoadGameDto {
 
     public void setDescription(@NotNull String description) {
         this.description = description;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 
     public String getIcon() {

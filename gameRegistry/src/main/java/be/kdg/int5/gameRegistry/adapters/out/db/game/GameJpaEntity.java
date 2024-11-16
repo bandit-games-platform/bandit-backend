@@ -5,6 +5,7 @@ import be.kdg.int5.gameRegistry.adapters.out.db.rule.RuleJpaEntity;
 import jakarta.persistence.*;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -17,6 +18,7 @@ public class GameJpaEntity {
     private UUID gameId;
     private String title;
     private String description;
+    private BigDecimal currentPrice;
     @OneToOne(fetch = FetchType.LAZY)
     private ImageResourceJpaEntity icon;
     @OneToOne(fetch = FetchType.LAZY)
@@ -34,10 +36,11 @@ public class GameJpaEntity {
     public GameJpaEntity() {
     }
 
-    public GameJpaEntity(UUID gameId, String title, String description, ImageResourceJpaEntity icon, ImageResourceJpaEntity background, Set<RuleJpaEntity> rules, String currentHost, Set<GameScreenshotJpaEntity> screenshots, Set<AchievementJpaEntity> achievements) {
+    public GameJpaEntity(UUID gameId, String title, String description, BigDecimal currentPrice, ImageResourceJpaEntity icon, ImageResourceJpaEntity background, Set<RuleJpaEntity> rules, String currentHost, Set<GameScreenshotJpaEntity> screenshots, Set<AchievementJpaEntity> achievements) {
         this.gameId = gameId;
         this.title = title;
         this.description = description;
+        this.currentPrice = currentPrice;
         this.icon = icon;
         this.background = background;
         this.rules = rules;
@@ -68,6 +71,14 @@ public class GameJpaEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public BigDecimal getCurrentPrice() {
+        return currentPrice;
+    }
+
+    public void setCurrentPrice(BigDecimal currentPrice) {
+        this.currentPrice = currentPrice;
     }
 
     public ImageResourceJpaEntity getIcon() {

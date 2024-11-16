@@ -71,6 +71,7 @@ public class GameJpaAdapter implements LoadGamesPort {
                 new GameId(gameJpa.getGameId()),
                 gameJpa.getTitle(),
                 gameJpa.getDescription(),
+                gameJpa.getCurrentPrice(),
                 icon,
                 backgroundImage,
                 rules,

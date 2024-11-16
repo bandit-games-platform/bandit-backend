@@ -37,6 +37,7 @@ public class GameDetailsRestController {
                 game.getId().uuid(),
                 game.getTitle(),
                 game.getDescription(),
+                game.getCurrentPrice(),
                 game.getBackground().url().url(),
                 screenshots
         );

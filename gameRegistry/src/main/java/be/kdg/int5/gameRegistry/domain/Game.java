@@ -27,6 +27,10 @@ public class Game {
         this(new GameId(UUID.randomUUID()),title, description, null, icon, background, rules, currentHost, screenshots,achievements);
     }
 
+    public Game(String title, String description, BigDecimal currentPrice, ImageResource icon, ImageResource background, Set<Rule> rules, ResourceURL currentHost, List<ImageResource> screenshots, Set<Achievement> achievements) {
+        this(new GameId(UUID.randomUUID()),title, description, currentPrice, icon, background, rules, currentHost, screenshots,achievements);
+    }
+
     public Game(GameId id, String title, String description, BigDecimal currentPrice, ImageResource icon, ImageResource background, Set<Rule> rules, ResourceURL currentHost, List<ImageResource> screenshots, Set<Achievement> achievements) {
         this.id = Objects.requireNonNull(id);
         this.title = Objects.requireNonNull(title);
