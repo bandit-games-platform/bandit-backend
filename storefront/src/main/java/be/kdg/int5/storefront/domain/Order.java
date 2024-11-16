@@ -2,6 +2,7 @@ package be.kdg.int5.storefront.domain;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.UUID;
 
 public class Order {
     private OrderId id;
@@ -11,7 +12,8 @@ public class Order {
     private LocalDateTime  orderCompletedAt;
     private OrderStatus orderStatus;
 
-    public Order(OrderId id, ProductId productId, CustomerId customerId, LocalDateTime orderDate) {
+    public Order( ProductId productId, CustomerId customerId, LocalDateTime orderDate) {
+        id = new OrderId(UUID.randomUUID());
         Objects.requireNonNull(id);
         Objects.requireNonNull(productId);
         Objects.requireNonNull(customerId);
