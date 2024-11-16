@@ -18,26 +18,16 @@ public class Game {
     private Set<Achievement> achievements;
 
     public Game(GameId id, String title, String description, ImageResource icon, ImageResource background, Set<Rule> rules, ResourceURL currentHost, List<ImageResource> screenshots, Set<Achievement> achievements) {
-        Objects.requireNonNull(id);
-        Objects.requireNonNull(title);
-        Objects.requireNonNull(description);
-        Objects.requireNonNull(icon);
-        Objects.requireNonNull(background);
-        Objects.requireNonNull(rules);
-        Objects.requireNonNull(currentHost);
+        this.id = Objects.requireNonNull(id);
+        this.title = Objects.requireNonNull(title);
+        this.description = Objects.requireNonNull(description);
+        this.icon = Objects.requireNonNull(icon);
+        this.background = Objects.requireNonNull(background);
+        this.rules = Objects.requireNonNull(rules);
+        this.currentHost = Objects.requireNonNull(currentHost);
 
-        if (screenshots == null) screenshots = new ArrayList<>();
-        if (achievements == null) achievements = new HashSet<>();
-
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.icon = icon;
-        this.background = background;
-        this.rules = rules;
-        this.currentHost = currentHost;
-        this.screenshots = screenshots;
-        this.achievements = achievements;
+        this.screenshots = Objects.requireNonNullElse(screenshots, new ArrayList<>());
+        this.achievements = Objects.requireNonNullElse(achievements, new HashSet<>());
     }
 
 

@@ -1,20 +1,20 @@
 package be.kdg.int5.chatbot.domain;
 
+import java.util.Objects;
+
 public class Question {
-    private String text;
+    private final String text;
     private Answer answer;
 
     public Question(String text, Answer answer) {
+        Objects.requireNonNull(text);
+
         this.text = text;
         this.answer = answer;
     }
 
     public String getText() {
         return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
     }
 
     public Answer getAnswer() {
