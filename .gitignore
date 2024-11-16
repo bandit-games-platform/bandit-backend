@@ -4,6 +4,7 @@
 infrastructure/idp_mysql_data/
 infrastructure/mysql/
 infrastructure/rabbitmq/
+infrastructure/postgresql/
 
 ### Java ###
 # Compiled class file
