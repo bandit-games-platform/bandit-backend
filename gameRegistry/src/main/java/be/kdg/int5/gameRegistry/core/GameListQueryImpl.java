@@ -1,4 +1,4 @@
-package be.kdg.int5.gameRegistry.core.query;
+package be.kdg.int5.gameRegistry.core;
 
 import be.kdg.int5.gameRegistry.domain.Game;
 import be.kdg.int5.gameRegistry.port.in.query.GameListQuery;

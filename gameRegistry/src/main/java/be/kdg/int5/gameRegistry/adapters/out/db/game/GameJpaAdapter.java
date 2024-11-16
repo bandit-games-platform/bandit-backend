@@ -1,4 +1,4 @@
-package be.kdg.int5.gameRegistry.adapters.out.db;
+package be.kdg.int5.gameRegistry.adapters.out.db.game;
 
 import be.kdg.int5.gameRegistry.domain.Game;
 import be.kdg.int5.gameRegistry.port.out.LoadGamesPort;

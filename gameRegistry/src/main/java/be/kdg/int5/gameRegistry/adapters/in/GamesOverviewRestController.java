@@ -1,14 +1,15 @@
 package be.kdg.int5.gameRegistry.adapters.in;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class GameRegistryRestController {
+@RequestMapping("/games")
+public class GamesOverviewRestController {
 
-
-    @GetMapping("/hello/game-library")
-    public void sayHelloB(){
+    @GetMapping("/overview")
+    public void getGameOverview(){
         System.out.println("Hello Game Registry");
     }
 
