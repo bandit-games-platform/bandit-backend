@@ -9,9 +9,10 @@ import java.util.UUID;
 public class GameScreenshotJpaEntity {
     @Id
     private UUID id;
+
     @ManyToOne
-    @JoinColumn(referencedColumnName = "screenshots")
-    private GameJpaEntity gameJpaEntity;
+    @JoinColumn(name = "game", referencedColumnName = "game_id")
+    private GameJpaEntity game;
     @OneToOne
     private ImageResourceJpaEntity screenshot;
 
@@ -20,7 +21,7 @@ public class GameScreenshotJpaEntity {
 
     public GameScreenshotJpaEntity(UUID id, GameJpaEntity gameJpaEntity, ImageResourceJpaEntity screenshot) {
         this.id = id;
-        this.gameJpaEntity = gameJpaEntity;
+        this.game = gameJpaEntity;
         this.screenshot = screenshot;
     }
 
@@ -33,11 +34,11 @@ public class GameScreenshotJpaEntity {
     }
 
     public GameJpaEntity getGameJpaEntity() {
-        return gameJpaEntity;
+        return game;
     }
 
     public void setGameJpaEntity(GameJpaEntity gameJpaEntity) {
-        this.gameJpaEntity = gameJpaEntity;
+        this.game = gameJpaEntity;
     }
 
     public ImageResourceJpaEntity getScreenshot() {

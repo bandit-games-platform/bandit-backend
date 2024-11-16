@@ -16,8 +16,8 @@ public class AchievementJpaEntity {
     private int counterTotal;
     private String description;
 
-    @ManyToOne( fetch = FetchType.LAZY)
-    @JoinColumn(referencedColumnName = "achievements")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "game", referencedColumnName = "game_id")
     private GameJpaEntity game;
 
     public AchievementJpaEntity() {

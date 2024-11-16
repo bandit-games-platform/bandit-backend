@@ -13,7 +13,7 @@ public class RuleJpaEntity {
     private String rule;
 
     @ManyToOne( fetch = FetchType.LAZY)
-    @JoinColumn(referencedColumnName = "rules")
+    @JoinColumn(name = "game", referencedColumnName = "game_id")
     private GameJpaEntity game;
 
     public RuleJpaEntity() {

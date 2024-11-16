@@ -3,6 +3,7 @@ package be.kdg.int5.gameRegistry.adapters.out.db.game;
 import be.kdg.int5.gameRegistry.adapters.out.db.achievement.AchievementJpaEntity;
 import be.kdg.int5.gameRegistry.adapters.out.db.rule.RuleJpaEntity;
 import jakarta.persistence.*;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Set;
@@ -12,6 +13,7 @@ import java.util.UUID;
 @Table(schema = "game_registry", name = "game")
 public class GameJpaEntity {
     @Id
+    @Column(name = "game_id")
     private UUID gameId;
     private String title;
     private String description;
@@ -20,13 +22,13 @@ public class GameJpaEntity {
     @OneToOne(fetch = FetchType.LAZY)
     private ImageResourceJpaEntity background;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "game")
     private Set<RuleJpaEntity> rules;
     private String currentHost;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "game")
     private List<GameScreenshotJpaEntity> screenshots;
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "game")
     private Set<AchievementJpaEntity> achievements;
 
     public GameJpaEntity() {
