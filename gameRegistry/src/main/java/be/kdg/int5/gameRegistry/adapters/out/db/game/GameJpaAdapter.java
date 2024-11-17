@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -45,6 +46,14 @@ public class GameJpaAdapter implements LoadGamesPort {
     @Override
     public List<Game> loadAllGamesByTitleLikeWithIcon(String title) {
         return gameJpaRepository.findAllByTitleLikeWithIcon("%" + title + "%")
+                .stream()
+                .map(this::toGame)
+                .toList();
+    }
+
+    @Override
+    public List<Game> loadAllGamesByTitleLikeAndPriceBelowWithIcon(String title, BigDecimal maxPrice) {
+        return gameJpaRepository.findAllByTitleLikeAndPriceBelowWithIcon("%" + title + "%",maxPrice)
                 .stream()
                 .map(this::toGame)
                 .toList();

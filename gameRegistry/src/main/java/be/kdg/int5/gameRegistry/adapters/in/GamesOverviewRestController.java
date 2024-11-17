@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -23,14 +25,26 @@ public class GamesOverviewRestController {
     }
 
     @GetMapping("/overview")
-    public ResponseEntity<List<LoadGameDto>> getGameOverview(@RequestParam(value = "title", required = false) String title) {
+    public ResponseEntity<List<LoadGameDto>> getGameOverview(@RequestParam(value = "title", required = false) String title,
+                                                             @RequestParam(value = "maxPrice", required = false) String maxPrice) {
 
         List<Game> games;
         List<LoadGameDto> gameDtos = new ArrayList<>();
+        BigDecimal maxPriceMoney;
+
+        if (maxPrice != null && !maxPrice.isEmpty()) {
+            try {
+                maxPriceMoney = new BigDecimal(maxPrice);
+            } catch (NumberFormatException e) {
+                return ResponseEntity.badRequest().body(Collections.emptyList());
+            }
+        } else {
+            maxPriceMoney = BigDecimal.valueOf(Double.MAX_VALUE);
+        }
 
 
         if (title != null && !title.isEmpty()) {
-            games = gameListQuery.retrieveGamesByTitleLikeWithIcon(title);
+            games = gameListQuery.retrieveGamesByTitleLikeAndPriceBelowWithIcon(title, maxPriceMoney);
         } else {
             games = gameListQuery.retrieveGamesWithIcon();
         }
@@ -39,6 +53,7 @@ public class GamesOverviewRestController {
             LoadGameDto gameDto = new LoadGameDto(
                     game.getTitle(),
                     game.getDescription(),
+                    game.getCurrentPrice(),
                     game.getIcon().url().url(),
                     game.getId().uuid()
             );

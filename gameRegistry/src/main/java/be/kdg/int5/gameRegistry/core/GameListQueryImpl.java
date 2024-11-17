@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -35,7 +36,17 @@ public class GameListQueryImpl implements GameListQuery {
     @Override
     public List<Game> retrieveGamesByTitleLikeWithIcon(String title) {
 
-        LOGGER.info("Retrieving all games...");
+        LOGGER.info("Retrieving all games with title like...");
         return loadGamesPort.loadAllGamesByTitleLikeWithIcon(title);
+    }
+
+
+    //TODO remove transactional
+    @Transactional
+    @Override
+    public List<Game> retrieveGamesByTitleLikeAndPriceBelowWithIcon(String title, BigDecimal price) {
+
+        LOGGER.info("Retrieving all games with title and price like...");
+        return loadGamesPort.loadAllGamesByTitleLikeAndPriceBelowWithIcon(title,price);
     }
 }
