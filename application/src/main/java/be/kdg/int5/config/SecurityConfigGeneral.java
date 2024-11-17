@@ -36,7 +36,7 @@ public class SecurityConfigGeneral {
                 .authorizeHttpRequests((authorize) -> authorize
                         .anyRequest().authenticated()
                 ).sessionManagement(mgmt -> mgmt.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//                .oauth2ResourceServer(rs -> rs.jwt(jwt -> jwtAuthenticationConverter()))
+                .oauth2ResourceServer(rs -> rs.jwt(jwt -> jwtAuthenticationConverter()))
         ;
         return http.build();
     }
