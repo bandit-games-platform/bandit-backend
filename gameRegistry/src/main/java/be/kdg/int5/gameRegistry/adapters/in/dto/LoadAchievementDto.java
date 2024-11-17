@@ -26,36 +26,35 @@ public class LoadAchievementDto {
         this.description = description;
     }
 
-    public @NotNull UUID getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(@NotNull UUID id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
-    public @NotNull String getTitle() {
+    public String getTitle() {
         return title;
     }
 
-    public void setTitle(@NotNull String title) {
+    public void setTitle(String title) {
         this.title = title;
     }
 
-    @Min(value = 1, message = "counterTotal must be greater than 0")
     public int getCounterTotal() {
         return counterTotal;
     }
 
-    public void setCounterTotal(@Min(value = 1, message = "counterTotal must be greater than 0") int counterTotal) {
+    public void setCounterTotal(int counterTotal) {
         this.counterTotal = counterTotal;
     }
 
-    public @NotNull String getDescription() {
+    public String getDescription() {
         return description;
     }
 
-    public void setDescription(@NotNull String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 }

@@ -27,24 +27,73 @@ public class LoadGameDto {
     public LoadGameDto() {
     }
 
-    public LoadGameDto(String title, String description, String icon, UUID id) {
-        this(id, title, description, icon,
-                ""
-                ,Set.of()
-                ,""
-                , List.of()
-                ,Set.of());
+    public LoadGameDto(UUID id, String title, String description, String icon) {
+        this(id, title, description, icon, "", Set.of(), "", List.of(), Set.of());
     }
 
-    public LoadGameDto(UUID id, String title, String description, BigDecimal price,  String background, DeveloperDto developer, List<String> screenshots) {
-        this(id, title, description, price, null, background, null, null, developer, screenshots, null);
+    public LoadGameDto(
+            UUID id,
+            String title,
+            String description,
+            BigDecimal price,
+            String background,
+            DeveloperDto developer,
+            List<String> screenshots
+    ) {
+        this(
+                id,
+                title,
+                description,
+                price,
+                null,
+                background,
+                null,
+                null,
+                developer,
+                screenshots,
+                null
+        );
     }
 
-    public LoadGameDto(UUID id, String title, String description, String icon, String background, Set<LoadRuleDto> rules, String currentHost, List<String> screenshots, Set<LoadAchievementDto> achievements) {
-        this(id, title, description, null, icon, background, rules, currentHost, null, screenshots, achievements);
+    public LoadGameDto(
+            UUID id,
+            String title,
+            String description,
+            String icon,
+            String background,
+            Set<LoadRuleDto> rules,
+            String currentHost,
+            List<String> screenshots,
+            Set<LoadAchievementDto> achievements
+    ) {
+        this(
+                id,
+                title,
+                description,
+                null,
+                icon,
+                background,
+                rules,
+                currentHost,
+                null,
+                screenshots,
+                achievements
+        );
     }
 
-    public LoadGameDto(UUID id, String title, String description, BigDecimal price, String icon, String background, Set<LoadRuleDto> rules, String currentHost, DeveloperDto developer, List<String> screenshots, Set<LoadAchievementDto> achievements) {
+    public LoadGameDto(
+            UUID id,
+            String title,
+            String description,
+            BigDecimal price,
+            String icon,
+            String background,
+            Set<LoadRuleDto> rules,
+            String currentHost,
+            DeveloperDto developer,
+            List<String> screenshots,
+            Set<LoadAchievementDto> achievements
+    ) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -58,27 +107,27 @@ public class LoadGameDto {
         this.achievements = achievements;
     }
 
-    public @NotNull UUID getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(@NotNull UUID id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
-    public @NotNull String getTitle() {
+    public String getTitle() {
         return title;
     }
 
-    public void setTitle(@NotNull String title) {
+    public void setTitle(String title) {
         this.title = title;
     }
 
-    public @NotNull String getDescription() {
+    public String getDescription() {
         return description;
     }
 
-    public void setDescription(@NotNull String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 
