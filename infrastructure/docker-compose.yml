@@ -62,6 +62,8 @@
         - idp_mysql
       networks:
         - kc
+      volumes:
+        - ./keycloak-jars/keycloakListener.jar:/opt/keycloak/providers/keycloakListener.jar
 
 
   networks:
