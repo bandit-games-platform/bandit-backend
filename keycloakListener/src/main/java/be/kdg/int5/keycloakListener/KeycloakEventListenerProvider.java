@@ -53,6 +53,7 @@ public class KeycloakEventListenerProvider implements EventListenerProvider {
             UUID identifyingId = UUID.nameUUIDFromBytes((authorizationId + "-" + userId + "-" + username).getBytes());
 
             boolean connected = false;
+            // TODO: I believe the issue is that the docker container has its own network and so can't connect via the host systems localhost
             String individualContextUrl = "http://localhost:8094/player/registration/" + identifyingId.toString();
             String wholeApplicationUrl = "http://localhost:8090/api/registration/" + identifyingId.toString();
 
