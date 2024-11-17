@@ -13,6 +13,9 @@ import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.Map.Entry;
 import java.util.Objects;
@@ -58,8 +61,8 @@ public class KeycloakEventListenerProvider implements EventListenerProvider {
                 if (!connected) {
                     connected = attemptConnection(wholeApplicationUrl, userId, username);
                 }
-            } catch (IOException | URISyntaxException e) {
-                LOGGER.error("Something went wrong sending the url {}", e.getMessage());
+            } catch (IOException | InterruptedException e) {
+                LOGGER.error("Something went wrong sending the url: {}", e.getMessage());
             }
         }
     }
@@ -73,36 +76,39 @@ public class KeycloakEventListenerProvider implements EventListenerProvider {
     public void close() {
     }
 
-    private boolean attemptConnection(String urlString, String userId, String username) throws IOException, URISyntaxException {
-        HttpURLConnection connection = null;
+    private boolean attemptConnection(String urlString, String userId, String username) throws IOException, InterruptedException {
+        String jsonInputString = """
+                    {
+                        "userId": "%s",
+                        "username": "%s"
+                    }
+                    """.formatted(userId, username);
+
         try {
-            URL url = new URI(urlString).toURL();
-            LOGGER.info("Attempting to connect to the URL: {}", url);
+            LOGGER.info("Attempting to send to URL: {}", urlString);
 
-            connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "application/json");
-            connection.setRequestProperty("Accept", "application/json");
-            connection.setDoOutput(true);
+            HttpRequest request = HttpRequest.newBuilder()
+                    .POST(HttpRequest.BodyPublishers.ofString(jsonInputString))
+                    .uri(URI.create(urlString))
+                    .header("Content-Type", "application/json")
+                    .build();
 
-            String jsonInputString = "{\"userId\": \"%s\", \"username\": \"%s\"}".formatted(userId, username);
+            HttpClient client = HttpClient.newHttpClient();
 
-            try (OutputStream os = connection.getOutputStream()) {
-                byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
-                os.write(input, 0, input.length);
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            LOGGER.info("Got status {}", response.statusCode());
+
+            client.close();
+
+            if (response.statusCode() == 200) {
+                return true;
             }
-
-            int responseCode = connection.getResponseCode();
-            if (responseCode == HttpURLConnection.HTTP_OK) {
-                return true;  // Connection succeeded
-            }
-        } catch (IOException | URISyntaxException e) {
-            // Log or handle the error for the current URL
-            LOGGER.error("Failed to connect to {}: {}", urlString, e.getMessage());
+        } catch (IOException | InterruptedException e) {
+            LOGGER.error("Failed to connect to {}: {}. Exception type: {}", urlString, e.getMessage(), e.getClass().getCanonicalName());
             return false;
         }
 
-        connection.disconnect();
         return false;
     }
 }
