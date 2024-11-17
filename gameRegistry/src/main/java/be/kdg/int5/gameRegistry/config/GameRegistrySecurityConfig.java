@@ -38,7 +38,7 @@ public class GameRegistrySecurityConfig {
                         .requestMatchers("/games/*").permitAll()
                         .anyRequest().authenticated()
                 ).sessionManagement(mgmt -> mgmt.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//                .oauth2ResourceServer(rs -> rs.jwt(jwt -> jwtAuthenticationConverter()))
+                .oauth2ResourceServer(rs -> rs.jwt(jwt -> jwtAuthenticationConverter()))
         ;
         return http.build();
     }

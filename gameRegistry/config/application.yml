@@ -27,7 +27,12 @@ spring:
     username: myuser
     password: mypassword
 
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8180/realms/bandit-realm
+          jwk-set-uri: http://localhost:8180/realms/bandit-realm/protocol/openid-connect/certs
+
   config:
     additional-location: ${SPRING_CONFIG_ADDITIONAL_LOCATION}
-
-
