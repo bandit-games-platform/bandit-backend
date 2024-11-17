@@ -2,12 +2,13 @@ package be.kdg.int5.statistics.domain;
 
 import java.util.Objects;
 
+
 public class AchievementProgress {
     private final AchievementId achievementId;
     private int counterValue;
 
     public AchievementProgress(final AchievementId achievementId, final int counterValue) {
-        this.achievementId = achievementId;
+        this.achievementId = Objects.requireNonNull(achievementId);
         this.counterValue = counterValue;
     }
 
@@ -34,4 +35,5 @@ public class AchievementProgress {
     public int hashCode() {
         return Objects.hashCode(achievementId);
     }
+
 }
