@@ -23,10 +23,11 @@ public class GameJpaEntity {
     private ImageResourceJpaEntity icon;
     @OneToOne(fetch = FetchType.LAZY)
     private ImageResourceJpaEntity background;
-
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "game")
     private Set<RuleJpaEntity> rules;
     private String currentHost;
+    @ManyToOne
+    private DeveloperJpaEntity developer;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "game")
     private Set<GameScreenshotJpaEntity> screenshots;
@@ -36,7 +37,7 @@ public class GameJpaEntity {
     public GameJpaEntity() {
     }
 
-    public GameJpaEntity(UUID gameId, String title, String description, BigDecimal currentPrice, ImageResourceJpaEntity icon, ImageResourceJpaEntity background, Set<RuleJpaEntity> rules, String currentHost, Set<GameScreenshotJpaEntity> screenshots, Set<AchievementJpaEntity> achievements) {
+    public GameJpaEntity(UUID gameId, String title, String description, BigDecimal currentPrice, ImageResourceJpaEntity icon, ImageResourceJpaEntity background, Set<RuleJpaEntity> rules, String currentHost, DeveloperJpaEntity developer, Set<GameScreenshotJpaEntity> screenshots, Set<AchievementJpaEntity> achievements) {
         this.gameId = gameId;
         this.title = title;
         this.description = description;
@@ -45,6 +46,7 @@ public class GameJpaEntity {
         this.background = background;
         this.rules = rules;
         this.currentHost = currentHost;
+        this.developer = developer;
         this.screenshots = screenshots;
         this.achievements = achievements;
     }
@@ -111,6 +113,14 @@ public class GameJpaEntity {
 
     public void setCurrentHost(String currentHost) {
         this.currentHost = currentHost;
+    }
+
+    public DeveloperJpaEntity getDeveloper() {
+        return developer;
+    }
+
+    public void setDeveloper(DeveloperJpaEntity developer) {
+        this.developer = developer;
     }
 
     public Set<GameScreenshotJpaEntity> getScreenshots() {

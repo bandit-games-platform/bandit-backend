@@ -32,9 +32,7 @@ public class GameJpaAdapter implements LoadGamesPort {
         GameJpaEntity gameJpaEntity = gameJpaRepository.findByIdWithAllRelationships(gameId);
 
         if (gameJpaEntity == null) return null;
-        Game game = toGame(gameJpaEntity);
-        LOGGER.info("Loaded game: {}", game.getTitle());
-        return game;
+        return toGame(gameJpaEntity);
     }
 
     @Override
@@ -66,6 +64,7 @@ public class GameJpaAdapter implements LoadGamesPort {
                 .stream()
                 .map(this::toRule)
                 .collect(Collectors.toSet());
+        Developer developer = new Developer(new DeveloperId(gameJpa.getDeveloper().getId()), gameJpa.getDeveloper().getStudioName());
 
         return new Game(
                 new GameId(gameJpa.getGameId()),
@@ -76,6 +75,7 @@ public class GameJpaAdapter implements LoadGamesPort {
                 backgroundImage,
                 rules,
                 hostUrl,
+                developer,
                 screenshots,
                 achievements
         );

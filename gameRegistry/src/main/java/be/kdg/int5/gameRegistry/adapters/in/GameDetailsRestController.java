@@ -1,5 +1,6 @@
 package be.kdg.int5.gameRegistry.adapters.in;
 
+import be.kdg.int5.gameRegistry.adapters.in.dto.DeveloperDto;
 import be.kdg.int5.gameRegistry.adapters.in.dto.LoadGameDto;
 import be.kdg.int5.gameRegistry.domain.Game;
 import be.kdg.int5.gameRegistry.port.in.query.GetGameDetailsQuery;
@@ -39,6 +40,7 @@ public class GameDetailsRestController {
                 game.getDescription(),
                 game.getCurrentPrice(),
                 game.getBackground().url().url(),
+                new DeveloperDto(game.getDeveloper().studioName()),
                 screenshots
         );
 

@@ -19,6 +19,7 @@ public class LoadGameDto {
     private String background;
     private Set<LoadRuleDto> rules;
     private String currentHost;
+    private DeveloperDto developer;
 
     private List<String> screenshots;
     private Set<LoadAchievementDto> achievements;
@@ -35,15 +36,15 @@ public class LoadGameDto {
                 ,Set.of());
     }
 
-    public LoadGameDto(UUID id, String title, String description, BigDecimal price,  String background, List<String> screenshots) {
-        this(id, title, description, price, null, background, null, null, screenshots, null);
+    public LoadGameDto(UUID id, String title, String description, BigDecimal price,  String background, DeveloperDto developer, List<String> screenshots) {
+        this(id, title, description, price, null, background, null, null, developer, screenshots, null);
     }
 
     public LoadGameDto(UUID id, String title, String description, String icon, String background, Set<LoadRuleDto> rules, String currentHost, List<String> screenshots, Set<LoadAchievementDto> achievements) {
-        this(id, title, description, null, icon, background, rules, currentHost, screenshots, achievements);
+        this(id, title, description, null, icon, background, rules, currentHost, null, screenshots, achievements);
     }
 
-    public LoadGameDto(UUID id, String title, String description, BigDecimal price, String icon, String background, Set<LoadRuleDto> rules, String currentHost, List<String> screenshots, Set<LoadAchievementDto> achievements) {
+    public LoadGameDto(UUID id, String title, String description, BigDecimal price, String icon, String background, Set<LoadRuleDto> rules, String currentHost, DeveloperDto developer, List<String> screenshots, Set<LoadAchievementDto> achievements) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -52,6 +53,7 @@ public class LoadGameDto {
         this.background = background;
         this.rules = rules;
         this.currentHost = currentHost;
+        this.developer = developer;
         this.screenshots = screenshots;
         this.achievements = achievements;
     }
@@ -118,6 +120,14 @@ public class LoadGameDto {
 
     public void setCurrentHost(String currentHost) {
         this.currentHost = currentHost;
+    }
+
+    public DeveloperDto getDeveloper() {
+        return developer;
+    }
+
+    public void setDeveloper(DeveloperDto developer) {
+        this.developer = developer;
     }
 
     public List<String> getScreenshots() {
