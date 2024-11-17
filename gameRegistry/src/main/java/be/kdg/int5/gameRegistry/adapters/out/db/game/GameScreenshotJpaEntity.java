@@ -9,7 +9,6 @@ import java.util.UUID;
 public class GameScreenshotJpaEntity {
     @Id
     private UUID id;
-
     @ManyToOne
     @JoinColumn(name = "game", referencedColumnName = "game_id")
     private GameJpaEntity game;

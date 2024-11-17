@@ -11,7 +11,6 @@ public class RuleJpaEntity {
     private UUID uuid;
     private int stepNumber ;
     private String rule;
-
     @ManyToOne( fetch = FetchType.LAZY)
     @JoinColumn(name = "game", referencedColumnName = "game_id")
     private GameJpaEntity game;
