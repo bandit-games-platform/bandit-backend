@@ -1,18 +1,19 @@
   services:
-    mysql_app_db:
-      image: mysql:9.0.1
+    postgres_app_db:
+      image: postgres:16.1-alpine
       restart: no
       environment:
-        MYSQL_DATABASE: 'app_db'
-        MYSQL_USER: 'user'
-        MYSQL_PASSWORD: 'password'
-        MYSQL_ROOT_PASSWORD: 'password'
+        POSTGRES_DB: 'bandit_db'
+        POSTGRES_USER: 'user'
+        POSTGRES_PASSWORD: 'password'
+        POSTGRES_ROOT_PASSWORD: 'password'
       ports:
-        - '3306:3306'
+        - '5555:5432'
       networks:
         - backend
       volumes:
-        - ./mysql/data:/var/lib/mysql
+        - ./init.sql:/docker-entrypoint-initdb.d/db.sql
+        - ./postgresql/data:/var/lib/postgresql
 
     app_rabbitmq:
       image: rabbitmq:3.13.7-management-alpine
