@@ -19,13 +19,13 @@ public class Game {
     private ImageResource background;
     private final Set<Rule> rules;
     private ResourceURL currentHost;
-    private Developer developer;
+    private final Developer developer;
 
     private List<ImageResource> screenshots;
     private Set<Achievement> achievements;
 
-    public Game( String title, String description, ImageResource icon, ImageResource background, Set<Rule> rules, ResourceURL currentHost, List<ImageResource> screenshots, Set<Achievement> achievements) {
-        this(new GameId(UUID.randomUUID()),title, description, null, icon, background, rules, currentHost, null, screenshots,achievements);
+    public Game( String title, String description, ImageResource icon, ImageResource background, Set<Rule> rules, ResourceURL currentHost, Developer developer, List<ImageResource> screenshots, Set<Achievement> achievements) {
+        this(new GameId(UUID.randomUUID()),title, description, null, icon, background, rules, currentHost, developer, screenshots,achievements);
     }
 
     public Game(String title, String description, BigDecimal currentPrice, ImageResource icon, ImageResource background, Set<Rule> rules, ResourceURL currentHost, Developer developer, List<ImageResource> screenshots, Set<Achievement> achievements) {
@@ -46,8 +46,6 @@ public class Game {
         this.screenshots = Objects.requireNonNullElse(screenshots, new ArrayList<>());
         this.achievements = Objects.requireNonNullElse(achievements, new HashSet<>());
     }
-
-
 
 
     public GameId getId() {
@@ -104,10 +102,6 @@ public class Game {
 
     public Developer getDeveloper() {
         return developer;
-    }
-
-    public void setDeveloper(Developer developer) {
-        this.developer = developer;
     }
 
     public List<ImageResource> getScreenshots() {
