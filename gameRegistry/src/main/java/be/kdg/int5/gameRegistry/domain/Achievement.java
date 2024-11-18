@@ -1,6 +1,7 @@
 package be.kdg.int5.gameRegistry.domain;
 
 import java.util.Objects;
+import java.util.UUID;
 
 public class Achievement {
     private static final int MAX_TITLE_LENGTH = 30;
@@ -9,6 +10,10 @@ public class Achievement {
     private String title;
     private int counterTotal;
     private String description;
+
+    public Achievement(String title, int counterTotal, String description) {
+        this(new AchievementId(UUID.randomUUID()), title, counterTotal, description);
+    }
 
     public Achievement(AchievementId id, String title, int counterTotal, String description) {
         this.id = Objects.requireNonNull(id);
