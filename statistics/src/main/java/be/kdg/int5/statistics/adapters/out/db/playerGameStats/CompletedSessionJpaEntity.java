@@ -67,8 +67,8 @@ public class CompletedSessionJpaEntity {
             final int opponentScore,
             final int clicks,
             final String character,
-            final boolean wasFirstToGo,
-            final PlayerGameStatsJpaEntity playerGameStatsJpaEntity) {
+            final boolean wasFirstToGo
+    ) {
         this.sessionId = sessionId;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -80,6 +80,55 @@ public class CompletedSessionJpaEntity {
         this.clicks = clicks;
         this.character = character;
         this.wasFirstToGo = wasFirstToGo;
-        this.playerGameStatsJpaEntity = playerGameStatsJpaEntity;
     }
+
+
+    public UUID getSessionId() {
+        return sessionId;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    public GameEndState getEndState() {
+        return endState;
+    }
+
+    public int getTurnsTaken() {
+        return turnsTaken;
+    }
+
+    public double getAvgSecondsPerTurn() {
+        return avgSecondsPerTurn;
+    }
+
+    public int getPlayerScore() {
+        return playerScore;
+    }
+
+    public int getOpponentScore() {
+        return opponentScore;
+    }
+
+    public int getClicks() {
+        return clicks;
+    }
+
+    public String getCharacter() {
+        return character;
+    }
+
+    public boolean isWasFirstToGo() {
+        return wasFirstToGo;
+    }
+
+    public PlayerGameStatsJpaEntity getPlayerGameStatsJpaEntity() {
+        return playerGameStatsJpaEntity;
+    }
+
 }

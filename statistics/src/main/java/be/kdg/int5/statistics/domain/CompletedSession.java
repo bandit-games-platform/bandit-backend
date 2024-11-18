@@ -55,4 +55,48 @@ public class CompletedSession {
     public int hashCode() {
         return Objects.hashCode(sessionId);
     }
+
+    public SessionId getSessionId() {
+        return sessionId;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    public GameEndState getEndState() {
+        return endState;
+    }
+
+    public Integer getTurnsTaken() {
+        return turnsTaken;
+    }
+
+    public Double getAvgSecondsPerTurn() {
+        return avgSecondsPerTurn;
+    }
+
+    public Integer getPlayerScore() {
+        return playerScore;
+    }
+
+    public Integer getOpponentScore() {
+        return opponentScore;
+    }
+
+    public Integer getClicks() {
+        return clicks;
+    }
+
+    public String getCharacter() {
+        return character;
+    }
+
+    public Boolean getWasFirstToGo() {
+        return wasFirstToGo;
+    }
 }

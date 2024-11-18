@@ -21,6 +21,7 @@ public class PlayerGameStatsJpaId implements Serializable {
         this.gameId = gameId;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

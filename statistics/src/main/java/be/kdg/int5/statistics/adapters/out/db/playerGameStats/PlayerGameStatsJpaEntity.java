@@ -20,4 +20,20 @@ public class PlayerGameStatsJpaEntity {
         this.id = id;
         this.completedSessions = completedSessions;
     }
+
+    public PlayerGameStatsJpaId getId() {
+        return id;
+    }
+
+    public void setId(PlayerGameStatsJpaId id) {
+        this.id = id;
+    }
+
+    public Set<CompletedSessionJpaEntity> getCompletedSessions() {
+        return completedSessions;
+    }
+
+    public void setCompletedSessions(Set<CompletedSessionJpaEntity> completedSessions) {
+        this.completedSessions = completedSessions;
+    }
 }
