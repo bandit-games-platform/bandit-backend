@@ -44,14 +44,6 @@ public class GameJpaAdapter implements LoadGamesPort {
     }
 
     @Override
-    public List<Game> loadAllGamesByTitleLikeWithIcon(String title) {
-        return gameJpaRepository.findAllByTitleLikeWithIcon("%" + title + "%")
-                .stream()
-                .map(this::toGame)
-                .toList();
-    }
-
-    @Override
     public List<Game> loadAllGamesByTitleLikeAndPriceBelowWithIcon(String title, BigDecimal maxPrice) {
         return gameJpaRepository.findAllByTitleLikeAndPriceBelowWithIcon("%" + title + "%",maxPrice)
                 .stream()

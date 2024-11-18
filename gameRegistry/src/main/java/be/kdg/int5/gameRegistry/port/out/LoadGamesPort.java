@@ -12,8 +12,6 @@ public interface LoadGamesPort {
 
     List<Game> loadAllGamesWithIcon();
 
-    List<Game> loadAllGamesByTitleLikeWithIcon(String title);
-
     List<Game> loadAllGamesByTitleLikeAndPriceBelowWithIcon(String title, BigDecimal maxPrice);
 }
 
