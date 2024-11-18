@@ -12,5 +12,8 @@ GET http://localhost:8092/game-registry/games/overview?title=che&maxPrice=100.0
 
 ### get all games with icon by title like che and price below 100 (empty)
 
-GET http://localhost:8092/game-registry/games/overview?title=che&maxPrice=8.0
+GET http://localhost:8092/game-registry/games/overview?title=che&maxPrice=5.0
 
+### get all games with icon by title like che and price below 100 (empty)
+
+GET http://localhost:8092/game-registry/games/overview?title=&maxPrice=5.0

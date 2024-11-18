@@ -1,6 +1,6 @@
-package be.kdg.int5.gameRegistry.core;
+package be.kdg.int5.gameRegistry.core.query;
 import be.kdg.int5.gameRegistry.domain.Game;
-import be.kdg.int5.gameRegistry.port.in.query.GameListQuery;
+import be.kdg.int5.gameRegistry.port.in.query.GetGameListQuery;
 import be.kdg.int5.gameRegistry.port.out.LoadGamesPort;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,13 +11,13 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Service
-public class GameListQueryImpl implements GameListQuery {
+public class GetGameListQueryImpl implements GetGameListQuery {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(GameListQueryImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GetGameListQueryImpl.class);
 
     private final LoadGamesPort loadGamesPort;
 
-    public GameListQueryImpl(LoadGamesPort loadGamesPort) {
+    public GetGameListQueryImpl(LoadGamesPort loadGamesPort) {
         this.loadGamesPort = loadGamesPort;
     }
 

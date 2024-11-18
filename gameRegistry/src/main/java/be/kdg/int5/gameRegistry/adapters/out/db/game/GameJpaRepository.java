@@ -41,6 +41,7 @@ public interface GameJpaRepository extends JpaRepository<GameJpaEntity, UUID> {
     @Query("""
     SELECT game FROM GameJpaEntity game
     LEFT JOIN FETCH game.icon
+    LEFT JOIN FETCH game.developer
     WHERE lower(game.title) LIKE lower(:title)
     AND game.currentPrice <= :maxPrice
     """)

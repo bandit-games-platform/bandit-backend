@@ -2,7 +2,7 @@ package be.kdg.int5.gameRegistry.adapters.in;
 
 import be.kdg.int5.gameRegistry.adapters.in.dto.LoadGameDto;
 import be.kdg.int5.gameRegistry.domain.Game;
-import be.kdg.int5.gameRegistry.port.in.query.GameListQuery;
+import be.kdg.int5.gameRegistry.port.in.query.GetGameListQuery;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,14 +18,14 @@ import java.util.List;
 @RequestMapping("/games")
 public class GamesOverviewRestController {
 
-    private final GameListQuery gameListQuery;
+    private final GetGameListQuery getGameListQuery;
 
-    public GamesOverviewRestController(GameListQuery gameListQuery) {
-        this.gameListQuery = gameListQuery;
+    public GamesOverviewRestController(GetGameListQuery getGameListQuery) {
+        this.getGameListQuery = getGameListQuery;
     }
 
     @GetMapping("/overview")
-    public ResponseEntity<List<LoadGameDto>> getGameOverview(@RequestParam(value = "title", required = false) String title,
+    public ResponseEntity<List<LoadGameDto>> getGameOverviewWithTitleAndPriceFilter(@RequestParam(value = "title", required = false) String title,
                                                              @RequestParam(value = "maxPrice", required = false) String maxPrice) {
 
         List<Game> games;
@@ -43,14 +43,15 @@ public class GamesOverviewRestController {
         }
 
 
-        if (title != null && !title.isEmpty()) {
-            games = gameListQuery.retrieveGamesByTitleLikeAndPriceBelowWithIcon(title, maxPriceMoney);
+        if (title != null) {
+            games = getGameListQuery.retrieveGamesByTitleLikeAndPriceBelowWithIcon(title, maxPriceMoney);
         } else {
-            games = gameListQuery.retrieveGamesWithIcon();
+            games = getGameListQuery.retrieveGamesWithIcon();
         }
 
         games.forEach(game -> {
             LoadGameDto gameDto = new LoadGameDto(
+                    game.getId().uuid(),
                     game.getTitle(),
                     game.getDescription(),
                     game.getCurrentPrice(),
