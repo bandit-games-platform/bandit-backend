@@ -1,6 +1,4 @@
 package be.kdg.int5.gameRegistry.adapters.in.dto;
-import be.kdg.int5.gameRegistry.domain.GameId;
-import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 import java.util.List;
