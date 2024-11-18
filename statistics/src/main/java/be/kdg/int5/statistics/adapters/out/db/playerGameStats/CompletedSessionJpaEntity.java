@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(catalog = "statistics_db", name = "completed_game_sessions")
+@Table(schema = "statistics", name = "completed_game_sessions")
 public class CompletedSessionJpaEntity {
     @Id
     @Column(name = "session_id", columnDefinition = "varchar(36)", nullable = false, unique = true)

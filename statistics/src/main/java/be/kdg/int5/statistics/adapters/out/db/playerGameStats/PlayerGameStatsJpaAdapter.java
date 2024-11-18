@@ -3,19 +3,25 @@ package be.kdg.int5.statistics.adapters.out.db.playerGameStats;
 import be.kdg.int5.statistics.domain.*;
 import be.kdg.int5.statistics.port.out.PlayerGameStatisticsLoadPort;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import java.util.Comparator;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Component
 public class PlayerGameStatsJpaAdapter implements PlayerGameStatisticsLoadPort {
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(PlayerGameStatsJpaAdapter.class);
     private final PlayerGameStatsJpaRepository playerGameStatsJpaRepository;
+    private final AchievementJpaRepository achievementJpaRepository;
+    private final AchievementProgressJpaRepository achievementProgressJpaRepository;
 
     public PlayerGameStatsJpaAdapter(
-            final PlayerGameStatsJpaRepository playerGameStatsJpaRepository
-    ) {
+            final PlayerGameStatsJpaRepository playerGameStatsJpaRepository,
+            AchievementJpaRepository achievementJpaRepository, AchievementProgressJpaRepository achievementProgressJpaRepository) {
         this.playerGameStatsJpaRepository = playerGameStatsJpaRepository;
+        this.achievementJpaRepository = achievementJpaRepository;
+        this.achievementProgressJpaRepository = achievementProgressJpaRepository;
     }
 
 
@@ -68,6 +74,12 @@ public class PlayerGameStatsJpaAdapter implements PlayerGameStatisticsLoadPort {
 
         // Add remaining sessions to `playerGameStats`
         playerGameStats.getCompletedSessions().addAll(remainingSessions);
+
+        Set<AchievementProgress> achievementProgressSet = playerGameStatsJpaEntity.getAchievementProgressJpaEntities()
+                .stream()
+                .map(this::achievementProgressJpaToDomain)
+                .collect(Collectors.toSet());
+
         return playerGameStats;
     }
 
@@ -102,4 +114,28 @@ public class PlayerGameStatsJpaAdapter implements PlayerGameStatisticsLoadPort {
                 completedSessionJpaEntity.isWasFirstToGo()
         );
     }
+
+    private AchievementProgress achievementProgressJpaToDomain(final AchievementProgressJpaEntity achievementProgressJpaEntity){
+        return new AchievementProgress(
+                new AchievementId(achievementProgressJpaEntity.getAchievementProgressId()),
+                        achievementProgressJpaEntity.getCounterTotal()
+        );
+    }
+
+    private AchievementProgressJpaEntity achievementProgressDomainToJpa(final AchievementProgress achievementProgress, PlayerId playerId){
+        final AchievementProgressJpaEntity achievementProgressJpaEntity = achievementProgressJpaRepository.findAchievementProgressByAchievementIdAndPlayerId(
+                achievementProgress.getAchievementId().uuid(),
+                playerId.uuid()
+        ).orElseThrow();
+
+        final AchievementJpaEntity achievementJpa = achievementJpaRepository.findById(achievementProgress.getAchievementId().uuid()).orElseThrow();
+
+        return new AchievementProgressJpaEntity(
+                achievementProgressJpaEntity.getAchievementProgressId(),
+                achievementJpa,
+                achievementProgressJpaEntity.getPlayerGameStatsJpaEntity(),
+                achievementProgress.getCounterValue()
+                );
+    }
+
 }
