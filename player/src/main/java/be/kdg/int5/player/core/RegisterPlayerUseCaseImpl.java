@@ -31,11 +31,11 @@ public class RegisterPlayerUseCaseImpl implements RegisterPlayerUseCase {
         if (player != null) {
             player.setDisplayName(command.username());
             updatePlayerPort.updatePlayerDisplayName(player);
-            LOGGER.info("Player updated with display name {}", command.username());
+            LOGGER.info("player: Player updated with display name {}", command.username());
             return;
         }
 
         createPlayerPort.createPlayer(new Player(new PlayerId(command.id()), command.username()));
-        LOGGER.info("New player persisted to database with username: {} and id: {}", command.username(), command.id());
+        LOGGER.info("player: New player persisted to database with username: {} and id: {}", command.username(), command.id());
     }
 }
