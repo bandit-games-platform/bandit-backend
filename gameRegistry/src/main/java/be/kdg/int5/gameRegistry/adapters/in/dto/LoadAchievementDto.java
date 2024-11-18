@@ -6,14 +6,9 @@ import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
 
 public class LoadAchievementDto {
-
-    @NotNull
     private UUID id;
-    @NotNull
     private String title;
-    @Min(value = 1, message = "counterTotal must be greater than 0")
     private int counterTotal;
-    @NotNull
     private String description;
 
     public LoadAchievementDto() {

@@ -7,12 +7,8 @@ import java.util.Set;
 import java.util.UUID;
 
 public class LoadGameDto {
-
-    @NotNull
     private UUID id;
-    @NotNull
     private String title;
-    @NotNull
     private String description;
     private BigDecimal price;
     private String icon;

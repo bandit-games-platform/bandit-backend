@@ -4,10 +4,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
 public class LoadRuleDto {
-
-    @Min(value = 1 , message = "stepNumber must be greater than 0")
     private int stepNumber;
-    @NotNull
     private String rule;
 
     public LoadRuleDto() {
