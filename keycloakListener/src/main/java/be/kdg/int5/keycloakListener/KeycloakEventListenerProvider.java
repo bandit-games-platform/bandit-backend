@@ -21,15 +21,8 @@ public class KeycloakEventListenerProvider implements EventListenerProvider {
 
     @Override
     public void onEvent(Event event) {
-        LOGGER.info("Event with type: {} occurred", event.getType().toString());
-
         if(Objects.equals(event.getType().toString(), "REGISTER")) {
-            // Get userId, then in details username
-            // event.getDetails().entrySet() has these values:
-            //      auth_method=openid-connect, auth_type=code, register_method=form, last_name=Gordon,
-            //      redirect_uri=http://localhost:8180/authentication-complete, first_name=Roman,
-            //      code_id=f192b9a6-8009-4ede-ac72-971f5fab17e6, email=roman.gordon@student.kdg.be,
-            //      username=roman.gordon@student.kdg.be
+            LOGGER.info("{} event occurred for user {}", event.getType().toString(), event.getUserId());
 
             String userId = event.getUserId();
             String username = "";
@@ -41,8 +34,6 @@ public class KeycloakEventListenerProvider implements EventListenerProvider {
                     }
                 }
             }
-
-            LOGGER.info("Registration for user with id {} and username {}", userId, username);
 
             UUID identifyingId = UUID.nameUUIDFromBytes((authorizationId + "-" + userId + "-" + username).getBytes());
 
@@ -63,7 +54,7 @@ public class KeycloakEventListenerProvider implements EventListenerProvider {
 
     @Override
     public void onEvent(AdminEvent adminEvent, boolean b) {
-        System.out.println("Admin Event Occurred");
+        LOGGER.info("An Admin Event Occurred");
     }
 
     @Override
@@ -91,7 +82,7 @@ public class KeycloakEventListenerProvider implements EventListenerProvider {
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            LOGGER.info("Got status {}", response.statusCode());
+            LOGGER.info("Posting to backend, received status {}", response.statusCode());
 
             client.close();
 

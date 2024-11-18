@@ -1,6 +1,9 @@
 package be.kdg.int5.player.adapters.out.db.player;
 
+import jakarta.persistence.Column;
+
 public class ImageResourceJpaEmbed {
+    @Column(name = "avatar")
     private String url;
 
     public ImageResourceJpaEmbed() {
