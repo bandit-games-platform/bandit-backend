@@ -5,18 +5,12 @@ import org.keycloak.events.EventListenerProvider;
 import org.keycloak.events.admin.AdminEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
 import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.charset.StandardCharsets;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.UUID;
@@ -53,9 +47,8 @@ public class KeycloakEventListenerProvider implements EventListenerProvider {
             UUID identifyingId = UUID.nameUUIDFromBytes((authorizationId + "-" + userId + "-" + username).getBytes());
 
             boolean connected = false;
-            // TODO: I believe the issue is that the docker container has its own network and so can't connect via the host systems localhost
-            String individualContextUrl = "http://localhost:8094/player/registration/" + identifyingId.toString();
-            String wholeApplicationUrl = "http://localhost:8090/api/registration/" + identifyingId.toString();
+            String individualContextUrl = "http://host.docker.internal:8094/player/registration/" + identifyingId.toString();
+            String wholeApplicationUrl = "http://host.docker.internal:8090/api/registration/" + identifyingId.toString();
 
             try {
                 connected = attemptConnection(individualContextUrl, userId, username);
