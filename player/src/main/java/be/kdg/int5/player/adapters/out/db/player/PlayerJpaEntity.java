@@ -17,6 +17,7 @@ public class PlayerJpaEntity {
     private String displayName;
     @Enumerated(EnumType.STRING)
     private Gender gender;
+    @Enumerated(EnumType.STRING)
     private Country location;
     private LocalDate birthdate;
     @Embedded
