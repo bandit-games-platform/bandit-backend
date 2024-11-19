@@ -1,0 +1,11 @@
+### GET request to example server
+POST http://localhost:8094/player/registration/8975f11f-4d5f-3040-be6e-ab379c721e5a
+Accept: application/json
+Content-Type: application/json
+
+{
+    "userId": "e58c4fcb-b870-421c-866c-e864cea2614e",
+    "username": "roman.gordon@student.kdg.be"
+}
+
+###
