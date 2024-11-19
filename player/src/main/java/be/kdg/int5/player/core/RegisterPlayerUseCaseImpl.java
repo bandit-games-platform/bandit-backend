@@ -7,6 +7,7 @@ import be.kdg.int5.player.port.in.RegisterPlayerUseCase;
 import be.kdg.int5.player.port.out.CreatePlayerPort;
 import be.kdg.int5.player.port.out.LoadPlayerPort;
 import be.kdg.int5.player.port.out.UpdatePlayerPort;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,7 @@ public class RegisterPlayerUseCaseImpl implements RegisterPlayerUseCase {
     }
 
     @Override
+    @Transactional
     public void registerPlayer(RegisterPlayerCommand command) {
         Player player = loadPlayerPort.loadPlayerById(command.id());
 

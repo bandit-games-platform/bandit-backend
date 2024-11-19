@@ -3,6 +3,7 @@ package be.kdg.int5.player.adapters.in;
 import be.kdg.int5.player.adapters.in.dto.NewPlayerRegistrationDto;
 import be.kdg.int5.player.port.in.RegisterPlayerCommand;
 import be.kdg.int5.player.port.in.RegisterPlayerUseCase;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ public class NewRegistrationController {
     }
 
     @PostMapping("/{authenticationId}")
-    public void registerNewRegistration(@PathVariable String authenticationId, @RequestBody NewPlayerRegistrationDto dto) {
+    public void registerNewRegistration(@PathVariable String authenticationId, @Valid @RequestBody NewPlayerRegistrationDto dto) {
         UUID identifyingId = UUID.nameUUIDFromBytes((authorizationId + "-" + dto.getUserId() + "-" + dto.getUsername()).getBytes());
 
         if (!Objects.equals(authenticationId, identifyingId.toString())) return;
