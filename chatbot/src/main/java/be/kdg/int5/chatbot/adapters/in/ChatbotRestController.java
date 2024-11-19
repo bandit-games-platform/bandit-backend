@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,9 +21,10 @@ public class ChatbotRestController {
     @Value("${python.backend.url:http://localhost:8000}")
     private String pythonBackendUrl;
 
+
+
     @PostMapping("/initial-question")
     public ResponseEntity<String> postInitialQuestion() {
-        System.out.println("Hi there Chatbot!");
 
         // Create mock data for DTOs
         GameRuleDto rule1 = new GameRuleDto(1, "Collect all the keys to unlock doors.");
