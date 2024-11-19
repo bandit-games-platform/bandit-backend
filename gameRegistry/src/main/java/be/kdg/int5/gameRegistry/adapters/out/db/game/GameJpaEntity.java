@@ -29,15 +29,27 @@ public class GameJpaEntity {
     @ManyToOne
     private DeveloperJpaEntity developer;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "game")
-    private Set<GameScreenshotJpaEntity> screenshots;
+    @OneToMany(fetch = FetchType.LAZY)
+    private Set<ImageResourceJpaEntity> screenshots;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "game")
     private Set<AchievementJpaEntity> achievements;
 
     public GameJpaEntity() {
     }
 
-    public GameJpaEntity(UUID gameId, String title, String description, BigDecimal currentPrice, ImageResourceJpaEntity icon, ImageResourceJpaEntity background, Set<RuleJpaEntity> rules, String currentHost, DeveloperJpaEntity developer, Set<GameScreenshotJpaEntity> screenshots, Set<AchievementJpaEntity> achievements) {
+    public GameJpaEntity(
+            UUID gameId,
+            String title,
+            String description,
+            BigDecimal currentPrice,
+            ImageResourceJpaEntity icon,
+            ImageResourceJpaEntity background,
+            Set<RuleJpaEntity> rules,
+            String currentHost,
+            DeveloperJpaEntity developer,
+            Set<ImageResourceJpaEntity> screenshots,
+            Set<AchievementJpaEntity> achievements
+    ) {
         this.gameId = gameId;
         this.title = title;
         this.description = description;
@@ -123,11 +135,11 @@ public class GameJpaEntity {
         this.developer = developer;
     }
 
-    public Set<GameScreenshotJpaEntity> getScreenshots() {
+    public Set<ImageResourceJpaEntity> getScreenshots() {
         return screenshots;
     }
 
-    public void setScreenshots(Set<GameScreenshotJpaEntity> screenshots) {
+    public void setScreenshots(Set<ImageResourceJpaEntity> screenshots) {
         this.screenshots = screenshots;
     }
 

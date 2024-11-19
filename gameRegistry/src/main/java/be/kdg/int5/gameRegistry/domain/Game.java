@@ -2,10 +2,6 @@ package be.kdg.int5.gameRegistry.domain;
 
 import be.kdg.int5.common.domain.ImageResource;
 import be.kdg.int5.common.domain.ResourceURL;
-import be.kdg.int5.gameRegistry.adapters.out.db.achievement.AchievementJpaEntity;
-import be.kdg.int5.gameRegistry.adapters.out.db.game.GameScreenshotJpaEntity;
-import be.kdg.int5.gameRegistry.adapters.out.db.game.ImageResourceJpaEntity;
-import be.kdg.int5.gameRegistry.adapters.out.db.rule.RuleJpaEntity;
 
 import java.math.BigDecimal;
 import java.util.*;

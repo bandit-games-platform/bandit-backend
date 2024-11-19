@@ -5,7 +5,9 @@ import be.kdg.int5.common.domain.ResourceURL;
 import be.kdg.int5.gameRegistry.adapters.out.db.achievement.AchievementJpaEntity;
 import be.kdg.int5.gameRegistry.adapters.out.db.rule.RuleJpaEntity;
 import be.kdg.int5.gameRegistry.domain.*;
+import be.kdg.int5.gameRegistry.port.out.GamesCreatePort;
 import be.kdg.int5.gameRegistry.port.out.GamesLoadPort;
+import be.kdg.int5.gameRegistry.port.out.GamesUpdatePort;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -16,7 +18,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Repository
-public class GameJpaAdapter implements GamesLoadPort {
+public class GameJpaAdapter implements GamesLoadPort, GamesCreatePort, GamesUpdatePort {
     private static final Logger LOGGER = LoggerFactory.getLogger(GameJpaAdapter.class);
 
     private final GameJpaRepository gameJpaRepository;
@@ -41,6 +43,37 @@ public class GameJpaAdapter implements GamesLoadPort {
                 .toList();
     }
 
+    @Override
+    public boolean create(Game newGame) {
+        if (gameJpaRepository.existsById(newGame.getId().uuid())) return false;
+
+        gameJpaRepository.save(toGameEntity(newGame));
+        return true;
+    }
+
+    @Override
+    public boolean update(Game game) {
+        if (!gameJpaRepository.existsById(game.getId().uuid())) return false;
+
+        gameJpaRepository.save(toGameEntity(game));
+        return true;
+    }
+
+    public GameJpaEntity toGameEntity(Game game) {
+        return new GameJpaEntity(
+                game.getId().uuid(),
+                game.getTitle(),
+                game.getDescription(),
+                game.getCurrentPrice(),
+                toImageResourceEntity(game.getIcon()),
+                toImageResourceEntity(game.getBackground()),
+                game.getRules().stream().map(this::toRuleEntity).collect(Collectors.toSet()),
+                game.getCurrentHost().url(),
+                toDeveloperEntity(game.getDeveloper()),
+                game.getScreenshots().stream().map(this::toImageResourceEntity).collect(Collectors.toSet()),
+                game.getAchievements().stream().map(this::toAchievementEntity).collect(Collectors.toSet())
+        );
+    }
 
     public Game toGame(GameJpaEntity gameJpa) {
 
@@ -50,7 +83,7 @@ public class GameJpaAdapter implements GamesLoadPort {
         ImageResource backgroundImage = toImageResource(gameJpa.getBackground());
         List<ImageResource> screenshots = gameJpa.getScreenshots()
                 .stream()
-                .map(screenshotJpa -> toImageResource(screenshotJpa.getScreenshot()))
+                .map(this::toImageResource)
                 .toList();
 
         Set<Achievement> achievements = gameJpa.getAchievements()
@@ -79,6 +112,23 @@ public class GameJpaAdapter implements GamesLoadPort {
         );
     }
 
+    public DeveloperJpaEntity toDeveloperEntity(Developer developer) {
+        return new DeveloperJpaEntity(
+                developer.id().uuid(),
+                developer.studioName()
+        );
+    }
+
+    public AchievementJpaEntity toAchievementEntity(Achievement achievement) {
+        return new AchievementJpaEntity(
+                achievement.getId().uuid(),
+                achievement.getTitle(),
+                achievement.getCounterTotal(),
+                achievement.getDescription(),
+                null
+        );
+    }
+
     public Achievement toAchievement(AchievementJpaEntity achievementJpa){
         return new Achievement(
                 new AchievementId(achievementJpa.getId()),
@@ -88,10 +138,24 @@ public class GameJpaAdapter implements GamesLoadPort {
         );
     }
 
+    public RuleJpaEntity toRuleEntity(Rule rule){
+        return new RuleJpaEntity(
+                rule.stepNumber(),
+                rule.rule(),
+                null
+        );
+    }
+
     public Rule toRule(RuleJpaEntity ruleJpa){
         return new Rule(
                 ruleJpa.getStepNumber(),
                 ruleJpa.getRule()
+        );
+    }
+
+    public ImageResourceJpaEntity toImageResourceEntity(ImageResource imageResource) {
+        return new ImageResourceJpaEntity(
+                imageResource.url().url()
         );
     }
 
