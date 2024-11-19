@@ -38,7 +38,7 @@ public class RegisterPlayerUseCaseImplMockingTest {
     @Test
     void NewPlayerShouldBeSavedWhenNewPlayerRegisters() {
         // Act
-        registerPlayerUseCase.registerPlayer(new RegisterPlayerCommand(Variables.PLAYER_ONE_UUID, Variables.PLAYER_ONE_USERNAME));
+        registerPlayerUseCase.registerOrUpdatePlayerAccount(new RegisterPlayerCommand(Variables.PLAYER_ONE_UUID, Variables.PLAYER_ONE_USERNAME));
 
         // Assert
         verify(loadPlayerPort, times(1)).loadPlayerById(Variables.PLAYER_ONE_UUID);
@@ -54,7 +54,7 @@ public class RegisterPlayerUseCaseImplMockingTest {
     @Test
     void PlayerShouldBeUpdatedWhenExistingPlayerRegisters() {
         // Act
-        registerPlayerUseCase.registerPlayer(new RegisterPlayerCommand(Variables.PLAYER_TWO_UUID, Variables.PLAYER_TWO_NEW_USERNAME));
+        registerPlayerUseCase.registerOrUpdatePlayerAccount(new RegisterPlayerCommand(Variables.PLAYER_TWO_UUID, Variables.PLAYER_TWO_NEW_USERNAME));
 
         // Assert
         verify(loadPlayerPort, times(1)).loadPlayerById(Variables.PLAYER_TWO_UUID);

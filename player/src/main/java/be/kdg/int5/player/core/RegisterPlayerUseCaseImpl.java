@@ -27,7 +27,7 @@ public class RegisterPlayerUseCaseImpl implements RegisterPlayerUseCase {
 
     @Override
     @Transactional
-    public void registerPlayer(RegisterPlayerCommand command) {
+    public void registerOrUpdatePlayerAccount(RegisterPlayerCommand command) {
         Player player = loadPlayerPort.loadPlayerById(command.id());
 
         if (player != null) {

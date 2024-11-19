@@ -30,6 +30,6 @@ public class NewRegistrationController {
 
         LOGGER.info("New player registration with id {} and username {}", dto.getUserId(), dto.getUsername());
 
-        registerPlayerUseCase.registerPlayer(new RegisterPlayerCommand(UUID.fromString(dto.getUserId()), dto.getUsername()));
+        registerPlayerUseCase.registerOrUpdatePlayerAccount(new RegisterPlayerCommand(UUID.fromString(dto.getUserId()), dto.getUsername()));
     }
 }
