@@ -4,6 +4,6 @@ import be.kdg.int5.player.domain.Player;
 
 import java.util.UUID;
 
-public interface LoadPlayerPort {
+public interface PlayerLoadPort {
     Player loadPlayerById(UUID playerId);
 }
