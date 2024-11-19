@@ -339,7 +339,16 @@
       "bandit-backend": [],
       "gameplay-backend": [],
       "bandit-frontend": [],
-      "gameregistry-backend": [],
+      "gameregistry-backend": [
+        {
+          "id": "6fdd9b7b-4b16-4665-b249-884818390104",
+          "name": "uma_protection",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "e0bcebb5-bb7b-4d5f-b071-8b896547466c",
+          "attributes": {}
+        }
+      ],
       "account": [
         {
           "id": "8a799d26-a9af-4762-8012-daf1633aba5e",
@@ -481,6 +490,29 @@
   "webAuthnPolicyPasswordlessAvoidSameAuthenticatorRegister": false,
   "webAuthnPolicyPasswordlessAcceptableAaguids": [],
   "webAuthnPolicyPasswordlessExtraOrigins": [],
+  "users": [
+    {
+      "id": "de879126-7c22-4c96-a2a2-e0aa1c45ebf5",
+      "username": "service-account-gameregistry-backend",
+      "emailVerified": false,
+      "createdTimestamp": 1731929370283,
+      "enabled": true,
+      "totp": false,
+      "serviceAccountClientId": "gameregistry-backend",
+      "disableableCredentialTypes": [],
+      "requiredActions": [],
+      "realmRoles": [
+        "default-roles-bandit-realm"
+      ],
+      "clientRoles": {
+        "gameregistry-backend": [
+          "uma_protection"
+        ]
+      },
+      "notBefore": 0,
+      "groups": []
+    }
+  ],
   "scopeMappings": [
     {
       "clientScope": "offline_access",
@@ -928,7 +960,8 @@
       "standardFlowEnabled": true,
       "implicitFlowEnabled": false,
       "directAccessGrantsEnabled": true,
-      "serviceAccountsEnabled": false,
+      "serviceAccountsEnabled": true,
+      "authorizationServicesEnabled": true,
       "publicClient": false,
       "frontchannelLogout": true,
       "protocol": "openid-connect",
@@ -937,12 +970,60 @@
         "client.secret.creation.time": "1731848404",
         "backchannel.logout.session.required": "true",
         "post.logout.redirect.uris": "+",
+        "display.on.consent.screen": "false",
         "oauth2.device.authorization.grant.enabled": "false",
         "backchannel.logout.revoke.offline.tokens": "false"
       },
       "authenticationFlowBindingOverrides": {},
       "fullScopeAllowed": true,
       "nodeReRegistrationTimeout": -1,
+      "protocolMappers": [
+        {
+          "id": "568d37c4-9d88-42a7-8099-dc68307f8cff",
+          "name": "Client Host",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usersessionmodel-note-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.session.note": "clientHost",
+            "id.token.claim": "true",
+            "introspection.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "clientHost",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "id": "c88269c8-7a25-4546-bdb8-0f521a3e3358",
+          "name": "Client ID",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usersessionmodel-note-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.session.note": "client_id",
+            "id.token.claim": "true",
+            "introspection.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "client_id",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "id": "d4fd3e51-fbae-49a6-aaac-d4eaa2444fbd",
+          "name": "Client IP Address",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usersessionmodel-note-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.session.note": "clientAddress",
+            "id.token.claim": "true",
+            "introspection.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "clientAddress",
+            "jsonType.label": "String"
+          }
+        }
+      ],
       "defaultClientScopes": [
         "web-origins",
         "acr",
@@ -956,7 +1037,47 @@
         "phone",
         "offline_access",
         "microprofile-jwt"
-      ]
+      ],
+      "authorizationSettings": {
+        "allowRemoteResourceManagement": true,
+        "policyEnforcementMode": "ENFORCING",
+        "resources": [
+          {
+            "name": "Default Resource",
+            "type": "urn:gameregistry-backend:resources:default",
+            "ownerManagedAccess": false,
+            "attributes": {},
+            "uris": [
+              "/*"
+            ]
+          }
+        ],
+        "policies": [
+          {
+            "name": "Default Policy",
+            "description": "A policy that grants access only for users within this realm",
+            "type": "js",
+            "logic": "POSITIVE",
+            "decisionStrategy": "AFFIRMATIVE",
+            "config": {
+              "code": "// by default, grants any permission associated with this policy\n$evaluation.grant();\n"
+            }
+          },
+          {
+            "name": "Default Permission",
+            "description": "A permission that applies to the default resource type",
+            "type": "resource",
+            "logic": "POSITIVE",
+            "decisionStrategy": "UNANIMOUS",
+            "config": {
+              "defaultResourceType": "urn:gameregistry-backend:resources:default",
+              "applyPolicies": "[\"Default Policy\"]"
+            }
+          }
+        ],
+        "scopes": [],
+        "decisionStrategy": "UNANIMOUS"
+      }
     },
     {
       "id": "6368c455-f14d-47ca-8c4d-4ad498913984",
@@ -1030,6 +1151,7 @@
       "implicitFlowEnabled": false,
       "directAccessGrantsEnabled": false,
       "serviceAccountsEnabled": false,
+      "authorizationServicesEnabled": true,
       "publicClient": false,
       "frontchannelLogout": false,
       "protocol": "openid-connect",
@@ -1052,7 +1174,134 @@
         "phone",
         "offline_access",
         "microprofile-jwt"
-      ]
+      ],
+      "authorizationSettings": {
+        "allowRemoteResourceManagement": false,
+        "policyEnforcementMode": "ENFORCING",
+        "resources": [
+          {
+            "name": "Users",
+            "ownerManagedAccess": false,
+            "attributes": {},
+            "uris": [],
+            "scopes": [
+              {
+                "name": "user-impersonated"
+              },
+              {
+                "name": "view"
+              },
+              {
+                "name": "manage-group-membership"
+              },
+              {
+                "name": "impersonate"
+              },
+              {
+                "name": "map-roles"
+              },
+              {
+                "name": "manage"
+              }
+            ]
+          }
+        ],
+        "policies": [
+          {
+            "name": "client-impersonators",
+            "description": "",
+            "type": "client",
+            "logic": "POSITIVE",
+            "decisionStrategy": "UNANIMOUS",
+            "config": {
+              "clients": "[\"bandit-backend\",\"gameregistry-backend\"]"
+            }
+          },
+          {
+            "name": "admin-impersonating.permission.users",
+            "description": "",
+            "type": "scope",
+            "logic": "POSITIVE",
+            "decisionStrategy": "UNANIMOUS",
+            "config": {
+              "resources": "[\"Users\"]",
+              "scopes": "[\"impersonate\"]",
+              "applyPolicies": "[\"client-impersonators\"]"
+            }
+          },
+          {
+            "name": "user-impersonated.permission.users",
+            "type": "scope",
+            "logic": "POSITIVE",
+            "decisionStrategy": "UNANIMOUS",
+            "config": {
+              "resources": "[\"Users\"]",
+              "scopes": "[\"user-impersonated\"]"
+            }
+          },
+          {
+            "name": "manage.permission.users",
+            "type": "scope",
+            "logic": "POSITIVE",
+            "decisionStrategy": "UNANIMOUS",
+            "config": {
+              "resources": "[\"Users\"]",
+              "scopes": "[\"manage\"]"
+            }
+          },
+          {
+            "name": "view.permission.users",
+            "type": "scope",
+            "logic": "POSITIVE",
+            "decisionStrategy": "UNANIMOUS",
+            "config": {
+              "resources": "[\"Users\"]",
+              "scopes": "[\"view\"]"
+            }
+          },
+          {
+            "name": "map-roles.permission.users",
+            "type": "scope",
+            "logic": "POSITIVE",
+            "decisionStrategy": "UNANIMOUS",
+            "config": {
+              "resources": "[\"Users\"]",
+              "scopes": "[\"map-roles\"]"
+            }
+          },
+          {
+            "name": "manage-group-membership.permission.users",
+            "type": "scope",
+            "logic": "POSITIVE",
+            "decisionStrategy": "UNANIMOUS",
+            "config": {
+              "resources": "[\"Users\"]",
+              "scopes": "[\"manage-group-membership\"]"
+            }
+          }
+        ],
+        "scopes": [
+          {
+            "name": "impersonate"
+          },
+          {
+            "name": "view"
+          },
+          {
+            "name": "user-impersonated"
+          },
+          {
+            "name": "manage-group-membership"
+          },
+          {
+            "name": "manage"
+          },
+          {
+            "name": "map-roles"
+          }
+        ],
+        "decisionStrategy": "UNANIMOUS"
+      }
     },
     {
       "id": "f36b9e18-16fe-4996-9b4b-38f74eafb14d",
