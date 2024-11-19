@@ -9,3 +9,5 @@ include 'gameplay'
 include 'player'
 include 'statistics'
 include 'storefront'
+
+include 'keycloakListener'
