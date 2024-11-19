@@ -3,7 +3,7 @@ package be.kdg.int5.gameRegistry.core;
 import be.kdg.int5.gameRegistry.domain.DeveloperApiKey;
 import be.kdg.int5.gameRegistry.port.in.AuthenticateSDKCommand;
 import be.kdg.int5.gameRegistry.port.in.AuthenticateSDKUseCase;
-import be.kdg.int5.gameRegistry.port.out.LoadDeveloperApiKeyPort;
+import be.kdg.int5.gameRegistry.port.out.DeveloperApiKeyLoadPort;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,15 +29,15 @@ public class AuthenticateSDKUseCaseImpl implements AuthenticateSDKUseCase {
     @Value("${keycloak.client.secret}")
     private String keycloakClientSecret;
 
-    private final LoadDeveloperApiKeyPort loadDeveloperApiKeyPort;
+    private final DeveloperApiKeyLoadPort developerApiKeyLoadPort;
 
-    public AuthenticateSDKUseCaseImpl(LoadDeveloperApiKeyPort loadDeveloperApiKeyPort) {
-        this.loadDeveloperApiKeyPort = loadDeveloperApiKeyPort;
+    public AuthenticateSDKUseCaseImpl(DeveloperApiKeyLoadPort developerApiKeyLoadPort) {
+        this.developerApiKeyLoadPort = developerApiKeyLoadPort;
     }
 
     @Override
     public String authenticate(AuthenticateSDKCommand command) throws InvalidApiKeyException {
-        Optional<DeveloperApiKey> apiKeyOptional = loadDeveloperApiKeyPort.load(command.apiKey());
+        Optional<DeveloperApiKey> apiKeyOptional = developerApiKeyLoadPort.load(command.apiKey());
         if (apiKeyOptional.isEmpty()) {
             logger.warn("gameRegistry:sdk-auth Auth attempt with non-existent api key: '{}'", command.apiKey());
             throw new InvalidApiKeyException();

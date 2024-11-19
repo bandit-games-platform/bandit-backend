@@ -2,13 +2,13 @@ package be.kdg.int5.gameRegistry.adapters.out.db.apiKey;
 
 import be.kdg.int5.gameRegistry.domain.DeveloperApiKey;
 import be.kdg.int5.gameRegistry.domain.DeveloperId;
-import be.kdg.int5.gameRegistry.port.out.LoadDeveloperApiKeyPort;
+import be.kdg.int5.gameRegistry.port.out.DeveloperApiKeyLoadPort;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public class DeveloperApiKeyJpaAdapter implements LoadDeveloperApiKeyPort {
+public class DeveloperApiKeyJpaAdapter implements DeveloperApiKeyLoadPort {
     private final DeveloperApiKeyJpaRepository repository;
 
     public DeveloperApiKeyJpaAdapter(DeveloperApiKeyJpaRepository repository) {
