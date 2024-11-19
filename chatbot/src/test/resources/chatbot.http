@@ -1,0 +1,13 @@
+### Initial Query
+
+#POST http://localhost:8090/api/schedule-appointment
+#Accept: application/json
+#Content-Type: application/json
+#Authorization: Bearer {{access_token_seller}}
+#
+#{
+#  "sellerUUID": "25ff40b1-ecf8-4d0c-b664-4cc91f02c112",
+#  "licensePlate": "1-ABC-123",
+#  "mineralCode": "PT",
+#  "slotStart": "2024-12-01T09:00:00"
+#}
