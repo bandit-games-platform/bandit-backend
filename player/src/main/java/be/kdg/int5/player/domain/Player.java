@@ -22,4 +22,55 @@ public class Player {
         this.displayName = displayName;
     }
 
+    public PlayerId getId() {
+        return id;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
+    public Country getLocation() {
+        return location;
+    }
+
+    public void setLocation(Country location) {
+        this.location = location;
+    }
+
+    public LocalDate getBirthdate() {
+        return birthdate;
+    }
+
+    public void setBirthdate(LocalDate birthdate) {
+        this.birthdate = birthdate;
+    }
+
+    public ImageResource getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(ImageResource avatar) {
+        this.avatar = avatar;
+    }
+
+    public List<Player> getFriendsList() {
+        return friendsList;
+    }
+
+    public void setFriendsList(List<Player> friendsList) {
+        this.friendsList = friendsList;
+    }
 }

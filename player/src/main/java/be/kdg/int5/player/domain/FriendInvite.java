@@ -14,4 +14,20 @@ public class FriendInvite {
         this.invited = invited;
         this.status = InviteStatus.PENDING;
     }
+
+    public PlayerId getInviter() {
+        return inviter;
+    }
+
+    public PlayerId getInvited() {
+        return invited;
+    }
+
+    public InviteStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(InviteStatus status) {
+        this.status = status;
+    }
 }
