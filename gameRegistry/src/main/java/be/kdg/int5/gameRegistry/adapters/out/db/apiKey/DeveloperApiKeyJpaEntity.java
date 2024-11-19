@@ -15,7 +15,6 @@ public class DeveloperApiKeyJpaEntity {
     private boolean revoked;
 
     public DeveloperApiKeyJpaEntity() {
-
     }
 
     public DeveloperApiKeyJpaEntity(UUID developerId, String apiKey, boolean revoked) {
