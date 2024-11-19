@@ -14,4 +14,16 @@ public class PlayerLibrary {
         this.playerId = playerId;
         this.playerLibraryItems = new HashSet<>();
     }
+
+    public PlayerId getPlayerId() {
+        return playerId;
+    }
+
+    public Set<PlayerLibraryItem> getPlayerLibraryItems() {
+        return playerLibraryItems;
+    }
+
+    public void setPlayerLibraryItems(Set<PlayerLibraryItem> playerLibraryItems) {
+        this.playerLibraryItems = playerLibraryItems;
+    }
 }

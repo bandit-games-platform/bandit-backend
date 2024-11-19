@@ -11,4 +11,24 @@ public class PlayerLibraryItem {
 
         this.gameId = gameId;
     }
+
+    public GameId getGameId() {
+        return gameId;
+    }
+
+    public boolean isFavourite() {
+        return favourite;
+    }
+
+    public void setFavourite(boolean favourite) {
+        this.favourite = favourite;
+    }
+
+    public boolean isHidden() {
+        return hidden;
+    }
+
+    public void setHidden(boolean hidden) {
+        this.hidden = hidden;
+    }
 }
