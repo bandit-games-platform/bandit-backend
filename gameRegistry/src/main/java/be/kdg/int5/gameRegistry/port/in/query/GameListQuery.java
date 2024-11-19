@@ -5,7 +5,7 @@ import be.kdg.int5.gameRegistry.domain.Game;
 import java.math.BigDecimal;
 import java.util.List;
 
-public interface GetGameListQuery {
+public interface GameListQuery {
 
     List<Game> retrieveGamesWithIcon();
 
