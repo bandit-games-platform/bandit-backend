@@ -1,7 +1,13 @@
 
 -- Insert developers
 INSERT INTO game_registry.developer (id, studio_name) VALUES
-('c5dd675d-0827-4221-9ccd-49180bf045f0', 'Integration Studio');
+('c5dd675d-0827-4221-9ccd-49180bf045f0', 'Integration Studio'),
+('3c0b923c-c267-498e-88a4-eee3a629fea4', 'BanditGames');
+
+-- give them a revoked and an active api key
+INSERT INTO game_registry.dev_api_key(developer_id, api_key, revoked)
+VALUES ('3c0b923c-c267-498e-88a4-eee3a629fea4', 'band1TAAA', true),
+       ('3c0b923c-c267-498e-88a4-eee3a629fea4', 'band1TBBB', false);
 
 -- Insert images into table
 INSERT INTO game_registry.image_resource( url) VALUES
