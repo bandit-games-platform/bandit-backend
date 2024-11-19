@@ -3,6 +3,12 @@ server:
   servlet:
     context-path: /api
 
+keycloak:
+  host: http://localhost:8180
+  realm: bandit-realm
+  client:
+    id: bandit-backend
+    secret: ${KEYCLOAK_CLIENT_SECRET}
 
 spring:
   config:
