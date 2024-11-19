@@ -1,16 +1,18 @@
 package be.kdg.int5.statistics.adapters.out.db.playerGameStats;
 
 import be.kdg.int5.statistics.domain.*;
+import be.kdg.int5.statistics.port.out.AchievementLoadPort;
 import be.kdg.int5.statistics.port.out.PlayerGameStatisticsLoadPort;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.Comparator;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
-public class PlayerGameStatsJpaAdapter implements PlayerGameStatisticsLoadPort {
+public class PlayerGameStatsJpaAdapter implements PlayerGameStatisticsLoadPort, AchievementLoadPort {
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(PlayerGameStatsJpaAdapter.class);
     private final PlayerGameStatsJpaRepository playerGameStatsJpaRepository;
     private final AchievementJpaRepository achievementJpaRepository;
@@ -33,6 +35,17 @@ public class PlayerGameStatsJpaAdapter implements PlayerGameStatisticsLoadPort {
                 .orElseThrow();
 
         return this.playerGameStatsJpaToDomain(playerGameStatsJpaEntity);
+    }
+
+    @Override
+    public List<Achievement> loadGameAchievements(GameId gameId) {
+        List<AchievementJpaEntity> achievements = achievementJpaRepository
+                .findAllByGameId(gameId.uuid())
+                .orElseThrow(() -> new IllegalStateException("Unable to find the earliest session."));
+
+        return achievements.stream()
+                .map(this::achievementJpaToDomain)
+                .toList();
     }
 
     private PlayerGameStatsJpaEntity playerGameStatsDomainToJpa(final PlayerGameStats playerGameStats){
@@ -80,6 +93,9 @@ public class PlayerGameStatsJpaAdapter implements PlayerGameStatisticsLoadPort {
                 .map(this::achievementProgressJpaToDomain)
                 .collect(Collectors.toSet());
 
+
+        playerGameStats.addAchievementProgressSet(achievementProgressSet);
+
         return playerGameStats;
     }
 
@@ -115,9 +131,19 @@ public class PlayerGameStatsJpaAdapter implements PlayerGameStatisticsLoadPort {
         );
     }
 
+    private Achievement achievementJpaToDomain(final AchievementJpaEntity achievementJpaEntity){
+        return new Achievement(
+                new AchievementId(achievementJpaEntity.getAchievementId()),
+                new GameId(achievementJpaEntity.getGameId()),
+                achievementJpaEntity.getCounterTotal(),
+                achievementJpaEntity.getTitle(),
+                achievementJpaEntity.getDescription()
+        );
+    }
+
     private AchievementProgress achievementProgressJpaToDomain(final AchievementProgressJpaEntity achievementProgressJpaEntity){
         return new AchievementProgress(
-                new AchievementId(achievementProgressJpaEntity.getAchievementProgressId()),
+                new AchievementId(achievementProgressJpaEntity.getAchievement().getAchievementId()),
                         achievementProgressJpaEntity.getCounterTotal()
         );
     }
@@ -137,5 +163,4 @@ public class PlayerGameStatsJpaAdapter implements PlayerGameStatisticsLoadPort {
                 achievementProgress.getCounterValue()
                 );
     }
-
 }

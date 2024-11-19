@@ -34,4 +34,18 @@ public class PlayerGameStats {
     public Set<AchievementProgress> getAchievementProgressSet() {
         return achievementProgressSet;
     }
+
+    public void addAchievementProgress(final AchievementProgress achievementProgress) {
+        Objects.requireNonNull(achievementProgress, "AchievementProgress cannot be null");
+        this.achievementProgressSet.add(achievementProgress);
+    }
+
+    public void addAchievementProgressSet(final Set<AchievementProgress> achievementProgressSet) {
+        if (achievementProgressSet == null || achievementProgressSet.isEmpty()) {
+            throw new IllegalArgumentException("AchievementProgress set cannot be null or empty");
+        }
+        this.achievementProgressSet.addAll(achievementProgressSet);
+    }
+
+
 }

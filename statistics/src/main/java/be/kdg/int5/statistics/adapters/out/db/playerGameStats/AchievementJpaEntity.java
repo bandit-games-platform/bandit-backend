@@ -11,7 +11,7 @@ import java.util.UUID;
 public class AchievementJpaEntity {
 
     @Id
-    @Column(name = "achievement_id", columnDefinition = "varchar(36)", nullable = false, unique = true)
+    @Column(name = "achievement_id", columnDefinition = "varchar(36)")
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private UUID achievementId;
 
@@ -21,13 +21,25 @@ public class AchievementJpaEntity {
     @Column
     private int counterTotal;
 
+    @Column(columnDefinition = "varchar(255)")
+    private String title;
+
+    @Column(columnDefinition = "varchar(1000)")
+    private String description;
+
     public AchievementJpaEntity() {
     }
 
-    public AchievementJpaEntity(final UUID achievementId, final UUID gameId, final int counterTotal) {
+    public AchievementJpaEntity(final UUID achievementId,
+                                final UUID gameId,
+                                final int counterTotal,
+                                final String title,
+                                final String description) {
         this.achievementId = achievementId;
         this.gameId = gameId;
         this.counterTotal = counterTotal;
+        this.title = title;
+        this.description = description;
     }
 
 
@@ -41,5 +53,13 @@ public class AchievementJpaEntity {
 
     public int getCounterTotal() {
         return counterTotal;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }

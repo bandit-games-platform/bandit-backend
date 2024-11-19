@@ -12,7 +12,7 @@ import java.util.UUID;
 @Table(schema = "statistics", name = "completed_game_sessions")
 public class CompletedSessionJpaEntity {
     @Id
-    @Column(name = "session_id", columnDefinition = "varchar(36)", nullable = false, unique = true)
+    @Column(name = "session_id", columnDefinition = "varchar(36)")
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private UUID sessionId;
 
@@ -23,6 +23,7 @@ public class CompletedSessionJpaEntity {
     private LocalDateTime endTime;
 
     @Column(name = "end_state", nullable = false)
+    @Enumerated(EnumType.STRING)
     private GameEndState endState;
 
     @Column(name = "turns_taken", nullable = true)

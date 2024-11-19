@@ -11,7 +11,7 @@ import java.util.UUID;
 public class AchievementProgressJpaEntity {
 
     @Id
-    @Column(name = "achievement_progress_id", columnDefinition = "varchar(36)", nullable = false, unique = true)
+    @Column(name = "achievement_progress_id", columnDefinition = "varchar(36)")
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private UUID achievementProgressId;
 
