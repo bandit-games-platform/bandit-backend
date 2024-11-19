@@ -5,20 +5,18 @@ import be.kdg.int5.common.domain.ResourceURL;
 import be.kdg.int5.gameRegistry.adapters.out.db.achievement.AchievementJpaEntity;
 import be.kdg.int5.gameRegistry.adapters.out.db.rule.RuleJpaEntity;
 import be.kdg.int5.gameRegistry.domain.*;
-import be.kdg.int5.gameRegistry.port.out.LoadGamesPort;
+import be.kdg.int5.gameRegistry.port.out.GamesLoadPort;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Repository
-public class GameJpaAdapter implements LoadGamesPort {
+public class GameJpaAdapter implements GamesLoadPort {
     private static final Logger LOGGER = LoggerFactory.getLogger(GameJpaAdapter.class);
 
     private final GameJpaRepository gameJpaRepository;

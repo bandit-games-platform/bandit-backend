@@ -1,4 +1,4 @@
 package be.kdg.int5.gameRegistry.port.out;
 
-public interface CreateGamesPort {
+public interface AchievementsLoadPort {
 }
