@@ -11,8 +11,6 @@ dependencies {
     compileOnly 'org.keycloak:keycloak-server-spi:26.0.5'
     compileOnly 'org.keycloak:keycloak-services:26.0.5'
 
-    implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
     implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
 }
