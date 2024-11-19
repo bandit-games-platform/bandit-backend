@@ -3,7 +3,7 @@ package be.kdg.int5.gameRegistry.adapters.in;
 import be.kdg.int5.gameRegistry.adapters.in.dto.DeveloperDto;
 import be.kdg.int5.gameRegistry.adapters.in.dto.LoadGameDto;
 import be.kdg.int5.gameRegistry.domain.Game;
-import be.kdg.int5.gameRegistry.port.in.query.GetGameDetailsQuery;
+import be.kdg.int5.gameRegistry.port.in.query.GameDetailsQuery;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,17 +18,17 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/games")
 public class GameDetailsRestController {
-    private final GetGameDetailsQuery getGameDetailsQuery;
+    private final GameDetailsQuery gameDetailsQuery;
 
-    public GameDetailsRestController(GetGameDetailsQuery getGameDetailsQuery) {
-        this.getGameDetailsQuery = getGameDetailsQuery;
+    public GameDetailsRestController(GameDetailsQuery gameDetailsQuery) {
+        this.gameDetailsQuery = gameDetailsQuery;
     }
 
     @GetMapping("/{gameId}")
     public ResponseEntity<LoadGameDto> getDetailsForGame(@PathVariable String gameId) {
         UUID gameIdConverted = UUID.fromString(gameId);
 
-        Game game = getGameDetailsQuery.getDetailsForGameFromId(gameIdConverted);
+        Game game = gameDetailsQuery.getDetailsForGameFromId(gameIdConverted);
         if (game == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         List<String> screenshots = new ArrayList<>();

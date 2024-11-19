@@ -4,6 +4,6 @@ import be.kdg.int5.gameRegistry.domain.Game;
 
 import java.util.UUID;
 
-public interface GetGameDetailsQuery {
+public interface GameDetailsQuery {
     Game getDetailsForGameFromId(UUID gameId);
 }

@@ -30,6 +30,7 @@ public interface GameJpaRepository extends JpaRepository<GameJpaEntity, UUID> {
     """)
     List<GameJpaEntity> findAllWithAllRelationships();
 
+
     @Query("""
     SELECT game FROM GameJpaEntity game
     LEFT JOIN FETCH game.icon
@@ -46,5 +47,6 @@ public interface GameJpaRepository extends JpaRepository<GameJpaEntity, UUID> {
     AND game.currentPrice <= :maxPrice
     """)
     List<GameJpaEntity> findAllByTitleLikeAndPriceBelowWithIcon(String title, BigDecimal maxPrice);
+
 
 }
