@@ -37,7 +37,7 @@ public class GameJpaAdapter implements GamesLoadPort, GamesCreatePort, GamesUpda
         GameJpaEntity gameJpaEntity = gameJpaRepository.findByIdWithDeveloper(gameId);
         if (gameJpaEntity == null) return null;
         return new Game(
-                new GameId(gameJpaEntity.getGameId()),
+                new GameId(gameJpaEntity.getId()),
                 gameJpaEntity.getTitle(),
                 new Developer(
                         new DeveloperId(gameJpaEntity.getDeveloper().getId()),
