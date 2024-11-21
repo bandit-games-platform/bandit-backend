@@ -1,6 +1,4 @@
-package be.kdg.int5.chatbot.adapters.in.dto;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+package be.kdg.int5.chatbot.adapters.out.python.dto;
 
 public class GameRuleDto {
     private int stepNumber;

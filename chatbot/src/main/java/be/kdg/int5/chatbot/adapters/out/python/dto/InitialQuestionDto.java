@@ -1,4 +1,4 @@
-package be.kdg.int5.chatbot.adapters.in.dto;
+package be.kdg.int5.chatbot.adapters.out.python.dto;
 
 public class InitialQuestionDto {
     private String initialPrompt;
