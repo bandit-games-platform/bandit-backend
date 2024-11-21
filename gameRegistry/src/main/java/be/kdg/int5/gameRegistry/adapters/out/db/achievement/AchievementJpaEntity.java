@@ -1,10 +1,9 @@
 package be.kdg.int5.gameRegistry.adapters.out.db.achievement;
 
 
-import be.kdg.int5.gameRegistry.adapters.out.db.game.GameJpaEntity;
-import be.kdg.int5.gameRegistry.domain.AchievementId;
 import jakarta.persistence.*;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
@@ -12,27 +11,26 @@ import java.util.UUID;
 public class AchievementJpaEntity {
     @Id
     private UUID id;
+    @Column(name = "game_id")
+    private UUID gameId;
+
     private String title;
     private int counterTotal;
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "game", referencedColumnName = "game_id")
-    private GameJpaEntity game;
-
     public AchievementJpaEntity() {
     }
 
-    public AchievementJpaEntity(String title, int counterTotal, String description, GameJpaEntity game) {
-        this(UUID.randomUUID(), title, counterTotal, description, game);
+    public AchievementJpaEntity(String title, int counterTotal, String description, UUID gameId) {
+        this(UUID.randomUUID(), title, counterTotal, description, gameId);
     }
 
-    public AchievementJpaEntity(UUID id, String title, int counterTotal, String description, GameJpaEntity game) {
+    public AchievementJpaEntity(UUID id, String title, int counterTotal, String description, UUID gameId) {
         this.id = id;
         this.title = title;
         this.counterTotal = counterTotal;
         this.description = description;
-        this.game = game;
+        this.gameId = gameId;
     }
 
     public UUID getId() {
@@ -47,31 +45,27 @@ public class AchievementJpaEntity {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public int getCounterTotal() {
         return counterTotal;
-    }
-
-    public void setCounterTotal(int counterTotal) {
-        this.counterTotal = counterTotal;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public UUID getGameId() {
+        return gameId;
     }
 
-    public GameJpaEntity getGame() {
-        return game;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AchievementJpaEntity that)) return false;
+        return getCounterTotal() == that.getCounterTotal() && Objects.equals(getId(), that.getId()) && Objects.equals(getGameId(), that.getGameId()) && Objects.equals(getTitle(), that.getTitle()) && Objects.equals(getDescription(), that.getDescription());
     }
 
-    public void setGame(GameJpaEntity game) {
-        this.game = game;
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getGameId(), getTitle(), getCounterTotal(), getDescription());
     }
 }
