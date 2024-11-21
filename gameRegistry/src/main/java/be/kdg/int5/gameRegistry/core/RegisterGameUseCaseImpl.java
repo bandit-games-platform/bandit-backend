@@ -54,7 +54,7 @@ public class RegisterGameUseCaseImpl implements RegisterGameUseCase {
                     command.achievements()
             );
 
-            gamesCreatePort.create(newGame);
+            if(gamesCreatePort.create(newGame)) return gameId;
         }else {
             //Patch mode
             if (command.currentHost() != null) existingGame.setCurrentHost(command.currentHost());
@@ -65,7 +65,7 @@ public class RegisterGameUseCaseImpl implements RegisterGameUseCase {
             if (command.screenshots() != null) existingGame.setScreenshots(command.screenshots());
             if (command.achievements() != null) existingGame.setAchievements(command.achievements());
 
-            gamesUpdatePort.update(existingGame);
+            if(gamesUpdatePort.update(existingGame)) return gameId;
         }
         return null;
     }
