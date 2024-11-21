@@ -1,12 +1,10 @@
 package be.kdg.int5.gameRegistry.adapters.out.db.game;
 
 import be.kdg.int5.gameRegistry.adapters.out.db.achievement.AchievementJpaEntity;
-import be.kdg.int5.gameRegistry.adapters.out.db.rule.RuleJpaEntity;
+import be.kdg.int5.gameRegistry.adapters.out.db.developer.DeveloperJpaEntity;
 import jakarta.persistence.*;
-import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -14,43 +12,59 @@ import java.util.UUID;
 @Table(schema = "game_registry", name = "game")
 public class GameJpaEntity {
     @Id
-    @Column(name = "game_id")
-    private UUID gameId;
+    private UUID id;
     private String title;
     private String description;
     private BigDecimal currentPrice;
-    @OneToOne(fetch = FetchType.LAZY)
-    private ImageResourceJpaEntity icon;
-    @OneToOne(fetch = FetchType.LAZY)
-    private ImageResourceJpaEntity background;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "game")
-    private Set<RuleJpaEntity> rules;
     private String currentHost;
+
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "url", column = @Column(name = "icon_url"))
+    })
+    private ImageResourceJpaEmbeddable icon;
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "url", column = @Column(name = "background_url"))
+    })
+    private ImageResourceJpaEmbeddable background;
+
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(
+            schema = "game_registry", name = "game_rules",
+            joinColumns = @JoinColumn(name = "game_id")
+    )
+    private Set<RuleJpaEmbeddable> rules;
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(
+            schema = "game_registry", name = "game_screenshots",
+            joinColumns = @JoinColumn(name = "game_id")
+    )
+    private Set<ImageResourceJpaEmbeddable> screenshots;
+
     @ManyToOne
     private DeveloperJpaEntity developer;
-
-    @OneToMany(fetch = FetchType.LAZY)
-    private Set<ImageResourceJpaEntity> screenshots;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "game")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "game_id")
     private Set<AchievementJpaEntity> achievements;
 
     public GameJpaEntity() {
     }
 
     public GameJpaEntity(
-            UUID gameId,
+            UUID id,
             String title,
             String description,
             BigDecimal currentPrice,
-            ImageResourceJpaEntity icon,
-            ImageResourceJpaEntity background,
-            Set<RuleJpaEntity> rules,
+            ImageResourceJpaEmbeddable icon,
+            ImageResourceJpaEmbeddable background,
+            Set<RuleJpaEmbeddable> rules,
             String currentHost,
             DeveloperJpaEntity developer,
-            Set<ImageResourceJpaEntity> screenshots,
+            Set<ImageResourceJpaEmbeddable> screenshots,
             Set<AchievementJpaEntity> achievements
     ) {
-        this.gameId = gameId;
+        this.id = id;
         this.title = title;
         this.description = description;
         this.currentPrice = currentPrice;
@@ -63,12 +77,12 @@ public class GameJpaEntity {
         this.achievements = achievements;
     }
 
-    public UUID getGameId() {
-        return gameId;
+    public UUID getId() {
+        return id;
     }
 
-    public void setGameId(UUID gameId) {
-        this.gameId = gameId;
+    public void setId(UUID gameId) {
+        this.id = gameId;
     }
 
     public String getTitle() {
@@ -95,27 +109,27 @@ public class GameJpaEntity {
         this.currentPrice = currentPrice;
     }
 
-    public ImageResourceJpaEntity getIcon() {
+    public ImageResourceJpaEmbeddable getIcon() {
         return icon;
     }
 
-    public void setIcon(ImageResourceJpaEntity icon) {
+    public void setIcon(ImageResourceJpaEmbeddable icon) {
         this.icon = icon;
     }
 
-    public ImageResourceJpaEntity getBackground() {
+    public ImageResourceJpaEmbeddable getBackground() {
         return background;
     }
 
-    public void setBackground(ImageResourceJpaEntity background) {
+    public void setBackground(ImageResourceJpaEmbeddable background) {
         this.background = background;
     }
 
-    public Set<RuleJpaEntity> getRules() {
+    public Set<RuleJpaEmbeddable> getRules() {
         return rules;
     }
 
-    public void setRules(Set<RuleJpaEntity> rules) {
+    public void setRules(Set<RuleJpaEmbeddable> rules) {
         this.rules = rules;
     }
 
@@ -135,11 +149,11 @@ public class GameJpaEntity {
         this.developer = developer;
     }
 
-    public Set<ImageResourceJpaEntity> getScreenshots() {
+    public Set<ImageResourceJpaEmbeddable> getScreenshots() {
         return screenshots;
     }
 
-    public void setScreenshots(Set<ImageResourceJpaEntity> screenshots) {
+    public void setScreenshots(Set<ImageResourceJpaEmbeddable> screenshots) {
         this.screenshots = screenshots;
     }
 

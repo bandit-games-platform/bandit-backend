@@ -1,8 +1,6 @@
 package be.kdg.int5.gameRegistry.adapters.out.db.achievement;
 
 
-import be.kdg.int5.gameRegistry.adapters.out.db.game.GameJpaEntity;
-import be.kdg.int5.gameRegistry.domain.AchievementId;
 import jakarta.persistence.*;
 
 import java.util.UUID;
@@ -12,27 +10,26 @@ import java.util.UUID;
 public class AchievementJpaEntity {
     @Id
     private UUID id;
+    @Column(name = "game_id", nullable = false)
+    private UUID gameId;
+
     private String title;
     private int counterTotal;
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "game", referencedColumnName = "game_id")
-    private GameJpaEntity game;
-
     public AchievementJpaEntity() {
     }
 
-    public AchievementJpaEntity(String title, int counterTotal, String description, GameJpaEntity game) {
-        this(UUID.randomUUID(), title, counterTotal, description, game);
+    public AchievementJpaEntity(String title, int counterTotal, String description, UUID gameId) {
+        this(UUID.randomUUID(), title, counterTotal, description, gameId);
     }
 
-    public AchievementJpaEntity(UUID id, String title, int counterTotal, String description, GameJpaEntity game) {
+    public AchievementJpaEntity(UUID id, String title, int counterTotal, String description, UUID gameId) {
         this.id = id;
         this.title = title;
         this.counterTotal = counterTotal;
         this.description = description;
-        this.game = game;
+        this.gameId = gameId;
     }
 
     public UUID getId() {
@@ -67,11 +64,11 @@ public class AchievementJpaEntity {
         this.description = description;
     }
 
-    public GameJpaEntity getGame() {
-        return game;
+    public UUID getGameId() {
+        return gameId;
     }
 
-    public void setGame(GameJpaEntity game) {
-        this.game = game;
+    public void setGameId(UUID gameId) {
+        this.gameId = gameId;
     }
 }

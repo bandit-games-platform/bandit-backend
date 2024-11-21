@@ -1,4 +1,4 @@
-package be.kdg.int5.gameRegistry.adapters.out.db.game;
+package be.kdg.int5.gameRegistry.adapters.out.db.developer;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

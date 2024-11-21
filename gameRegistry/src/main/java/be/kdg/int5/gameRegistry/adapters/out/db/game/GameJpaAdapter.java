@@ -3,7 +3,7 @@ package be.kdg.int5.gameRegistry.adapters.out.db.game;
 import be.kdg.int5.common.domain.ImageResource;
 import be.kdg.int5.common.domain.ResourceURL;
 import be.kdg.int5.gameRegistry.adapters.out.db.achievement.AchievementJpaEntity;
-import be.kdg.int5.gameRegistry.adapters.out.db.rule.RuleJpaEntity;
+import be.kdg.int5.gameRegistry.adapters.out.db.developer.DeveloperJpaEntity;
 import be.kdg.int5.gameRegistry.domain.*;
 import be.kdg.int5.gameRegistry.port.out.GamesCreatePort;
 import be.kdg.int5.gameRegistry.port.out.GamesLoadPort;
@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 
 @Repository
 public class GameJpaAdapter implements GamesLoadPort, GamesCreatePort, GamesUpdatePort {
-    private static final Logger LOGGER = LoggerFactory.getLogger(GameJpaAdapter.class);
 
     private final GameJpaRepository gameJpaRepository;
 
@@ -37,7 +36,7 @@ public class GameJpaAdapter implements GamesLoadPort, GamesCreatePort, GamesUpda
 
     @Override
     public List<Game> loadAllGamesWithIcon() {
-        return gameJpaRepository.findAllWithIcon()
+        return gameJpaRepository.findAll()
                 .stream()
                 .map(this::toGame)
                 .toList();
@@ -60,8 +59,10 @@ public class GameJpaAdapter implements GamesLoadPort, GamesCreatePort, GamesUpda
     }
 
     public GameJpaEntity toGameEntity(Game game) {
+        UUID gameId = game.getId().uuid();
+
         return new GameJpaEntity(
-                game.getId().uuid(),
+                gameId,
                 game.getTitle(),
                 game.getDescription(),
                 game.getCurrentPrice(),
@@ -71,7 +72,7 @@ public class GameJpaAdapter implements GamesLoadPort, GamesCreatePort, GamesUpda
                 game.getCurrentHost().url(),
                 toDeveloperEntity(game.getDeveloper()),
                 game.getScreenshots().stream().map(this::toImageResourceEntity).collect(Collectors.toSet()),
-                game.getAchievements().stream().map(this::toAchievementEntity).collect(Collectors.toSet())
+                game.getAchievements().stream().map(achievement -> toAchievementEntity(achievement, gameId)).collect(Collectors.toSet())
         );
     }
 
@@ -98,7 +99,7 @@ public class GameJpaAdapter implements GamesLoadPort, GamesCreatePort, GamesUpda
         Developer developer = new Developer(new DeveloperId(gameJpa.getDeveloper().getId()), gameJpa.getDeveloper().getStudioName());
 
         return new Game(
-                new GameId(gameJpa.getGameId()),
+                new GameId(gameJpa.getId()),
                 gameJpa.getTitle(),
                 gameJpa.getDescription(),
                 gameJpa.getCurrentPrice(),
@@ -119,13 +120,13 @@ public class GameJpaAdapter implements GamesLoadPort, GamesCreatePort, GamesUpda
         );
     }
 
-    public AchievementJpaEntity toAchievementEntity(Achievement achievement) {
+    public AchievementJpaEntity toAchievementEntity(Achievement achievement, UUID gameId) {
         return new AchievementJpaEntity(
                 achievement.getId().uuid(),
                 achievement.getTitle(),
                 achievement.getCounterTotal(),
                 achievement.getDescription(),
-                null
+                gameId
         );
     }
 
@@ -138,28 +139,27 @@ public class GameJpaAdapter implements GamesLoadPort, GamesCreatePort, GamesUpda
         );
     }
 
-    public RuleJpaEntity toRuleEntity(Rule rule){
-        return new RuleJpaEntity(
+    public RuleJpaEmbeddable toRuleEntity(Rule rule){
+        return new RuleJpaEmbeddable(
                 rule.stepNumber(),
-                rule.rule(),
-                null
+                rule.rule()
         );
     }
 
-    public Rule toRule(RuleJpaEntity ruleJpa){
+    public Rule toRule(RuleJpaEmbeddable ruleJpa){
         return new Rule(
                 ruleJpa.getStepNumber(),
                 ruleJpa.getRule()
         );
     }
 
-    public ImageResourceJpaEntity toImageResourceEntity(ImageResource imageResource) {
-        return new ImageResourceJpaEntity(
+    public ImageResourceJpaEmbeddable toImageResourceEntity(ImageResource imageResource) {
+        return new ImageResourceJpaEmbeddable(
                 imageResource.url().url()
         );
     }
 
-    public ImageResource toImageResource(ImageResourceJpaEntity imageResourceJpa) {
+    public ImageResource toImageResource(ImageResourceJpaEmbeddable imageResourceJpa) {
         return new ImageResource(new ResourceURL(imageResourceJpa.getUrl()));
     }
 }

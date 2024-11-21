@@ -1,7 +1,5 @@
-package be.kdg.int5.gameRegistry.adapters.out.db;
+package be.kdg.int5.gameRegistry.adapters.out.db.developer;
 
-import be.kdg.int5.gameRegistry.adapters.out.db.game.DeveloperJpaEntity;
-import be.kdg.int5.gameRegistry.adapters.out.db.game.DeveloperJpaRepository;
 import be.kdg.int5.gameRegistry.domain.Developer;
 import be.kdg.int5.gameRegistry.domain.DeveloperId;
 import be.kdg.int5.gameRegistry.port.out.DeveloperLoadPort;
