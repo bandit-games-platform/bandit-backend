@@ -34,6 +34,18 @@ public class GameJpaAdapter implements GamesLoadPort {
     }
 
     @Override
+    public Game loadGameById(UUID gameId) {
+        GameJpaEntity gameJpaEntity = gameJpaRepository.findByIdWithDeveloper(gameId);
+        if (gameJpaEntity == null) return null;
+        return new Game(
+                new GameId(gameJpaEntity.getGameId()),
+                gameJpaEntity.getTitle(),
+                new Developer(
+                        new DeveloperId(gameJpaEntity.getDeveloper().getId()),
+                        gameJpaEntity.getDeveloper().getStudioName()));
+    }
+
+    @Override
     public List<Game> loadAllGamesWithIcon() {
         return gameJpaRepository.findAllWithIcon()
                 .stream()

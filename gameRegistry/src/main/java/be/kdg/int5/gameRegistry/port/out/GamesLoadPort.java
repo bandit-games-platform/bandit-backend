@@ -7,6 +7,7 @@ import java.util.UUID;
 
 public interface GamesLoadPort {
     Game loadGameByIdWithDetails(UUID gameId);
+    Game loadGameById(UUID gameId);
 
     List<Game> loadAllGamesWithIcon();
 }

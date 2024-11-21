@@ -6,4 +6,5 @@ import java.util.UUID;
 
 public interface GetGameDetailsQuery {
     Game getDetailsForGameFromId(UUID gameId);
+    Game getGameWithoutRelationshipsFromId(UUID gameId);
 }

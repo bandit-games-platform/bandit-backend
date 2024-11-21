@@ -19,4 +19,9 @@ public class GetGameDetailsQueryImpl implements GetGameDetailsQuery {
     public Game getDetailsForGameFromId(UUID gameId) {
         return gamesLoadPort.loadGameByIdWithDetails(gameId);
     }
+
+    @Override
+    public Game getGameWithoutRelationshipsFromId(UUID gameId) {
+        return gamesLoadPort.loadGameById(gameId);
+    }
 }

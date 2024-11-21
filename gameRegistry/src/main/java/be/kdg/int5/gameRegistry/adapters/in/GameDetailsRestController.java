@@ -1,6 +1,7 @@
 package be.kdg.int5.gameRegistry.adapters.in;
 
 import be.kdg.int5.gameRegistry.adapters.in.dto.DeveloperDto;
+import be.kdg.int5.gameRegistry.adapters.in.dto.LoadDeveloperIdDto;
 import be.kdg.int5.gameRegistry.adapters.in.dto.LoadGameDto;
 import be.kdg.int5.gameRegistry.domain.Game;
 import be.kdg.int5.gameRegistry.port.in.query.GetGameDetailsQuery;
@@ -45,5 +46,14 @@ public class GameDetailsRestController {
         );
 
         return ResponseEntity.ok(loadedGame);
+    }
+
+    @GetMapping("/{gameId}/developer")
+    public ResponseEntity<LoadDeveloperIdDto> getDeveloperThatOwnsGame(@PathVariable String gameId) {
+        UUID gameIdConverted = UUID.fromString(gameId);
+
+        Game game = getGameDetailsQuery.getGameWithoutRelationshipsFromId(gameIdConverted);
+        if (game == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return ResponseEntity.ok(new LoadDeveloperIdDto(game.getDeveloper().id().uuid()));
     }
 }

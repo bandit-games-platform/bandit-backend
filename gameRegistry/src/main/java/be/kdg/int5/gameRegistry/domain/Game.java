@@ -24,7 +24,14 @@ public class Game {
     private List<ImageResource> screenshots;
     private Set<Achievement> achievements;
 
-    public Game( String title, String description, ImageResource icon, ImageResource background, Set<Rule> rules, ResourceURL currentHost, Developer developer, List<ImageResource> screenshots, Set<Achievement> achievements) {
+    public Game(GameId id, String title, Developer developer) {
+        this.id = id;
+        this.title = title;
+        this.rules = new HashSet<>();
+        this.developer = developer;
+    }
+
+    public Game(String title, String description, ImageResource icon, ImageResource background, Set<Rule> rules, ResourceURL currentHost, Developer developer, List<ImageResource> screenshots, Set<Achievement> achievements) {
         this(new GameId(UUID.randomUUID()),title, description, null, icon, background, rules, currentHost, developer, screenshots,achievements);
     }
 

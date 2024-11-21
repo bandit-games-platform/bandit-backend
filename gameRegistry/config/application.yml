@@ -3,6 +3,12 @@ server:
   servlet:
     context-path: /game-registry
 
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+
 keycloak:
   host: http://localhost:8180
   realm: bandit-realm
