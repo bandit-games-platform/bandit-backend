@@ -1,6 +1,7 @@
 package be.kdg.int5.gameRegistry.adapters.in.dto;
 
 import be.kdg.int5.gameRegistry.domain.Rule;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
@@ -17,6 +18,7 @@ public class RegisterGameDto {
     private String iconUrl;
     private String backgroundUrl;
     private Set<Rule> rules;
+    @Valid
     private Set<AchievementDto> achievements;
     private List<String> screenshots;
 

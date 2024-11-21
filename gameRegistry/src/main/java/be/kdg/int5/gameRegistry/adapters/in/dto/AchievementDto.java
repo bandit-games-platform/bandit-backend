@@ -2,13 +2,17 @@ package be.kdg.int5.gameRegistry.adapters.in.dto;
 
 import be.kdg.int5.gameRegistry.domain.Achievement;
 import be.kdg.int5.gameRegistry.domain.AchievementId;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.UUID;
 
 public class AchievementDto {
+    @NotNull
     private UUID id;
+    @NotNull
     private String title;
     private int counterTotal;
+    @NotNull
     private String description;
 
     public AchievementDto() {
