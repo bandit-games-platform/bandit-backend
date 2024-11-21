@@ -12,14 +12,17 @@ public class QuestionJpaEntity {
     @Id
     private UUID id;
     private String text;
-    @ManyToOne(fetch = FetchType.LAZY)
+
+    @ManyToOne
     @JoinColumn(name = "conversation_id")
     private ConversationJpaEntity conversation;
+
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "answer_id")
     private AnswerJpaEntity answer;
 
     public QuestionJpaEntity() {
+        this.id = UUID.randomUUID();
     }
 
     public QuestionJpaEntity(String text, ConversationJpaEntity conversation, AnswerJpaEntity answer) {

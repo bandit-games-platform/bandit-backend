@@ -1,12 +1,9 @@
 package be.kdg.int5.chatbot.adapters.out.conversation;
 
-import be.kdg.int5.chatbot.adapters.out.question.QuestionJpaEntity;
-import be.kdg.int5.chatbot.domain.GameId;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -21,8 +18,8 @@ public class GameConversationJpaEntity extends ConversationJpaEntity {
         this.gameId = gameId;
     }
 
-    public GameConversationJpaEntity(String userId, LocalDateTime startTime, LocalDateTime lastMessageTime, List<QuestionJpaEntity> questions, UUID gameId) {
-        super(userId, startTime, lastMessageTime, questions);
+    public GameConversationJpaEntity(UUID userId, LocalDateTime startTime, LocalDateTime lastMessageTime, UUID gameId) {
+        super(userId, startTime, lastMessageTime);
         this.gameId = gameId;
     }
 

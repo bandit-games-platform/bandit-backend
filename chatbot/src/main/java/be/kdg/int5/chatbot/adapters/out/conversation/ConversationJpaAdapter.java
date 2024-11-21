@@ -1,16 +1,91 @@
 package be.kdg.int5.chatbot.adapters.out.conversation;
 
-import be.kdg.int5.chatbot.domain.Conversation;
-import be.kdg.int5.chatbot.domain.GameId;
-import be.kdg.int5.chatbot.domain.UserId;
+import be.kdg.int5.chatbot.adapters.out.answer.AnswerJpaEntity;
+import be.kdg.int5.chatbot.adapters.out.question.QuestionJpaEntity;
+import be.kdg.int5.chatbot.domain.*;
 import be.kdg.int5.chatbot.ports.out.ConversationLoadPort;
+import be.kdg.int5.chatbot.ports.out.ConversationSavePort;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
-public class ConversationJpaAdapter implements ConversationLoadPort {
+public class ConversationJpaAdapter implements ConversationLoadPort, ConversationSavePort {
+    private final ConversationJpaRepository conversationJpaRepository;
+
+    public ConversationJpaAdapter(ConversationJpaRepository conversationJpaRepository) {
+        this.conversationJpaRepository = conversationJpaRepository;
+    }
 
     @Override
-    public Conversation loadGameConversation(UserId userId, GameId gameId) {
-        return null;
+    public GameConversation loadGameConversation(UserId userId, GameId gameId) {
+        final GameConversationJpaEntity gameConversationJpa = conversationJpaRepository.findByUserIdAndGameIdWithQuestions(userId.uuid(), gameId.uuid());
+
+        if (gameConversationJpa == null) return null;
+
+        final GameConversation gameConversation = new GameConversation(
+                new UserId(gameConversationJpa.getUserId()),
+                gameConversationJpa.getStartTime(),
+                gameConversationJpa.getLastMessageTime(),
+                new GameId(gameConversationJpa.getGameId())
+        );
+
+        final List<Question> questionList = gameConversationJpa.getQuestions().stream()
+                .map(q -> {
+                    final Question question = new Question(q.getText());
+                    final Answer answer = new Answer(q.getAnswer().getText());
+                    question.setAnswer(answer);
+                    return question;
+                })
+                .toList();
+
+        gameConversation.setQuestions(questionList);
+
+        return gameConversation;
+    }
+
+    @Override
+    public void saveConversation(Conversation conversation) {
+        ConversationJpaEntity conversationJpa = toConservationJpa(conversation);
+
+        final ConversationJpaEntity finalConversationJpa = conversationJpa; // apparently you can't use temp variables inside a lambda (see below)
+        final List<QuestionJpaEntity> questionJpaList = conversation.getQuestions().stream()
+                .map(q -> {
+                    AnswerJpaEntity answerJpa = new AnswerJpaEntity();
+                    answerJpa.setText(q.getAnswer().text());
+
+                    QuestionJpaEntity questionJpa = new QuestionJpaEntity();
+                    questionJpa.setText(q.getText());
+                    questionJpa.setConversation(finalConversationJpa); // here
+                    questionJpa.setAnswer(answerJpa);
+
+                    return questionJpa;
+                })
+                .toList();
+
+
+        conversationJpa.setQuestions(questionJpaList);
+
+        conversationJpaRepository.save(conversationJpa);
+    }
+
+    private ConversationJpaEntity toConservationJpa(Conversation conversation) {
+        if (conversation instanceof GameConversation) {
+            return new GameConversationJpaEntity(
+                    conversation.getUserId().uuid(),
+                    conversation.getStartTime(),
+                    conversation.getLastMessageTime(),
+                    ((GameConversation) conversation).getGameId().uuid());
+        }
+
+        if (conversation instanceof PlatformConversation) {
+            return new PlatformConversationJpaEntity(
+                    conversation.getUserId().uuid(),
+                    conversation.getStartTime(),
+                    conversation.getLastMessageTime(),
+                    ((PlatformConversation) conversation).getCurrentPage());
+        } else {
+            throw new IllegalArgumentException("Unsupported conversation type: " + conversation.getClass().getName());
+        }
     }
 }

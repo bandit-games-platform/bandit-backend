@@ -5,7 +5,7 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.UUID;
 
 @Entity
 @DiscriminatorValue("PLATFORM_CONVERSATION")
@@ -19,8 +19,8 @@ public class PlatformConversationJpaEntity extends ConversationJpaEntity {
         this.currentPage = currentPage;
     }
 
-    public PlatformConversationJpaEntity(String userId, LocalDateTime startTime, LocalDateTime lastMessageTime, List<QuestionJpaEntity> questions, String currentPage) {
-        super(userId, startTime, lastMessageTime, questions);
+    public PlatformConversationJpaEntity(UUID userId, LocalDateTime startTime, LocalDateTime lastMessageTime, String currentPage) {
+        super(userId, startTime, lastMessageTime);
         this.currentPage = currentPage;
     }
 

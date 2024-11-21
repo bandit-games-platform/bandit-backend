@@ -6,10 +6,12 @@ public class Question {
     private final String text;
     private Answer answer;
 
-    public Question(String text, Answer answer) {
-        Objects.requireNonNull(text);
+    public Question(String text) {
+        this.text = Objects.requireNonNull(text);
+    }
 
-        this.text = text;
+    public Question(String text, Answer answer) {
+        this(text);
         this.answer = answer;
     }
 

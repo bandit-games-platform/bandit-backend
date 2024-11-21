@@ -14,6 +14,7 @@ public class AnswerJpaEntity {
     private String text;
 
     public AnswerJpaEntity() {
+        this.id = UUID.randomUUID();
     }
 
     public AnswerJpaEntity(String text) {
