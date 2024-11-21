@@ -20,11 +20,19 @@ public class Game {
     private List<ImageResource> screenshots;
     private Set<Achievement> achievements;
 
-    public Game(GameId id, String title, Developer developer) {
-        this.id = id;
-        this.title = title;
-        this.rules = new HashSet<>();
+    public Game(GameId id, String title, String description, BigDecimal currentPrice, ImageResource icon, ImageResource background, ResourceURL currentHost, Developer developer) {
+        this.id = Objects.requireNonNull(id);
+        this.title = Objects.requireNonNull(title);
+        this.description = description;
+        this.currentPrice = currentPrice;
+        this.icon = icon;
+        this.background = background;
+        this.currentHost = currentHost;
         this.developer = developer;
+    }
+
+    public Game(GameId id, String title, String description, BigDecimal currentPrice, ImageResource icon, ImageResource background, ResourceURL currentHost, Developer developer, Set<Achievement> achievements) {
+        this(id, title, description, currentPrice, icon, background, null, currentHost, developer, null, achievements);
     }
 
     public Game(String title, String description, ImageResource icon, ImageResource background, Set<Rule> rules, ResourceURL currentHost, Developer developer, List<ImageResource> screenshots, Set<Achievement> achievements) {

@@ -19,6 +19,10 @@ public class PlayerGameStatsJpaEntity {
     public PlayerGameStatsJpaEntity() {
     }
 
+    public PlayerGameStatsJpaEntity(PlayerGameStatsJpaId id) {
+        this.id = id;
+    }
+
     public PlayerGameStatsJpaEntity(final PlayerGameStatsJpaId id, final Set<CompletedSessionJpaEntity> completedSessions) {
         this.id = id;
         this.completedSessions = completedSessions;
@@ -36,5 +40,10 @@ public class PlayerGameStatsJpaEntity {
 
     public Set<AchievementProgressJpaEntity> getAchievementProgressJpaEntities() {
         return achievementProgressJpaEntities;
+    }
+
+    public void setAchievementProgressJpaEntities(Set<AchievementProgressJpaEntity> achievementProgressJpaEntities) {
+        achievementProgressJpaEntities.forEach(achievementProgressJpaEntity -> achievementProgressJpaEntity.setPlayerGameStatsJpaEntity(this));
+        this.achievementProgressJpaEntities = achievementProgressJpaEntities;
     }
 }

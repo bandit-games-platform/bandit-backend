@@ -4,3 +4,7 @@ GET http://localhost:8092/game-registry/games/d77e1d1f-6b46-4c89-9290-3b9cf8a7c0
 ### GET developer owns game
 GET http://localhost:8092/game-registry/games/d77e1d1f-6b46-4c89-9290-3b9cf8a7c001/developer
 Accept: application/json
+
+### GET achievements for game
+GET http://localhost:8092/game-registry/games/d77e1d1f-6b46-4c89-9290-3b9cf8a7c001/achievements
+Accept: application/json

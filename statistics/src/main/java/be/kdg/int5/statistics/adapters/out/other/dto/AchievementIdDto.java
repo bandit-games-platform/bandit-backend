@@ -1,14 +1,14 @@
-package be.kdg.int5.statistics.adapters.out.dto;
+package be.kdg.int5.statistics.adapters.out.other.dto;
 
 import java.util.UUID;
 
-public class DeveloperIdDto {
+public class AchievementIdDto {
     private UUID uuid;
 
-    public DeveloperIdDto() {
+    public AchievementIdDto() {
     }
 
-    public DeveloperIdDto(UUID uuid) {
+    public AchievementIdDto(UUID uuid) {
         this.uuid = uuid;
     }
 

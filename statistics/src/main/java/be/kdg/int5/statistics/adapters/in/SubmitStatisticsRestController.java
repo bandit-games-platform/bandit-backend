@@ -1,13 +1,12 @@
 package be.kdg.int5.statistics.adapters.in;
 
+import be.kdg.int5.statistics.adapters.in.dto.NewAchievementProgressDto;
 import be.kdg.int5.statistics.adapters.in.dto.NewCompletedSessionDto;
+import be.kdg.int5.statistics.domain.AchievementId;
 import be.kdg.int5.statistics.domain.GameEndState;
 import be.kdg.int5.statistics.domain.GameId;
 import be.kdg.int5.statistics.domain.PlayerId;
-import be.kdg.int5.statistics.port.in.SaveCompletedSessionCommand;
-import be.kdg.int5.statistics.port.in.SaveCompletedSessionUseCase;
-import be.kdg.int5.statistics.port.in.VerifyIfDeveloperOwnsGameCommand;
-import be.kdg.int5.statistics.port.in.VerifyIfDeveloperOwnsGameUseCase;
+import be.kdg.int5.statistics.port.in.*;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,10 +21,14 @@ import java.util.UUID;
 public class SubmitStatisticsRestController {
     private final SaveCompletedSessionUseCase saveCompletedSessionUseCase;
     private final VerifyIfDeveloperOwnsGameUseCase verifyIfDeveloperOwnsGameUseCase;
+    private final UpdateAchievementProgressUseCase updateAchievementProgressUseCase;
+    private final VerifyIfAchievementBelongsToGameUseCase verifyIfAchievementBelongsToGameUseCase;
 
-    public SubmitStatisticsRestController(SaveCompletedSessionUseCase saveCompletedSessionUseCase, VerifyIfDeveloperOwnsGameUseCase verifyIfDeveloperOwnsGameUseCase) {
+    public SubmitStatisticsRestController(SaveCompletedSessionUseCase saveCompletedSessionUseCase, VerifyIfDeveloperOwnsGameUseCase verifyIfDeveloperOwnsGameUseCase, UpdateAchievementProgressUseCase updateAchievementProgressUseCase, VerifyIfAchievementBelongsToGameUseCase verifyIfAchievementBelongsToGameUseCase) {
         this.saveCompletedSessionUseCase = saveCompletedSessionUseCase;
         this.verifyIfDeveloperOwnsGameUseCase = verifyIfDeveloperOwnsGameUseCase;
+        this.updateAchievementProgressUseCase = updateAchievementProgressUseCase;
+        this.verifyIfAchievementBelongsToGameUseCase = verifyIfAchievementBelongsToGameUseCase;
     }
 
     @PostMapping("/statistics/submit")
@@ -34,7 +37,8 @@ public class SubmitStatisticsRestController {
             @RequestParam String gameId,
             @RequestParam String playerId,
             @Valid @RequestBody NewCompletedSessionDto dto,
-            @AuthenticationPrincipal Jwt token) {
+            @AuthenticationPrincipal Jwt token
+    ) {
 
         UUID developerId = UUID.fromString(token.getClaimAsString("sub"));
 
@@ -59,6 +63,39 @@ public class SubmitStatisticsRestController {
                 dto.getCharacter(),
                 dto.getWasFirstToGo()
         ));
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/statistics/achievements/{achievementId}")
+    @PreAuthorize("hasAuthority('developer')")
+    public ResponseEntity<Void> updateAchievementProgress(
+            @PathVariable String achievementId,
+            @RequestParam String gameId,
+            @RequestParam String playerId,
+            @Valid @RequestBody NewAchievementProgressDto dto,
+            @AuthenticationPrincipal Jwt token
+    ) {
+        UUID developerId = UUID.fromString(token.getClaimAsString("sub"));
+        GameId gameIdObj = new GameId(UUID.fromString(gameId));
+        boolean ownsGame = verifyIfDeveloperOwnsGameUseCase.doesDeveloperOwnGame(new VerifyIfDeveloperOwnsGameCommand(
+                developerId, gameIdObj)
+        );
+        if (!ownsGame) return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+
+        boolean belongsToGame = verifyIfAchievementBelongsToGameUseCase.doesAchievementBelongToGame(
+                new VerifyIfAchievementBelongsToGameCommand(gameIdObj, new AchievementId(UUID.fromString(achievementId)))
+        );
+        if (!belongsToGame) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        updateAchievementProgressUseCase.updateAchievementProgress(
+                new UpdateAchievementProgressCommand(
+                        new PlayerId(UUID.fromString(playerId)),
+                        new GameId(UUID.fromString(gameId)),
+                        new AchievementId(UUID.fromString(achievementId)),
+                        dto.getNewProgressAmount() != null ? dto.getNewProgressAmount() : null
+                )
+        );
 
         return ResponseEntity.ok().build();
     }

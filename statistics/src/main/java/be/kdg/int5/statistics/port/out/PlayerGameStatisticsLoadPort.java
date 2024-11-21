@@ -5,4 +5,5 @@ import be.kdg.int5.statistics.domain.PlayerId;
 
 public interface PlayerGameStatisticsLoadPort {
     PlayerGameStats loadPlayerGameStat(PlayerId playerId, GameId gameId);
+    PlayerGameStats loadPlayerGameStatsWithAllRelationships(PlayerId playerId, GameId gameId);
 }

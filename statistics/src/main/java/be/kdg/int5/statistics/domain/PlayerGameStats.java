@@ -19,6 +19,15 @@ public class PlayerGameStats {
         completedSessions.add(Objects.requireNonNull(completedSession));
     }
 
+    public PlayerGameStats(final PlayerId playerId, final GameId gameId, final AchievementProgress achievementProgress) {
+        this.playerId = Objects.requireNonNull(playerId);
+        this.gameId = Objects.requireNonNull(gameId);
+        completedSessions = new HashSet<>();
+        achievementProgressSet = new HashSet<>();
+
+        achievementProgressSet.add(Objects.requireNonNull(achievementProgress));
+    }
+
     public PlayerId getPlayerId() {
         return playerId;
     }

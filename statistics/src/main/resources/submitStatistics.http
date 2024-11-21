@@ -22,3 +22,11 @@ Authorization: Bearer {{access_token_dev}}
     "wasFirstToGo": "true"
 }
 
+### Submit achievements progress
+POST http://localhost:8095/statistics/statistics/achievements/123e4567-e89b-12d3-a456-426614174001?playerId=c5b8f7a1-d34e-4e19-9d0f-b4c5d0e1f501&gameId=d77e1d1f-6b46-4c89-9290-3b9cf8a7c001
+Content-Type: application/json
+Authorization: Bearer {{access_token_dev}}
+
+{
+}
+

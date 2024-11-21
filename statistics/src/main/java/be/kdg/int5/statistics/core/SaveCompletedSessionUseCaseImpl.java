@@ -6,6 +6,8 @@ import be.kdg.int5.statistics.domain.PlayerGameStats;
 import be.kdg.int5.statistics.domain.SessionId;
 import be.kdg.int5.statistics.port.in.SaveCompletedSessionCommand;
 import be.kdg.int5.statistics.port.in.SaveCompletedSessionUseCase;
+import be.kdg.int5.statistics.port.out.PlayerGameStatisticsLoadPort;
+import be.kdg.int5.statistics.port.out.PlayerGameStatisticsUpdatePort;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,10 +19,12 @@ import java.util.UUID;
 @Service
 public class SaveCompletedSessionUseCaseImpl implements SaveCompletedSessionUseCase {
     private static final Logger logger = LoggerFactory.getLogger(SaveCompletedSessionUseCaseImpl.class);
-    private final PlayerGameStatsJpaAdapter playerGameStatsJpaAdapter;
+    private final PlayerGameStatisticsUpdatePort playerGameStatisticsUpdatePort;
+    private final PlayerGameStatisticsLoadPort playerGameStatisticsLoadPort;
 
-    public SaveCompletedSessionUseCaseImpl(PlayerGameStatsJpaAdapter playerGameStatsJpaAdapter) {
-        this.playerGameStatsJpaAdapter = playerGameStatsJpaAdapter;
+    public SaveCompletedSessionUseCaseImpl(PlayerGameStatisticsUpdatePort playerGameStatisticsUpdatePort, PlayerGameStatisticsLoadPort playerGameStatisticsLoadPort) {
+        this.playerGameStatisticsUpdatePort = playerGameStatisticsUpdatePort;
+        this.playerGameStatisticsLoadPort = playerGameStatisticsLoadPort;
     }
 
     @Override
@@ -43,7 +47,7 @@ public class SaveCompletedSessionUseCaseImpl implements SaveCompletedSessionUseC
         );
 
         try {
-            playerGameStats = playerGameStatsJpaAdapter.loadPlayerGameStat(command.playerId(), command.gameId());
+            playerGameStats = playerGameStatisticsLoadPort.loadPlayerGameStat(command.playerId(), command.gameId());
             logger.info("Existing player game statistics already found for game {} and player {}", command.gameId().uuid(), command.playerId().uuid());
             playerGameStats.addCompletedGameSession(completedSession);
 
@@ -52,6 +56,6 @@ public class SaveCompletedSessionUseCaseImpl implements SaveCompletedSessionUseC
             logger.info("New player game statistics created for game {} and player {}", command.gameId().uuid(), command.playerId().uuid());
         }
 
-        playerGameStatsJpaAdapter.addNewCompletedSession(playerGameStats);
+        playerGameStatisticsUpdatePort.addNewCompletedSession(playerGameStats);
     }
 }

@@ -1,8 +1,11 @@
-package be.kdg.int5.statistics.adapters.out;
+package be.kdg.int5.statistics.adapters.out.other;
 
-import be.kdg.int5.statistics.adapters.out.dto.DeveloperIdDto;
+import be.kdg.int5.statistics.adapters.out.other.dto.AchievementIdDto;
+import be.kdg.int5.statistics.adapters.out.other.dto.DeveloperIdDto;
+import be.kdg.int5.statistics.domain.AchievementId;
 import be.kdg.int5.statistics.domain.GameId;
 import be.kdg.int5.statistics.port.out.GameRegistryCallPort;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +17,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -35,7 +39,7 @@ public class GameRegistryCallAdapter implements GameRegistryCallPort {
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            logger.info("Posting to game registry, received status {}", response.statusCode());
+            logger.info("Sending request to verify developer to game registry, received status {}", response.statusCode());
 
             client.close();
 
@@ -53,6 +57,42 @@ public class GameRegistryCallAdapter implements GameRegistryCallPort {
             return ownsGame;
         } catch (InterruptedException | IOException e) {
             logger.error("Could not get who owns the game from game registry");
+            return false;
+        }
+    }
+
+    @Override
+    public boolean doesAchievementBelongToGame(AchievementId achievementId, GameId gameId) {
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .GET()
+                    .uri(URI.create(gameRegistryBaseUrl + "/games/" + gameId.uuid().toString() + "/achievements"))
+                    .header("Accept", "application/json")
+                    .build();
+
+            HttpClient client = HttpClient.newHttpClient();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            logger.info("Sending request to verify achievement to game registry, received status {}", response.statusCode());
+
+            client.close();
+
+            List<AchievementIdDto> achievementIdDtos;
+            if (response.statusCode() == 200) {
+                ObjectMapper objectMapper = new ObjectMapper();
+                achievementIdDtos = objectMapper.readValue(response.body(), new TypeReference<List<AchievementIdDto>>() {});
+            } else {
+                return false;
+            }
+
+            boolean belongsToGame = achievementIdDtos.stream()
+                    .anyMatch(achievementIdDto -> achievementIdDto.getUuid().equals(achievementId.uuid()));
+            logger.info("Achievement {} {} game {}", achievementId.uuid(), belongsToGame ? "belongs to" : "does not belong to", gameId.uuid());
+
+            return belongsToGame;
+        } catch (InterruptedException | IOException e) {
+            logger.error("Could not get achievement status from game registry");
             return false;
         }
     }
