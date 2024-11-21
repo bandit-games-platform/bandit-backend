@@ -47,5 +47,15 @@ public class PlayerGameStats {
         this.achievementProgressSet.addAll(achievementProgressSet);
     }
 
+    public void addCompletedGameSession(CompletedSession completedSession) {
+        Objects.requireNonNull(completedSession);
 
+        for (CompletedSession session: completedSessions) {
+            if (session.getStartTime().equals(completedSession.getStartTime()) &&
+                    session.getEndTime().equals(completedSession.getEndTime()) &&
+                    session.getEndState().equals(completedSession.getEndState())) return;
+        }
+
+        this.completedSessions.add(completedSession);
+    }
 }

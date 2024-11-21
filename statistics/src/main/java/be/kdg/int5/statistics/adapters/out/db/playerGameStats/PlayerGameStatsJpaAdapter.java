@@ -3,6 +3,7 @@ package be.kdg.int5.statistics.adapters.out.db.playerGameStats;
 import be.kdg.int5.statistics.domain.*;
 import be.kdg.int5.statistics.port.out.AchievementLoadPort;
 import be.kdg.int5.statistics.port.out.PlayerGameStatisticsLoadPort;
+import be.kdg.int5.statistics.port.out.PlayerGameStatisticsUpdatePort;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +13,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
-public class PlayerGameStatsJpaAdapter implements PlayerGameStatisticsLoadPort, AchievementLoadPort {
+public class PlayerGameStatsJpaAdapter implements PlayerGameStatisticsLoadPort, PlayerGameStatisticsUpdatePort, AchievementLoadPort {
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(PlayerGameStatsJpaAdapter.class);
     private final PlayerGameStatsJpaRepository playerGameStatsJpaRepository;
     private final AchievementJpaRepository achievementJpaRepository;
@@ -35,6 +36,11 @@ public class PlayerGameStatsJpaAdapter implements PlayerGameStatisticsLoadPort, 
                 .orElseThrow();
 
         return this.playerGameStatsJpaToDomain(playerGameStatsJpaEntity);
+    }
+
+    @Override
+    public void addNewCompletedSession(PlayerGameStats playerGameStats) {
+        playerGameStatsJpaRepository.save(playerGameStatsDomainToJpa(playerGameStats));
     }
 
     @Override
