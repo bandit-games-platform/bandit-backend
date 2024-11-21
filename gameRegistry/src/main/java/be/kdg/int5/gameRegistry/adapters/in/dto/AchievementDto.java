@@ -25,6 +25,7 @@ public class AchievementDto {
         this.description = description;
     }
 
+
     public UUID getId() {
         return id;
     }

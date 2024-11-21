@@ -47,6 +47,7 @@ public class RegisterGameDto {
         this.screenshots = screenshots;
     }
 
+
     public @NotNull String getTitle() {
         return title;
     }
