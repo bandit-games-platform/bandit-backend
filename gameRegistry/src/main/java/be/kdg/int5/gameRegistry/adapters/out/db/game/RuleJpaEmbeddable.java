@@ -5,7 +5,7 @@ import java.util.Objects;
 
 @Embeddable
 public class RuleJpaEmbeddable {
-    private int stepNumber ;
+    private int stepNumber;
     private String rule;
 
     public RuleJpaEmbeddable() {
