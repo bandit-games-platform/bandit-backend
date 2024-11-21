@@ -27,25 +27,25 @@ public class CompletedSessionJpaEntity {
     private GameEndState endState;
 
     @Column(name = "turns_taken", nullable = true)
-    private int turnsTaken;
+    private Integer turnsTaken;
 
     @Column(name = "avg_seconds_per_turn", nullable = true)
-    private double avgSecondsPerTurn;
+    private Double avgSecondsPerTurn;
 
     @Column(name = "player_score", nullable = true)
-    private int playerScore;
+    private Integer playerScore;
 
     @Column(name = "opponent_score", nullable = true)
-    private int opponentScore;
+    private Integer opponentScore;
 
     @Column(name = "clicks", nullable = true)
-    private int clicks;
+    private Integer clicks;
 
     @Column(name = "character", nullable = true)
     private String character;
 
     @Column(name = "was_first_to_go", nullable = true)
-    private boolean wasFirstToGo;
+    private Boolean wasFirstToGo;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumns({
@@ -62,13 +62,13 @@ public class CompletedSessionJpaEntity {
             final LocalDateTime startTime,
             final LocalDateTime endTime,
             final GameEndState endState,
-            final int turnsTaken,
-            final double avgSecondsPerTurn,
-            final int playerScore,
-            final int opponentScore,
-            final int clicks,
+            final Integer turnsTaken,
+            final Double avgSecondsPerTurn,
+            final Integer playerScore,
+            final Integer opponentScore,
+            final Integer clicks,
             final String character,
-            final boolean wasFirstToGo
+            final Boolean wasFirstToGo
     ) {
         this.sessionId = sessionId;
         this.startTime = startTime;
@@ -100,23 +100,23 @@ public class CompletedSessionJpaEntity {
         return endState;
     }
 
-    public int getTurnsTaken() {
+    public Integer getTurnsTaken() {
         return turnsTaken;
     }
 
-    public double getAvgSecondsPerTurn() {
+    public Double getAvgSecondsPerTurn() {
         return avgSecondsPerTurn;
     }
 
-    public int getPlayerScore() {
+    public Integer getPlayerScore() {
         return playerScore;
     }
 
-    public int getOpponentScore() {
+    public Integer getOpponentScore() {
         return opponentScore;
     }
 
-    public int getClicks() {
+    public Integer getClicks() {
         return clicks;
     }
 
@@ -124,7 +124,7 @@ public class CompletedSessionJpaEntity {
         return character;
     }
 
-    public boolean isWasFirstToGo() {
+    public Boolean isWasFirstToGo() {
         return wasFirstToGo;
     }
 
@@ -132,4 +132,7 @@ public class CompletedSessionJpaEntity {
         return playerGameStatsJpaEntity;
     }
 
+    public void setPlayerGameStatsJpaEntity(PlayerGameStatsJpaEntity playerGameStatsJpaEntity) {
+        this.playerGameStatsJpaEntity = playerGameStatsJpaEntity;
+    }
 }

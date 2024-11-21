@@ -22,6 +22,7 @@ public class PlayerGameStatsJpaEntity {
     public PlayerGameStatsJpaEntity(final PlayerGameStatsJpaId id, final Set<CompletedSessionJpaEntity> completedSessions) {
         this.id = id;
         this.completedSessions = completedSessions;
+        for (CompletedSessionJpaEntity completedSession: completedSessions) completedSession.setPlayerGameStatsJpaEntity(this);
         achievementProgressJpaEntities = new HashSet<>();
     }
 
