@@ -1,7 +1,5 @@
 package be.kdg.int5.gameRegistry.adapters.in.dto;
 
-import be.kdg.int5.common.domain.ImageResource;
-import be.kdg.int5.gameRegistry.domain.Achievement;
 import be.kdg.int5.gameRegistry.domain.Rule;
 import jakarta.validation.constraints.NotNull;
 
@@ -19,8 +17,8 @@ public class RegisterGameDto {
     private String iconUrl;
     private String backgroundUrl;
     private Set<Rule> rules;
-    private Set<Achievement> achievements;
-    private List<ImageResource> screenshots;
+    private Set<AchievementDto> achievements;
+    private List<String> screenshots;
 
     public RegisterGameDto() {
     }
@@ -33,8 +31,8 @@ public class RegisterGameDto {
             String iconUrl,
             String backgroundUrl,
             Set<Rule> rules,
-            Set<Achievement> achievements,
-            List<ImageResource> screenshots
+            Set<AchievementDto> achievements,
+            List<String> screenshots
     ) {
         this.title = title;
         this.currentHost = currentHost;
@@ -75,11 +73,11 @@ public class RegisterGameDto {
         return rules;
     }
 
-    public Set<Achievement> getAchievements() {
+    public Set<AchievementDto> getAchievements() {
         return achievements;
     }
 
-    public List<ImageResource> getScreenshots() {
+    public List<String> getScreenshots() {
         return screenshots;
     }
 }

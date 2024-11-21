@@ -2,7 +2,9 @@ package be.kdg.int5.gameRegistry.adapters.in;
 
 import be.kdg.int5.common.domain.ImageResource;
 import be.kdg.int5.common.domain.ResourceURL;
+import be.kdg.int5.gameRegistry.adapters.in.dto.AchievementDto;
 import be.kdg.int5.gameRegistry.adapters.in.dto.RegisterGameDto;
+import be.kdg.int5.gameRegistry.domain.Achievement;
 import be.kdg.int5.gameRegistry.domain.DeveloperId;
 import be.kdg.int5.gameRegistry.domain.GameId;
 import be.kdg.int5.gameRegistry.port.in.AuthenticateSDKCommand;
@@ -18,7 +20,10 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/registry")
@@ -47,17 +52,34 @@ public class GameRegistryRestController {
     public ResponseEntity<GameId> registerGame(@AuthenticationPrincipal Jwt token, @RequestBody @Valid RegisterGameDto dto) {
         DeveloperId developerId = new DeveloperId(UUID.fromString(token.getSubject()));
 
+        Set<Achievement> achievements = null;
+        if (dto.getAchievements() != null) {
+            achievements = dto
+                    .getAchievements()
+                    .stream()
+                    .map(AchievementDto::mapToObject)
+                    .collect(Collectors.toSet());
+        }
+        List<ImageResource> screenshots = null;
+        if (dto.getScreenshots() != null) {
+            screenshots = dto
+                    .getScreenshots()
+                    .stream()
+                    .map(url -> new ImageResource(new ResourceURL(url)))
+                    .collect(Collectors.toList());
+        }
+
         GameId result = registerGameUseCase.registerGame(new RegisterGameCommand(
                 developerId,
                 dto.getTitle(),
                 new ResourceURL(dto.getCurrentHost()),
                 dto.getDescription(),
                 dto.getCurrentPrice(),
-                new ImageResource(new ResourceURL(dto.getIconUrl())),
-                new ImageResource(new ResourceURL(dto.getBackgroundUrl())),
+                dto.getIconUrl(),
+                dto.getBackgroundUrl(),
                 dto.getRules(),
-                dto.getAchievements(),
-                dto.getScreenshots()
+                achievements,
+                screenshots
         ));
 
         if (result != null) {

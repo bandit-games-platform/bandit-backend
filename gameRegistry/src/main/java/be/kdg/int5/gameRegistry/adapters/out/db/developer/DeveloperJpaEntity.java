@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
@@ -34,4 +35,15 @@ public class DeveloperJpaEntity {
         return studioName;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof DeveloperJpaEntity that)) return false;
+        return Objects.equals(getId(), that.getId()) && Objects.equals(getStudioName(), that.getStudioName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getStudioName());
+    }
 }

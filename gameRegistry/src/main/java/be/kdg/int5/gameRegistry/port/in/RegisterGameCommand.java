@@ -17,8 +17,8 @@ public record RegisterGameCommand(
         ResourceURL currentHost,
         String description,
         BigDecimal currentPrice,
-        ImageResource icon,
-        ImageResource background,
+        String icon,
+        String background,
         Set<Rule> rules,
         Set<Achievement> achievements,
         List<ImageResource> screenshots

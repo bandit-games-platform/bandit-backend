@@ -13,7 +13,7 @@ public class Game {
     private BigDecimal currentPrice;
     private ImageResource icon;
     private ImageResource background;
-    private final Set<Rule> rules;
+    private Set<Rule> rules;
     private ResourceURL currentHost;
     private final Developer developer;
 
@@ -88,6 +88,10 @@ public class Game {
         return rules;
     }
 
+    public void setRules(Set<Rule> rules) {
+        this.rules = rules;
+    }
+
     public ResourceURL getCurrentHost() {
         return currentHost;
     }
@@ -114,5 +118,22 @@ public class Game {
 
     public void setAchievements(Set<Achievement> achievements) {
         this.achievements = achievements;
+    }
+
+    @Override
+    public String toString() {
+        return "Game{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", currentPrice=" + currentPrice +
+                ", icon=" + icon +
+                ", background=" + background +
+                ", rules=" + rules +
+                ", currentHost=" + currentHost +
+                ", developer=" + developer +
+                ", screenshots=" + screenshots +
+                ", achievements=" + achievements +
+                '}';
     }
 }

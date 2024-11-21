@@ -3,6 +3,7 @@ package be.kdg.int5.gameRegistry.adapters.out.db.achievement;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
@@ -10,7 +11,7 @@ import java.util.UUID;
 public class AchievementJpaEntity {
     @Id
     private UUID id;
-    @Column(name = "game_id", nullable = false)
+    @Column(name = "game_id")
     private UUID gameId;
 
     private String title;
@@ -56,4 +57,15 @@ public class AchievementJpaEntity {
         return gameId;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AchievementJpaEntity that)) return false;
+        return getCounterTotal() == that.getCounterTotal() && Objects.equals(getId(), that.getId()) && Objects.equals(getGameId(), that.getGameId()) && Objects.equals(getTitle(), that.getTitle()) && Objects.equals(getDescription(), that.getDescription());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getGameId(), getTitle(), getCounterTotal(), getDescription());
+    }
 }
