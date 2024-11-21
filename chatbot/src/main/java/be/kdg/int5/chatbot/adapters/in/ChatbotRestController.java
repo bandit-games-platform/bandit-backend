@@ -3,15 +3,16 @@ package be.kdg.int5.chatbot.adapters.in;
 import be.kdg.int5.chatbot.adapters.in.dto.GameDetailsDto;
 import be.kdg.int5.chatbot.adapters.in.dto.GameRuleDto;
 import be.kdg.int5.chatbot.adapters.in.dto.InitialQuestionDto;
+import be.kdg.int5.chatbot.domain.GameDetails;
+import be.kdg.int5.chatbot.domain.GameId;
+import be.kdg.int5.chatbot.ports.in.query.GameDetailsQuery;
+import be.kdg.int5.chatbot.ports.in.query.GetGameDetailsCommand;
+import be.kdg.int5.chatbot.ports.in.query.InitialQuestionForConversation;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,31 +22,27 @@ public class ChatbotRestController {
     @Value("${python.backend.url:http://localhost:8000}")
     private String pythonBackendUrl;
 
+    private final GameDetailsQuery gameDetailsQuery;
+    private final InitialQuestionForConversation initialQuestionForConversation;
 
+    public ChatbotRestController(GameDetailsQuery gameDetailsQuery, InitialQuestionForConversation initialQuestionForConversation) {
+        this.gameDetailsQuery = gameDetailsQuery;
+        this.initialQuestionForConversation = initialQuestionForConversation;
+    }
 
     @PostMapping("/initial-question")
     public ResponseEntity<String> postInitialQuestion() {
+        final GameId gameUUID = new GameId(UUID.fromString("d77e1d1f-6b46-4c89-9290-3b9cf8a7c001"));
+        final GetGameDetailsCommand gameDetailsCommand = new GetGameDetailsCommand(gameUUID);
 
-        // Create mock data for DTOs
-        GameRuleDto rule1 = new GameRuleDto(1, "Collect all the keys to unlock doors.");
-        GameRuleDto rule2 = new GameRuleDto(2, "Avoid traps and enemies.");
-        GameRuleDto rule3 = new GameRuleDto(3, "Solve puzzles to progress.");
-        List<GameRuleDto> rules = new ArrayList<>();
-        rules.add(rule1);
-        rules.add(rule2);
-        rules.add(rule3);
+        final GameDetails gameDetails = gameDetailsQuery.loadGameDetails(gameDetailsCommand);
 
-        GameDetailsDto gameDetails = new GameDetailsDto(
-                UUID.randomUUID(), // Generate a unique ID
-                "Adventure Quest", // Game title
-                "A thrilling adventure game full of puzzles and challenges.", // Game description
-                rules
-        );
+        if (gameDetails == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-        InitialQuestionDto initialQuestionDto = new InitialQuestionDto(
-                " Provide a very short paragraph to describe the game. Additionally, can you summarize the rules for this game in as few words as possible?", // Initial prompt
-                gameDetails
-        );
+        final GameDetailsDto gameDetailsDto = toGameDetailsDto(gameDetails);
+        final String initialPrompt = initialQuestionForConversation.getInitialQuestionForGameConversation();
+
+        final InitialQuestionDto initialQuestionDto = new InitialQuestionDto(initialPrompt, gameDetailsDto);
 
         // Set headers
         HttpHeaders headers = new HttpHeaders();
@@ -58,11 +55,23 @@ public class ChatbotRestController {
         RestTemplate restTemplate = new RestTemplate();
 
         try {
-            ResponseEntity<String> response = restTemplate.postForEntity(pythonBackendUrl, initialQuestionDto, String.class);
+            ResponseEntity<String> response = restTemplate.postForEntity(pythonBackendUrl, entity, String.class);
             System.out.println(response);
             return ResponseEntity.ok(response.getBody());
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Error while sending POST request to Python backend: " + e.getMessage());
         }
+    }
+
+    private GameDetailsDto toGameDetailsDto(GameDetails gameDetails) {
+        final List<GameRuleDto> gameRuleDtos = gameDetails.getRules().stream()
+                .map(rule -> new GameRuleDto(rule.stepNumber(), rule.rule())).toList();
+
+        return new GameDetailsDto(
+                gameDetails.getId().uuid(),
+                gameDetails.getTitle(),
+                gameDetails.getDescription(),
+                gameRuleDtos
+        );
     }
 }

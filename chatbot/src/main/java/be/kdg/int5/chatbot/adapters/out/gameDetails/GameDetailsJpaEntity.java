@@ -26,4 +26,36 @@ public class GameDetailsJpaEntity {
         this.description = description;
         this.gameRules = gameRules;
     }
+
+    public UUID getGameId() {
+        return gameId;
+    }
+
+    public void setGameId(UUID gameId) {
+        this.gameId = gameId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Set<GameRuleJpaEntity> getGameRules() {
+        return gameRules;
+    }
+
+    public void setGameRules(Set<GameRuleJpaEntity> gameRules) {
+        this.gameRules = gameRules;
+    }
 }

@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/application/bandit-backend.application.test.iml" filepath="$PROJECT_DIR$/.idea/modules/application/bandit-backend.application.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/chatbot/bandit-backend.chatbot.test.iml" filepath="$PROJECT_DIR$/.idea/modules/chatbot/bandit-backend.chatbot.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/gameRegistry/bandit-backend.gameRegistry.main.iml" filepath="$PROJECT_DIR$/.idea/modules/gameRegistry/bandit-backend.gameRegistry.main.iml" />
     </modules>
   </component>
