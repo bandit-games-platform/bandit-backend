@@ -89,56 +89,28 @@ public class GameJpaEntity {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getDescription() {
         return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public BigDecimal getCurrentPrice() {
         return currentPrice;
     }
 
-    public void setCurrentPrice(BigDecimal currentPrice) {
-        this.currentPrice = currentPrice;
-    }
-
     public ImageResourceJpaEmbeddable getIcon() {
         return icon;
-    }
-
-    public void setIcon(ImageResourceJpaEmbeddable icon) {
-        this.icon = icon;
     }
 
     public ImageResourceJpaEmbeddable getBackground() {
         return background;
     }
 
-    public void setBackground(ImageResourceJpaEmbeddable background) {
-        this.background = background;
-    }
-
     public Set<RuleJpaEmbeddable> getRules() {
         return rules;
     }
 
-    public void setRules(Set<RuleJpaEmbeddable> rules) {
-        this.rules = rules;
-    }
-
     public String getCurrentHost() {
         return currentHost;
-    }
-
-    public void setCurrentHost(String currentHost) {
-        this.currentHost = currentHost;
     }
 
     public DeveloperJpaEntity getDeveloper() {
@@ -153,15 +125,7 @@ public class GameJpaEntity {
         return screenshots;
     }
 
-    public void setScreenshots(Set<ImageResourceJpaEmbeddable> screenshots) {
-        this.screenshots = screenshots;
-    }
-
     public Set<AchievementJpaEntity> getAchievements() {
         return achievements;
-    }
-
-    public void setAchievements(Set<AchievementJpaEntity> achievements) {
-        this.achievements = achievements;
     }
 }

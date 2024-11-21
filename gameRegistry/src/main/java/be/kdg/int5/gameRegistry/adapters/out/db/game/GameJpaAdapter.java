@@ -8,8 +8,6 @@ import be.kdg.int5.gameRegistry.domain.*;
 import be.kdg.int5.gameRegistry.port.out.GamesCreatePort;
 import be.kdg.int5.gameRegistry.port.out.GamesLoadPort;
 import be.kdg.int5.gameRegistry.port.out.GamesUpdatePort;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

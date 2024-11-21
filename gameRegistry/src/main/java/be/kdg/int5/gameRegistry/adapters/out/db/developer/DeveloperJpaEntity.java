@@ -34,7 +34,4 @@ public class DeveloperJpaEntity {
         return studioName;
     }
 
-    public void setStudioName(String studioName) {
-        this.studioName = studioName;
-    }
 }

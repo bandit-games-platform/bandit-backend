@@ -18,16 +18,7 @@ public class RuleJpaEmbeddable {
         return stepNumber;
     }
 
-    public void setStepNumber(int stepNumber) {
-        this.stepNumber = stepNumber;
-    }
-
     public String getRule() {
         return rule;
     }
-
-    public void setRule(String rule) {
-        this.rule = rule;
-    }
-
 }

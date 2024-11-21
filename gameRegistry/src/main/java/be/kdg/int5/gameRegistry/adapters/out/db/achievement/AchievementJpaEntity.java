@@ -44,31 +44,16 @@ public class AchievementJpaEntity {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public int getCounterTotal() {
         return counterTotal;
-    }
-
-    public void setCounterTotal(int counterTotal) {
-        this.counterTotal = counterTotal;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public UUID getGameId() {
         return gameId;
     }
 
-    public void setGameId(UUID gameId) {
-        this.gameId = gameId;
-    }
 }
