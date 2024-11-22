@@ -42,12 +42,7 @@ public class GamesOverviewRestController {
             maxPriceMoney = BigDecimal.valueOf(Double.MAX_VALUE);
         }
 
-
-        if (title != null) {
-            games = gameListQuery.retrieveGamesByTitleLikeAndPriceBelowWithIcon(title, maxPriceMoney);
-        } else {
-            games = gameListQuery.retrieveGamesWithIcon();
-        }
+        games = gameListQuery.retrieveGamesByTitleLikeAndPriceBelowWithIcon(title, maxPriceMoney);
 
         games.forEach(game -> {
             LoadGameDto gameDto = new LoadGameDto(

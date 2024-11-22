@@ -1,19 +1,24 @@
 ### get all games with icon
 
 GET http://localhost:8092/game-registry/games/overview
+Accept: application/json
 
 ### get all games with icon by title like ch
 
 GET http://localhost:8092/game-registry/games/overview?title=che
+Accept: application/json
 
 ### get all games with icon by title like che and price below 100 (1 record)
 
 GET http://localhost:8092/game-registry/games/overview?title=che&maxPrice=100.0
+Accept: application/json
 
 ### get all games with icon by title like che and price below 100 (empty)
 
 GET http://localhost:8092/game-registry/games/overview?title=che&maxPrice=5.0
+Accept: application/json
 
 ### get all games with icon by title like che and price below 100 (empty)
 
 GET http://localhost:8092/game-registry/games/overview?title=&maxPrice=5.0
+Accept: application/json
