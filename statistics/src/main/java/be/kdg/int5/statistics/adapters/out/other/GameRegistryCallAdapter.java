@@ -39,7 +39,7 @@ public class GameRegistryCallAdapter implements GameRegistryCallPort {
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            logger.info("Sending request to verify developer to game registry, received status {}", response.statusCode());
+            logger.info("statistics: Sending request to verify developer to game registry, received status {}", response.statusCode());
 
             client.close();
 
@@ -52,11 +52,11 @@ public class GameRegistryCallAdapter implements GameRegistryCallPort {
             }
 
             boolean ownsGame = developerIdDto.getUuid().equals(developerId);
-            logger.info("Developer {} {} the game {}", developerId, ownsGame ? "owns" : "does not own", gameId.uuid());
+            logger.info("statistics: Developer {} {} the game {}", developerId, ownsGame ? "owns" : "does not own", gameId.uuid());
 
             return ownsGame;
         } catch (InterruptedException | IOException e) {
-            logger.error("Could not get who owns the game from game registry");
+            logger.error("statistics: Could not get who owns the game from game registry");
             return false;
         }
     }
@@ -74,7 +74,7 @@ public class GameRegistryCallAdapter implements GameRegistryCallPort {
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            logger.info("Sending request to verify achievement to game registry, received status {}", response.statusCode());
+            logger.info("statistics: Sending request to verify achievement to game registry, received status {}", response.statusCode());
 
             client.close();
 
@@ -88,11 +88,11 @@ public class GameRegistryCallAdapter implements GameRegistryCallPort {
 
             boolean belongsToGame = achievementIdDtos.stream()
                     .anyMatch(achievementIdDto -> achievementIdDto.getUuid().equals(achievementId.uuid()));
-            logger.info("Achievement {} {} game {}", achievementId.uuid(), belongsToGame ? "belongs to" : "does not belong to", gameId.uuid());
+            logger.info("statistics: Achievement {} {} game {}", achievementId.uuid(), belongsToGame ? "belongs to" : "does not belong to", gameId.uuid());
 
             return belongsToGame;
         } catch (InterruptedException | IOException e) {
-            logger.error("Could not get achievement status from game registry");
+            logger.error("statistics: Could not get achievement status from game registry");
             return false;
         }
     }

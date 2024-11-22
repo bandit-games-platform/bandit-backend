@@ -48,12 +48,12 @@ public class SaveCompletedSessionUseCaseImpl implements SaveCompletedSessionUseC
 
         try {
             playerGameStats = playerGameStatisticsLoadPort.loadPlayerGameStatsWithAllRelationships(command.playerId(), command.gameId());
-            logger.info("Existing player game statistics already found for game {} and player {}", command.gameId().uuid(), command.playerId().uuid());
+            logger.info("statistics: Existing player game statistics already found for game {} and player {}", command.gameId().uuid(), command.playerId().uuid());
             playerGameStats.addCompletedGameSession(completedSession);
 
         } catch (NoSuchElementException e) {
             playerGameStats = new PlayerGameStats(command.playerId(), command.gameId(), completedSession);
-            logger.info("New player game statistics created for game {} and player {}", command.gameId().uuid(), command.playerId().uuid());
+            logger.info("statistics: New player game statistics created for game {} and player {}", command.gameId().uuid(), command.playerId().uuid());
         }
 
         playerGameStatisticsUpdatePort.addNewCompletedSession(playerGameStats);

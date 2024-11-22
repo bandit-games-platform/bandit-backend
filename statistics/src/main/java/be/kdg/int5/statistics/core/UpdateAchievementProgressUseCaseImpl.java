@@ -33,7 +33,7 @@ public class UpdateAchievementProgressUseCaseImpl implements UpdateAchievementPr
 
         try {
             playerGameStats = playerGameStatisticsLoadPort.loadPlayerGameStatsWithAllRelationships(command.playerId(), command.gameId());
-            logger.info("Existing player achievement progress already found for game {} and player {}", command.gameId().uuid(), command.playerId().uuid());
+            logger.info("statistics: Existing player achievement progress already found for game {} and player {}", command.gameId().uuid(), command.playerId().uuid());
 
             Set<AchievementProgress> achievementProgressSet = playerGameStats.getAchievementProgressSet();
             for (AchievementProgress achievementProgress : achievementProgressSet) {
@@ -53,7 +53,7 @@ public class UpdateAchievementProgressUseCaseImpl implements UpdateAchievementPr
                     command.newAmount() != null ? command.newAmount() : 1
             );
             playerGameStats = new PlayerGameStats(command.playerId(), command.gameId(), achievementProgress);
-            logger.info("New player achievement progress created for game {} and player {}", command.gameId().uuid(), command.playerId().uuid());
+            logger.info("statistics: New player achievement progress created for game {} and player {}", command.gameId().uuid(), command.playerId().uuid());
         }
 
         playerGameStatisticsUpdatePort.updateAchievementProgress(playerGameStats);
