@@ -45,10 +45,7 @@ public class PlayerGameStatsJpaAdapter implements PlayerGameStatisticsLoadPort, 
                 .findById(playerGameStatsJpaId)
                 .orElseThrow();
 
-        if (playerGameStatsJpaEntity.getCompletedSessions().isEmpty()) {
-            return this.playerGameStatsJpaToDomainOnlyAchievements(playerGameStatsJpaEntity);
-        }
-        return this.playerGameStatsJpaToDomain(playerGameStatsJpaEntity);
+        return this.playerGameStatisticsJpaToDomain(playerGameStatsJpaEntity);
     }
 
 
@@ -133,22 +130,47 @@ public class PlayerGameStatsJpaAdapter implements PlayerGameStatisticsLoadPort, 
         return playerGameStats;
     }
 
-    private PlayerGameStats playerGameStatsJpaToDomainOnlyAchievements(final PlayerGameStatsJpaEntity playerGameStatsJpaEntity) {
-        Set<AchievementProgress> achievementProgressSet = playerGameStatsJpaEntity.getAchievementProgressJpaEntities()
-                .stream()
-                .map(this::achievementProgressJpaToDomain)
-                .collect(Collectors.toSet());
+    private PlayerGameStats playerGameStatisticsJpaToDomain(final PlayerGameStatsJpaEntity playerGameStatsJpaEntity) {
+        PlayerGameStats playerGameStats = null;
 
-        AchievementProgress firstAchievement = achievementProgressSet.stream().findFirst().orElseThrow();
-        achievementProgressSet.remove(firstAchievement);
+        if (!playerGameStatsJpaEntity.getAchievementProgressJpaEntities().isEmpty()) {
+            Set<AchievementProgress> achievementProgressSet = playerGameStatsJpaEntity.getAchievementProgressJpaEntities()
+                    .stream()
+                    .map(achievementProgress -> new AchievementProgress(
+                            new AchievementId(achievementProgress.getAchievementProgressId()),
+                            achievementProgress.getCounterTotal()
+                    ))
+                    .collect(Collectors.toSet());
 
-        PlayerGameStats playerGameStats = new PlayerGameStats(
-                new PlayerId(playerGameStatsJpaEntity.getId().getPlayerId()),
-                new GameId(playerGameStatsJpaEntity.getId().getGameId()),
-                firstAchievement
-        );
+            AchievementProgress firstAchievement = achievementProgressSet.stream().findFirst().orElseThrow();
+            achievementProgressSet.remove(firstAchievement);
 
-        playerGameStats.addAchievementProgressSet(achievementProgressSet);
+            playerGameStats = new PlayerGameStats(
+                    new PlayerId(playerGameStatsJpaEntity.getId().getPlayerId()),
+                    new GameId(playerGameStatsJpaEntity.getId().getGameId()),
+                    firstAchievement
+            );
+
+            if (!achievementProgressSet.isEmpty()) playerGameStats.addAchievementProgressSet(achievementProgressSet);
+        }
+
+        if (!playerGameStatsJpaEntity.getCompletedSessions().isEmpty()) {
+            Set<CompletedSession> completedSessions = playerGameStatsJpaEntity.getCompletedSessions()
+                    .stream()
+                    .map(this::completedSessionJpaToDomain)
+                    .collect(Collectors.toSet());
+
+            CompletedSession firstSession = completedSessions.stream().findFirst().orElseThrow();
+            completedSessions.remove(firstSession);
+
+            playerGameStats = new PlayerGameStats(
+                    new PlayerId(playerGameStatsJpaEntity.getId().getPlayerId()),
+                    new GameId(playerGameStatsJpaEntity.getId().getGameId()),
+                    firstSession
+            );
+
+            if (!completedSessions.isEmpty()) playerGameStats.addCompletedSessions(completedSessions);
+        }
 
         return playerGameStats;
     }

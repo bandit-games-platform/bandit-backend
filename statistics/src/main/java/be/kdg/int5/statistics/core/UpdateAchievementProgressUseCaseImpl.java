@@ -37,7 +37,7 @@ public class UpdateAchievementProgressUseCaseImpl implements UpdateAchievementPr
 
             Set<AchievementProgress> achievementProgressSet = playerGameStats.getAchievementProgressSet();
             for (AchievementProgress achievementProgress : achievementProgressSet) {
-                if (achievementProgress.getAchievementId().uuid() == command.achievementId().uuid()) {
+                if (achievementProgress.getAchievementId().uuid().equals(command.achievementId().uuid())) {
                     achievementProgressSet.remove(achievementProgress);
                     achievementProgress.setCounterValue(
                             command.newAmount() != null ?

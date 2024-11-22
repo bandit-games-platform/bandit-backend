@@ -47,7 +47,7 @@ public class SaveCompletedSessionUseCaseImpl implements SaveCompletedSessionUseC
         );
 
         try {
-            playerGameStats = playerGameStatisticsLoadPort.loadPlayerGameStat(command.playerId(), command.gameId());
+            playerGameStats = playerGameStatisticsLoadPort.loadPlayerGameStatsWithAllRelationships(command.playerId(), command.gameId());
             logger.info("Existing player game statistics already found for game {} and player {}", command.gameId().uuid(), command.playerId().uuid());
             playerGameStats.addCompletedGameSession(completedSession);
 

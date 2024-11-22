@@ -67,4 +67,10 @@ public class PlayerGameStats {
 
         this.completedSessions.add(completedSession);
     }
+
+    public void addCompletedSessions(Set<CompletedSession> completedSessions) {
+        for (CompletedSession session : completedSessions) {
+            addCompletedGameSession(session);
+        }
+    }
 }
