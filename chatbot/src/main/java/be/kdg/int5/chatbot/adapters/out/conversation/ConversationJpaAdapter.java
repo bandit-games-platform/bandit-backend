@@ -7,7 +7,9 @@ import be.kdg.int5.chatbot.ports.out.ConversationLoadPort;
 import be.kdg.int5.chatbot.ports.out.ConversationSavePort;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 public class ConversationJpaAdapter implements ConversationLoadPort, ConversationSavePort {
@@ -37,7 +39,7 @@ public class ConversationJpaAdapter implements ConversationLoadPort, Conversatio
                     question.setAnswer(answer);
                     return question;
                 })
-                .toList();
+                .collect(Collectors.toCollection(ArrayList::new)); // .toList() would return an immutable list (to which I need to add to in the use case)
 
         gameConversation.setQuestions(questionList);
 

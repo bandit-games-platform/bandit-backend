@@ -4,7 +4,7 @@ import be.kdg.int5.chatbot.domain.Answer;
 import be.kdg.int5.chatbot.domain.GameConversation;
 import be.kdg.int5.chatbot.domain.GameDetails;
 import be.kdg.int5.chatbot.domain.Question;
-import be.kdg.int5.chatbot.ports.in.StartConversationUseCase;
+import be.kdg.int5.chatbot.ports.in.StartGameConversationUseCase;
 import be.kdg.int5.chatbot.ports.in.StartGameConversationCommand;
 import be.kdg.int5.chatbot.ports.out.ConversationSavePort;
 import be.kdg.int5.chatbot.ports.out.ConversationStartPort;
@@ -15,12 +15,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 
 @Service
-public class StartConversationUseCaseImpl implements StartConversationUseCase {
+public class StartGameConversationUseCaseImpl implements StartGameConversationUseCase {
     private final GameDetailsLoadPort gameDetailsLoadPort;
     private final ConversationSavePort conversationSavePort;
     private final ConversationStartPort conversationStartPort;
 
-    public StartConversationUseCaseImpl(
+    public StartGameConversationUseCaseImpl(
             GameDetailsLoadPort gameDetailsLoadPort,
             ConversationSavePort conversationSavePort,
             ConversationStartPort conversationStartPort) {

@@ -10,6 +10,7 @@ public interface ConversationJpaRepository extends JpaRepository<ConversationJpa
     @Query("""
             SELECT g FROM GameConversationJpaEntity g
             JOIN FETCH g.questions q
+            JOIN FETCH q.answer a
             WHERE g.userId = :userId
             AND g.gameId = :gameId
             """)

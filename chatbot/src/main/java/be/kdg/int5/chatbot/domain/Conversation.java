@@ -50,7 +50,7 @@ public abstract class Conversation {
     }
 
     public void addQuestion(Question question) {
-        if (this.questions == null) this.questions = new ArrayList<>();
+//        if (this.questions == null) this.questions = new ArrayList<>();
         questions.add(question);
     }
 }
