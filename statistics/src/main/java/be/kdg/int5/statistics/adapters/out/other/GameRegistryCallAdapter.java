@@ -39,8 +39,6 @@ public class GameRegistryCallAdapter implements GameRegistryCallPort {
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            logger.info("statistics: Sending request to verify developer to game registry, received status {}", response.statusCode());
-
             client.close();
 
             DeveloperIdDto developerIdDto;
@@ -73,8 +71,6 @@ public class GameRegistryCallAdapter implements GameRegistryCallPort {
             HttpClient client = HttpClient.newHttpClient();
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-            logger.info("statistics: Sending request to verify achievement to game registry, received status {}", response.statusCode());
 
             client.close();
 
