@@ -15,9 +15,7 @@ public class AchievementProgressJpaEntity {
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private UUID achievementProgressId;
 
-    @OneToOne
-    @JoinColumn(name = "achievement_id")
-    private AchievementJpaEntity achievement;
+    private UUID achievementId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumns({
@@ -32,14 +30,15 @@ public class AchievementProgressJpaEntity {
     public AchievementProgressJpaEntity() {
     }
 
-    public AchievementProgressJpaEntity(UUID achievementProgressId, int counterTotal) {
-        this.achievementProgressId = achievementProgressId;
+    public AchievementProgressJpaEntity(UUID achievementId, int counterTotal) {
+        this.achievementProgressId = UUID.randomUUID();
+        this.achievementId = achievementId;
         this.counterTotal = counterTotal;
     }
 
-    public AchievementProgressJpaEntity(UUID achievementProgressId, AchievementJpaEntity achievement, PlayerGameStatsJpaEntity playerGameStatsJpaEntity, int counterTotal) {
+    public AchievementProgressJpaEntity(UUID achievementProgressId, UUID achievementId, PlayerGameStatsJpaEntity playerGameStatsJpaEntity, int counterTotal) {
         this.achievementProgressId = achievementProgressId;
-        this.achievement = achievement;
+        this.achievementId = achievementId;
         this.playerGameStatsJpaEntity = playerGameStatsJpaEntity;
         this.counterTotal = counterTotal;
     }
@@ -48,8 +47,8 @@ public class AchievementProgressJpaEntity {
         return achievementProgressId;
     }
 
-    public AchievementJpaEntity getAchievement() {
-        return achievement;
+    public UUID getAchievementId() {
+        return achievementId;
     }
 
     public PlayerGameStatsJpaEntity getPlayerGameStatsJpaEntity() {
@@ -62,5 +61,9 @@ public class AchievementProgressJpaEntity {
 
     public int getCounterTotal() {
         return counterTotal;
+    }
+
+    public void setCounterTotal(int counterTotal) {
+        this.counterTotal = counterTotal;
     }
 }

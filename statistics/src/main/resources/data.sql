@@ -1,10 +1,3 @@
-INSERT INTO statistics.game_achievements (achievement_id, game_id, counter_total, title, description)
-VALUES
-    ('a1f65dfc-2b4f-4e10-bd0f-33d1b05b9f01', 'b2e98f3b-3e2b-4a9e-8e5e-c3b4d0a4e401', 50, 'Capture the 9 Tails', '"Capture the 9 Tails" is an achievement unlocked by successfully defeating or capturing the mythical Nine-Tailed Fox in a challenging encounter. This rare feat showcases your strategic skill and perseverance, earning you bragging rights and exclusive in-game rewards.'),
-    ('a2e54abc-4d3f-45b8-8a5e-fd4d03b2d101', 'b3d12e4a-6a7b-412c-9e0e-e4d05c3f4b02', 30, 'Defeat the Akatsuki', '"Defeat the Akatsuki" is an achievement earned by overcoming all members of a powerful rogue organization in the game. Prove your strength, strategy, and resilience in epic battles to claim this prestigious milestone and unlock exclusive rewards.');
-
-
-
 INSERT INTO statistics.player_game_stats (player_id, game_id)
 VALUES
     ('c5b8f7a1-d34e-4e19-9d0f-b4c5d0e1f501', 'b2e98f3b-3e2b-4a9e-8e5e-c3b4d0a4e401'),

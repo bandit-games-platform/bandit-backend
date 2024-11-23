@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public interface AchievementProgressJpaRepository extends JpaRepository<AchievementProgressJpaEntity, UUID> {
 
-    @Query("SELECT ap FROM AchievementProgressJpaEntity ap JOIN ap.achievement a WHERE a.achievementId = :achievementId AND ap.playerGameStatsJpaEntity.id.playerId = :playerId")
+    @Query("SELECT ap FROM AchievementProgressJpaEntity ap WHERE ap.achievementId = :achievementId AND ap.playerGameStatsJpaEntity.id.playerId = :playerId")
     Optional<AchievementProgressJpaEntity> findAchievementProgressByAchievementIdAndPlayerId(
             @Param("achievementId") UUID achievementId,
             @Param("playerId") UUID playerId)

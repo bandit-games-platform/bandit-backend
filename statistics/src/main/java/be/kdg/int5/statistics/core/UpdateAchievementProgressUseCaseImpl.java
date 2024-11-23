@@ -47,6 +47,13 @@ public class UpdateAchievementProgressUseCaseImpl implements UpdateAchievementPr
                     break;
                 }
             }
+            if (achievementProgressSet.isEmpty()) {
+                AchievementProgress achievementProgress = new AchievementProgress(
+                        command.achievementId(),
+                        command.newAmount() != null ? command.newAmount() : 1
+                );
+                playerGameStats.addAchievementProgress(achievementProgress);
+            }
         } catch (NoSuchElementException e) {
             AchievementProgress achievementProgress = new AchievementProgress(
                     command.achievementId(),
