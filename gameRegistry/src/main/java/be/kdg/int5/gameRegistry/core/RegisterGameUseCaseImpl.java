@@ -2,10 +2,7 @@ package be.kdg.int5.gameRegistry.core;
 
 import be.kdg.int5.common.domain.ImageResource;
 import be.kdg.int5.common.domain.ResourceURL;
-import be.kdg.int5.gameRegistry.domain.Developer;
-import be.kdg.int5.gameRegistry.domain.DeveloperId;
-import be.kdg.int5.gameRegistry.domain.Game;
-import be.kdg.int5.gameRegistry.domain.GameId;
+import be.kdg.int5.gameRegistry.domain.*;
 import be.kdg.int5.gameRegistry.port.in.RegisterGameCommand;
 import be.kdg.int5.gameRegistry.port.in.RegisterGameUseCase;
 import be.kdg.int5.gameRegistry.port.out.DeveloperLoadPort;
@@ -18,7 +15,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class RegisterGameUseCaseImpl implements RegisterGameUseCase {
@@ -46,6 +45,15 @@ public class RegisterGameUseCaseImpl implements RegisterGameUseCase {
                 command.developerId()
         );
 
+        Set<Achievement> achievements = null;
+        if (command.achievements() != null) {
+            achievements = command
+                    .achievements()
+                    .stream()
+                    .map(ar -> mapAchievementCommandRecordToDomain(ar, gameId))
+                    .collect(Collectors.toSet());
+        }
+
         Game existingGame = gamesLoadPort.loadGameByIdWithDetails(gameId.uuid());
 
         if (existingGame == null) {
@@ -67,7 +75,7 @@ public class RegisterGameUseCaseImpl implements RegisterGameUseCase {
                     command.currentHost(),
                     gameDev,
                     command.screenshots(),
-                    command.achievements()
+                    achievements
             );
 
             if(gamesCreatePort.create(newGame)) return gameId;
@@ -81,7 +89,7 @@ public class RegisterGameUseCaseImpl implements RegisterGameUseCase {
             if (command.icon() != null) existingGame.setIcon(new ImageResource(new ResourceURL(command.icon())));
             if (command.background() != null) existingGame.setBackground(new ImageResource(new ResourceURL(command.background())));
             if (command.screenshots() != null) existingGame.setScreenshots(command.screenshots());
-            if (command.achievements() != null) existingGame.setAchievements(command.achievements());
+            if (achievements != null) existingGame.setAchievements(achievements);
             if (command.rules() != null) existingGame.setRules(command.rules());
 
             if(gamesUpdatePort.update(existingGame)) return gameId;
@@ -91,5 +99,18 @@ public class RegisterGameUseCaseImpl implements RegisterGameUseCase {
 
     private GameId generateUniqueIdFromDeveloperAndTitle(DeveloperId developerId, String title) {
         return new GameId(UUID.nameUUIDFromBytes((developerId.toString()+":"+title).getBytes(StandardCharsets.UTF_8)));
+    }
+
+    private AchievementId generateUniqueAchievementIdFromGameIdAndUniqueNumber(GameId gameId, int uniqueNumber) {
+        return new AchievementId(UUID.nameUUIDFromBytes((gameId.toString()+":"+uniqueNumber).getBytes(StandardCharsets.UTF_8)));
+    }
+
+    private Achievement mapAchievementCommandRecordToDomain(RegisterGameCommand.AchievementRecord achievementRecord, GameId gameId) {
+        return new Achievement(
+                generateUniqueAchievementIdFromGameIdAndUniqueNumber(gameId, achievementRecord.uniqueNumber()),
+                achievementRecord.title(),
+                achievementRecord.counterTotal(),
+                achievementRecord.description()
+        );
     }
 }

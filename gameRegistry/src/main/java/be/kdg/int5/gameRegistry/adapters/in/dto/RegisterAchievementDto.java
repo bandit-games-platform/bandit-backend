@@ -1,33 +1,30 @@
 package be.kdg.int5.gameRegistry.adapters.in.dto;
 
-import be.kdg.int5.gameRegistry.domain.Achievement;
-import be.kdg.int5.gameRegistry.domain.AchievementId;
+import be.kdg.int5.gameRegistry.port.in.RegisterGameCommand;
 import jakarta.validation.constraints.NotNull;
 
-import java.util.UUID;
-
-public class AchievementDto {
+public class RegisterAchievementDto {
     @NotNull
-    private UUID id;
+    private Integer uniqueNumber;
     @NotNull
     private String title;
     private int counterTotal;
     @NotNull
     private String description;
 
-    public AchievementDto() {
+    public RegisterAchievementDto() {
     }
 
-    public AchievementDto(UUID id, String title, int counterTotal, String description) {
-        this.id = id;
+    public RegisterAchievementDto(int uniqueNumber, String title, int counterTotal, String description) {
+        this.uniqueNumber = uniqueNumber;
         this.title = title;
         this.counterTotal = counterTotal;
         this.description = description;
     }
 
 
-    public UUID getId() {
-        return id;
+    public Integer getUniqueNumber() {
+        return uniqueNumber;
     }
 
     public String getTitle() {
@@ -42,9 +39,9 @@ public class AchievementDto {
         return description;
     }
 
-    public Achievement mapToObject() {
-        return new Achievement(
-                new AchievementId(getId()),
+    public RegisterGameCommand.AchievementRecord mapToCommandObject() {
+        return new RegisterGameCommand.AchievementRecord(
+                getUniqueNumber(),
                 getTitle(),
                 getCounterTotal(),
                 getDescription()

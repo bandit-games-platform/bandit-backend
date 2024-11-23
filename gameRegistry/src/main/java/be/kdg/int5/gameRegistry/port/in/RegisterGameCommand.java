@@ -2,7 +2,6 @@ package be.kdg.int5.gameRegistry.port.in;
 
 import be.kdg.int5.common.domain.ImageResource;
 import be.kdg.int5.common.domain.ResourceURL;
-import be.kdg.int5.gameRegistry.domain.Achievement;
 import be.kdg.int5.gameRegistry.domain.DeveloperId;
 import be.kdg.int5.gameRegistry.domain.Rule;
 
@@ -20,12 +19,15 @@ public record RegisterGameCommand(
         String icon,
         String background,
         Set<Rule> rules,
-        Set<Achievement> achievements,
+        List<AchievementRecord> achievements,
         List<ImageResource> screenshots
 ) {
     public RegisterGameCommand {
         Objects.requireNonNull(developerId);
         Objects.requireNonNull(title);
         Objects.requireNonNull(currentHost);
+    }
+
+    public record AchievementRecord(int uniqueNumber, String title, int counterTotal, String description) {
     }
 }

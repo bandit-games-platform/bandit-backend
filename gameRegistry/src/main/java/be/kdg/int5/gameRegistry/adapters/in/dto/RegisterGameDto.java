@@ -19,7 +19,7 @@ public class RegisterGameDto {
     private String backgroundUrl;
     private Set<Rule> rules;
     @Valid
-    private Set<AchievementDto> achievements;
+    private Set<RegisterAchievementDto> achievements;
     private List<String> screenshots;
 
     public RegisterGameDto() {
@@ -33,7 +33,7 @@ public class RegisterGameDto {
             String iconUrl,
             String backgroundUrl,
             Set<Rule> rules,
-            Set<AchievementDto> achievements,
+            Set<RegisterAchievementDto> achievements,
             List<String> screenshots
     ) {
         this.title = title;
@@ -76,7 +76,7 @@ public class RegisterGameDto {
         return rules;
     }
 
-    public Set<AchievementDto> getAchievements() {
+    public Set<RegisterAchievementDto> getAchievements() {
         return achievements;
     }
 
