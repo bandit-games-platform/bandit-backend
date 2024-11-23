@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public abstract class Conversation {
     private final UserId userId;
@@ -64,7 +65,17 @@ public abstract class Conversation {
     }
 
     public void update(Question question) {
-        questions.add(question);
+        // if question was added but no answer for it yet
+        Optional<Question> existingQuestion = questions.stream()
+                .filter(q -> q.getSubmittedAt().isEqual(question.getSubmittedAt()))
+                .findAny();
+
+        if (existingQuestion.isPresent()) {
+            existingQuestion.get().update(question.getAnswer());
+        } else {
+            questions.add(question);
+        }
+
         this.setLastMessageTime(question.getSubmittedAt());
     }
 }
