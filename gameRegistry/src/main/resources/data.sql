@@ -1,20 +1,21 @@
 
 -- Insert developers
 INSERT INTO game_registry.developer (id, studio_name) VALUES
-('eff0a57c-86b3-49a9-a266-6c77eb77fe80', 'Integration Studio'),
+('d7df9644-7803-4b70-8997-0f246665cb01', 'Integration Studio'),
 ('3c0b923c-c267-498e-88a4-eee3a629fea4', 'BanditGames');
 
 -- give them a revoked and an active api key
 INSERT INTO game_registry.dev_api_key(developer_id, api_key, revoked)
 VALUES ('3c0b923c-c267-498e-88a4-eee3a629fea4', 'band1TAAA', true),
-       ('3c0b923c-c267-498e-88a4-eee3a629fea4', 'band1TBBB', false);
+       ('3c0b923c-c267-498e-88a4-eee3a629fea4', 'band1TBBB', false),
+       ('d7df9644-7803-4b70-8997-0f246665cb01', 'band1TCCC', false);
 
 
 -- Seeding data for `game` table
 INSERT INTO game_registry.game (id, title, description, current_price, developer_id, current_host, icon_url, background_url) VALUES
-('d77e1d1f-6b46-4c89-9290-3b9cf8a7c001', 'Battleship', 'A strategic naval combat game', 10.99, 'eff0a57c-86b3-49a9-a266-6c77eb77fe80', 'host1','https://cdn.discordapp.com/attachments/1306721570122633317/1307298001383063583/Screenshot_2024-11-16_at_11.55.25.png?ex=6739cba3&is=67387a23&hm=d9ef1e1247cc38dd8ddbd6005a24b9d1650e038ec9fc9920d85d6d11dc5654cd&','https://cdn.discordapp.com/attachments/1306721570122633317/1307300416031162439/Screenshot_2024-11-16_at_12.05.02.png?ex=6739cde3&is=67387c63&hm=50468e030edc646899d9707e362c7668953c69181ba8d72130b1ed025141c40d&'),
-('d77e1d1f-6b46-4c89-9290-3b9cf8a7c002', 'Chess', 'A classic strategy game of kings and queens', 5.99, 'eff0a57c-86b3-49a9-a266-6c77eb77fe80', 'host2', 'https://cdn.discordapp.com/attachments/1306721570122633317/1307297507092725800/Screenshot_2024-11-16_at_11.53.25.png?ex=6739cb2e&is=673879ae&hm=70b916f6df0d5f17a6aca28e195f079710d94c32fee55437d3d4ccbf9ae5a533&','https://cdn.discordapp.com/attachments/1306721570122633317/1307299288115843082/Screenshot_2024-11-16_at_12.00.32.png?ex=6739ccd6&is=67387b56&hm=7a93a6d9c99646f34c4656bea3daddb7b35007e293be89abd6904cf716c4aaea&'),
-('d77e1d1f-6b46-4c89-9290-3b9cf8a7c003', 'Snakes and Ladders', 'A game of ups and downs', 50.00, 'eff0a57c-86b3-49a9-a266-6c77eb77fe80', 'host3', 'https://cdn.discordapp.com/attachments/1306721570122633317/1307298303569952808/Screenshot_2024-11-16_at_11.56.37.png?ex=6739cbeb&is=67387a6b&hm=9e562d3a3a8b268c9957b480a0bc9399b000cba835251829e377644def69bd02&','https://img.freepik.com/premium-vector/snakes-ladders-board-game-vector_600323-522.jpg?w=1060');
+('d77e1d1f-6b46-4c89-9290-3b9cf8a7c001', 'Battleship', 'A strategic naval combat game', 10.99, 'd7df9644-7803-4b70-8997-0f246665cb01', 'host1','https://cdn.discordapp.com/attachments/1306721570122633317/1307298001383063583/Screenshot_2024-11-16_at_11.55.25.png?ex=6739cba3&is=67387a23&hm=d9ef1e1247cc38dd8ddbd6005a24b9d1650e038ec9fc9920d85d6d11dc5654cd&','https://cdn.discordapp.com/attachments/1306721570122633317/1307300416031162439/Screenshot_2024-11-16_at_12.05.02.png?ex=6739cde3&is=67387c63&hm=50468e030edc646899d9707e362c7668953c69181ba8d72130b1ed025141c40d&'),
+('d77e1d1f-6b46-4c89-9290-3b9cf8a7c002', 'Chess', 'A classic strategy game of kings and queens', 5.99, 'd7df9644-7803-4b70-8997-0f246665cb01', 'host2', 'https://cdn.discordapp.com/attachments/1306721570122633317/1307297507092725800/Screenshot_2024-11-16_at_11.53.25.png?ex=6739cb2e&is=673879ae&hm=70b916f6df0d5f17a6aca28e195f079710d94c32fee55437d3d4ccbf9ae5a533&','https://cdn.discordapp.com/attachments/1306721570122633317/1307299288115843082/Screenshot_2024-11-16_at_12.00.32.png?ex=6739ccd6&is=67387b56&hm=7a93a6d9c99646f34c4656bea3daddb7b35007e293be89abd6904cf716c4aaea&'),
+('d77e1d1f-6b46-4c89-9290-3b9cf8a7c003', 'Snakes and Ladders', 'A game of ups and downs', 50.00, 'd7df9644-7803-4b70-8997-0f246665cb01', 'host3', 'https://cdn.discordapp.com/attachments/1306721570122633317/1307298303569952808/Screenshot_2024-11-16_at_11.56.37.png?ex=6739cbeb&is=67387a6b&hm=9e562d3a3a8b268c9957b480a0bc9399b000cba835251829e377644def69bd02&','https://img.freepik.com/premium-vector/snakes-ladders-board-game-vector_600323-522.jpg?w=1060');
 
 INSERT INTO game_registry.game_screenshots (game_id, url) VALUES
 -- Chess
