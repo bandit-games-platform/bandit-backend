@@ -7,7 +7,7 @@ import be.kdg.int5.chatbot.domain.Question;
 import be.kdg.int5.chatbot.ports.in.StartGameConversationUseCase;
 import be.kdg.int5.chatbot.ports.in.StartGameConversationCommand;
 import be.kdg.int5.chatbot.ports.out.ConversationSavePort;
-import be.kdg.int5.chatbot.ports.out.ConversationStartPort;
+import be.kdg.int5.chatbot.ports.out.AnswerAskPort;
 import be.kdg.int5.chatbot.ports.out.GameDetailsLoadPort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,45 +18,38 @@ import java.time.LocalDateTime;
 public class StartGameConversationUseCaseImpl implements StartGameConversationUseCase {
     private final GameDetailsLoadPort gameDetailsLoadPort;
     private final ConversationSavePort conversationSavePort;
-    private final ConversationStartPort conversationStartPort;
+    private final AnswerAskPort answerAskPort;
 
     public StartGameConversationUseCaseImpl(
             GameDetailsLoadPort gameDetailsLoadPort,
             ConversationSavePort conversationSavePort,
-            ConversationStartPort conversationStartPort) {
+            AnswerAskPort answerAskPort) {
         this.gameDetailsLoadPort = gameDetailsLoadPort;
         this.conversationSavePort = conversationSavePort;
-        this.conversationStartPort = conversationStartPort;
+        this.answerAskPort = answerAskPort;
     }
 
     @Override
     @Transactional
     public Answer startGameConversation(StartGameConversationCommand command) {
-        // load GameDetails
+        // load gameDetails
         final GameDetails gameDetails = gameDetailsLoadPort.loadGameDetailsByGameId(command.gameId());
 
         // create conversation
-        final LocalDateTime conversationStartTime = LocalDateTime.now();
-        final GameConversation gameConversation = new GameConversation(
-                command.userId(),
-                conversationStartTime,
-                conversationStartTime,
-                command.gameId()
-        );
+        final GameConversation gameConversation = new GameConversation(command.userId(), command.gameId());
 
         // start conversation
-        final LocalDateTime questionSubmittedAt = LocalDateTime.now();
-        final Question initialQuestion = new Question(GameConversation.initialPrompt, questionSubmittedAt);
-        final Answer answer = conversationStartPort.startGameConversation(gameDetails, gameConversation, initialQuestion);
+        final Question initialQuestion = gameConversation.start();
+        final Answer answer = answerAskPort.getAnswerForInitialQuestion(gameDetails, gameConversation, initialQuestion);
 
-        // add question-answer pair to the conversation
-        initialQuestion.setAnswer(answer);
-        gameConversation.addQuestion(initialQuestion, questionSubmittedAt);
+        // update question and conversation
+        initialQuestion.update(answer);
+        gameConversation.update(initialQuestion);
 
         // save conservation
         conversationSavePort.saveConversation(gameConversation);
 
-        // return conversation
+        // return answer
         return answer;
     }
 }

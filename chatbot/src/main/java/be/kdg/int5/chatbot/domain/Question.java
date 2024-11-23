@@ -10,7 +10,7 @@ public class Question {
 
     public Question(String text, LocalDateTime submittedAt) {
         this.text = Objects.requireNonNull(text);
-        this.submittedAt = submittedAt;
+        this.submittedAt = Objects.requireNonNull(submittedAt);
     }
 
     public Question(String text, LocalDateTime submittedAt, Answer answer) {
@@ -32,5 +32,9 @@ public class Question {
 
     public void setAnswer(Answer answer) {
         this.answer = answer;
+    }
+
+    public void update(Answer answer) {
+        setAnswer(answer);
     }
 }

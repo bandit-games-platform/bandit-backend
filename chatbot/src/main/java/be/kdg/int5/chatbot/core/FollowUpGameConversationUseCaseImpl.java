@@ -6,54 +6,49 @@ import be.kdg.int5.chatbot.domain.GameDetails;
 import be.kdg.int5.chatbot.domain.Question;
 import be.kdg.int5.chatbot.ports.in.FollowUpGameConversationCommand;
 import be.kdg.int5.chatbot.ports.in.FollowUpGameConversationUseCase;
-import be.kdg.int5.chatbot.ports.in.StartGameConversationCommand;
 import be.kdg.int5.chatbot.ports.out.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
 
 @Service
 public class FollowUpGameConversationUseCaseImpl implements FollowUpGameConversationUseCase {
     private final GameDetailsLoadPort gameDetailsLoadPort;
     private final ConversationSavePort conversationSavePort;
     private final ConversationLoadPort conversationLoadPort;
-    private final ConversationFollowUpPort conversationFollowUpPort;
-
+    private final AnswerAskPort answerAskPort;
 
     public FollowUpGameConversationUseCaseImpl(
             GameDetailsLoadPort gameDetailsLoadPort,
             ConversationSavePort conversationSavePort,
             ConversationLoadPort conversationLoadPort,
-            ConversationFollowUpPort conversationFollowUpPort) {
+            AnswerAskPort answerAskPort) {
         this.gameDetailsLoadPort = gameDetailsLoadPort;
         this.conversationSavePort = conversationSavePort;
         this.conversationLoadPort = conversationLoadPort;
-        this.conversationFollowUpPort = conversationFollowUpPort;
+        this.answerAskPort = answerAskPort;
     }
 
     @Override
     @Transactional
     public Answer followUpGameConversation(FollowUpGameConversationCommand command) {
-        // load GameDetails
+        // load gameDetails
         final GameDetails gameDetails = gameDetailsLoadPort.loadGameDetailsByGameId(command.gameId());
 
         // load conversation
         final GameConversation gameConversation = conversationLoadPort.loadGameConversation(command.userId(), command.gameId());
 
-        // create a new question
-        final LocalDateTime questionSubmittedAt = LocalDateTime.now();
-        final Question followUpQuestion = new Question(command.question(), questionSubmittedAt);
-        final Answer answer = conversationFollowUpPort.followUpOnGameConversation(gameDetails, gameConversation, followUpQuestion);
+        // add a new question
+        final Question followUpQuestion = gameConversation.addFollowUpQuestion(command.question());
+        final Answer answer = answerAskPort.getAnswerForFollowUpQuestion(gameDetails, gameConversation, followUpQuestion);
 
-        // add question-answer pair to the conversation
-        followUpQuestion.setAnswer(answer);
-        gameConversation.addQuestion(followUpQuestion, questionSubmittedAt);
+        // update question and conversation
+        followUpQuestion.update(answer);
+        gameConversation.update(followUpQuestion);
 
         // save conservation
         conversationSavePort.saveConversation(gameConversation);
 
-        // return conversation
+        // return answer
         return answer;
     }
 }

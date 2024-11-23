@@ -11,8 +11,14 @@ public abstract class Conversation {
     private LocalDateTime lastMessageTime;
     private List<Question> questions;
 
+    public Conversation(UserId userId) {
+        this(userId, LocalDateTime.now(), null, null);
+    }
+
     public Conversation(UserId userId, LocalDateTime startTime, LocalDateTime lastMessageTime) {
-        this(userId, startTime, lastMessageTime, null);
+        this.userId = userId;
+        this.startTime = startTime;
+        this.lastMessageTime = lastMessageTime;
     }
 
     public Conversation(UserId userId, LocalDateTime startTime, LocalDateTime lastMessageTime, List<Question> questions) {
@@ -49,10 +55,16 @@ public abstract class Conversation {
         this.lastMessageTime = lastMessageTime;
     }
 
-//    public abstract void addInitialQuestion();
+    public abstract Question start();
 
-    public void addQuestion(Question question, LocalDateTime questionSubmittedAt) {
+    public Question addFollowUpQuestion(String text) {
+        Question question = new Question(text, LocalDateTime.now());
+        update(question);
+        return question;
+    }
+
+    public void update(Question question) {
         questions.add(question);
-        this.setLastMessageTime(questionSubmittedAt);
+        this.setLastMessageTime(question.getSubmittedAt());
     }
 }

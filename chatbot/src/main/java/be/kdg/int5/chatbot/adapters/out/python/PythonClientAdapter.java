@@ -5,8 +5,7 @@ import be.kdg.int5.chatbot.domain.Answer;
 import be.kdg.int5.chatbot.domain.GameConversation;
 import be.kdg.int5.chatbot.domain.GameDetails;
 import be.kdg.int5.chatbot.domain.Question;
-import be.kdg.int5.chatbot.ports.out.ConversationFollowUpPort;
-import be.kdg.int5.chatbot.ports.out.ConversationStartPort;
+import be.kdg.int5.chatbot.ports.out.AnswerAskPort;
 import be.kdg.int5.common.exceptions.PythonServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +19,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 
 @Repository
-public class PythonClientAdapter implements ConversationStartPort, ConversationFollowUpPort {
+public class PythonClientAdapter implements AnswerAskPort {
     @Value("${python.backend.url:http://localhost:8000}")
     private String pythonBackendUrl;
     private static final String INITIAL_QUESTION = "/initial-question";
@@ -35,7 +34,7 @@ public class PythonClientAdapter implements ConversationStartPort, ConversationF
     }
 
     @Override
-    public Answer startGameConversation(GameDetails gameDetails, GameConversation gameConversation, Question question) {
+    public Answer getAnswerForInitialQuestion(GameDetails gameDetails, GameConversation gameConversation, Question question) {
         // create Dtos for Python
         final GameDetailsDto gameDetailsDto = toGameDetailsDto(gameDetails);
         final InitialQuestionDto initialQuestionDto = new InitialQuestionDto(question.getText(), gameDetailsDto);
@@ -64,7 +63,7 @@ public class PythonClientAdapter implements ConversationStartPort, ConversationF
     }
 
     @Override
-    public Answer followUpOnGameConversation(GameDetails gameDetails, GameConversation gameConversation, Question question) {
+    public Answer getAnswerForFollowUpQuestion(GameDetails gameDetails, GameConversation gameConversation, Question question) {
         // create Dtos for Python
         final GameDetailsDto gameDetailsDto = toGameDetailsDto(gameDetails);
         final List<QuestionAnswerDto> questionAnswerDtoList = toQuestionAnswerDtoList(gameConversation);
@@ -108,6 +107,7 @@ public class PythonClientAdapter implements ConversationStartPort, ConversationF
 
     private List<QuestionAnswerDto> toQuestionAnswerDtoList(GameConversation gameConversation) {
         return gameConversation.getQuestions().stream()
+                .filter(q -> q.getAnswer() != null)
                 .map(q -> {
                     QuestionAnswerDto qaDto = new QuestionAnswerDto();
                     qaDto.setQuestion(q.getText());

@@ -48,9 +48,10 @@ public class ChatbotRestController {
     public ResponseEntity<Answer> postFollowUpQuestion() {
         final UserId userUUID = new UserId(UUID.fromString("e4a40c63-2edf-4592-8d36-46b902db69d7")); // TODO
         final GameId gameUUID = new GameId(UUID.fromString("d77e1d1f-6b46-4c89-9290-3b9cf8a7c001")); // TODO
+        final String followUpQuestion = "Tell me more about this game.";
 
         try {
-            final FollowUpGameConversationCommand followUpGameConversationCommand = new FollowUpGameConversationCommand(userUUID, gameUUID, "Tell me more about this game.");
+            final FollowUpGameConversationCommand followUpGameConversationCommand = new FollowUpGameConversationCommand(userUUID, gameUUID, followUpQuestion);
             final Answer answer = followUpGameConversationUseCase.followUpGameConversation(followUpGameConversationCommand);
 
             logger.info("Answer in the Controller - Follow-up: {}", answer.toString());
