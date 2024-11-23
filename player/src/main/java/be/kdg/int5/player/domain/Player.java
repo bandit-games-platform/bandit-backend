@@ -2,11 +2,13 @@ package be.kdg.int5.player.domain;
 
 import be.kdg.int5.common.domain.ImageResource;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import static java.util.Objects.requireNonNull;
 
 public class Player {
     private final PlayerId id;
+    private final LocalDateTime joinDate;
     private String displayName;
     private Gender gender;
     private Country location;
@@ -14,16 +16,22 @@ public class Player {
     private ImageResource avatar;
     private List<Player> friendsList;
 
-    public Player(final PlayerId id, final String displayName) {
+    public Player(final PlayerId id, final LocalDateTime joinDate, final String displayName) {
         requireNonNull(id);
+        requireNonNull(joinDate);
         requireNonNull(displayName);
 
         this.id = id;
+        this.joinDate = joinDate;
         this.displayName = displayName;
     }
 
     public PlayerId getId() {
         return id;
+    }
+
+    public LocalDateTime getJoinDate() {
+        return joinDate;
     }
 
     public String getDisplayName() {
