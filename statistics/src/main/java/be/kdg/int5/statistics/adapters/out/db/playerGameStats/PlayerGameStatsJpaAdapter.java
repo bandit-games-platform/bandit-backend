@@ -1,28 +1,24 @@
 package be.kdg.int5.statistics.adapters.out.db.playerGameStats;
 
 import be.kdg.int5.statistics.domain.*;
-import be.kdg.int5.statistics.port.out.AchievementLoadPort;
 import be.kdg.int5.statistics.port.out.PlayerGameStatisticsLoadPort;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.Comparator;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Component
-public class PlayerGameStatsJpaAdapter implements PlayerGameStatisticsLoadPort, AchievementLoadPort {
+@Repository
+public class PlayerGameStatsJpaAdapter implements PlayerGameStatisticsLoadPort {
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(PlayerGameStatsJpaAdapter.class);
     private final PlayerGameStatsJpaRepository playerGameStatsJpaRepository;
-    private final AchievementJpaRepository achievementJpaRepository;
     private final AchievementProgressJpaRepository achievementProgressJpaRepository;
 
     public PlayerGameStatsJpaAdapter(
             final PlayerGameStatsJpaRepository playerGameStatsJpaRepository,
-            AchievementJpaRepository achievementJpaRepository, AchievementProgressJpaRepository achievementProgressJpaRepository) {
+            final AchievementProgressJpaRepository achievementProgressJpaRepository) {
         this.playerGameStatsJpaRepository = playerGameStatsJpaRepository;
-        this.achievementJpaRepository = achievementJpaRepository;
         this.achievementProgressJpaRepository = achievementProgressJpaRepository;
     }
 
@@ -37,16 +33,6 @@ public class PlayerGameStatsJpaAdapter implements PlayerGameStatisticsLoadPort, 
         return this.playerGameStatsJpaToDomain(playerGameStatsJpaEntity);
     }
 
-    @Override
-    public List<Achievement> loadGameAchievements(GameId gameId) {
-        List<AchievementJpaEntity> achievements = achievementJpaRepository
-                .findAllByGameId(gameId.uuid())
-                .orElseThrow(() -> new IllegalStateException("Unable to find the earliest session."));
-
-        return achievements.stream()
-                .map(this::achievementJpaToDomain)
-                .toList();
-    }
 
     private PlayerGameStatsJpaEntity playerGameStatsDomainToJpa(final PlayerGameStats playerGameStats){
         PlayerGameStatsJpaId playerGameStatsJpaId = new PlayerGameStatsJpaId(playerGameStats.getPlayerId().uuid(), playerGameStats.getGameId().uuid());
@@ -131,34 +117,24 @@ public class PlayerGameStatsJpaAdapter implements PlayerGameStatisticsLoadPort, 
         );
     }
 
-    private Achievement achievementJpaToDomain(final AchievementJpaEntity achievementJpaEntity){
-        return new Achievement(
-                new AchievementId(achievementJpaEntity.getAchievementId()),
-                new GameId(achievementJpaEntity.getGameId()),
-                achievementJpaEntity.getCounterTotal(),
-                achievementJpaEntity.getTitle(),
-                achievementJpaEntity.getDescription()
-        );
-    }
 
     private AchievementProgress achievementProgressJpaToDomain(final AchievementProgressJpaEntity achievementProgressJpaEntity){
         return new AchievementProgress(
-                new AchievementId(achievementProgressJpaEntity.getAchievement().getAchievementId()),
+                new AchievementId(achievementProgressJpaEntity.getAchievementId()),
                         achievementProgressJpaEntity.getCounterTotal()
         );
     }
 
     private AchievementProgressJpaEntity achievementProgressDomainToJpa(final AchievementProgress achievementProgress, PlayerId playerId){
-        final AchievementProgressJpaEntity achievementProgressJpaEntity = achievementProgressJpaRepository.findAchievementProgressByAchievementIdAndPlayerId(
+
+        final AchievementProgressJpaEntity achievementProgressJpaEntity = achievementProgressJpaRepository.findAchievementProgressJpaEntitiesByAchievementIdAndPlayerGameStatsJpaEntity_IdPlayerId(
                 achievementProgress.getAchievementId().uuid(),
                 playerId.uuid()
         ).orElseThrow();
 
-        final AchievementJpaEntity achievementJpa = achievementJpaRepository.findById(achievementProgress.getAchievementId().uuid()).orElseThrow();
-
         return new AchievementProgressJpaEntity(
                 achievementProgressJpaEntity.getAchievementProgressId(),
-                achievementJpa,
+                achievementProgress.getAchievementId().uuid(),
                 achievementProgressJpaEntity.getPlayerGameStatsJpaEntity(),
                 achievementProgress.getCounterValue()
                 );

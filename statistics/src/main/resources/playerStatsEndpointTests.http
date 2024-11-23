@@ -1,24 +1,16 @@
-#### Get access token with warehouse user
-#
-#POST http://localhost:8180/realms/mineral/protocol/openid-connect/token HTTP/1.1
-#Content-Type: application/x-www-form-urlencoded
-#
-#client_id=warehouse_client&client_secret=b6l3cVHYhOaOTAp5qEGlDPcphamWHNc9&username=warehouse_user&password=password&grant_type=password&scope=openid
-#
-#//saving the warehouse access token
-#> {%client.global.set("access_token_warehouse", response.body.access_token);%}
+#### Get access token with player user
 
+POST http://localhost:8180/realms/bandit-realm/protocol/openid-connect/token HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
 
+client_id=bandit-backend&client_secret=**********&username=john@gmail.com&password=johnnyboy&grant_type=password&scope=openid
 
-.
+//saving the warehouse access token
+> {%client.global.set("logged-in-user", response.body.access_token);%}
+
 
 ### Get player Statistics for a game
 
-GET http://localhost:8095/statistics/player-game-statistics/c5b8f7a1-d34e-4e19-9d0f-b4c5d0e1f501/b2e98f3b-3e2b-4a9e-8e5e-c3b4d0a4e401
+GET http://localhost:8095/statistics/player-game-statistics/c5b8f7a1-d34e-4e19-9d0f-b4c5d0e1f501/d77e1d1f-6b46-4c89-9290-3b9cf8a7c001
 Accept: application/json
-
-
-### Get achievements for a game by achievement ID
-
-GET http://localhost:8095/statistics/game-achievements/b3d12e4a-6a7b-412c-9e0e-e4d05c3f4b02
-Accept: application/json
+Authorization: Bearer {{logged-in-user}}
