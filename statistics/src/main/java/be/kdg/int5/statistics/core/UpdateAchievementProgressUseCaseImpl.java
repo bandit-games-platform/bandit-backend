@@ -36,6 +36,7 @@ public class UpdateAchievementProgressUseCaseImpl implements UpdateAchievementPr
             logger.info("statistics: Existing player achievement progress already found for game {} and player {}", command.gameId().uuid(), command.playerId().uuid());
 
             Set<AchievementProgress> achievementProgressSet = playerGameStats.getAchievementProgressSet();
+            boolean foundForGame = false;
             for (AchievementProgress achievementProgress : achievementProgressSet) {
                 if (achievementProgress.getAchievementId().uuid().equals(command.achievementId().uuid())) {
                     achievementProgressSet.remove(achievementProgress);
@@ -44,10 +45,11 @@ public class UpdateAchievementProgressUseCaseImpl implements UpdateAchievementPr
                                     command.newAmount() :
                                     achievementProgress.getCounterValue() + 1);
                     achievementProgressSet.add(achievementProgress);
+                    foundForGame = true;
                     break;
                 }
             }
-            if (achievementProgressSet.isEmpty()) {
+            if (achievementProgressSet.isEmpty() || !foundForGame) {
                 AchievementProgress achievementProgress = new AchievementProgress(
                         command.achievementId(),
                         command.newAmount() != null ? command.newAmount() : 1
