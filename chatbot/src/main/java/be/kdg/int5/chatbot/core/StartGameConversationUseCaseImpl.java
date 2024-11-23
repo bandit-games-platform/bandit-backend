@@ -45,7 +45,7 @@ public class StartGameConversationUseCaseImpl implements StartGameConversationUs
         );
 
         // start conversation
-        final Question initialQuestion = new Question(GameConversation.initialPrompt);
+        final Question initialQuestion = new Question(GameConversation.initialPrompt, LocalDateTime.now());
         final Answer answer = conversationStartPort.startGameConversation(gameDetails, gameConversation, initialQuestion);
 
         // add question-answer pair to the conversation

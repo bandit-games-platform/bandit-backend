@@ -11,6 +11,8 @@ import be.kdg.int5.chatbot.ports.out.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 @Service
 public class FollowUpGameConversationUseCaseImpl implements FollowUpGameConversationUseCase {
     private final GameDetailsLoadPort gameDetailsLoadPort;
@@ -40,7 +42,7 @@ public class FollowUpGameConversationUseCaseImpl implements FollowUpGameConversa
         final GameConversation gameConversation = conversationLoadPort.loadGameConversation(command.userId(), command.gameId());
 
         // create a new question
-        final Question followUpQuestion = new Question(command.question());
+        final Question followUpQuestion = new Question(command.question(), LocalDateTime.now());
         final Answer answer = conversationFollowUpPort.followUpOnGameConversation(gameDetails, gameConversation, followUpQuestion);
 
         // add question-answer pair to the conversation

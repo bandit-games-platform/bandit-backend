@@ -17,5 +17,12 @@ public interface ConversationJpaRepository extends JpaRepository<ConversationJpa
             """)
     GameConversationJpaEntity findByUserIdAndGameIdWithQuestions(UUID userId, UUID gameId);
 
-    ConversationJpaEntity findByUserIdAndStartTime(UUID userId, LocalDateTime startTime);
+    @Query("""
+            SELECT g FROM GameConversationJpaEntity g
+            JOIN FETCH g.questions q
+            JOIN FETCH q.answer a
+            WHERE g.userId = :userId
+            AND g.startTime = :startTime
+            """)
+    ConversationJpaEntity findByUserIdAndStartTimeWithQuestions(UUID userId, LocalDateTime startTime);
 }

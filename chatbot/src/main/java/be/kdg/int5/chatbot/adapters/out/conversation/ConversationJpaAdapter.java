@@ -7,8 +7,10 @@ import be.kdg.int5.chatbot.ports.out.ConversationLoadPort;
 import be.kdg.int5.chatbot.ports.out.ConversationSavePort;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Repository
@@ -34,7 +36,7 @@ public class ConversationJpaAdapter implements ConversationLoadPort, Conversatio
 
         final List<Question> questionList = gameConversationJpa.getQuestions().stream()
                 .map(q -> {
-                    final Question question = new Question(q.getText());
+                    final Question question = new Question(q.getText(), q.getSubmittedAt());
                     final Answer answer = new Answer(q.getAnswer().getText());
                     question.setAnswer(answer);
                     return question;
@@ -48,7 +50,7 @@ public class ConversationJpaAdapter implements ConversationLoadPort, Conversatio
 
     @Override
     public void saveConversation(Conversation conversation) {
-        ConversationJpaEntity conversationJpa = conversationJpaRepository.findByUserIdAndStartTime(conversation.getUserId().uuid(), conversation.getStartTime());
+        ConversationJpaEntity conversationJpa = conversationJpaRepository.findByUserIdAndStartTimeWithQuestions(conversation.getUserId().uuid(), conversation.getStartTime());
 
         if (conversationJpa == null) {
             conversationJpa = toConservationJpa(conversation);
@@ -56,22 +58,34 @@ public class ConversationJpaAdapter implements ConversationLoadPort, Conversatio
             conversationJpa.setLastMessageTime(conversation.getLastMessageTime());
         }
 
-        final ConversationJpaEntity finalConversationJpa = conversationJpa; // apparently you can't use temp variables inside a lambda (see below)
-        final List<QuestionJpaEntity> questionJpaList = conversation.getQuestions().stream()
-                .map(q -> {
-                    AnswerJpaEntity answerJpa = new AnswerJpaEntity();
-                    answerJpa.setText(q.getAnswer().text());
+        // Use a map to track existing questions by their questionTime for efficient lookup
+        Map<LocalDateTime, QuestionJpaEntity> existingQuestionsMap = conversationJpa.getQuestions().stream()
+                .collect(Collectors.toMap(QuestionJpaEntity::getSubmittedAt, q -> q));
 
-                    QuestionJpaEntity questionJpa = new QuestionJpaEntity();
-                    questionJpa.setText(q.getText());
-                    questionJpa.setConversation(finalConversationJpa); // here
-                    questionJpa.setAnswer(answerJpa);
+        // Add new questions or update existing ones based on questionTime
+        for (Question question : conversation.getQuestions()) {
+            LocalDateTime questionTime = question.getSubmittedAt();
+            QuestionJpaEntity questionJpa = existingQuestionsMap.get(questionTime);
 
-                    return questionJpa;
-                })
-                .collect(Collectors.toCollection(ArrayList::new)); // .toList() would return an immutable list (to which I need to add to in the use case)
+            if (questionJpa == null) {
+                // New question: create and add it
+                questionJpa = new QuestionJpaEntity();
+                questionJpa.setText(question.getText());
+                questionJpa.setSubmittedAt(questionTime);
 
-        conversationJpa.setQuestions(questionJpaList);
+                AnswerJpaEntity answerJpa = new AnswerJpaEntity();
+                answerJpa.setText(question.getAnswer().text());
+                questionJpa.setAnswer(answerJpa);
+
+                questionJpa.setConversation(conversationJpa);
+                conversationJpa.getQuestions().add(questionJpa);
+            } else {
+                // Existing question: update its answer if necessary
+                if (!questionJpa.getAnswer().getText().equals(question.getAnswer().text())) {
+                    questionJpa.getAnswer().setText(question.getAnswer().text());
+                }
+            }
+        }
 
         conversationJpaRepository.save(conversationJpa);
     }

@@ -4,6 +4,7 @@ import be.kdg.int5.chatbot.adapters.out.answer.AnswerJpaEntity;
 import be.kdg.int5.chatbot.adapters.out.conversation.ConversationJpaEntity;
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -12,6 +13,7 @@ public class QuestionJpaEntity {
     @Id
     private UUID id;
     private String text;
+    private LocalDateTime submittedAt;
 
     @ManyToOne
     @JoinColumn(name = "conversation_id")
@@ -25,9 +27,14 @@ public class QuestionJpaEntity {
         this.id = UUID.randomUUID();
     }
 
-    public QuestionJpaEntity(String text, ConversationJpaEntity conversation, AnswerJpaEntity answer) {
+    public QuestionJpaEntity(
+            String text,
+            LocalDateTime submittedAt,
+            ConversationJpaEntity conversation,
+            AnswerJpaEntity answer) {
         this.id = UUID.randomUUID();
         this.text = text;
+        this.submittedAt = submittedAt;
         this.conversation = conversation;
         this.answer = answer;
     }
@@ -46,6 +53,14 @@ public class QuestionJpaEntity {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public LocalDateTime getSubmittedAt() {
+        return submittedAt;
+    }
+
+    public void setSubmittedAt(LocalDateTime submittedAt) {
+        this.submittedAt = submittedAt;
     }
 
     public ConversationJpaEntity getConversation() {
