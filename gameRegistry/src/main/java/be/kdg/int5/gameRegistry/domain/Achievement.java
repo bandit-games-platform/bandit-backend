@@ -16,14 +16,12 @@ public class Achievement {
     }
 
     public Achievement(AchievementId id, String title, int counterTotal, String description) {
+        if (title.isEmpty() || title.length() > MAX_TITLE_LENGTH) throw new IllegalArgumentException();
+
         this.id = Objects.requireNonNull(id);
         this.title = Objects.requireNonNull(title);
-        this.counterTotal = counterTotal;
+        this.counterTotal = counterTotal <= 0 ? 1 : counterTotal;
         this.description = Objects.requireNonNull(description);
-
-        assert !title.isEmpty() && title.length() < MAX_TITLE_LENGTH;
-
-        assert counterTotal > 0;
     }
 
 
