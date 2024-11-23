@@ -51,8 +51,8 @@ public abstract class Conversation {
 
 //    public abstract void addInitialQuestion();
 
-    public void addQuestion(Question question) {
+    public void addQuestion(Question question, LocalDateTime questionSubmittedAt) {
         questions.add(question);
-        this.setLastMessageTime(LocalDateTime.now()); // TODO: change to Question having a time
+        this.setLastMessageTime(questionSubmittedAt);
     }
 }

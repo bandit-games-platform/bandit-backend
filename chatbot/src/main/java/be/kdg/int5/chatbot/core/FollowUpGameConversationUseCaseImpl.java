@@ -42,12 +42,13 @@ public class FollowUpGameConversationUseCaseImpl implements FollowUpGameConversa
         final GameConversation gameConversation = conversationLoadPort.loadGameConversation(command.userId(), command.gameId());
 
         // create a new question
-        final Question followUpQuestion = new Question(command.question(), LocalDateTime.now());
+        final LocalDateTime questionSubmittedAt = LocalDateTime.now();
+        final Question followUpQuestion = new Question(command.question(), questionSubmittedAt);
         final Answer answer = conversationFollowUpPort.followUpOnGameConversation(gameDetails, gameConversation, followUpQuestion);
 
         // add question-answer pair to the conversation
         followUpQuestion.setAnswer(answer);
-        gameConversation.addQuestion(followUpQuestion);
+        gameConversation.addQuestion(followUpQuestion, questionSubmittedAt);
 
         // save conservation
         conversationSavePort.saveConversation(gameConversation);

@@ -36,21 +36,22 @@ public class StartGameConversationUseCaseImpl implements StartGameConversationUs
         final GameDetails gameDetails = gameDetailsLoadPort.loadGameDetailsByGameId(command.gameId());
 
         // create conversation
-        final LocalDateTime now = LocalDateTime.now();
+        final LocalDateTime conversationStartTime = LocalDateTime.now();
         final GameConversation gameConversation = new GameConversation(
                 command.userId(),
-                now,
-                now,
+                conversationStartTime,
+                conversationStartTime,
                 command.gameId()
         );
 
         // start conversation
-        final Question initialQuestion = new Question(GameConversation.initialPrompt, LocalDateTime.now());
+        final LocalDateTime questionSubmittedAt = LocalDateTime.now();
+        final Question initialQuestion = new Question(GameConversation.initialPrompt, questionSubmittedAt);
         final Answer answer = conversationStartPort.startGameConversation(gameDetails, gameConversation, initialQuestion);
 
         // add question-answer pair to the conversation
         initialQuestion.setAnswer(answer);
-        gameConversation.addQuestion(initialQuestion);
+        gameConversation.addQuestion(initialQuestion, questionSubmittedAt);
 
         // save conservation
         conversationSavePort.saveConversation(gameConversation);
