@@ -3,6 +3,7 @@ package be.kdg.int5.chatbot.adapters.out.conversation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 public interface ConversationJpaRepository extends JpaRepository<ConversationJpaEntity, UUID> {
@@ -15,4 +16,6 @@ public interface ConversationJpaRepository extends JpaRepository<ConversationJpa
             AND g.gameId = :gameId
             """)
     GameConversationJpaEntity findByUserIdAndGameIdWithQuestions(UUID userId, UUID gameId);
+
+    ConversationJpaEntity findByUserIdAndStartTime(UUID userId, LocalDateTime startTime);
 }

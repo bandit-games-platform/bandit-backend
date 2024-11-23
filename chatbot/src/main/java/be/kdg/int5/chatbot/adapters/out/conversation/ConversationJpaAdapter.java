@@ -48,7 +48,13 @@ public class ConversationJpaAdapter implements ConversationLoadPort, Conversatio
 
     @Override
     public void saveConversation(Conversation conversation) {
-        ConversationJpaEntity conversationJpa = toConservationJpa(conversation);
+        ConversationJpaEntity conversationJpa = conversationJpaRepository.findByUserIdAndStartTime(conversation.getUserId().uuid(), conversation.getStartTime());
+
+        if (conversationJpa == null) {
+            conversationJpa = toConservationJpa(conversation);
+        } else {
+            conversationJpa.setLastMessageTime(conversation.getLastMessageTime());
+        }
 
         final ConversationJpaEntity finalConversationJpa = conversationJpa; // apparently you can't use temp variables inside a lambda (see below)
         final List<QuestionJpaEntity> questionJpaList = conversation.getQuestions().stream()
@@ -63,8 +69,7 @@ public class ConversationJpaAdapter implements ConversationLoadPort, Conversatio
 
                     return questionJpa;
                 })
-                .toList();
-
+                .collect(Collectors.toCollection(ArrayList::new)); // .toList() would return an immutable list (to which I need to add to in the use case)
 
         conversationJpa.setQuestions(questionJpaList);
 

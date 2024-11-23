@@ -7,7 +7,7 @@ public class GameConversation extends Conversation {
     public static final String initialPrompt = " Provide a very short paragraph to describe the game. Additionally, can you summarize the rules for this game in as few words as possible? Give your response as raw text, without any characters wrapping it.";
     private final GameId gameId;
 
-    public GameConversation(UserId userId, LocalDateTime lastMessageTime, LocalDateTime startTime, GameId gameId) {
+    public GameConversation(UserId userId, LocalDateTime startTime, LocalDateTime lastMessageTime, GameId gameId) {
         this(userId, startTime, lastMessageTime, null, gameId);
     }
 
@@ -19,4 +19,9 @@ public class GameConversation extends Conversation {
     public GameId getGameId() {
         return gameId;
     }
+
+//    @Override
+//    public void addInitialQuestion() {
+//        addQuestion(new Question(initialPrompt));
+//    }
 }

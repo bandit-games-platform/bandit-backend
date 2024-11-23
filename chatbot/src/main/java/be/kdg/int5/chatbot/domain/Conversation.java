@@ -11,7 +11,7 @@ public abstract class Conversation {
     private LocalDateTime lastMessageTime;
     private List<Question> questions;
 
-    public Conversation(UserId userId, LocalDateTime lastMessageTime, LocalDateTime startTime) {
+    public Conversation(UserId userId, LocalDateTime startTime, LocalDateTime lastMessageTime) {
         this(userId, startTime, lastMessageTime, null);
     }
 
@@ -49,8 +49,10 @@ public abstract class Conversation {
         this.lastMessageTime = lastMessageTime;
     }
 
+//    public abstract void addInitialQuestion();
+
     public void addQuestion(Question question) {
-//        if (this.questions == null) this.questions = new ArrayList<>();
         questions.add(question);
+        this.setLastMessageTime(LocalDateTime.now()); // TODO: change to Question having a time
     }
 }

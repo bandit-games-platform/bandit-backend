@@ -4,10 +4,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class PlatformConversation extends Conversation {
-    private static final String platformDescription = "Something or other";
+    private final String platformDescription = "Something or other";
     private String currentPage;
 
-    public PlatformConversation(UserId userId, LocalDateTime lastMessageTime, LocalDateTime startTime, String currentPage) {
+    public PlatformConversation(UserId userId, LocalDateTime startTime, LocalDateTime lastMessageTime, String currentPage) {
         this(userId, startTime, lastMessageTime, null, currentPage);
     }
 
@@ -23,4 +23,9 @@ public class PlatformConversation extends Conversation {
     public void setCurrentPage(String currentPage) {
         this.currentPage = currentPage;
     }
+
+//    @Override
+//    public void addInitialQuestion() {
+//        addQuestion(new Question(platformDescription));
+//    }
 }
