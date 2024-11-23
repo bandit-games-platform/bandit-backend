@@ -1,16 +1,15 @@
 package be.kdg.int5.chatbot.domain;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 public abstract class Conversation {
     private final UserId userId;
     private final LocalDateTime startTime;
     private LocalDateTime lastMessageTime;
     private List<Question> questions;
+
+    private static final int QUESTION_WINDOW = 5;
 
     public Conversation(UserId userId) {
         this(userId, LocalDateTime.now(), null, null);
@@ -77,5 +76,18 @@ public abstract class Conversation {
         }
 
         this.setLastMessageTime(question.getSubmittedAt());
+    }
+
+    public List<Question> getPreviousQuestionsInWindow() {
+        if (questions.size() <= QUESTION_WINDOW) {
+            return questions.stream()
+                    .sorted(Comparator.comparing(Question::getSubmittedAt))
+                    .toList();
+        }
+
+        return questions.stream()
+                .sorted(Comparator.comparing(Question::getSubmittedAt))
+                .skip(questions.size() - 5)
+                .toList();
     }
 }

@@ -63,10 +63,10 @@ public class PythonClientAdapter implements AnswerAskPort {
     }
 
     @Override
-    public Answer getAnswerForFollowUpQuestion(GameDetails gameDetails, GameConversation gameConversation, Question question) {
+    public Answer getAnswerForFollowUpQuestion(GameDetails gameDetails, List<Question> previousQuestionWindowList, Question question) {
         // create Dtos for Python
         final GameDetailsDto gameDetailsDto = toGameDetailsDto(gameDetails);
-        final List<QuestionAnswerDto> questionAnswerDtoList = toQuestionAnswerDtoList(gameConversation);
+        final List<QuestionAnswerDto> questionAnswerDtoList = toQuestionAnswerDtoList(previousQuestionWindowList);
 
         final FollowUpQuestionDto followUpQuestionDto = new FollowUpQuestionDto(question.getText(), gameDetailsDto, questionAnswerDtoList);
 
@@ -105,8 +105,8 @@ public class PythonClientAdapter implements AnswerAskPort {
         );
     }
 
-    private List<QuestionAnswerDto> toQuestionAnswerDtoList(GameConversation gameConversation) {
-        return gameConversation.getQuestions().stream()
+    private List<QuestionAnswerDto> toQuestionAnswerDtoList(List<Question> previousQuestionWindowList) {
+        return previousQuestionWindowList.stream()
                 .filter(q -> q.getAnswer() != null)
                 .map(q -> {
                     QuestionAnswerDto qaDto = new QuestionAnswerDto();

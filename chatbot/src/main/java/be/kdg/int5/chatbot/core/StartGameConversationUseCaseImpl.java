@@ -42,7 +42,7 @@ public class StartGameConversationUseCaseImpl implements StartGameConversationUs
         final Question initialQuestion = gameConversation.start();
         final Answer answer = answerAskPort.getAnswerForInitialQuestion(gameDetails, gameConversation, initialQuestion);
 
-        // update question conversation
+        // update question and conversation
         initialQuestion.update(answer);
         gameConversation.update(initialQuestion);
 

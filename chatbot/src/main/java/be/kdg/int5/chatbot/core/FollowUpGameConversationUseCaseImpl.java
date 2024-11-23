@@ -10,6 +10,8 @@ import be.kdg.int5.chatbot.ports.out.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class FollowUpGameConversationUseCaseImpl implements FollowUpGameConversationUseCase {
     private final GameDetailsLoadPort gameDetailsLoadPort;
@@ -39,7 +41,8 @@ public class FollowUpGameConversationUseCaseImpl implements FollowUpGameConversa
 
         // add a new question
         final Question followUpQuestion = gameConversation.addFollowUpQuestion(command.question());
-        final Answer answer = answerAskPort.getAnswerForFollowUpQuestion(gameDetails, gameConversation, followUpQuestion);
+        final List<Question> previousQuestionWindowList = gameConversation.getPreviousQuestionsInWindow();
+        final Answer answer = answerAskPort.getAnswerForFollowUpQuestion(gameDetails, previousQuestionWindowList, followUpQuestion);
 
         // update question and conversation
         followUpQuestion.update(answer);

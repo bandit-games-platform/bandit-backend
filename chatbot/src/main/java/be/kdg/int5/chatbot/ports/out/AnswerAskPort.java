@@ -5,8 +5,10 @@ import be.kdg.int5.chatbot.domain.GameConversation;
 import be.kdg.int5.chatbot.domain.GameDetails;
 import be.kdg.int5.chatbot.domain.Question;
 
+import java.util.List;
+
 public interface AnswerAskPort {
     Answer getAnswerForInitialQuestion(GameDetails gameDetails, GameConversation gameConversation, Question question);
 
-    Answer getAnswerForFollowUpQuestion(GameDetails gameDetails, GameConversation gameConversation, Question question);
+    Answer getAnswerForFollowUpQuestion(GameDetails gameDetails, List<Question> previousQuestionWindowList, Question question);
 }

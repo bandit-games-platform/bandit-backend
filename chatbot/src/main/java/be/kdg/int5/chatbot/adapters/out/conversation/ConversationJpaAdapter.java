@@ -79,11 +79,6 @@ public class ConversationJpaAdapter implements ConversationLoadPort, Conversatio
 
                 questionJpa.setConversation(conversationJpa);
                 conversationJpa.getQuestions().add(questionJpa);
-            } else {
-                // Existing question: update its answer if necessary
-                if (!questionJpa.getAnswer().getText().equals(question.getAnswer().text())) {
-                    questionJpa.getAnswer().setText(question.getAnswer().text());
-                }
             }
         }
 
