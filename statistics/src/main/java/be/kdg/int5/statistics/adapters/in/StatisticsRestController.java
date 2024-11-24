@@ -8,7 +8,6 @@ import be.kdg.int5.statistics.domain.PlayerGameStats;
 import be.kdg.int5.statistics.domain.PlayerId;
 import be.kdg.int5.statistics.port.in.query.GetPlayerGameStatsCommand;
 import be.kdg.int5.statistics.port.in.query.PlayerGameStatsQuery;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +40,7 @@ public class StatisticsRestController {
                         new PlayerId(playerId),
                         new GameId(gameId)
                 )
-        ).orElse(null);
+        );
 
         if (playerGameStats != null){
             PlayerGameStatsDTO statsDTO = mapToDTO(playerGameStats);
