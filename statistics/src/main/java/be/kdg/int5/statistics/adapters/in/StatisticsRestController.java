@@ -8,12 +8,14 @@ import be.kdg.int5.statistics.domain.PlayerGameStats;
 import be.kdg.int5.statistics.domain.PlayerId;
 import be.kdg.int5.statistics.port.in.query.GetPlayerGameStatsCommand;
 import be.kdg.int5.statistics.port.in.query.PlayerGameStatsQuery;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.List;
 import java.util.UUID;
@@ -27,22 +29,25 @@ public class StatisticsRestController {
         this.playerGameStatsQuery = playerGameStatsQuery;
     }
 
-
+    @PreAuthorize("hasAuthority('player')")
     @GetMapping("/player-game-statistics/{playerId}/{gameId}")
     public ResponseEntity<PlayerGameStatsDTO> getPlayerGameStats(
-            @PathVariable("playerId") UUID playerId,
-            @PathVariable("gameId") UUID gameId
+            @NotNull @PathVariable("playerId") UUID playerId,
+            @NotNull @PathVariable("gameId") UUID gameId
     ) {
-        // Fetch the PlayerGameStats domain object
+
         PlayerGameStats playerGameStats = playerGameStatsQuery.getPlayerGameStats(
                 new GetPlayerGameStatsCommand(
                         new PlayerId(playerId),
                         new GameId(gameId)
                 )
-        );
+        ).orElse(null);
 
-        PlayerGameStatsDTO statsDTO = mapToDTO(playerGameStats);
-        return ResponseEntity.ok(statsDTO);
+        if (playerGameStats != null){
+            PlayerGameStatsDTO statsDTO = mapToDTO(playerGameStats);
+            return ResponseEntity.ok(statsDTO);
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
 

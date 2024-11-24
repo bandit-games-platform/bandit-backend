@@ -7,6 +7,7 @@ import be.kdg.int5.gameRegistry.domain.Achievement;
 import be.kdg.int5.gameRegistry.domain.Game;
 import be.kdg.int5.gameRegistry.port.in.query.GetGameAchievementsQuery;
 import be.kdg.int5.gameRegistry.port.in.query.GetGameDetailsQuery;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -54,13 +55,14 @@ public class GameDetailsRestController {
     }
 
     @GetMapping("/{gameId}/achievements")
-    public ResponseEntity<List<AchievementDto>> getGameAchievement(@PathVariable("gameId") UUID gameId) {
-        // Fetch the PlayerGameStats domain object
+    public ResponseEntity<List<AchievementDto>> getGameAchievement(@Valid @PathVariable("gameId") UUID gameId) {
+
         List<Achievement> achievements = getGameAchievementsQuery.getAchievementsForGameFromId(gameId);
 
         List<AchievementDto> achievementDTOs = achievements.stream()
                 .map(achievement -> new AchievementDto(
                         achievement.getId().uuid(),
+                        gameId,
                         achievement.getDescription(),
                         achievement.getCounterTotal(),
                         achievement.getTitle()

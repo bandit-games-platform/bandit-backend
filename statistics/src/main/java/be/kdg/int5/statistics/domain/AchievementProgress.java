@@ -1,7 +1,5 @@
 package be.kdg.int5.statistics.domain;
-
 import java.util.Objects;
-
 
 public class AchievementProgress {
     private final AchievementId achievementId;
@@ -18,10 +16,6 @@ public class AchievementProgress {
 
     public int getCounterValue() {
         return counterValue;
-    }
-
-    public void setCounterValue(int counterValue) {
-        this.counterValue = counterValue;
     }
 
     @Override

@@ -11,6 +11,6 @@ client_id=bandit-backend&client_secret=**********&username=john@gmail.com&passwo
 
 ### Get player Statistics for a game
 
-GET http://localhost:8095/statistics/player-game-statistics/c5b8f7a1-d34e-4e19-9d0f-b4c5d0e1f501/d77e1d1f-6b46-4c89-9290-3b9cf8a7c001
+GET http://localhost:8095/statistics/player-game-statistics/8449ba7c-194c-4e51-b060-cd88cc498836/d77e1d1f-6b46-4c89-9290-3b9cf8a7c001
 Accept: application/json
 Authorization: Bearer {{logged-in-user}}

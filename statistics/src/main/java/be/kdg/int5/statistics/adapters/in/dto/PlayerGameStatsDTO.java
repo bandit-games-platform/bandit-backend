@@ -1,12 +1,16 @@
 package be.kdg.int5.statistics.adapters.in.dto;
+import jakarta.validation.constraints.NotNull;
+
 import java.util.*;
 
 import java.util.List;
 import java.util.UUID;
 
 public class PlayerGameStatsDTO {
-
+    @NotNull
     private final UUID playerId;
+
+    @NotNull
     private final UUID gameId;
     private final List<CompletedSessionDTO> completedSessions;
     private final List<AchievementProgressDTO> achievementProgress;

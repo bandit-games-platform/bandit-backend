@@ -9,6 +9,9 @@ import java.util.UUID;
 public class AchievementDto {
     @NotNull
     private UUID id;
+
+    private UUID gameId;
+
     @NotNull
     private String title;
     private int counterTotal;
@@ -18,8 +21,9 @@ public class AchievementDto {
     public AchievementDto() {
     }
 
-    public AchievementDto(UUID id, String title, int counterTotal, String description) {
+    public AchievementDto(UUID id, UUID gameId, String title, int counterTotal, String description) {
         this.id = id;
+        this.gameId = gameId;
         this.title = title;
         this.counterTotal = counterTotal;
         this.description = description;
@@ -28,6 +32,10 @@ public class AchievementDto {
 
     public UUID getId() {
         return id;
+    }
+
+    public UUID getGameId() {
+        return gameId;
     }
 
     public String getTitle() {
