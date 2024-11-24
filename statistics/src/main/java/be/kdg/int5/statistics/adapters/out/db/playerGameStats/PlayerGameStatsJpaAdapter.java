@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.Comparator;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -42,6 +43,15 @@ public class PlayerGameStatsJpaAdapter implements PlayerGameStatisticsLoadPort, 
                 .orElseThrow();
 
         return this.playerGameStatisticsJpaToDomain(playerGameStatsJpaEntity);
+    }
+
+    @Override
+    public List<PlayerGameStats> loadAllPlayerGameStatsForPlayer(PlayerId playerId) {
+        List<PlayerGameStatsJpaEntity> playerGameStatsJpaEntities = playerGameStatsJpaRepository.findAllByPlayerId(
+                playerId.uuid()
+        );
+        if (playerGameStatsJpaEntities == null) return null;
+        return playerGameStatsJpaEntities.stream().map(this::playerGameStatisticsJpaToDomain).collect(Collectors.toList());
     }
 
 

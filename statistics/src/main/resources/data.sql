@@ -2,13 +2,16 @@ INSERT INTO statistics.player_game_stats (player_id, game_id)
 VALUES
     ('c5b8f7a1-d34e-4e19-9d0f-b4c5d0e1f501', 'b2e98f3b-3e2b-4a9e-8e5e-c3b4d0a4e401'),
     ('d7f9b8e3-3c4f-4b9f-8d7e-e1c0f4a7b901', 'b3d12e4a-6a7b-412c-9e0e-e4d05c3f4b02'),
-    ('94dad160-f5c8-4817-8f2d-611e1436ffcd', 'd7df9644-7803-4b70-8997-0f246665cb01');
+    ('94dad160-f5c8-4817-8f2d-611e1436ffcd', 'd7df9644-7803-4b70-8997-0f246665cb01'),
+    ('94dad160-f5c8-4817-8f2d-611e1436ffcd', 'd7df9644-7803-4b70-8997-0f246665cb02');
 
 
 INSERT INTO statistics.player_achievements_progress (achievement_progress_id, achievement_id, player_id, game_id, counter_total)
 VALUES
     ('e3d12a4f-4b9f-8c0e-d05b-c3f4b7e1d01', 'a1f65dfc-2b4f-4e10-bd0f-33d1b05b9f01', 'c5b8f7a1-d34e-4e19-9d0f-b4c5d0e1f501', 'b2e98f3b-3e2b-4a9e-8e5e-c3b4d0a4e401', 20),
-    ('f4d05b3b-9e0e-c7f1-b0e1-a1c5d0f7b302', 'a2e54abc-4d3f-45b8-8a5e-fd4d03b2d101', 'd7f9b8e3-3c4f-4b9f-8d7e-e1c0f4a7b901', 'b3d12e4a-6a7b-412c-9e0e-e4d05c3f4b02', 15);
+    ('f4d05b3b-9e0e-c7f1-b0e1-a1c5d0f7b302', 'a2e54abc-4d3f-45b8-8a5e-fd4d03b2d101', 'd7f9b8e3-3c4f-4b9f-8d7e-e1c0f4a7b901', 'b3d12e4a-6a7b-412c-9e0e-e4d05c3f4b02', 15),
+    ('f7bb7281-cbf9-4b60-a549-8e3aceacefe3', '123e4567-e89b-12d3-a456-426614174003', '94dad160-f5c8-4817-8f2d-611e1436ffcd', 'd7df9644-7803-4b70-8997-0f246665cb01', 10),
+    ('bc7b11ff-27bf-45f4-99aa-7021e28b1133', '123e4567-e89b-12d3-a456-426614174002', '94dad160-f5c8-4817-8f2d-611e1436ffcd', 'd7df9644-7803-4b70-8997-0f246665cb01', 5);
 
 
 
@@ -28,7 +31,8 @@ VALUES
     ('6ba385bf-34f1-46d3-8654-4bd4d7a556ad', '2024-11-15 16:24:00', '2024-11-15 19:14:00', 'WIN', 38, 25, null, null, null, null, false, '94dad160-f5c8-4817-8f2d-611e1436ffcd', 'd7df9644-7803-4b70-8997-0f246665cb01'),
     ('b707ef86-1ca2-4240-a502-84fff1a5303b', '2024-11-15 08:14:00', '2024-11-15 12:24:00', 'LOSE', 15, 42, null, null, null, null, true, '94dad160-f5c8-4817-8f2d-611e1436ffcd', 'd7df9644-7803-4b70-8997-0f246665cb01'),
     ('51874c74-aeec-4c97-b52d-e3e767477f9d', '2024-11-11 09:00:34', '2024-11-11 16:00:00', 'WIN', 100, 150, null, null, null, null, true, '94dad160-f5c8-4817-8f2d-611e1436ffcd', 'd7df9644-7803-4b70-8997-0f246665cb01'),
-    ('e8aa06e0-4dc3-4aa1-bf57-91df33f31ed7', '2024-11-11 05:34:00', '2024-11-11 08:16:24', 'WIN', 48, 42, null, null, null, null, false, '94dad160-f5c8-4817-8f2d-611e1436ffcd', 'd7df9644-7803-4b70-8997-0f246665cb01');
+    ('e8aa06e0-4dc3-4aa1-bf57-91df33f31ed7', '2024-11-11 05:34:00', '2024-11-11 08:16:24', 'WIN', 48, 42, null, null, null, null, false, '94dad160-f5c8-4817-8f2d-611e1436ffcd', 'd7df9644-7803-4b70-8997-0f246665cb01'),
+    ('878cd7a1-a275-4652-afa1-90817c748d33', '2024-11-24 19:00:00', '2024-11-24 21:24:27', 'WIN', 40, 66, null, null, null, 'White', true, '94dad160-f5c8-4817-8f2d-611e1436ffcd', 'd7df9644-7803-4b70-8997-0f246665cb02');
 
 
 
