@@ -21,7 +21,10 @@ public class UpdateAchievementProgressUseCaseImpl implements UpdateAchievementPr
     private final PlayerGameStatisticsUpdatePort playerGameStatisticsUpdatePort;
     private final PlayerGameStatisticsLoadPort playerGameStatisticsLoadPort;
 
-    public UpdateAchievementProgressUseCaseImpl(PlayerGameStatisticsUpdatePort playerGameStatisticsUpdatePort, PlayerGameStatisticsLoadPort playerGameStatisticsLoadPort) {
+    public UpdateAchievementProgressUseCaseImpl(
+            PlayerGameStatisticsUpdatePort playerGameStatisticsUpdatePort,
+            PlayerGameStatisticsLoadPort playerGameStatisticsLoadPort
+    ) {
         this.playerGameStatisticsUpdatePort = playerGameStatisticsUpdatePort;
         this.playerGameStatisticsLoadPort = playerGameStatisticsLoadPort;
     }
