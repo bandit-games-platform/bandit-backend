@@ -1,5 +1,6 @@
 package be.kdg.int5.gameRegistry.domain;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -63,5 +64,10 @@ public class Achievement {
     @Override
     public int hashCode() {
         return Objects.hashCode(getId());
+    }
+
+
+    public static AchievementId generateUniqueIdFromGameIdAndUniqueNumber(GameId gameId, int uniqueNumber) {
+        return new AchievementId(UUID.nameUUIDFromBytes((gameId.toString()+":"+uniqueNumber).getBytes(StandardCharsets.UTF_8)));
     }
 }
