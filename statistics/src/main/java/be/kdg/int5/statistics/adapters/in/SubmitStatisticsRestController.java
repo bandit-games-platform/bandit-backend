@@ -24,7 +24,12 @@ public class SubmitStatisticsRestController {
     private final UpdateAchievementProgressUseCase updateAchievementProgressUseCase;
     private final VerifyIfAchievementBelongsToGameUseCase verifyIfAchievementBelongsToGameUseCase;
 
-    public SubmitStatisticsRestController(SaveCompletedSessionUseCase saveCompletedSessionUseCase, VerifyIfDeveloperOwnsGameUseCase verifyIfDeveloperOwnsGameUseCase, UpdateAchievementProgressUseCase updateAchievementProgressUseCase, VerifyIfAchievementBelongsToGameUseCase verifyIfAchievementBelongsToGameUseCase) {
+    public SubmitStatisticsRestController(
+            SaveCompletedSessionUseCase saveCompletedSessionUseCase,
+            VerifyIfDeveloperOwnsGameUseCase verifyIfDeveloperOwnsGameUseCase,
+            UpdateAchievementProgressUseCase updateAchievementProgressUseCase,
+            VerifyIfAchievementBelongsToGameUseCase verifyIfAchievementBelongsToGameUseCase
+    ) {
         this.saveCompletedSessionUseCase = saveCompletedSessionUseCase;
         this.verifyIfDeveloperOwnsGameUseCase = verifyIfDeveloperOwnsGameUseCase;
         this.updateAchievementProgressUseCase = updateAchievementProgressUseCase;
