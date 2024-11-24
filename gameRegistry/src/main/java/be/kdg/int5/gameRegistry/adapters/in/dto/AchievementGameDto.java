@@ -6,20 +6,24 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.UUID;
 
-public class AchievementDto {
+public class AchievementGameDto {
     @NotNull
     private UUID id;
+
+    private UUID gameId;
+
     @NotNull
     private String title;
     private int counterTotal;
     @NotNull
     private String description;
 
-    public AchievementDto() {
+    public AchievementGameDto() {
     }
 
-    public AchievementDto(UUID id, String title, int counterTotal, String description) {
+    public AchievementGameDto(UUID id, UUID gameId, String title, int counterTotal, String description) {
         this.id = id;
+        this.gameId = gameId;
         this.title = title;
         this.counterTotal = counterTotal;
         this.description = description;
@@ -28,6 +32,10 @@ public class AchievementDto {
 
     public UUID getId() {
         return id;
+    }
+
+    public UUID getGameId() {
+        return gameId;
     }
 
     public String getTitle() {

@@ -29,8 +29,8 @@ public class StatisticsRestController {
         this.playerGameStatsQuery = playerGameStatsQuery;
     }
 
-    @PreAuthorize("hasAuthority('player')")
     @GetMapping("/player-game-statistics/{playerId}/{gameId}")
+    @PreAuthorize("hasAuthority('player')")
     public ResponseEntity<PlayerGameStatsDTO> getPlayerGameStats(
             @NotNull @PathVariable("playerId") UUID playerId,
             @NotNull @PathVariable("gameId") UUID gameId

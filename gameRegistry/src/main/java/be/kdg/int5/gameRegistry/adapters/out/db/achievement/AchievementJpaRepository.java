@@ -10,5 +10,5 @@ import java.util.UUID;
 
 @Repository
 public interface AchievementJpaRepository extends JpaRepository<AchievementJpaEntity, UUID> {
-    Optional<List<AchievementJpaEntity>> findAllByGameId (@Param("gameId") UUID gameId);
+    List<AchievementJpaEntity> findAllByGameId (@Param("gameId") UUID gameId);
 }

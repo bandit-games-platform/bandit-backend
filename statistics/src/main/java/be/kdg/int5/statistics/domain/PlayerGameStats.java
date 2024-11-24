@@ -41,6 +41,4 @@ public class PlayerGameStats {
         }
         this.achievementProgressSet.addAll(achievementProgressSet);
     }
-
-
 }

@@ -1,6 +1,7 @@
 package be.kdg.int5.gameRegistry.adapters.in;
 
 import be.kdg.int5.gameRegistry.adapters.in.dto.AchievementDto;
+import be.kdg.int5.gameRegistry.adapters.in.dto.AchievementGameDto;
 import be.kdg.int5.gameRegistry.adapters.in.dto.DeveloperDto;
 import be.kdg.int5.gameRegistry.adapters.in.dto.LoadGameDto;
 import be.kdg.int5.gameRegistry.domain.Achievement;
@@ -55,12 +56,11 @@ public class GameDetailsRestController {
     }
 
     @GetMapping("/{gameId}/achievements")
-    public ResponseEntity<List<AchievementDto>> getGameAchievement(@Valid @PathVariable("gameId") UUID gameId) {
-
+    public ResponseEntity<List<AchievementGameDto>> getGameAchievement(@Valid @PathVariable("gameId") UUID gameId) {
         List<Achievement> achievements = getGameAchievementsQuery.getAchievementsForGameFromId(gameId);
 
-        List<AchievementDto> achievementDTOs = achievements.stream()
-                .map(achievement -> new AchievementDto(
+        List<AchievementGameDto> achievementDTOs = achievements.stream()
+                .map(achievement -> new AchievementGameDto(
                         achievement.getId().uuid(),
                         gameId,
                         achievement.getDescription(),

@@ -10,7 +10,7 @@ public interface AchievementProgressJpaRepository extends JpaRepository<Achievem
 
     Optional<AchievementProgressJpaEntity> findAchievementProgressJpaEntitiesByAchievementIdAndPlayerGameStatsJpaEntity_IdPlayerId(
             @Param("achievementId") UUID achievementId,
-            @Param("playerId") UUID playerId)
-            ;
+            @Param("playerId") UUID playerId
+    );
 
 }

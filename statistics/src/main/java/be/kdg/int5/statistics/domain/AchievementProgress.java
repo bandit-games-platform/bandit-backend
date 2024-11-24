@@ -18,6 +18,10 @@ public class AchievementProgress {
         return counterValue;
     }
 
+    public void setCounterValue(int counterValue) {
+        this.counterValue = counterValue;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -29,5 +33,4 @@ public class AchievementProgress {
     public int hashCode() {
         return Objects.hashCode(achievementId);
     }
-
 }
