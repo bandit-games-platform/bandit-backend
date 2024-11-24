@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -43,14 +44,7 @@ public class RegisterGameUseCaseImpl implements RegisterGameUseCase {
                 command.developerId()
         );
 
-        Set<Achievement> achievements = null;
-        if (command.achievements() != null) {
-            achievements = command
-                    .achievements()
-                    .stream()
-                    .map(ar -> mapAchievementCommandRecordToDomain(ar, gameId))
-                    .collect(Collectors.toSet());
-        }
+        Set<Achievement> achievements = mapAchievementRecordsToDomainSet(command.achievements(), gameId);
 
         Game existingGame = gamesLoadPort.loadGameByIdWithDetails(gameId.uuid());
 
@@ -59,8 +53,6 @@ public class RegisterGameUseCaseImpl implements RegisterGameUseCase {
             Developer gameDev = developerLoadPort.load(command.developerId());
             if (gameDev == null) gameDev = new Developer(command.developerId(), command.developerId().toString());
             logger.info("gameRegistry:register-game [CREATION MODE] developer name is '{}'", gameDev.studioName());
-
-            if (command.icon() == null || command.background() == null) throw new NullPointerException();
 
             Game newGame = new Game(
                     gameId,
@@ -81,18 +73,29 @@ public class RegisterGameUseCaseImpl implements RegisterGameUseCase {
             //Patch mode
             logger.info("gameRegistry:register-game [PATCH MODE] for existing game: '{}'", existingGame);
 
-            if (command.currentHost() != null) existingGame.setCurrentHost(command.currentHost());
-            if (command.description() != null) existingGame.setDescription(command.description());
-            if (command.currentPrice() != null) existingGame.setCurrentPrice(command.currentPrice());
-            if (command.icon() != null) existingGame.setIcon(new ImageResource(new ResourceURL(command.icon())));
-            if (command.background() != null) existingGame.setBackground(new ImageResource(new ResourceURL(command.background())));
-            if (command.screenshots() != null) existingGame.setScreenshots(command.screenshots());
-            if (achievements != null) existingGame.setAchievements(achievements);
-            if (command.rules() != null) existingGame.setRules(command.rules());
+            existingGame.patch(
+                    command.description(),
+                    command.currentPrice(),
+                    command.icon() == null ? null : new ImageResource(new ResourceURL(command.icon())),
+                    command.background() == null ? null : new ImageResource(new ResourceURL(command.background())),
+                    command.rules(),
+                    command.currentHost(),
+                    command.screenshots(),
+                    achievements
+            );
 
             if(gamesUpdatePort.update(existingGame)) return gameId;
         }
         return null;
+    }
+
+    private Set<Achievement> mapAchievementRecordsToDomainSet(List<RegisterGameCommand.AchievementRecord> achievements, GameId gameId) {
+        if (achievements == null) return null;
+
+        return achievements
+                .stream()
+                .map(ar -> mapAchievementCommandRecordToDomain(ar, gameId))
+                .collect(Collectors.toSet());
     }
 
     private Achievement mapAchievementCommandRecordToDomain(RegisterGameCommand.AchievementRecord achievementRecord, GameId gameId) {
