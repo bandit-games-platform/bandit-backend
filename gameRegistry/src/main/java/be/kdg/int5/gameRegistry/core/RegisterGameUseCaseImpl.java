@@ -14,9 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Set;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,7 +36,7 @@ public class RegisterGameUseCaseImpl implements RegisterGameUseCase {
     @Override
     @Transactional
     public GameId registerGame(RegisterGameCommand command) {
-        GameId gameId = generateUniqueIdFromDeveloperAndTitle(command.developerId(), command.title());
+        GameId gameId = Game.generateUniqueIdFromDeveloperAndTitle(command.developerId(), command.title());
         logger.info("gameRegistry:register-game Generated gameId is '{}' for title '{}' and developerId '{}'",
                 gameId,
                 command.title(),
@@ -97,17 +95,9 @@ public class RegisterGameUseCaseImpl implements RegisterGameUseCase {
         return null;
     }
 
-    private GameId generateUniqueIdFromDeveloperAndTitle(DeveloperId developerId, String title) {
-        return new GameId(UUID.nameUUIDFromBytes((developerId.toString()+":"+title).getBytes(StandardCharsets.UTF_8)));
-    }
-
-    private AchievementId generateUniqueAchievementIdFromGameIdAndUniqueNumber(GameId gameId, int uniqueNumber) {
-        return new AchievementId(UUID.nameUUIDFromBytes((gameId.toString()+":"+uniqueNumber).getBytes(StandardCharsets.UTF_8)));
-    }
-
     private Achievement mapAchievementCommandRecordToDomain(RegisterGameCommand.AchievementRecord achievementRecord, GameId gameId) {
         return new Achievement(
-                generateUniqueAchievementIdFromGameIdAndUniqueNumber(gameId, achievementRecord.uniqueNumber()),
+                Achievement.generateUniqueIdFromGameIdAndUniqueNumber(gameId, achievementRecord.uniqueNumber()),
                 achievementRecord.title(),
                 achievementRecord.counterTotal(),
                 achievementRecord.description()

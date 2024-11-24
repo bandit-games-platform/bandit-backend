@@ -4,6 +4,7 @@ import be.kdg.int5.common.domain.ImageResource;
 import be.kdg.int5.common.domain.ResourceURL;
 
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class Game {
@@ -135,5 +136,10 @@ public class Game {
                 ", screenshots=" + screenshots +
                 ", achievements=" + achievements +
                 '}';
+    }
+
+
+    public static GameId generateUniqueIdFromDeveloperAndTitle(DeveloperId developerId, String title) {
+        return new GameId(UUID.nameUUIDFromBytes((developerId.toString()+":"+title).getBytes(StandardCharsets.UTF_8)));
     }
 }
