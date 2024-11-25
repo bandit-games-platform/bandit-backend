@@ -9,9 +9,7 @@ import java.util.UUID;
 public class AchievementGameDto {
     @NotNull
     private UUID id;
-
     private UUID gameId;
-
     @NotNull
     private String title;
     private int counterTotal;
