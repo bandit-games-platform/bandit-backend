@@ -2,9 +2,8 @@ package be.kdg.int5.gameRegistry.adapters.in;
 
 import be.kdg.int5.common.domain.ImageResource;
 import be.kdg.int5.common.domain.ResourceURL;
-import be.kdg.int5.gameRegistry.adapters.in.dto.AchievementDto;
+import be.kdg.int5.gameRegistry.adapters.in.dto.RegisterAchievementDto;
 import be.kdg.int5.gameRegistry.adapters.in.dto.RegisterGameDto;
-import be.kdg.int5.gameRegistry.domain.Achievement;
 import be.kdg.int5.gameRegistry.domain.DeveloperId;
 import be.kdg.int5.gameRegistry.domain.GameId;
 import be.kdg.int5.gameRegistry.port.in.AuthenticateSDKCommand;
@@ -21,9 +20,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/registry")
@@ -52,13 +49,13 @@ public class GameRegistryRestController {
     public ResponseEntity<GameId> registerGame(@AuthenticationPrincipal Jwt token, @RequestBody @Valid RegisterGameDto dto) {
         DeveloperId developerId = new DeveloperId(UUID.fromString(token.getSubject()));
 
-        Set<Achievement> achievements = null;
+        List<RegisterGameCommand.AchievementRecord> achievements = null;
         if (dto.getAchievements() != null) {
             achievements = dto
                     .getAchievements()
                     .stream()
-                    .map(AchievementDto::mapToObject)
-                    .collect(Collectors.toSet());
+                    .map(RegisterAchievementDto::mapToCommandObject)
+                    .toList();
         }
         List<ImageResource> screenshots = null;
         if (dto.getScreenshots() != null) {
@@ -66,7 +63,7 @@ public class GameRegistryRestController {
                     .getScreenshots()
                     .stream()
                     .map(url -> new ImageResource(new ResourceURL(url)))
-                    .collect(Collectors.toList());
+                    .toList();
         }
 
         GameId result = registerGameUseCase.registerGame(new RegisterGameCommand(

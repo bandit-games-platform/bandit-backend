@@ -4,21 +4,21 @@ import be.kdg.int5.statistics.domain.*;
 import be.kdg.int5.statistics.port.out.PlayerGameStatisticsLoadPort;
 import be.kdg.int5.statistics.port.out.PlayerGameStatisticsUpdatePort;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.Comparator;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Component
-public class PlayerGameStatsJpaAdapter implements PlayerGameStatisticsLoadPort, PlayerGameStatisticsUpdatePort {
+@Repository
+public class PlayerGameStatsJpaAdapter implements PlayerGameStatisticsLoadPort {
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(PlayerGameStatsJpaAdapter.class);
     private final PlayerGameStatsJpaRepository playerGameStatsJpaRepository;
     private final AchievementProgressJpaRepository achievementProgressJpaRepository;
 
     public PlayerGameStatsJpaAdapter(
             final PlayerGameStatsJpaRepository playerGameStatsJpaRepository,
-            AchievementProgressJpaRepository achievementProgressJpaRepository) {
+            final AchievementProgressJpaRepository achievementProgressJpaRepository) {
         this.playerGameStatsJpaRepository = playerGameStatsJpaRepository;
         this.achievementProgressJpaRepository = achievementProgressJpaRepository;
     }
@@ -29,7 +29,7 @@ public class PlayerGameStatsJpaAdapter implements PlayerGameStatisticsLoadPort, 
         PlayerGameStatsJpaId playerGameStatsJpaId = new PlayerGameStatsJpaId(playerId.uuid(), gameId.uuid());
         PlayerGameStatsJpaEntity playerGameStatsJpaEntity = playerGameStatsJpaRepository
                 .findById(playerGameStatsJpaId)
-                .orElseThrow();
+                .orElseThrow(PlayerGameStatsNotFound::new);
 
         return this.playerGameStatsJpaToDomain(playerGameStatsJpaEntity);
     }
@@ -119,7 +119,6 @@ public class PlayerGameStatsJpaAdapter implements PlayerGameStatisticsLoadPort, 
                 .stream()
                 .map(this::achievementProgressJpaToDomain)
                 .collect(Collectors.toSet());
-
 
         playerGameStats.addAchievementProgressSet(achievementProgressSet);
 
@@ -220,7 +219,7 @@ public class PlayerGameStatsJpaAdapter implements PlayerGameStatisticsLoadPort, 
 
         return new AchievementProgressJpaEntity(
                 achievementProgressJpaEntity.getAchievementProgressId(),
-                achievementProgressJpaEntity.getAchievementId(),
+                achievementProgress.getAchievementId().uuid(),
                 achievementProgressJpaEntity.getPlayerGameStatsJpaEntity(),
                 achievementProgress.getCounterValue()
                 );

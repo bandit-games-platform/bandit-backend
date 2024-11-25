@@ -1,8 +1,6 @@
 package be.kdg.int5.gameRegistry.adapters.out.db.achievement;
 
-
 import jakarta.persistence.*;
-
 import java.util.Objects;
 import java.util.UUID;
 

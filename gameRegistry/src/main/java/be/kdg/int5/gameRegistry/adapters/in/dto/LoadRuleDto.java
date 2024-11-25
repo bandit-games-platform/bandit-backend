@@ -1,8 +1,5 @@
 package be.kdg.int5.gameRegistry.adapters.in.dto;
 
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
-
 public class LoadRuleDto {
     private int stepNumber;
     private String rule;

@@ -1,7 +1,5 @@
 package be.kdg.int5.statistics.domain;
-
 import java.util.Objects;
-
 
 public class AchievementProgress {
     private final AchievementId achievementId;
@@ -35,5 +33,4 @@ public class AchievementProgress {
     public int hashCode() {
         return Objects.hashCode(achievementId);
     }
-
 }
