@@ -9,12 +9,16 @@ client_id=bandit-backend&client_secret=**********&username=john@gmail.com&passwo
 > {%client.global.set("logged-in-user", response.body.access_token);%}
 
 
-### GET game details
-GET http://localhost:8092/game-registry/games/d77e1d1f-6b46-4c89-9290-3b9cf8a7c001
+### Get player Statistics for a game
+
+GET http://localhost:8095/statistics/player-game-statistics/8449ba7c-194c-4e51-b060-cd88cc498836/d77e1d1f-6b46-4c89-9290-3b9cf8a7c001
 Accept: application/json
 Authorization: Bearer {{logged-in-user}}
 
-### GET all Achievements for a game
-GET http://localhost:8092/game-registry/games/d77e1d1f-6b46-4c89-9290-3b9cf8a7c001/achievements
+
+
+### Get player Statistics for a game they haven't played
+
+GET http://localhost:8095/statistics/player-game-statistics/9449ba7c-194c-4e51-b060-cd88cc498836/d77e1d1f-6b46-4c89-9290-3b9cf8a7c001
 Accept: application/json
 Authorization: Bearer {{logged-in-user}}

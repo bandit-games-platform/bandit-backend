@@ -1,14 +1,13 @@
-package be.kdg.int5.statistics.domain;
+package be.kdg.int5.statistics.adapters.in.dto;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
+import java.util.*;
 
-public class CompletedSession {
-    private final SessionId sessionId;
+public class CompletedSessionDto {
+    private final UUID sessionId;
     private final LocalDateTime startTime;
     private final LocalDateTime endTime;
-    private final GameEndState endState;
-
+    private final String endState;
     private final Integer turnsTaken;
     private final Double avgSecondsPerTurn;
     private final Integer playerScore;
@@ -17,23 +16,23 @@ public class CompletedSession {
     private final String character;
     private final Boolean wasFirstToGo;
 
-    public CompletedSession(
-            final SessionId sessionId,
-            final LocalDateTime startTime,
-            final LocalDateTime endTime,
-            final GameEndState endState,
-            final Integer turnsTaken,
-            final Double avgSecondsPerTurn,
-            final Integer playerScore,
-            final Integer opponentScore,
-            final Integer clicks,
-            final String character,
-            final Boolean wasFirstToGo
+    public CompletedSessionDto(
+            UUID sessionId,
+            LocalDateTime startTime,
+            LocalDateTime endTime,
+            String endState,
+            Integer turnsTaken,
+            Double avgSecondsPerTurn,
+            Integer playerScore,
+            Integer opponentScore,
+            Integer clicks,
+            String character,
+            Boolean wasFirstToGo
     ) {
         this.sessionId = Objects.requireNonNull(sessionId);
         this.startTime = Objects.requireNonNull(startTime);
         this.endTime = Objects.requireNonNull(endTime);
-        this.endState = Objects.requireNonNull(endState);
+        this.endState = endState;
         this.turnsTaken = turnsTaken;
         this.avgSecondsPerTurn = avgSecondsPerTurn;
         this.playerScore = playerScore;
@@ -43,20 +42,7 @@ public class CompletedSession {
         this.wasFirstToGo = wasFirstToGo;
     }
 
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof CompletedSession that)) return false;
-        return Objects.equals(sessionId, that.sessionId);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(sessionId);
-    }
-
-    public SessionId getSessionId() {
+    public UUID getSessionId() {
         return sessionId;
     }
 
@@ -68,7 +54,7 @@ public class CompletedSession {
         return endTime;
     }
 
-    public GameEndState getEndState() {
+    public String getEndState() {
         return endState;
     }
 
@@ -100,3 +86,4 @@ public class CompletedSession {
         return wasFirstToGo;
     }
 }
+

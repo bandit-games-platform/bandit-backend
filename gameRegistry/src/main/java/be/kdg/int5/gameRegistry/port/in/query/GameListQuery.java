@@ -9,5 +9,5 @@ public interface GameListQuery {
 
     List<Game> retrieveGamesWithIcon();
 
-    List<Game> retrieveGamesByTitleLikeAndPriceBelowWithIcon(String title,  BigDecimal price);
+    List<Game> retrieveGamesByTitleLikeAndPriceBelowWithIcon(String title, BigDecimal price);
 }

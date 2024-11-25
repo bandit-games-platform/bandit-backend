@@ -1,8 +1,13 @@
 package be.kdg.int5.gameRegistry.adapters.in;
 
+
+import be.kdg.int5.gameRegistry.adapters.in.dto.AchievementGameDto;
 import be.kdg.int5.gameRegistry.adapters.in.dto.DeveloperDto;
 import be.kdg.int5.gameRegistry.adapters.in.dto.LoadGameDto;
+import be.kdg.int5.gameRegistry.domain.Achievement;
 import be.kdg.int5.gameRegistry.domain.Game;
+import be.kdg.int5.gameRegistry.port.in.query.GetGameAchievementsQuery;
+import jakarta.validation.Valid;
 import be.kdg.int5.gameRegistry.port.in.query.GameDetailsQuery;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,14 +19,17 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/games")
 public class GameDetailsRestController {
     private final GameDetailsQuery gameDetailsQuery;
+    private final GetGameAchievementsQuery getGameAchievementsQuery;
 
-    public GameDetailsRestController(GameDetailsQuery gameDetailsQuery) {
+    public GameDetailsRestController(GameDetailsQuery gameDetailsQuery, GetGameAchievementsQuery getGameAchievementsQuery) {
         this.gameDetailsQuery = gameDetailsQuery;
+        this.getGameAchievementsQuery = getGameAchievementsQuery;
     }
 
     @GetMapping("/{gameId}")
@@ -45,5 +53,22 @@ public class GameDetailsRestController {
         );
 
         return ResponseEntity.ok(loadedGame);
+    }
+
+    @GetMapping("/{gameId}/achievements")
+    public ResponseEntity<List<AchievementGameDto>> getGameAchievement(@Valid @PathVariable("gameId") UUID gameId) {
+        List<Achievement> achievements = getGameAchievementsQuery.getAchievementsForGameFromId(gameId);
+
+        List<AchievementGameDto> achievementDtoList = achievements.stream()
+                .map(achievement -> new AchievementGameDto(
+                        achievement.getId().uuid(),
+                        gameId,
+                        achievement.getDescription(),
+                        achievement.getCounterTotal(),
+                        achievement.getTitle()
+                ))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(achievementDtoList);
     }
 }
