@@ -87,7 +87,7 @@ public abstract class Conversation {
 
         return questions.stream()
                 .sorted(Comparator.comparing(Question::getSubmittedAt))
-                .skip(questions.size() - 5)
+                .skip(questions.size() - QUESTION_WINDOW)
                 .toList();
     }
 }
