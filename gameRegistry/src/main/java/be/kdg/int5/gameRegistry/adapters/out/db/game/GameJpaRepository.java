@@ -16,7 +16,7 @@ public interface GameJpaRepository extends JpaRepository<GameJpaEntity, UUID> {
     LEFT JOIN FETCH game.rules
     LEFT JOIN FETCH game.screenshots
     LEFT JOIN FETCH game.achievements
-    WHERE game.gameId = :id
+    WHERE game.id = :id
     """)
     GameJpaEntity findByIdWithAllRelationships(UUID id);
 
