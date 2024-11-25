@@ -1,6 +1,6 @@
 package be.kdg.int5.statistics.adapters.in;
 
-import be.kdg.int5.statistics.adapters.in.dto.AchievementProgressDTO;
+import be.kdg.int5.statistics.adapters.in.dto.AchievementProgressDto;
 import be.kdg.int5.statistics.adapters.in.dto.GameProgressDto;
 import be.kdg.int5.statistics.domain.PlayerGameStats;
 import be.kdg.int5.statistics.domain.PlayerId;
@@ -64,7 +64,7 @@ public class OverallStatisticsRestController {
                 playerGameStat -> new GameProgressDto(
                         playerGameStat.getGameId().uuid(),
                         playerGameStat.getAchievementProgressSet().stream().map(
-                                achievementProgress -> new AchievementProgressDTO(
+                                achievementProgress -> new AchievementProgressDto(
                                         achievementProgress.getAchievementId().uuid(),
                                         achievementProgress.getCounterValue()
                                 )

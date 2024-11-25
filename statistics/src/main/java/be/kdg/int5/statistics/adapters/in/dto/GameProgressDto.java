@@ -5,12 +5,12 @@ import java.util.UUID;
 
 public class GameProgressDto {
     UUID gameId;
-    List<AchievementProgressDTO> achievementProgresses;
+    List<AchievementProgressDto> achievementProgresses;
 
     public GameProgressDto() {
     }
 
-    public GameProgressDto(UUID gameId, List<AchievementProgressDTO> achievementProgresses) {
+    public GameProgressDto(UUID gameId, List<AchievementProgressDto> achievementProgresses) {
         this.gameId = gameId;
         this.achievementProgresses = achievementProgresses;
     }
@@ -23,11 +23,11 @@ public class GameProgressDto {
         this.gameId = gameId;
     }
 
-    public List<AchievementProgressDTO> getAchievementProgresses() {
+    public List<AchievementProgressDto> getAchievementProgresses() {
         return achievementProgresses;
     }
 
-    public void setAchievementProgresses(List<AchievementProgressDTO> achievementProgresses) {
+    public void setAchievementProgresses(List<AchievementProgressDto> achievementProgresses) {
         this.achievementProgresses = achievementProgresses;
     }
 }
