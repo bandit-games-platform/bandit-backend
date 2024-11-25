@@ -12,5 +12,4 @@ public interface AchievementProgressJpaRepository extends JpaRepository<Achievem
             @Param("achievementId") UUID achievementId,
             @Param("playerId") UUID playerId
     );
-
 }

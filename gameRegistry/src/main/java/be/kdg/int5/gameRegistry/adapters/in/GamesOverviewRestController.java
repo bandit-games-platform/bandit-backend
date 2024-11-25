@@ -12,5 +12,4 @@ public class GamesOverviewRestController {
     public void getGameOverview(){
         System.out.println("Hello Game Registry");
     }
-
 }

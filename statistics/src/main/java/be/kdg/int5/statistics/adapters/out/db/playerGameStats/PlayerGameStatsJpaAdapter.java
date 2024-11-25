@@ -33,7 +33,6 @@ public class PlayerGameStatsJpaAdapter implements PlayerGameStatisticsLoadPort {
         return this.playerGameStatsJpaToDomain(playerGameStatsJpaEntity);
     }
 
-
     private PlayerGameStatsJpaEntity playerGameStatsDomainToJpa(final PlayerGameStats playerGameStats){
         PlayerGameStatsJpaId playerGameStatsJpaId = new PlayerGameStatsJpaId(playerGameStats.getPlayerId().uuid(), playerGameStats.getGameId().uuid());
         Set<CompletedSessionJpaEntity> completedSessions = playerGameStats.getCompletedSessions().stream()
@@ -79,7 +78,6 @@ public class PlayerGameStatsJpaAdapter implements PlayerGameStatisticsLoadPort {
                 .map(this::achievementProgressJpaToDomain)
                 .collect(Collectors.toSet());
 
-
         playerGameStats.addAchievementProgressSet(achievementProgressSet);
 
         return playerGameStats;
@@ -116,7 +114,6 @@ public class PlayerGameStatsJpaAdapter implements PlayerGameStatisticsLoadPort {
                 completedSessionJpaEntity.isWasFirstToGo()
         );
     }
-
 
     private AchievementProgress achievementProgressJpaToDomain(final AchievementProgressJpaEntity achievementProgressJpaEntity){
         return new AchievementProgress(

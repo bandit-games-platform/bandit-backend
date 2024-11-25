@@ -59,7 +59,7 @@ public class GameDetailsRestController {
     public ResponseEntity<List<AchievementGameDto>> getGameAchievement(@Valid @PathVariable("gameId") UUID gameId) {
         List<Achievement> achievements = getGameAchievementsQuery.getAchievementsForGameFromId(gameId);
 
-        List<AchievementGameDto> achievementDTOs = achievements.stream()
+        List<AchievementGameDto> achievementDtoList = achievements.stream()
                 .map(achievement -> new AchievementGameDto(
                         achievement.getId().uuid(),
                         gameId,
@@ -69,6 +69,6 @@ public class GameDetailsRestController {
                 ))
                 .collect(Collectors.toList());
 
-        return ResponseEntity.ok(achievementDTOs);
+        return ResponseEntity.ok(achievementDtoList);
     }
 }
