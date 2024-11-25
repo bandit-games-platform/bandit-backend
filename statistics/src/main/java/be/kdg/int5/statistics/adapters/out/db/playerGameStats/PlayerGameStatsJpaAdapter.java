@@ -1,5 +1,6 @@
 package be.kdg.int5.statistics.adapters.out.db.playerGameStats;
 
+import be.kdg.int5.common.exceptions.PlayerGameStatsNotFound;
 import be.kdg.int5.statistics.domain.*;
 import be.kdg.int5.statistics.port.out.PlayerGameStatisticsLoadPort;
 import org.slf4j.LoggerFactory;
@@ -28,7 +29,7 @@ public class PlayerGameStatsJpaAdapter implements PlayerGameStatisticsLoadPort {
         PlayerGameStatsJpaId playerGameStatsJpaId = new PlayerGameStatsJpaId(playerId.uuid(), gameId.uuid());
         PlayerGameStatsJpaEntity playerGameStatsJpaEntity = playerGameStatsJpaRepository
                 .findById(playerGameStatsJpaId)
-                .orElseThrow();
+                .orElseThrow(PlayerGameStatsNotFound::new);
 
         return this.playerGameStatsJpaToDomain(playerGameStatsJpaEntity);
     }

@@ -1,3 +1,7 @@
 plugins {
     id 'module-config'
 }
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+}
