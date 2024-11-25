@@ -7,6 +7,8 @@ import be.kdg.int5.chatbot.domain.GameDetails;
 import be.kdg.int5.chatbot.domain.Question;
 import be.kdg.int5.chatbot.ports.out.AnswerAskPort;
 import be.kdg.int5.common.exceptions.PythonServiceException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -46,20 +48,16 @@ public class PythonClientAdapter implements AnswerAskPort {
         // Wrap DTO in HttpEntity for the request
         HttpEntity<InitialQuestionDto> entity = new HttpEntity<>(initialQuestionDto, headers);
 
-        final Answer answer;
-
         try {
             String response = restTemplate.postForObject(pythonBackendUrl + INITIAL_QUESTION, entity, String.class);
-
             logger.debug("Response Out Adapter - Inital: {}", response);
 
-            answer = new Answer(response);
+            String extractedAnswer = parseResponse(response);
+            return new Answer(extractedAnswer);
 
         } catch (Exception e) {
             throw new PythonServiceException("An error occurred while calling the Python service.", e);
         }
-
-        return answer;
     }
 
     @Override
@@ -76,20 +74,41 @@ public class PythonClientAdapter implements AnswerAskPort {
         // Wrap DTO in HttpEntity for the request
         HttpEntity<FollowUpQuestionDto> entity = new HttpEntity<>(followUpQuestionDto, headers);
 
-        final Answer answer;
-
         try {
             String response = restTemplate.postForObject(pythonBackendUrl + FOLLOW_UP_QUESTION, entity, String.class);
-
             logger.debug("Response Out Adapter - FollowUp: {}", response);
 
-            answer = new Answer(response);
+            String extractedResponse = parseResponse(response);
+            return new Answer(extractedResponse);
 
         } catch (Exception e) {
             throw new PythonServiceException("An error occurred while calling the Python service.", e);
         }
+    }
 
-        return answer;
+    private String parseResponse(String response) {
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        try {
+            JsonNode jsonNode = objectMapper.readTree(response);
+
+            // Extract the "response" field
+            if (jsonNode.has("response")) {
+                String rawResponse = jsonNode.get("response").toString();
+
+                String cleanResponse = rawResponse.trim();
+                if (cleanResponse.startsWith("\"") && cleanResponse.endsWith("\"")) {
+                    cleanResponse = cleanResponse.substring(1, cleanResponse.length() - 1);
+                }
+
+                return cleanResponse;
+            } else {
+                throw new IllegalArgumentException("Response JSON does not contain 'response' field");
+            }
+        } catch (Exception e) {
+            logger.error("Error while parsing the Python service response", e);
+            throw new PythonServiceException("Failed to parse Python service response.", e);
+        }
     }
 
     private GameDetailsDto toGameDetailsDto(GameDetails gameDetails) {
