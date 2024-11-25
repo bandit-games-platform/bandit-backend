@@ -10,6 +10,7 @@ import be.kdg.int5.gameRegistry.port.out.GamesLoadPort;
 import be.kdg.int5.gameRegistry.port.out.GamesUpdatePort;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -41,9 +42,16 @@ public class GameJpaAdapter implements GamesLoadPort, GamesCreatePort, GamesUpda
     }
 
     @Override
+    public List<Game> loadAllGamesByTitleLikeAndPriceBelowWithIcon(String title, BigDecimal maxPrice) {
+        return gameJpaRepository.findAllByTitleLikeAndPriceBelowWithIcon("%" + title + "%",maxPrice)
+                .stream()
+                .map(this::toGame)
+                .toList();
+    }
+
+    @Override
     public boolean create(Game newGame) {
         if (gameJpaRepository.existsById(newGame.getId().uuid())) return false;
-
         gameJpaRepository.save(toGameEntity(newGame));
         return true;
     }
@@ -51,7 +59,6 @@ public class GameJpaAdapter implements GamesLoadPort, GamesCreatePort, GamesUpda
     @Override
     public boolean update(Game game) {
         if (!gameJpaRepository.existsById(game.getId().uuid())) return false;
-
         gameJpaRepository.save(toGameEntity(game));
         return true;
     }
