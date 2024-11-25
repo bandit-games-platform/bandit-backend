@@ -4,7 +4,6 @@ import be.kdg.int5.gameRegistry.domain.Achievement;
 import be.kdg.int5.gameRegistry.domain.GameId;
 import be.kdg.int5.gameRegistry.port.in.query.GetGameAchievementsQuery;
 import be.kdg.int5.gameRegistry.port.out.AchievementsLoadPort;
-import be.kdg.int5.gameRegistry.port.out.GamesLoadPort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

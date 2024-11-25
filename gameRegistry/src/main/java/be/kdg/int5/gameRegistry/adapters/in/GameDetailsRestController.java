@@ -1,6 +1,6 @@
 package be.kdg.int5.gameRegistry.adapters.in;
 
-import be.kdg.int5.gameRegistry.adapters.in.dto.AchievementDto;
+
 import be.kdg.int5.gameRegistry.adapters.in.dto.AchievementGameDto;
 import be.kdg.int5.gameRegistry.adapters.in.dto.DeveloperDto;
 import be.kdg.int5.gameRegistry.adapters.in.dto.LoadGameDto;
