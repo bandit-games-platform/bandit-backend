@@ -1,12 +1,10 @@
 package be.kdg.int5.gameRegistry.adapters.out.db.game;
 
 import be.kdg.int5.gameRegistry.adapters.out.db.achievement.AchievementJpaEntity;
-import be.kdg.int5.gameRegistry.adapters.out.db.rule.RuleJpaEntity;
+import be.kdg.int5.gameRegistry.adapters.out.db.developer.DeveloperJpaEntity;
 import jakarta.persistence.*;
-import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -14,31 +12,59 @@ import java.util.UUID;
 @Table(schema = "game_registry", name = "game")
 public class GameJpaEntity {
     @Id
-    @Column(name = "game_id")
-    private UUID gameId;
+    private UUID id;
     private String title;
     private String description;
     private BigDecimal currentPrice;
-    @OneToOne(fetch = FetchType.LAZY)
-    private ImageResourceJpaEntity icon;
-    @OneToOne(fetch = FetchType.LAZY)
-    private ImageResourceJpaEntity background;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "game")
-    private Set<RuleJpaEntity> rules;
     private String currentHost;
+
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "url", column = @Column(name = "icon_url"))
+    })
+    private ImageResourceJpaEmbeddable icon;
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "url", column = @Column(name = "background_url"))
+    })
+    private ImageResourceJpaEmbeddable background;
+
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(
+            schema = "game_registry", name = "game_rules",
+            joinColumns = @JoinColumn(name = "game_id")
+    )
+    private Set<RuleJpaEmbeddable> rules;
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(
+            schema = "game_registry", name = "game_screenshots",
+            joinColumns = @JoinColumn(name = "game_id")
+    )
+    private Set<ImageResourceJpaEmbeddable> screenshots;
+
     @ManyToOne
     private DeveloperJpaEntity developer;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "game")
-    private Set<GameScreenshotJpaEntity> screenshots;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "game")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "game_id")
     private Set<AchievementJpaEntity> achievements;
 
     public GameJpaEntity() {
     }
 
-    public GameJpaEntity(UUID gameId, String title, String description, BigDecimal currentPrice, ImageResourceJpaEntity icon, ImageResourceJpaEntity background, Set<RuleJpaEntity> rules, String currentHost, DeveloperJpaEntity developer, Set<GameScreenshotJpaEntity> screenshots, Set<AchievementJpaEntity> achievements) {
-        this.gameId = gameId;
+    public GameJpaEntity(
+            UUID id,
+            String title,
+            String description,
+            BigDecimal currentPrice,
+            ImageResourceJpaEmbeddable icon,
+            ImageResourceJpaEmbeddable background,
+            Set<RuleJpaEmbeddable> rules,
+            String currentHost,
+            DeveloperJpaEntity developer,
+            Set<ImageResourceJpaEmbeddable> screenshots,
+            Set<AchievementJpaEntity> achievements
+    ) {
+        this.id = id;
         this.title = title;
         this.description = description;
         this.currentPrice = currentPrice;
@@ -51,68 +77,40 @@ public class GameJpaEntity {
         this.achievements = achievements;
     }
 
-    public UUID getGameId() {
-        return gameId;
+    public UUID getId() {
+        return id;
     }
 
-    public void setGameId(UUID gameId) {
-        this.gameId = gameId;
+    public void setId(UUID gameId) {
+        this.id = gameId;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getDescription() {
         return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public BigDecimal getCurrentPrice() {
         return currentPrice;
     }
 
-    public void setCurrentPrice(BigDecimal currentPrice) {
-        this.currentPrice = currentPrice;
-    }
-
-    public ImageResourceJpaEntity getIcon() {
+    public ImageResourceJpaEmbeddable getIcon() {
         return icon;
     }
 
-    public void setIcon(ImageResourceJpaEntity icon) {
-        this.icon = icon;
-    }
-
-    public ImageResourceJpaEntity getBackground() {
+    public ImageResourceJpaEmbeddable getBackground() {
         return background;
     }
 
-    public void setBackground(ImageResourceJpaEntity background) {
-        this.background = background;
-    }
-
-    public Set<RuleJpaEntity> getRules() {
+    public Set<RuleJpaEmbeddable> getRules() {
         return rules;
-    }
-
-    public void setRules(Set<RuleJpaEntity> rules) {
-        this.rules = rules;
     }
 
     public String getCurrentHost() {
         return currentHost;
-    }
-
-    public void setCurrentHost(String currentHost) {
-        this.currentHost = currentHost;
     }
 
     public DeveloperJpaEntity getDeveloper() {
@@ -123,19 +121,11 @@ public class GameJpaEntity {
         this.developer = developer;
     }
 
-    public Set<GameScreenshotJpaEntity> getScreenshots() {
+    public Set<ImageResourceJpaEmbeddable> getScreenshots() {
         return screenshots;
-    }
-
-    public void setScreenshots(Set<GameScreenshotJpaEntity> screenshots) {
-        this.screenshots = screenshots;
     }
 
     public Set<AchievementJpaEntity> getAchievements() {
         return achievements;
-    }
-
-    public void setAchievements(Set<AchievementJpaEntity> achievements) {
-        this.achievements = achievements;
     }
 }

@@ -341,7 +341,7 @@
       "bandit-frontend": [],
       "gameregistry-backend": [
         {
-          "id": "6fdd9b7b-4b16-4665-b249-884818390104",
+          "id": "c6d2e871-3e9a-43c7-a140-fbd75c6bc42e",
           "name": "uma_protection",
           "composite": false,
           "clientRole": true,
@@ -490,29 +490,6 @@
   "webAuthnPolicyPasswordlessAvoidSameAuthenticatorRegister": false,
   "webAuthnPolicyPasswordlessAcceptableAaguids": [],
   "webAuthnPolicyPasswordlessExtraOrigins": [],
-  "users": [
-    {
-      "id": "de879126-7c22-4c96-a2a2-e0aa1c45ebf5",
-      "username": "service-account-gameregistry-backend",
-      "emailVerified": false,
-      "createdTimestamp": 1731929370283,
-      "enabled": true,
-      "totp": false,
-      "serviceAccountClientId": "gameregistry-backend",
-      "disableableCredentialTypes": [],
-      "requiredActions": [],
-      "realmRoles": [
-        "default-roles-bandit-realm"
-      ],
-      "clientRoles": {
-        "gameregistry-backend": [
-          "uma_protection"
-        ]
-      },
-      "notBefore": 0,
-      "groups": []
-    }
-  ],
   "scopeMappings": [
     {
       "clientScope": "offline_access",
@@ -706,7 +683,7 @@
       "protocol": "openid-connect",
       "attributes": {
         "oidc.ciba.grant.enabled": "false",
-        "client.secret.creation.time": "1731845484",
+        "client.secret.creation.time": "1732183166",
         "backchannel.logout.session.required": "true",
         "post.logout.redirect.uris": "+",
         "display.on.consent.screen": "false",
@@ -960,8 +937,7 @@
       "standardFlowEnabled": true,
       "implicitFlowEnabled": false,
       "directAccessGrantsEnabled": true,
-      "serviceAccountsEnabled": true,
-      "authorizationServicesEnabled": true,
+      "serviceAccountsEnabled": false,
       "publicClient": false,
       "frontchannelLogout": true,
       "protocol": "openid-connect",
@@ -970,60 +946,12 @@
         "client.secret.creation.time": "1731848404",
         "backchannel.logout.session.required": "true",
         "post.logout.redirect.uris": "+",
-        "display.on.consent.screen": "false",
         "oauth2.device.authorization.grant.enabled": "false",
         "backchannel.logout.revoke.offline.tokens": "false"
       },
       "authenticationFlowBindingOverrides": {},
       "fullScopeAllowed": true,
       "nodeReRegistrationTimeout": -1,
-      "protocolMappers": [
-        {
-          "id": "568d37c4-9d88-42a7-8099-dc68307f8cff",
-          "name": "Client Host",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-usersessionmodel-note-mapper",
-          "consentRequired": false,
-          "config": {
-            "user.session.note": "clientHost",
-            "id.token.claim": "true",
-            "introspection.token.claim": "true",
-            "access.token.claim": "true",
-            "claim.name": "clientHost",
-            "jsonType.label": "String"
-          }
-        },
-        {
-          "id": "c88269c8-7a25-4546-bdb8-0f521a3e3358",
-          "name": "Client ID",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-usersessionmodel-note-mapper",
-          "consentRequired": false,
-          "config": {
-            "user.session.note": "client_id",
-            "id.token.claim": "true",
-            "introspection.token.claim": "true",
-            "access.token.claim": "true",
-            "claim.name": "client_id",
-            "jsonType.label": "String"
-          }
-        },
-        {
-          "id": "d4fd3e51-fbae-49a6-aaac-d4eaa2444fbd",
-          "name": "Client IP Address",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-usersessionmodel-note-mapper",
-          "consentRequired": false,
-          "config": {
-            "user.session.note": "clientAddress",
-            "id.token.claim": "true",
-            "introspection.token.claim": "true",
-            "access.token.claim": "true",
-            "claim.name": "clientAddress",
-            "jsonType.label": "String"
-          }
-        }
-      ],
       "defaultClientScopes": [
         "web-origins",
         "acr",
@@ -1037,47 +965,7 @@
         "phone",
         "offline_access",
         "microprofile-jwt"
-      ],
-      "authorizationSettings": {
-        "allowRemoteResourceManagement": true,
-        "policyEnforcementMode": "ENFORCING",
-        "resources": [
-          {
-            "name": "Default Resource",
-            "type": "urn:gameregistry-backend:resources:default",
-            "ownerManagedAccess": false,
-            "attributes": {},
-            "uris": [
-              "/*"
-            ]
-          }
-        ],
-        "policies": [
-          {
-            "name": "Default Policy",
-            "description": "A policy that grants access only for users within this realm",
-            "type": "js",
-            "logic": "POSITIVE",
-            "decisionStrategy": "AFFIRMATIVE",
-            "config": {
-              "code": "// by default, grants any permission associated with this policy\n$evaluation.grant();\n"
-            }
-          },
-          {
-            "name": "Default Permission",
-            "description": "A permission that applies to the default resource type",
-            "type": "resource",
-            "logic": "POSITIVE",
-            "decisionStrategy": "UNANIMOUS",
-            "config": {
-              "defaultResourceType": "urn:gameregistry-backend:resources:default",
-              "applyPolicies": "[\"Default Policy\"]"
-            }
-          }
-        ],
-        "scopes": [],
-        "decisionStrategy": "UNANIMOUS"
-      }
+      ]
     },
     {
       "id": "6368c455-f14d-47ca-8c4d-4ad498913984",
@@ -1189,10 +1077,10 @@
                 "name": "user-impersonated"
               },
               {
-                "name": "view"
+                "name": "manage-group-membership"
               },
               {
-                "name": "manage-group-membership"
+                "name": "view"
               },
               {
                 "name": "impersonate"
@@ -1230,7 +1118,18 @@
             }
           },
           {
+            "name": "view.permission.users",
+            "type": "scope",
+            "logic": "POSITIVE",
+            "decisionStrategy": "UNANIMOUS",
+            "config": {
+              "resources": "[\"Users\"]",
+              "scopes": "[\"view\"]"
+            }
+          },
+          {
             "name": "user-impersonated.permission.users",
+            "description": "",
             "type": "scope",
             "logic": "POSITIVE",
             "decisionStrategy": "UNANIMOUS",
@@ -1250,13 +1149,13 @@
             }
           },
           {
-            "name": "view.permission.users",
+            "name": "manage-group-membership.permission.users",
             "type": "scope",
             "logic": "POSITIVE",
             "decisionStrategy": "UNANIMOUS",
             "config": {
               "resources": "[\"Users\"]",
-              "scopes": "[\"view\"]"
+              "scopes": "[\"manage-group-membership\"]"
             }
           },
           {
@@ -1268,19 +1167,15 @@
               "resources": "[\"Users\"]",
               "scopes": "[\"map-roles\"]"
             }
-          },
-          {
-            "name": "manage-group-membership.permission.users",
-            "type": "scope",
-            "logic": "POSITIVE",
-            "decisionStrategy": "UNANIMOUS",
-            "config": {
-              "resources": "[\"Users\"]",
-              "scopes": "[\"manage-group-membership\"]"
-            }
           }
         ],
         "scopes": [
+          {
+            "name": "manage-group-membership"
+          },
+          {
+            "name": "map-roles"
+          },
           {
             "name": "impersonate"
           },
@@ -1288,16 +1183,11 @@
             "name": "view"
           },
           {
-            "name": "user-impersonated"
-          },
-          {
-            "name": "manage-group-membership"
+            "name": "user-impersonated",
+            "iconUri": ""
           },
           {
             "name": "manage"
-          },
-          {
-            "name": "map-roles"
           }
         ],
         "decisionStrategy": "UNANIMOUS"
@@ -2219,14 +2109,14 @@
         "subComponents": {},
         "config": {
           "allowed-protocol-mapper-types": [
-            "saml-role-list-mapper",
-            "oidc-sha256-pairwise-sub-mapper",
-            "oidc-address-mapper",
-            "oidc-usermodel-property-mapper",
-            "oidc-usermodel-attribute-mapper",
-            "saml-user-property-mapper",
+            "oidc-full-name-mapper",
             "saml-user-attribute-mapper",
-            "oidc-full-name-mapper"
+            "oidc-usermodel-attribute-mapper",
+            "oidc-usermodel-property-mapper",
+            "oidc-address-mapper",
+            "oidc-sha256-pairwise-sub-mapper",
+            "saml-user-property-mapper",
+            "saml-role-list-mapper"
           ]
         }
       },
@@ -2238,12 +2128,12 @@
         "subComponents": {},
         "config": {
           "allowed-protocol-mapper-types": [
-            "oidc-usermodel-attribute-mapper",
-            "oidc-full-name-mapper",
-            "saml-role-list-mapper",
             "saml-user-attribute-mapper",
-            "saml-user-property-mapper",
+            "saml-role-list-mapper",
             "oidc-address-mapper",
+            "saml-user-property-mapper",
+            "oidc-full-name-mapper",
+            "oidc-usermodel-attribute-mapper",
             "oidc-sha256-pairwise-sub-mapper",
             "oidc-usermodel-property-mapper"
           ]

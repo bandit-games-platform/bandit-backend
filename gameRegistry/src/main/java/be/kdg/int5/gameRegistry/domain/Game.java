@@ -2,12 +2,9 @@ package be.kdg.int5.gameRegistry.domain;
 
 import be.kdg.int5.common.domain.ImageResource;
 import be.kdg.int5.common.domain.ResourceURL;
-import be.kdg.int5.gameRegistry.adapters.out.db.achievement.AchievementJpaEntity;
-import be.kdg.int5.gameRegistry.adapters.out.db.game.GameScreenshotJpaEntity;
-import be.kdg.int5.gameRegistry.adapters.out.db.game.ImageResourceJpaEntity;
-import be.kdg.int5.gameRegistry.adapters.out.db.rule.RuleJpaEntity;
 
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class Game {
@@ -17,7 +14,7 @@ public class Game {
     private BigDecimal currentPrice;
     private ImageResource icon;
     private ImageResource background;
-    private final Set<Rule> rules;
+    private Set<Rule> rules;
     private ResourceURL currentHost;
     private final Developer developer;
 
@@ -92,6 +89,10 @@ public class Game {
         return rules;
     }
 
+    public void setRules(Set<Rule> rules) {
+        this.rules = rules;
+    }
+
     public ResourceURL getCurrentHost() {
         return currentHost;
     }
@@ -118,5 +119,47 @@ public class Game {
 
     public void setAchievements(Set<Achievement> achievements) {
         this.achievements = achievements;
+    }
+
+    @Override
+    public String toString() {
+        return "Game{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", currentPrice=" + currentPrice +
+                ", icon=" + icon +
+                ", background=" + background +
+                ", rules=" + rules +
+                ", currentHost=" + currentHost +
+                ", developer=" + developer +
+                ", screenshots=" + screenshots +
+                ", achievements=" + achievements +
+                '}';
+    }
+
+
+    public void patch(
+            String description,
+            BigDecimal currentPrice,
+            ImageResource icon,
+            ImageResource background,
+            Set<Rule> rules,
+            ResourceURL currentHost,
+            List<ImageResource> screenshots,
+            Set<Achievement> achievements
+    ) {
+        if (description != null) setDescription(description);
+        if (currentPrice != null) setCurrentPrice(currentPrice);
+        if (icon != null) setIcon(icon);
+        if (background != null) setBackground(background);
+        if (rules != null) setRules(rules);
+        if (currentHost != null) setCurrentHost(currentHost);
+        if (screenshots != null) setScreenshots(screenshots);
+        if (achievements != null) setAchievements(achievements);
+    }
+
+    public static GameId generateUniqueIdFromDeveloperAndTitle(DeveloperId developerId, String title) {
+        return new GameId(UUID.nameUUIDFromBytes((developerId.toString()+":"+title).getBytes(StandardCharsets.UTF_8)));
     }
 }
