@@ -3,7 +3,7 @@ package be.kdg.int5.statistics.adapters.in.dto;
 import java.time.LocalDateTime;
 import java.util.*;
 
-public class CompletedSessionDTO {
+public class CompletedSessionDto {
     private final UUID sessionId;
     private final LocalDateTime startTime;
     private final LocalDateTime endTime;
@@ -16,7 +16,7 @@ public class CompletedSessionDTO {
     private final String character;
     private final Boolean wasFirstToGo;
 
-    public CompletedSessionDTO(
+    public CompletedSessionDto(
             UUID sessionId,
             LocalDateTime startTime,
             LocalDateTime endTime,

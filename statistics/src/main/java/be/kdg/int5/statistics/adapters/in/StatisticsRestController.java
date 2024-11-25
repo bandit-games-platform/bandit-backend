@@ -1,8 +1,8 @@
 package be.kdg.int5.statistics.adapters.in;
 
-import be.kdg.int5.statistics.adapters.in.dto.AchievementProgressDTO;
-import be.kdg.int5.statistics.adapters.in.dto.CompletedSessionDTO;
-import be.kdg.int5.statistics.adapters.in.dto.PlayerGameStatsDTO;
+import be.kdg.int5.statistics.adapters.in.dto.AchievementProgressDto;
+import be.kdg.int5.statistics.adapters.in.dto.CompletedSessionDto;
+import be.kdg.int5.statistics.adapters.in.dto.PlayerGameStatsDto;
 import be.kdg.int5.statistics.domain.GameId;
 import be.kdg.int5.statistics.domain.PlayerGameStats;
 import be.kdg.int5.statistics.domain.PlayerId;
@@ -30,7 +30,7 @@ public class StatisticsRestController {
 
     @GetMapping("/player-game-statistics/{playerId}/{gameId}")
     @PreAuthorize("hasAuthority('player')")
-    public ResponseEntity<PlayerGameStatsDTO> getPlayerGameStats(
+    public ResponseEntity<PlayerGameStatsDto> getPlayerGameStats(
             @NotNull @PathVariable("playerId") UUID playerId,
             @NotNull @PathVariable("gameId") UUID gameId
     ) {
@@ -43,17 +43,17 @@ public class StatisticsRestController {
         );
 
         if (playerGameStats != null){
-            PlayerGameStatsDTO statsDTO = mapToDTO(playerGameStats);
+            PlayerGameStatsDto statsDTO = mapToDTO(playerGameStats);
             return ResponseEntity.ok(statsDTO);
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
 
-    private PlayerGameStatsDTO mapToDTO(PlayerGameStats playerGameStats) {
-        // Map CompletedSession to CompletedSessionDTO
-        List<CompletedSessionDTO> sessionDTOs = playerGameStats.getCompletedSessions().stream()
-                .map(session -> new CompletedSessionDTO(
+    private PlayerGameStatsDto mapToDTO(PlayerGameStats playerGameStats) {
+        // Map CompletedSession to CompletedSessionDto
+        List<CompletedSessionDto> sessionDTOs = playerGameStats.getCompletedSessions().stream()
+                .map(session -> new CompletedSessionDto(
                         session.getSessionId().uuid(),
                         session.getStartTime(),
                         session.getEndTime(),
@@ -68,16 +68,16 @@ public class StatisticsRestController {
                 ))
                 .toList();
 
-        // Map AchievementProgress to AchievementProgressDTO
-        List<AchievementProgressDTO> achievementDTOs = playerGameStats.getAchievementProgressSet().stream()
-                .map(progress -> new AchievementProgressDTO(
+        // Map AchievementProgress to AchievementProgressDto
+        List<AchievementProgressDto> achievementDTOs = playerGameStats.getAchievementProgressSet().stream()
+                .map(progress -> new AchievementProgressDto(
                         progress.getAchievementId().uuid(),
                         progress.getCounterValue()
                 ))
                 .toList();
 
-        // Create the PlayerGameStatsDTO
-        return new PlayerGameStatsDTO(
+        // Create the PlayerGameStatsDto
+        return new PlayerGameStatsDto(
                 playerGameStats.getPlayerId().uuid(),
                 playerGameStats.getGameId().uuid(),
                 sessionDTOs,
