@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -25,11 +26,11 @@ public class RegisterGameUseCaseImpl implements RegisterGameUseCase {
     private final Logger logger = LoggerFactory.getLogger(RegisterGameUseCaseImpl.class);
 
     private final GamesLoadPort gamesLoadPort;
-    private final GamesCreatePort gamesCreatePort;
+    private final List<GamesCreatePort> gamesCreatePort;
     private final DeveloperLoadPort developerLoadPort;
-    private final GamesUpdatePort gamesUpdatePort;
+    private final List<GamesUpdatePort> gamesUpdatePort;
 
-    public RegisterGameUseCaseImpl(GamesLoadPort gamesLoadPort, GamesCreatePort gamesCreatePort, DeveloperLoadPort developerLoadPort, GamesUpdatePort gamesUpdatePort) {
+    public RegisterGameUseCaseImpl(GamesLoadPort gamesLoadPort, List<GamesCreatePort> gamesCreatePort, DeveloperLoadPort developerLoadPort, List<GamesUpdatePort> gamesUpdatePort) {
         this.gamesLoadPort = gamesLoadPort;
         this.gamesCreatePort = gamesCreatePort;
         this.developerLoadPort = developerLoadPort;
@@ -70,7 +71,11 @@ public class RegisterGameUseCaseImpl implements RegisterGameUseCase {
                     command.achievements()
             );
 
-            if(gamesCreatePort.create(newGame)) return gameId;
+            boolean gameCreated = false;
+            for (GamesCreatePort gamesCreate: gamesCreatePort) {
+                gameCreated |= gamesCreate.create(newGame);
+            }
+            if(gameCreated) return gameId;
         }else {
             //Patch mode
             logger.info("gameRegistry:register-game [PATCH MODE] for existing game: '{}'", existingGame);
@@ -84,7 +89,11 @@ public class RegisterGameUseCaseImpl implements RegisterGameUseCase {
             if (command.achievements() != null) existingGame.setAchievements(command.achievements());
             if (command.rules() != null) existingGame.setRules(command.rules());
 
-            if(gamesUpdatePort.update(existingGame)) return gameId;
+            boolean gameUpdated = false;
+            for (GamesUpdatePort gamesUpdate: gamesUpdatePort) {
+                gameUpdated |= gamesUpdate.update(existingGame);
+            }
+            if(gameUpdated) return gameId;
         }
         return null;
     }
