@@ -7,8 +7,8 @@ import be.kdg.int5.gameRegistry.adapters.in.dto.LoadGameDto;
 import be.kdg.int5.gameRegistry.domain.Achievement;
 import be.kdg.int5.gameRegistry.domain.Game;
 import be.kdg.int5.gameRegistry.port.in.query.GetGameAchievementsQuery;
-import be.kdg.int5.gameRegistry.port.in.query.GetGameDetailsQuery;
 import jakarta.validation.Valid;
+import be.kdg.int5.gameRegistry.port.in.query.GameDetailsQuery;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,11 +24,11 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/games")
 public class GameDetailsRestController {
-    private final GetGameDetailsQuery getGameDetailsQuery;
+    private final GameDetailsQuery gameDetailsQuery;
     private final GetGameAchievementsQuery getGameAchievementsQuery;
 
-    public GameDetailsRestController(GetGameDetailsQuery getGameDetailsQuery, GetGameAchievementsQuery getGameAchievementsQuery) {
-        this.getGameDetailsQuery = getGameDetailsQuery;
+    public GameDetailsRestController(GameDetailsQuery gameDetailsQuery, GetGameAchievementsQuery getGameAchievementsQuery) {
+        this.gameDetailsQuery = gameDetailsQuery;
         this.getGameAchievementsQuery = getGameAchievementsQuery;
     }
 
@@ -36,7 +36,7 @@ public class GameDetailsRestController {
     public ResponseEntity<LoadGameDto> getDetailsForGame(@PathVariable String gameId) {
         UUID gameIdConverted = UUID.fromString(gameId);
 
-        Game game = getGameDetailsQuery.getDetailsForGameFromId(gameIdConverted);
+        Game game = gameDetailsQuery.getDetailsForGameFromId(gameIdConverted);
         if (game == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         List<String> screenshots = new ArrayList<>();
