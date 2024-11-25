@@ -47,7 +47,6 @@ public class GameJpaAdapter implements GamesLoadPort, GamesCreatePort, GamesUpda
                 .stream()
                 .map(this::toGame)
                 .toList();
-
     }
 
     @Override

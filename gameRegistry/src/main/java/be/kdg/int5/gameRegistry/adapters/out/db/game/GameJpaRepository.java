@@ -11,8 +11,6 @@ public interface GameJpaRepository extends JpaRepository<GameJpaEntity, UUID> {
 
     @Query("""
     SELECT game FROM GameJpaEntity game
-    LEFT JOIN FETCH game.icon
-    LEFT JOIN FETCH game.background
     LEFT JOIN FETCH game.rules
     LEFT JOIN FETCH game.screenshots
     LEFT JOIN FETCH game.achievements
@@ -22,8 +20,6 @@ public interface GameJpaRepository extends JpaRepository<GameJpaEntity, UUID> {
 
     @Query("""
     SELECT game FROM GameJpaEntity game
-    LEFT JOIN FETCH game.icon
-    LEFT JOIN FETCH game.background
     LEFT JOIN FETCH game.rules
     LEFT JOIN FETCH game.screenshots
     LEFT JOIN FETCH game.achievements
@@ -33,7 +29,6 @@ public interface GameJpaRepository extends JpaRepository<GameJpaEntity, UUID> {
     @Query("""
     SELECT game FROM GameJpaEntity game
     LEFT JOIN FETCH game.icon
-  
     """)
     List<GameJpaEntity> findAllWithIcon();
 
