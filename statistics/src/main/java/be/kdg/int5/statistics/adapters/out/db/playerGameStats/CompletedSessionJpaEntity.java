@@ -2,8 +2,6 @@ package be.kdg.int5.statistics.adapters.out.db.playerGameStats;
 
 import be.kdg.int5.statistics.domain.GameEndState;
 import jakarta.persistence.*;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -12,8 +10,7 @@ import java.util.UUID;
 @Table(schema = "statistics", name = "completed_game_sessions")
 public class CompletedSessionJpaEntity {
     @Id
-    @Column(name = "session_id", columnDefinition = "varchar(36)")
-    @JdbcTypeCode(SqlTypes.VARCHAR)
+    @Column(name = "session_id")
     private UUID sessionId;
 
     @Column(name = "start_time", nullable = false)

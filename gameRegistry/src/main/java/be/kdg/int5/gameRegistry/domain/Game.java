@@ -4,6 +4,7 @@ import be.kdg.int5.common.domain.ImageResource;
 import be.kdg.int5.common.domain.ResourceURL;
 
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class Game {
@@ -20,7 +21,16 @@ public class Game {
     private List<ImageResource> screenshots;
     private Set<Achievement> achievements;
 
-    public Game(GameId id, String title, String description, BigDecimal currentPrice, ImageResource icon, ImageResource background, ResourceURL currentHost, Developer developer) {
+    public Game(
+            GameId id,
+            String title,
+            String description,
+            BigDecimal currentPrice,
+            ImageResource icon,
+            ImageResource background,
+            ResourceURL currentHost,
+            Developer developer
+    ) {
         this.id = Objects.requireNonNull(id);
         this.title = Objects.requireNonNull(title);
         this.description = description;
@@ -31,19 +41,62 @@ public class Game {
         this.developer = developer;
     }
 
-    public Game(GameId id, String title, String description, BigDecimal currentPrice, ImageResource icon, ImageResource background, ResourceURL currentHost, Developer developer, Set<Achievement> achievements) {
+    public Game(
+            GameId id,
+            String title,
+            String description,
+            BigDecimal currentPrice,
+            ImageResource icon,
+            ImageResource background,
+            ResourceURL currentHost,
+            Developer developer,
+            Set<Achievement> achievements
+    ) {
         this(id, title, description, currentPrice, icon, background, null, currentHost, developer, null, achievements);
     }
 
-    public Game(String title, String description, ImageResource icon, ImageResource background, Set<Rule> rules, ResourceURL currentHost, Developer developer, List<ImageResource> screenshots, Set<Achievement> achievements) {
+    public Game(
+            String title,
+            String description,
+            ImageResource icon,
+            ImageResource background,
+            Set<Rule> rules,
+            ResourceURL currentHost,
+            Developer developer,
+            List<ImageResource> screenshots,
+            Set<Achievement> achievements
+    ) {
         this(new GameId(UUID.randomUUID()),title, description, null, icon, background, rules, currentHost, developer, screenshots,achievements);
     }
 
-    public Game(String title, String description, BigDecimal currentPrice, ImageResource icon, ImageResource background, Set<Rule> rules, ResourceURL currentHost, Developer developer, List<ImageResource> screenshots, Set<Achievement> achievements) {
+    public Game(
+            String title,
+            String description,
+            BigDecimal currentPrice,
+            ImageResource icon,
+            ImageResource background,
+            Set<Rule> rules,
+            ResourceURL currentHost,
+            Developer developer,
+            List<ImageResource> screenshots,
+            Set<Achievement> achievements
+    ) {
         this(new GameId(UUID.randomUUID()),title, description, currentPrice, icon, background, rules, currentHost, developer, screenshots,achievements);
     }
 
-    public Game(GameId id, String title, String description, BigDecimal currentPrice, ImageResource icon, ImageResource background, Set<Rule> rules, ResourceURL currentHost, Developer developer, List<ImageResource> screenshots, Set<Achievement> achievements) {
+    public Game(
+            GameId id,
+            String title,
+            String description,
+            BigDecimal currentPrice,
+            ImageResource icon,
+            ImageResource background,
+            Set<Rule> rules,
+            ResourceURL currentHost,
+            Developer developer,
+            List<ImageResource> screenshots,
+            Set<Achievement> achievements
+    ) {
         this.id = Objects.requireNonNull(id);
         this.title = Objects.requireNonNull(title);
         this.description = Objects.requireNonNull(description);
@@ -150,5 +203,30 @@ public class Game {
                 ", screenshots=" + screenshots +
                 ", achievements=" + achievements +
                 '}';
+    }
+
+
+    public void patch(
+            String description,
+            BigDecimal currentPrice,
+            ImageResource icon,
+            ImageResource background,
+            Set<Rule> rules,
+            ResourceURL currentHost,
+            List<ImageResource> screenshots,
+            Set<Achievement> achievements
+    ) {
+        if (description != null) setDescription(description);
+        if (currentPrice != null) setCurrentPrice(currentPrice);
+        if (icon != null) setIcon(icon);
+        if (background != null) setBackground(background);
+        if (rules != null) setRules(rules);
+        if (currentHost != null) setCurrentHost(currentHost);
+        if (screenshots != null) setScreenshots(screenshots);
+        if (achievements != null) setAchievements(achievements);
+    }
+
+    public static GameId generateUniqueIdFromDeveloperAndTitle(DeveloperId developerId, String title) {
+        return new GameId(UUID.nameUUIDFromBytes((developerId.toString()+":"+title).getBytes(StandardCharsets.UTF_8)));
     }
 }

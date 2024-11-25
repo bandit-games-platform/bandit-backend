@@ -33,19 +33,19 @@ INSERT INTO game_registry.game_screenshots (game_id, url) VALUES
 -- Seeding data for `achievement` table
 INSERT INTO game_registry.achievement (id, title, counter_total, description, game_id) VALUES
 -- Achievements for Battleship
-('123e4567-e89b-12d3-a456-426614174001', 'Fleet Commander', 5, 'Sink 5 enemy ships in one match','d77e1d1f-6b46-4c89-9290-3b9cf8a7c001'),
-('123e4567-e89b-12d3-a456-426614174002', 'Perfect Precision', 10, 'Hit 10 consecutive shots without a miss', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c001'),
-('123e4567-e89b-12d3-a456-426614174003', 'Ultimate Admiral', 20, 'Win 20 matches','d77e1d1f-6b46-4c89-9290-3b9cf8a7c001'),
+('4964f6f7-5cee-3619-8caf-754d10078579', 'Fleet Commander', 5, 'Sink 5 enemy ships in one match','d77e1d1f-6b46-4c89-9290-3b9cf8a7c001'),
+('28172f39-8abc-3499-819f-edc22a116468', 'Perfect Precision', 10, 'Hit 10 consecutive shots without a miss', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c001'),
+('26640462-8af6-3c2d-ae2d-6a133ba87b3a', 'Ultimate Admiral', 20, 'Win 20 matches','d77e1d1f-6b46-4c89-9290-3b9cf8a7c001'),
 
 -- Achievements for Chess
-('223e4567-e89b-12d3-a456-426614174004', 'Grandmaster', 100, 'Win 100 matches','d77e1d1f-6b46-4c89-9290-3b9cf8a7c002'),
-('223e4567-e89b-12d3-a456-426614174005', 'Checkmate Pro', 50, 'Win 50 games by delivering checkmate within 20 moves','d77e1d1f-6b46-4c89-9290-3b9cf8a7c002'),
-('223e4567-e89b-12d3-a456-426614174006', 'Opening Mastery', 10, 'Master 10 chess openings','d77e1d1f-6b46-4c89-9290-3b9cf8a7c002'),
+('3b529ded-ee8a-3c1d-bd56-fdb04ba35abc', 'Grandmaster', 100, 'Win 100 matches','d77e1d1f-6b46-4c89-9290-3b9cf8a7c002'),
+('3eaf18ca-2089-354f-81b4-6d0df2622207', 'Checkmate Pro', 50, 'Win 50 games by delivering checkmate within 20 moves','d77e1d1f-6b46-4c89-9290-3b9cf8a7c002'),
+('0fbd54d3-386a-3fc6-9833-01a7f75ece13', 'Opening Mastery', 10, 'Master 10 chess openings','d77e1d1f-6b46-4c89-9290-3b9cf8a7c002'),
 
 -- Achievements for Snakes and Ladders
-('323e4567-e89b-12d3-a456-426614174007', 'Ladder Climber', 20, 'Climb 20 ladders in a single game','d77e1d1f-6b46-4c89-9290-3b9cf8a7c003'),
-('323e4567-e89b-12d3-a456-426614174008', 'Snake Dodger', 15, 'Avoid 15 snakes in a single game','d77e1d1f-6b46-4c89-9290-3b9cf8a7c003'),
-('323e4567-e89b-12d3-a456-426614174009', 'Perfect Game', 1, 'Win a game without landing on any snake','d77e1d1f-6b46-4c89-9290-3b9cf8a7c003');
+('d903303f-c6fb-36a3-b3a5-0f7ec221ab49', 'Ladder Climber', 20, 'Climb 20 ladders in a single game','d77e1d1f-6b46-4c89-9290-3b9cf8a7c003'),
+('da135883-30f9-3211-95b4-4cb7f22df5cf', 'Snake Dodger', 15, 'Avoid 15 snakes in a single game','d77e1d1f-6b46-4c89-9290-3b9cf8a7c003'),
+('9e2aabec-3b59-321d-8004-26a24e8e5202', 'Perfect Game', 1, 'Win a game without landing on any snake','d77e1d1f-6b46-4c89-9290-3b9cf8a7c003');
 
 -- Seeding data for `rule` table
 INSERT INTO game_registry.game_rules (step_number, rule, game_id) VALUES

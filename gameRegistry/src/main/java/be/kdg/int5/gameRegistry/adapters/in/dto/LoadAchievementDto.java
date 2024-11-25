@@ -1,8 +1,5 @@
 package be.kdg.int5.gameRegistry.adapters.in.dto;
 
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
-
 import java.util.UUID;
 
 public class LoadAchievementDto {

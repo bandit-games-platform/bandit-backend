@@ -1,5 +1,4 @@
 package be.kdg.int5.gameRegistry.adapters.in.dto;
-import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -101,6 +100,28 @@ public class LoadGameDto {
         this.developer = developer;
         this.screenshots = screenshots;
         this.achievements = achievements;
+    }
+
+    public LoadGameDto(
+            UUID id,
+            String title,
+            String description,
+            BigDecimal price,
+            String icon,
+            UUID uuid) {
+        this(
+                id,
+                title,
+                description,
+                price,
+                icon,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
     }
 
     public UUID getId() {
