@@ -1,5 +1,6 @@
 package be.kdg.int5.statistics.adapters.out.db.playerGameStats;
 
+import be.kdg.int5.common.exceptions.PlayerGameStatsNotFound;
 import be.kdg.int5.statistics.domain.*;
 import be.kdg.int5.statistics.port.out.PlayerGameStatisticsLoadPort;
 import be.kdg.int5.statistics.port.out.PlayerGameStatisticsUpdatePort;
@@ -11,7 +12,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Repository
-public class PlayerGameStatsJpaAdapter implements PlayerGameStatisticsLoadPort {
+public class PlayerGameStatsJpaAdapter implements PlayerGameStatisticsLoadPort, PlayerGameStatisticsUpdatePort {
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(PlayerGameStatsJpaAdapter.class);
     private final PlayerGameStatsJpaRepository playerGameStatsJpaRepository;
     private final AchievementProgressJpaRepository achievementProgressJpaRepository;

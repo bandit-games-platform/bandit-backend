@@ -66,7 +66,7 @@ public class GameDetailsRestController {
         return ResponseEntity.ok(new LoadDeveloperIdDto(game.getDeveloper().id().uuid()));
     }
 
-    @GetMapping("/{gameId}/achievements")
+    @GetMapping("/{gameId}/achievement-ids")
     public ResponseEntity<List<LoadAchievementIdDto>> getAchievementIdsForGame(@PathVariable String gameId) {
         UUID gameIdConverted = UUID.fromString(gameId);
 

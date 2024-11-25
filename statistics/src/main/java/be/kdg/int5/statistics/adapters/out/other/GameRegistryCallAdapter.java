@@ -64,7 +64,7 @@ public class GameRegistryCallAdapter implements GameRegistryCallPort {
         try {
             HttpRequest request = HttpRequest.newBuilder()
                     .GET()
-                    .uri(URI.create(gameRegistryBaseUrl + "/games/" + gameId.uuid().toString() + "/achievements"))
+                    .uri(URI.create(gameRegistryBaseUrl + "/games/" + gameId.uuid().toString() + "/achievement-ids"))
                     .header("Accept", "application/json")
                     .build();
 

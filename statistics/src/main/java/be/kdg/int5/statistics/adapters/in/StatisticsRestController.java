@@ -1,8 +1,8 @@
 package be.kdg.int5.statistics.adapters.in;
 
-import be.kdg.int5.statistics.adapters.in.dto.AchievementProgressDTO;
-import be.kdg.int5.statistics.adapters.in.dto.CompletedSessionDTO;
-import be.kdg.int5.statistics.adapters.in.dto.PlayerGameStatsDTO;
+import be.kdg.int5.statistics.adapters.in.dto.AchievementProgressDto;
+import be.kdg.int5.statistics.adapters.in.dto.CompletedSessionDto;
+import be.kdg.int5.statistics.adapters.in.dto.PlayerGameStatsDto;
 import be.kdg.int5.statistics.domain.GameId;
 import be.kdg.int5.statistics.domain.PlayerGameStats;
 import be.kdg.int5.statistics.domain.PlayerId;
@@ -42,17 +42,6 @@ public class StatisticsRestController {
                 )
         );
 
-        // Map the domain model to the DTO
-        PlayerGameStatsDTO statsDTO = mapToDTO(playerGameStats);
-
-        // Return the DTO wrapped in a ResponseEntity
-        return ResponseEntity.ok(statsDTO);
-    }
-
-    private PlayerGameStatsDTO mapToDTO(PlayerGameStats playerGameStats) {
-        // Map CompletedSession to CompletedSessionDTO
-        List<CompletedSessionDTO> sessionDTOs = playerGameStats.getCompletedSessions().stream()
-                .map(session -> new CompletedSessionDTO(
         if (playerGameStats != null){
             PlayerGameStatsDto statsDTO = mapToDTO(playerGameStats);
             return ResponseEntity.ok(statsDTO);
