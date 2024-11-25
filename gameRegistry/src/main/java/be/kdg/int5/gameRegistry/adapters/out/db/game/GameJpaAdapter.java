@@ -34,6 +34,24 @@ public class GameJpaAdapter implements GamesLoadPort, GamesCreatePort, GamesUpda
     }
 
     @Override
+    public Game loadGameById(UUID gameId) {
+        GameJpaEntity gameJpaEntity = gameJpaRepository.findByIdWithDeveloper(gameId);
+        if (gameJpaEntity == null) return null;
+        return toGameWithoutCollections(gameJpaEntity);
+    }
+
+    @Override
+    public Game loadGameByIdWithAchievements(UUID gameId) {
+        GameJpaEntity gameJpaEntity = gameJpaRepository.findByIdWithAchievements(gameId);
+        if (gameJpaEntity == null) return null;
+        Game game = toGameWithoutCollections(gameJpaEntity);
+        game.setAchievements(
+            gameJpaEntity.getAchievements().stream().map(this::toAchievement).collect(Collectors.toSet())
+        );
+        return game;
+    }
+
+    @Override
     public List<Game> loadAllGamesWithIcon() {
         return gameJpaRepository.findAll()
                 .stream()
@@ -78,6 +96,23 @@ public class GameJpaAdapter implements GamesLoadPort, GamesCreatePort, GamesUpda
                 toDeveloperEntity(game.getDeveloper()),
                 game.getScreenshots().stream().map(this::toImageResourceEntity).collect(Collectors.toSet()),
                 game.getAchievements().stream().map(achievement -> toAchievementEntity(achievement, gameId)).collect(Collectors.toSet())
+        );
+    }
+
+    public Game toGameWithoutCollections(GameJpaEntity gameJpa) {
+        ResourceURL hostUrl = new ResourceURL(gameJpa.getCurrentHost());
+        ImageResource icon = toImageResource(gameJpa.getIcon());
+        ImageResource backgroundImage = toImageResource(gameJpa.getBackground());
+        Developer developer = new Developer(new DeveloperId(gameJpa.getDeveloper().getId()), gameJpa.getDeveloper().getStudioName());
+        return new Game(
+                new GameId(gameJpa.getId()),
+                gameJpa.getTitle(),
+                gameJpa.getDescription(),
+                gameJpa.getCurrentPrice(),
+                icon,
+                backgroundImage,
+                hostUrl,
+                developer
         );
     }
 

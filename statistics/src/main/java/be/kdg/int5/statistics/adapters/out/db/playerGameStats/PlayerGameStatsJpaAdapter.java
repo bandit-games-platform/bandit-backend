@@ -3,6 +3,7 @@ package be.kdg.int5.statistics.adapters.out.db.playerGameStats;
 import be.kdg.int5.common.exceptions.PlayerGameStatsNotFound;
 import be.kdg.int5.statistics.domain.*;
 import be.kdg.int5.statistics.port.out.PlayerGameStatisticsLoadPort;
+import be.kdg.int5.statistics.port.out.PlayerGameStatisticsUpdatePort;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
@@ -11,7 +12,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Repository
-public class PlayerGameStatsJpaAdapter implements PlayerGameStatisticsLoadPort {
+public class PlayerGameStatsJpaAdapter implements PlayerGameStatisticsLoadPort, PlayerGameStatisticsUpdatePort {
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(PlayerGameStatsJpaAdapter.class);
     private final PlayerGameStatsJpaRepository playerGameStatsJpaRepository;
     private final AchievementProgressJpaRepository achievementProgressJpaRepository;
@@ -34,13 +35,54 @@ public class PlayerGameStatsJpaAdapter implements PlayerGameStatisticsLoadPort {
         return this.playerGameStatsJpaToDomain(playerGameStatsJpaEntity);
     }
 
+    @Override
+    public PlayerGameStats loadPlayerGameStatsWithAllRelationships(PlayerId playerId, GameId gameId) {
+        PlayerGameStatsJpaId playerGameStatsJpaId = new PlayerGameStatsJpaId(playerId.uuid(), gameId.uuid());
+        PlayerGameStatsJpaEntity playerGameStatsJpaEntity = playerGameStatsJpaRepository
+                .findById(playerGameStatsJpaId)
+                .orElseThrow();
+
+        return this.playerGameStatisticsJpaToDomain(playerGameStatsJpaEntity);
+    }
+
+
+    @Override
+    public void addNewCompletedSession(PlayerGameStats playerGameStats) {
+        playerGameStatsJpaRepository.save(playerGameStatsDomainToJpa(playerGameStats));
+    }
+
+    @Override
+    public void updateAchievementProgress(PlayerGameStats playerGameStats) {
+        playerGameStatsJpaRepository.save(playerGameStatsDomainToJpa(playerGameStats));
+    }
+
     private PlayerGameStatsJpaEntity playerGameStatsDomainToJpa(final PlayerGameStats playerGameStats){
         PlayerGameStatsJpaId playerGameStatsJpaId = new PlayerGameStatsJpaId(playerGameStats.getPlayerId().uuid(), playerGameStats.getGameId().uuid());
         Set<CompletedSessionJpaEntity> completedSessions = playerGameStats.getCompletedSessions().stream()
                 .map(this::completedSessionDomainToJpa)
                 .collect(Collectors.toSet());
 
-        return new PlayerGameStatsJpaEntity(playerGameStatsJpaId, completedSessions);
+        Set<AchievementProgressJpaEntity> achievementProgressSet = playerGameStats.getAchievementProgressSet().stream()
+                .map(achievementProgress -> {
+                    AchievementProgressJpaEntity achievementProgressJpaEntity = achievementProgressJpaRepository.findAchievementProgressByAchievementIdAndPlayerId(
+                            achievementProgress.getAchievementId().uuid(),
+                            playerGameStats.getPlayerId().uuid()
+                    ).orElse(null);
+
+                    if (achievementProgressJpaEntity != null) {
+                        achievementProgressJpaEntity.setCounterTotal(achievementProgress.getCounterValue());
+                        return achievementProgressJpaEntity;
+                    }
+
+                    return new AchievementProgressJpaEntity(
+                            achievementProgress.getAchievementId().uuid(),
+                            achievementProgress.getCounterValue());
+                })
+                .collect(Collectors.toSet());
+
+        PlayerGameStatsJpaEntity playerGameStatsJpaEntity =  new PlayerGameStatsJpaEntity(playerGameStatsJpaId, completedSessions);
+        playerGameStatsJpaEntity.setAchievementProgressJpaEntities(achievementProgressSet);
+        return playerGameStatsJpaEntity;
     }
 
     private PlayerGameStats playerGameStatsJpaToDomain(final PlayerGameStatsJpaEntity playerGameStatsJpaEntity) {
@@ -80,6 +122,53 @@ public class PlayerGameStatsJpaAdapter implements PlayerGameStatisticsLoadPort {
                 .collect(Collectors.toSet());
 
         playerGameStats.addAchievementProgressSet(achievementProgressSet);
+
+        return playerGameStats;
+    }
+
+    private PlayerGameStats playerGameStatisticsJpaToDomain(final PlayerGameStatsJpaEntity playerGameStatsJpaEntity) {
+        PlayerGameStats playerGameStats = null;
+
+        if (!playerGameStatsJpaEntity.getAchievementProgressJpaEntities().isEmpty()) {
+            Set<AchievementProgress> achievementProgressSet = playerGameStatsJpaEntity.getAchievementProgressJpaEntities()
+                    .stream()
+                    .map(achievementProgress -> new AchievementProgress(
+                            new AchievementId(achievementProgress.getAchievementId()),
+                            achievementProgress.getCounterTotal()
+                    ))
+                    .collect(Collectors.toSet());
+
+            AchievementProgress firstAchievement = achievementProgressSet.stream().findFirst().orElseThrow();
+            achievementProgressSet.remove(firstAchievement);
+
+            playerGameStats = new PlayerGameStats(
+                    new PlayerId(playerGameStatsJpaEntity.getId().getPlayerId()),
+                    new GameId(playerGameStatsJpaEntity.getId().getGameId()),
+                    firstAchievement
+            );
+
+            if (!achievementProgressSet.isEmpty()) playerGameStats.addAchievementProgressSet(achievementProgressSet);
+        }
+
+        if (!playerGameStatsJpaEntity.getCompletedSessions().isEmpty()) {
+            Set<CompletedSession> completedSessions = playerGameStatsJpaEntity.getCompletedSessions()
+                    .stream()
+                    .map(this::completedSessionJpaToDomain)
+                    .collect(Collectors.toSet());
+
+            if (playerGameStats == null) {
+                CompletedSession firstSession = completedSessions.stream().findFirst().orElseThrow();
+                completedSessions.remove(firstSession);
+
+                playerGameStats = new PlayerGameStats(
+                        new PlayerId(playerGameStatsJpaEntity.getId().getPlayerId()),
+                        new GameId(playerGameStatsJpaEntity.getId().getGameId()),
+                        firstSession
+                );
+            }
+
+            if (!completedSessions.isEmpty()) playerGameStats.addCompletedSessions(completedSessions);
+        }
 
         return playerGameStats;
     }
@@ -124,8 +213,7 @@ public class PlayerGameStatsJpaAdapter implements PlayerGameStatisticsLoadPort {
     }
 
     private AchievementProgressJpaEntity achievementProgressDomainToJpa(final AchievementProgress achievementProgress, PlayerId playerId){
-
-        final AchievementProgressJpaEntity achievementProgressJpaEntity = achievementProgressJpaRepository.findAchievementProgressJpaEntitiesByAchievementIdAndPlayerGameStatsJpaEntity_IdPlayerId(
+        final AchievementProgressJpaEntity achievementProgressJpaEntity = achievementProgressJpaRepository.findAchievementProgressByAchievementIdAndPlayerId(
                 achievementProgress.getAchievementId().uuid(),
                 playerId.uuid()
         ).orElseThrow();

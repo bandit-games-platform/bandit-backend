@@ -20,6 +20,21 @@ public interface GameJpaRepository extends JpaRepository<GameJpaEntity, UUID> {
 
     @Query("""
     SELECT game FROM GameJpaEntity game
+    LEFT JOIN FETCH game.developer
+    WHERE game.id = :id
+    """)
+    GameJpaEntity findByIdWithDeveloper(UUID id);
+
+    @Query("""
+    SELECT game FROM GameJpaEntity game
+    LEFT JOIN FETCH game.achievements
+    LEFT JOIN FETCH game.developer
+    WHERE game.id = :id
+    """)
+    GameJpaEntity findByIdWithAchievements(UUID id);
+
+    @Query("""
+    SELECT game FROM GameJpaEntity game
     LEFT JOIN FETCH game.rules
     LEFT JOIN FETCH game.screenshots
     LEFT JOIN FETCH game.achievements

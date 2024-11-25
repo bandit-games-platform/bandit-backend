@@ -8,7 +8,8 @@ import java.util.UUID;
 
 public interface GamesLoadPort {
     Game loadGameByIdWithDetails(UUID gameId);
-
+    Game loadGameById(UUID gameId);
+    Game loadGameByIdWithAchievements(UUID gameId);
     List<Game> loadAllGamesWithIcon();
 
     List<Game> loadAllGamesByTitleLikeAndPriceBelowWithIcon(String title, BigDecimal maxPrice);

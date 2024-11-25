@@ -3,6 +3,8 @@ package be.kdg.int5.gameRegistry.adapters.in;
 
 import be.kdg.int5.gameRegistry.adapters.in.dto.AchievementGameDto;
 import be.kdg.int5.gameRegistry.adapters.in.dto.DeveloperDto;
+import be.kdg.int5.gameRegistry.adapters.in.dto.LoadAchievementIdDto;
+import be.kdg.int5.gameRegistry.adapters.in.dto.LoadDeveloperIdDto;
 import be.kdg.int5.gameRegistry.adapters.in.dto.LoadGameDto;
 import be.kdg.int5.gameRegistry.domain.Achievement;
 import be.kdg.int5.gameRegistry.domain.Game;
@@ -53,6 +55,27 @@ public class GameDetailsRestController {
         );
 
         return ResponseEntity.ok(loadedGame);
+    }
+
+    @GetMapping("/{gameId}/developer")
+    public ResponseEntity<LoadDeveloperIdDto> getDeveloperThatOwnsGame(@PathVariable String gameId) {
+        UUID gameIdConverted = UUID.fromString(gameId);
+
+        Game game = gameDetailsQuery.getGameWithoutRelationshipsFromId(gameIdConverted);
+        if (game == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return ResponseEntity.ok(new LoadDeveloperIdDto(game.getDeveloper().id().uuid()));
+    }
+
+    @GetMapping("/{gameId}/achievement-ids")
+    public ResponseEntity<List<LoadAchievementIdDto>> getAchievementIdsForGame(@PathVariable String gameId) {
+        UUID gameIdConverted = UUID.fromString(gameId);
+
+        Game game = gameDetailsQuery.getGameWithAchievementsFromId(gameIdConverted);
+        if (game == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        List<LoadAchievementIdDto> achievementIdDtos = game.getAchievements().stream().map(
+                achievement -> new LoadAchievementIdDto(achievement.getId().uuid())
+        ).collect(Collectors.toList());
+        return ResponseEntity.ok(achievementIdDtos);
     }
 
     @GetMapping("/{gameId}/achievements")

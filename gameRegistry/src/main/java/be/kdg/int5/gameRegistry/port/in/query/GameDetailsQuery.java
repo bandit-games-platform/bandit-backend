@@ -6,4 +6,6 @@ import java.util.UUID;
 
 public interface GameDetailsQuery {
     Game getDetailsForGameFromId(UUID gameId);
+    Game getGameWithoutRelationshipsFromId(UUID gameId);
+    Game getGameWithAchievementsFromId(UUID gameId);
 }

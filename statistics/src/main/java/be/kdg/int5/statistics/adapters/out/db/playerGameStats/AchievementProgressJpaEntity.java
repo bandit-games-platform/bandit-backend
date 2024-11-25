@@ -27,6 +27,12 @@ public class AchievementProgressJpaEntity {
     public AchievementProgressJpaEntity() {
     }
 
+    public AchievementProgressJpaEntity(UUID achievementId, int counterTotal) {
+        this.achievementProgressId = UUID.randomUUID();
+        this.achievementId = achievementId;
+        this.counterTotal = counterTotal;
+    }
+
     public AchievementProgressJpaEntity(UUID achievementProgressId, UUID achievementId, PlayerGameStatsJpaEntity playerGameStatsJpaEntity, int counterTotal) {
         this.achievementProgressId = achievementProgressId;
         this.achievementId = achievementId;
@@ -46,7 +52,15 @@ public class AchievementProgressJpaEntity {
         return playerGameStatsJpaEntity;
     }
 
+    public void setPlayerGameStatsJpaEntity(PlayerGameStatsJpaEntity playerGameStatsJpaEntity) {
+        this.playerGameStatsJpaEntity = playerGameStatsJpaEntity;
+    }
+
     public int getCounterTotal() {
         return counterTotal;
+    }
+
+    public void setCounterTotal(int counterTotal) {
+        this.counterTotal = counterTotal;
     }
 }
