@@ -25,8 +25,7 @@ public class AchievementJpaAdapter implements AchievementsLoadPort {
     @Override
     public List<Achievement> loadGameAchievements(GameId gameId) {
         List<AchievementJpaEntity> achievements = achievementJpaRepository
-                .findAllByGameId(gameId.uuid())
-                .orElseThrow(() -> new NoSuchElementException("No achievements found for Game."));
+                .findAllByGameId(gameId.uuid());
 
         return achievements.stream()
                 .map(this::achievementJpaToDomain)
