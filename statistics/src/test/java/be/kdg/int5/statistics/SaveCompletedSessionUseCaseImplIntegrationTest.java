@@ -78,8 +78,73 @@ public class SaveCompletedSessionUseCaseImplIntegrationTest extends AbstractData
         );
 
         assertNotNull(playerGameStatsJpaEntityUpdated);
-        assertEquals(playerGameStatsJpaEntity.getCompletedSessions().size(), 1);
-        assertEquals(playerGameStatsJpaEntityUpdated.getCompletedSessions().size(), 2);
+        assertEquals(1, playerGameStatsJpaEntity.getCompletedSessions().size());
+        assertEquals(2, playerGameStatsJpaEntityUpdated.getCompletedSessions().size());
+
+        // Tear-down
+        playerGameStatsJpaRepository.deleteById(new PlayerGameStatsJpaId(Variables.PLAYER_ONE_UUID, Variables.GAME_ID));
+    }
+
+    @Test
+    void whenCompletedSessionWithBasicDetailsForExistingPlayerStatsWithAchievementSubmittedResultsInSuccess() {
+        // Arrange
+        Set<CompletedSessionJpaEntity> completedSessionJpaEntities = new HashSet<>();
+        Set<AchievementProgressJpaEntity> achievementProgressJpaEntities = new HashSet<>();
+        completedSessionJpaEntities.add(new CompletedSessionJpaEntity(
+                Variables.SAMPLE_SESSION_ID,
+                Variables.SAMPLE_SESSION_START_TIME,
+                Variables.SAMPLE_SESSION_END_TIME,
+                GameEndState.WIN,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+        ));
+        achievementProgressJpaEntities.add(new AchievementProgressJpaEntity(
+                Variables.ACHIEVEMENT_ONE_ID,
+                5
+        ));
+        PlayerGameStatsJpaEntity playerGameStatsJpaEntity =
+                new PlayerGameStatsJpaEntity(
+                        new PlayerGameStatsJpaId(Variables.PLAYER_THREE_UUID, Variables.GAME_ID),
+                        completedSessionJpaEntities
+                );
+        playerGameStatsJpaEntity.setAchievementProgressJpaEntities(achievementProgressJpaEntities);
+        playerGameStatsJpaRepository.save(playerGameStatsJpaEntity);
+
+        // Act
+        saveCompletedSessionUseCase.saveCompletedGameSession(
+                new SaveCompletedSessionCommand(
+                        new PlayerId(Variables.PLAYER_THREE_UUID),
+                        new GameId(Variables.GAME_ID),
+                        Variables.NEW_SESSION_START_TIME,
+                        Variables.NEW_SESSION_END_TIME,
+                        GameEndState.DRAW,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null
+                )
+        );
+
+        // Assert
+        PlayerGameStatsJpaEntity playerGameStatsJpaEntityUpdated = playerGameStatsJpaRepository.findByIdWithAllRelationships(
+                new PlayerGameStatsJpaId(Variables.PLAYER_THREE_UUID, Variables.GAME_ID)
+        );
+
+        assertNotNull(playerGameStatsJpaEntityUpdated);
+        assertEquals(1, playerGameStatsJpaEntity.getCompletedSessions().size());
+        assertEquals(2, playerGameStatsJpaEntityUpdated.getCompletedSessions().size());
+        assertEquals(1, playerGameStatsJpaEntityUpdated.getAchievementProgressJpaEntities().size());
+
+        // Tear-down
+        playerGameStatsJpaRepository.deleteById(new PlayerGameStatsJpaId(Variables.PLAYER_THREE_UUID, Variables.GAME_ID));
     }
 
     @Test
@@ -110,7 +175,10 @@ public class SaveCompletedSessionUseCaseImplIntegrationTest extends AbstractData
         );
 
         assertNotNull(playerGameStatsJpaEntityUpdated);
-        assertEquals(playerGameStatsJpaEntityUpdated.getCompletedSessions().size(), 1);
+        assertEquals(1, playerGameStatsJpaEntityUpdated.getCompletedSessions().size());
+
+        // Tear-down
+        playerGameStatsJpaRepository.deleteById(new PlayerGameStatsJpaId(Variables.PLAYER_TWO_UUID, Variables.GAME_ID));
     }
 
 }
