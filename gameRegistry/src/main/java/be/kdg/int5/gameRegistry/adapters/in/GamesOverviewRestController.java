@@ -27,7 +27,6 @@ public class GamesOverviewRestController {
     @GetMapping("/overview")
     public ResponseEntity<List<LoadGameDto>> getGameOverviewWithTitleAndPriceFilter(@RequestParam(value = "title", required = false) String title,
                                                                                     @RequestParam(value = "maxPrice", required = false) String maxPrice) {
-
         List<Game> games;
         List<LoadGameDto> gameDtos = new ArrayList<>();
         BigDecimal maxPriceMoney;

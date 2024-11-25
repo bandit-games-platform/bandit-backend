@@ -53,7 +53,6 @@ public class GameJpaAdapter implements GamesLoadPort, GamesCreatePort, GamesUpda
     @Override
     public boolean create(Game newGame) {
         if (gameJpaRepository.existsById(newGame.getId().uuid())) return false;
-
         gameJpaRepository.save(toGameEntity(newGame));
         return true;
     }
@@ -61,7 +60,6 @@ public class GameJpaAdapter implements GamesLoadPort, GamesCreatePort, GamesUpda
     @Override
     public boolean update(Game game) {
         if (!gameJpaRepository.existsById(game.getId().uuid())) return false;
-
         gameJpaRepository.save(toGameEntity(game));
         return true;
     }

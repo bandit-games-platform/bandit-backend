@@ -10,7 +10,6 @@ import java.util.List;
 
 @Service
 public class GameListQueryImpl implements GameListQuery {
-
     private final GamesLoadPort gamesLoadPort;
 
     public GameListQueryImpl(GamesLoadPort gamesLoadPort) {
