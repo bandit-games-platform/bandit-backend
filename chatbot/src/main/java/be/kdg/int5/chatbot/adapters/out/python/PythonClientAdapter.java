@@ -67,7 +67,6 @@ public class PythonClientAdapter implements AnswerAskPort {
         // create Dtos for Python
         final GameDetailsDto gameDetailsDto = toGameDetailsDto(gameDetails);
         final List<QuestionAnswerDto> questionAnswerDtoList = toQuestionAnswerDtoList(previousQuestionWindowList);
-
         final FollowUpQuestionDto followUpQuestionDto = new FollowUpQuestionDto(question.getText(), gameDetailsDto, questionAnswerDtoList);
 
         // Set Http headers

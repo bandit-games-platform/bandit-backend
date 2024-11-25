@@ -79,15 +79,10 @@ public abstract class Conversation {
     }
 
     public List<Question> getPreviousQuestionsInWindow() {
-        if (questions.size() <= QUESTION_WINDOW) {
-            return questions.stream()
-                    .sorted(Comparator.comparing(Question::getSubmittedAt))
-                    .toList();
-        }
+        questions.sort(Comparator.comparing(Question::getSubmittedAt));
 
-        return questions.stream()
-                .sorted(Comparator.comparing(Question::getSubmittedAt))
-                .skip(questions.size() - QUESTION_WINDOW)
-                .toList();
+        return questions.size() <= QUESTION_WINDOW
+                ? questions
+                : questions.subList(questions.size() - QUESTION_WINDOW, questions.size());
     }
 }

@@ -33,25 +33,20 @@ public class FollowUpGameConversationUseCaseImpl implements FollowUpGameConversa
     @Override
     @Transactional
     public Answer followUpGameConversation(FollowUpGameConversationCommand command) {
-        // load gameDetails
         final GameDetails gameDetails = gameDetailsLoadPort.loadGameDetailsByGameId(command.gameId());
 
-        // load conversation
         final GameConversation gameConversation = conversationLoadPort.loadGameConversation(command.userId(), command.gameId());
 
-        // add a new question
         final Question followUpQuestion = gameConversation.addFollowUpQuestion(command.question());
         final List<Question> previousQuestionWindowList = gameConversation.getPreviousQuestionsInWindow();
+
         final Answer answer = answerAskPort.getAnswerForFollowUpQuestion(gameDetails, previousQuestionWindowList, followUpQuestion);
 
-        // update question and conversation
         followUpQuestion.update(answer);
         gameConversation.update(followUpQuestion);
 
-        // save conservation
         conversationSavePort.saveConversation(gameConversation);
 
-        // return answer
         return answer;
     }
 }
