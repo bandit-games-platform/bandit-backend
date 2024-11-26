@@ -2,6 +2,7 @@ package be.kdg.int5.statistics.adapters.in;
 
 import be.kdg.int5.statistics.adapters.in.dto.AchievementProgressDto;
 import be.kdg.int5.statistics.adapters.in.dto.GameProgressDto;
+import be.kdg.int5.statistics.domain.GameEndState;
 import be.kdg.int5.statistics.domain.PlayerGameStats;
 import be.kdg.int5.statistics.domain.PlayerId;
 import be.kdg.int5.statistics.port.in.query.PlayerAchievementProgressForPlayedGamesCommand;
@@ -63,6 +64,15 @@ public class OverallStatisticsRestController {
         List<GameProgressDto> gameProgressDtos = playerGameStats.stream().map(
                 playerGameStat -> new GameProgressDto(
                         playerGameStat.getGameId().uuid(),
+                        playerGameStat.getCompletedSessions().stream().filter(
+                                completedSession -> completedSession.getEndState() == GameEndState.WIN
+                        ).count(),
+                        playerGameStat.getCompletedSessions().stream().filter(
+                                completedSession -> completedSession.getEndState() == GameEndState.LOSS
+                        ).count(),
+                        playerGameStat.getCompletedSessions().stream().filter(
+                                completedSession -> completedSession.getEndState() == GameEndState.DRAW
+                        ).count(),
                         playerGameStat.getAchievementProgressSet().stream().map(
                                 achievementProgress -> new AchievementProgressDto(
                                         achievementProgress.getAchievementId().uuid(),
