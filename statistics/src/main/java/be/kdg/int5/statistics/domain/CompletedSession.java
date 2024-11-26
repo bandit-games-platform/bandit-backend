@@ -43,6 +43,19 @@ public class CompletedSession {
         this.wasFirstToGo = wasFirstToGo;
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CompletedSession that)) return false;
+        return Objects.equals(sessionId, that.sessionId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(sessionId);
+    }
+
     public SessionId getSessionId() {
         return sessionId;
     }
@@ -85,17 +98,5 @@ public class CompletedSession {
 
     public Boolean getWasFirstToGo() {
         return wasFirstToGo;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof CompletedSession that)) return false;
-        return Objects.equals(sessionId, that.sessionId);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(sessionId);
     }
 }

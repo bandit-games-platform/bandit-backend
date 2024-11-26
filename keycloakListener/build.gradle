@@ -1,0 +1,16 @@
+plugins {
+    id 'module-config'
+}
+
+
+
+dependencies {
+    implementation project(':common')
+
+    implementation 'org.keycloak:keycloak-core:26.0.5'
+    compileOnly 'org.keycloak:keycloak-server-spi:26.0.5'
+    compileOnly 'org.keycloak:keycloak-services:26.0.5'
+
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+}

@@ -25,6 +25,7 @@
             <option value="$PROJECT_DIR$/common" />
             <option value="$PROJECT_DIR$/gameRegistry" />
             <option value="$PROJECT_DIR$/gameplay" />
+            <option value="$PROJECT_DIR$/keycloakListener" />
             <option value="$PROJECT_DIR$/player" />
             <option value="$PROJECT_DIR$/statistics" />
             <option value="$PROJECT_DIR$/storefront" />

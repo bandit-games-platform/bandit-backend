@@ -1,5 +1,6 @@
 package be.kdg.int5.gameRegistry.domain;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -16,14 +17,12 @@ public class Achievement {
     }
 
     public Achievement(AchievementId id, String title, int counterTotal, String description) {
+        if (title.isEmpty() || title.length() > MAX_TITLE_LENGTH) throw new IllegalArgumentException();
+
         this.id = Objects.requireNonNull(id);
         this.title = Objects.requireNonNull(title);
-        this.counterTotal = counterTotal;
+        this.counterTotal = counterTotal <= 0 ? 1 : counterTotal;
         this.description = Objects.requireNonNull(description);
-
-        assert !title.isEmpty() && title.length() < MAX_TITLE_LENGTH;
-
-        assert counterTotal > 0;
     }
 
 
@@ -65,5 +64,10 @@ public class Achievement {
     @Override
     public int hashCode() {
         return Objects.hashCode(getId());
+    }
+
+
+    public static AchievementId generateUniqueIdFromGameIdAndUniqueNumber(GameId gameId, int uniqueNumber) {
+        return new AchievementId(UUID.nameUUIDFromBytes((gameId.toString()+":"+uniqueNumber).getBytes(StandardCharsets.UTF_8)));
     }
 }

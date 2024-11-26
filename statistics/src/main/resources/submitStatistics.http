@@ -1,0 +1,41 @@
+### Authenticate developer
+POST http://localhost:8180/realms/bandit-realm/protocol/openid-connect/token
+Content-Type: application/x-www-form-urlencoded
+
+client_id=bandit-backend&client_secret={{client_secret}}&username=developer@email.com&password=developer&grant_type=password&scope=openid
+
+> {%
+    client.global.set("access_token_dev", response.body.access_token)
+%}
+
+### Submit game statistics
+POST http://localhost:8095/statistics/statistics/submit?playerId=c5b8f7a1-d34e-4e19-9d0f-b4c5d0e1f501&gameId=d77e1d1f-6b46-4c89-9290-3b9cf8a7c001
+Content-Type: application/json
+Authorization: Bearer {{access_token_dev}}
+
+{
+    "startTime":  "2024-11-21T10:05",
+    "endTime": "2024-11-21T11:16",
+    "endState":  "WIN",
+    "turnsTaken": "25",
+    "avgSecondsPerTurn":  "50.13",
+    "wasFirstToGo": "true"
+}
+
+### Submit achievements progress
+POST http://localhost:8095/statistics/statistics/achievements/123e4567-e89b-12d3-a456-426614174001?playerId=c5b8f7a1-d34e-4e19-9d0f-b4c5d0e1f501&gameId=d77e1d1f-6b46-4c89-9290-3b9cf8a7c001
+Content-Type: application/json
+Authorization: Bearer {{access_token_dev}}
+
+{
+}
+
+### Set achievements progress to certain amount instead of increasing by 1
+POST http://localhost:8095/statistics/statistics/achievements/123e4567-e89b-12d3-a456-426614174001?playerId=c5b8f7a1-d34e-4e19-9d0f-b4c5d0e1f501&gameId=d77e1d1f-6b46-4c89-9290-3b9cf8a7c001
+Content-Type: application/json
+Authorization: Bearer {{access_token_dev}}
+
+{
+    "newProgressAmount": 10
+}
+
