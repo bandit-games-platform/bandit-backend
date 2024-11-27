@@ -36,7 +36,7 @@ public class PythonClientAdapter implements AnswerAskPort {
     }
 
     @Override
-    public Answer getAnswerForInitialQuestion(GameDetails gameDetails, GameConversation gameConversation, Question question) {
+    public Answer getAnswerForInitialQuestion(GameDetails gameDetails, Question question) {
         // create Dtos for Python
         final GameDetailsDto gameDetailsDto = toGameDetailsDto(gameDetails);
         final InitialQuestionDto initialQuestionDto = new InitialQuestionDto(question.getText(), gameDetailsDto);

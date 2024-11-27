@@ -7,7 +7,6 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/gameRegistry/bandit-backend.gameRegistry.main.iml" filepath="$PROJECT_DIR$/.idea/modules/gameRegistry/bandit-backend.gameRegistry.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/gameRegistry/bandit-backend.gameRegistry.test.iml" filepath="$PROJECT_DIR$/.idea/modules/gameRegistry/bandit-backend.gameRegistry.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/player/bandit-backend.player.main.iml" filepath="$PROJECT_DIR$/.idea/modules/player/bandit-backend.player.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/player/bandit-backend.player.main.iml" filepath="$PROJECT_DIR$/.idea/modules/player/bandit-backend.player.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/player/bandit-backend.player.test.iml" filepath="$PROJECT_DIR$/.idea/modules/player/bandit-backend.player.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/statistics/bandit-backend.statistics.test.iml" filepath="$PROJECT_DIR$/.idea/modules/statistics/bandit-backend.statistics.test.iml" />
     </modules>

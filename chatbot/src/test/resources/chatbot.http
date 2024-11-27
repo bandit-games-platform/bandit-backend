@@ -1,13 +1,20 @@
-### Initial Query
+#### Get access token with player user
 
-#POST http://localhost:8090/api/schedule-appointment
-#Accept: application/json
-#Content-Type: application/json
-#Authorization: Bearer {{access_token_seller}}
-#
-#{
-#  "sellerUUID": "25ff40b1-ecf8-4d0c-b664-4cc91f02c112",
-#  "licensePlate": "1-ABC-123",
-#  "mineralCode": "PT",
-#  "slotStart": "2024-12-01T09:00:00"
-#}
+POST http://localhost:8180/realms/bandit-realm/protocol/openid-connect/token HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+
+client_id=bandit-backend&client_secret=**********&username=gamora_the_player@gmail.com&password=password&grant_type=password&scope=openid
+
+> {%client.global.set("player", response.body.access_token);%}
+
+
+### Post initial question
+POST http://localhost:8091/chatbot/initial-question
+Content-Type: application/json
+Authorization: Bearer {{player}}
+
+
+### Post follow-up question
+POST http://localhost:8091/chatbot/follow-up-question
+Content-Type: application/json
+Authorization: Bearer {{player}}
