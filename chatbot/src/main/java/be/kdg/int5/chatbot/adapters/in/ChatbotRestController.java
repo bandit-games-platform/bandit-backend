@@ -1,7 +1,8 @@
 package be.kdg.int5.chatbot.adapters.in;
 
 import be.kdg.int5.chatbot.adapters.in.dto.AnswerDto;
-import be.kdg.int5.chatbot.adapters.in.dto.QuestionDto;
+import be.kdg.int5.chatbot.adapters.in.dto.FollowUpQuestionDto;
+import be.kdg.int5.chatbot.adapters.in.dto.InitialQuestionDto;
 import be.kdg.int5.chatbot.domain.*;
 import be.kdg.int5.chatbot.ports.in.FollowUpGameConversationCommand;
 import be.kdg.int5.chatbot.ports.in.FollowUpGameConversationUseCase;
@@ -31,9 +32,9 @@ public class ChatbotRestController {
 
     @PostMapping("/initial-question")
     @PreAuthorize("hasAuthority('player')")
-    public ResponseEntity<AnswerDto> postInitialQuestion() {
-        final UserId userUUID = new UserId(UUID.fromString("e4a40c63-2edf-4592-8d36-46b902db69d7")); // TODO
-        final GameId gameUUID = new GameId(UUID.fromString("d77e1d1f-6b46-4c89-9290-3b9cf8a7c001")); // TODO
+    public ResponseEntity<AnswerDto> postInitialQuestion(@RequestBody InitialQuestionDto initialQuestionDto) {
+        final UserId userUUID = new UserId(UUID.fromString(initialQuestionDto.getUserId()));
+        final GameId gameUUID = new GameId(UUID.fromString(initialQuestionDto.getGameId()));
 
         try {
             final StartGameConversationCommand startGameConversationCommand = new StartGameConversationCommand(userUUID, gameUUID);
@@ -51,12 +52,13 @@ public class ChatbotRestController {
 
     @PostMapping("/follow-up-question")
     @PreAuthorize("hasAuthority('player')")
-    public ResponseEntity<AnswerDto> postFollowUpQuestion(@RequestBody QuestionDto questionDto) {
-        final UserId userUUID = new UserId(UUID.fromString("e4a40c63-2edf-4592-8d36-46b902db69d7")); // TODO
-        final GameId gameUUID = new GameId(UUID.fromString("d77e1d1f-6b46-4c89-9290-3b9cf8a7c001")); // TODO
+    public ResponseEntity<AnswerDto> postFollowUpQuestion(@RequestBody FollowUpQuestionDto followUpQuestionDto) {
+        final UserId userUUID = new UserId(UUID.fromString(followUpQuestionDto.getUserId()));
+        final GameId gameUUID = new GameId(UUID.fromString(followUpQuestionDto.getGameId()));
+        final String question = followUpQuestionDto.getQuestion().getText();
 
         try {
-            final FollowUpGameConversationCommand followUpGameConversationCommand = new FollowUpGameConversationCommand(userUUID, gameUUID, questionDto.getText());
+            final FollowUpGameConversationCommand followUpGameConversationCommand = new FollowUpGameConversationCommand(userUUID, gameUUID, question);
             final Answer answer = followUpGameConversationUseCase.followUpGameConversation(followUpGameConversationCommand);
 
             logger.info("Answer in the Controller - Follow-up: {}", answer.toString());

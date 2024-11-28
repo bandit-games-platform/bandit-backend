@@ -12,7 +12,7 @@ import java.util.UUID;
 public class AnswerJpaEntity {
     @Id
     private UUID id;
-    @Column(length = 1000)
+    @Column(length = 10000)
     private String text;
 
     public AnswerJpaEntity() {
