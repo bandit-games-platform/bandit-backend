@@ -38,7 +38,10 @@ public class GameDetailsRestController {
         if (game == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         List<String> screenshots = game.getScreenshots().stream().map(screenshot -> screenshot.url().url()).toList();
-        Set<LoadRuleDto> rules = game.getRules().stream().map(LoadRuleDto::fromDomain).collect(Collectors.toSet());
+        Set<LoadRuleDto> rules = game.getRules().stream().map(rule -> new LoadRuleDto(
+                rule.stepNumber(),
+                rule.rule()
+        )).collect(Collectors.toSet());
 
         LoadGameDto loadedGame = new LoadGameDto(
                 game.getId().uuid(),
