@@ -1,11 +1,7 @@
 package be.kdg.int5.gameRegistry.adapters.in;
 
 
-import be.kdg.int5.gameRegistry.adapters.in.dto.AchievementGameDto;
-import be.kdg.int5.gameRegistry.adapters.in.dto.DeveloperDto;
-import be.kdg.int5.gameRegistry.adapters.in.dto.LoadAchievementIdDto;
-import be.kdg.int5.gameRegistry.adapters.in.dto.LoadDeveloperIdDto;
-import be.kdg.int5.gameRegistry.adapters.in.dto.LoadGameDto;
+import be.kdg.int5.gameRegistry.adapters.in.dto.*;
 import be.kdg.int5.gameRegistry.domain.Achievement;
 import be.kdg.int5.gameRegistry.domain.Game;
 import be.kdg.int5.gameRegistry.port.in.query.GetGameAchievementsQuery;
@@ -18,8 +14,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -41,15 +37,21 @@ public class GameDetailsRestController {
         Game game = gameDetailsQuery.getDetailsForGameFromId(gameIdConverted);
         if (game == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-        List<String> screenshots = new ArrayList<>();
-        game.getScreenshots().forEach(screenshot -> screenshots.add(screenshot.url().url()));
+        List<String> screenshots = game.getScreenshots().stream().map(screenshot -> screenshot.url().url()).toList();
+        Set<LoadRuleDto> rules = game.getRules().stream().map(rule -> new LoadRuleDto(
+                rule.stepNumber(),
+                rule.rule()
+        )).collect(Collectors.toSet());
 
         LoadGameDto loadedGame = new LoadGameDto(
                 game.getId().uuid(),
                 game.getTitle(),
                 game.getDescription(),
                 game.getCurrentPrice(),
+                game.getIcon().url().url(),
                 game.getBackground().url().url(),
+                rules,
+                game.getCurrentHost().url(),
                 new DeveloperDto(game.getDeveloper().studioName()),
                 screenshots
         );
