@@ -12,15 +12,60 @@ public class Order {
     private LocalDateTime  orderCompletedAt;
     private OrderStatus orderStatus;
 
-    public Order( ProductId productId, CustomerId customerId, LocalDateTime orderDate) {
-        id = new OrderId(UUID.randomUUID());
+    public Order(ProductId productId, CustomerId customerId, LocalDateTime orderDate) {
+        this(new OrderId(UUID.randomUUID()), productId, customerId, orderDate, OrderStatus.PENDING, null);
+    }
+
+    public Order(
+            OrderId id,
+            ProductId productId,
+            CustomerId customerId,
+            LocalDateTime orderDate,
+            OrderStatus orderStatus,
+            LocalDateTime orderCompletedAt
+    ) {
         Objects.requireNonNull(id);
         Objects.requireNonNull(productId);
         Objects.requireNonNull(customerId);
         Objects.requireNonNull(orderDate);
 
+        this.id = id;
         this.productId = productId;
         this.customerId = customerId;
         this.orderDate = orderDate;
+        this.orderStatus = orderStatus;
+        this.orderCompletedAt = orderCompletedAt;
+    }
+
+    public OrderId getId() {
+        return id;
+    }
+
+    public ProductId getProductId() {
+        return productId;
+    }
+
+    public CustomerId getCustomerId() {
+        return customerId;
+    }
+
+    public LocalDateTime getOrderDate() {
+        return orderDate;
+    }
+
+    public LocalDateTime getOrderCompletedAt() {
+        return orderCompletedAt;
+    }
+
+    public void setOrderCompletedAt(LocalDateTime orderCompletedAt) {
+        this.orderCompletedAt = orderCompletedAt;
+    }
+
+    public OrderStatus getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
     }
 }
