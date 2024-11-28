@@ -26,6 +26,32 @@ public class LoadGameDto {
             UUID id,
             String title,
             String description,
+            String icon,
+            String background,
+            Set<LoadRuleDto> rules,
+            String currentHost,
+            List<String> screenshots,
+            Set<LoadAchievementDto> achievements
+    ) {
+        this(
+                id,
+                title,
+                description,
+                null,
+                icon,
+                background,
+                rules,
+                currentHost,
+                null,
+                screenshots,
+                achievements
+        );
+    }
+
+    public LoadGameDto(
+            UUID id,
+            String title,
+            String description,
             BigDecimal price,
             String icon,
             String background,
