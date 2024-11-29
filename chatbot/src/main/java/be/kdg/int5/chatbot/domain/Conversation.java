@@ -58,7 +58,7 @@ public abstract class Conversation {
     public abstract Question start();
 
     public Question addFollowUpQuestion(String text) {
-        Question question = new Question(text, LocalDateTime.now());
+        Question question = new Question(text, LocalDateTime.now(), false);
         update(question);
         return question;
     }
@@ -84,5 +84,13 @@ public abstract class Conversation {
         return questions.size() <= QUESTION_WINDOW
                 ? questions
                 : questions.subList(questions.size() - QUESTION_WINDOW, questions.size());
+    }
+
+    public Question getInitialQuestion() {
+        return this.questions
+                .stream()
+                .filter(Question::isInitial)
+                .findAny()
+                .orElseThrow();
     }
 }

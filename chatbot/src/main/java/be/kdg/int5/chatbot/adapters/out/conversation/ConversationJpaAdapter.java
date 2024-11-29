@@ -36,7 +36,7 @@ public class ConversationJpaAdapter implements ConversationLoadPort, Conversatio
 
         final List<Question> questionList = gameConversationJpa.getQuestions().stream()
                 .map(q -> {
-                    final Question question = new Question(q.getText(), q.getSubmittedAt());
+                    final Question question = new Question(q.getText(), q.getSubmittedAt(), q.getInitial());
                     final Answer answer = new Answer(q.getAnswer().getText());
                     question.setAnswer(answer);
                     return question;
@@ -72,6 +72,7 @@ public class ConversationJpaAdapter implements ConversationLoadPort, Conversatio
                 questionJpa = new QuestionJpaEntity();
                 questionJpa.setText(question.getText());
                 questionJpa.setSubmittedAt(questionTime);
+                questionJpa.setInitial(question.isInitial());
 
                 AnswerJpaEntity answerJpa = new AnswerJpaEntity();
                 answerJpa.setText(question.getAnswer().text());

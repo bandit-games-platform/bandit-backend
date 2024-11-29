@@ -6,15 +6,17 @@ import java.util.Objects;
 public class Question {
     private final String text;
     private final LocalDateTime submittedAt;
+    private final boolean isInitial;
     private Answer answer;
 
-    public Question(String text, LocalDateTime submittedAt) {
+    public Question(String text, LocalDateTime submittedAt, boolean isInitial) {
         this.text = Objects.requireNonNull(text);
         this.submittedAt = Objects.requireNonNull(submittedAt);
+        this.isInitial = isInitial;
     }
 
-    public Question(String text, LocalDateTime submittedAt, Answer answer) {
-        this(text, submittedAt);
+    public Question(String text, LocalDateTime submittedAt, boolean isInitial, Answer answer) {
+        this(text, submittedAt, isInitial);
         this.answer = answer;
     }
 
@@ -24,6 +26,10 @@ public class Question {
 
     public LocalDateTime getSubmittedAt() {
         return submittedAt;
+    }
+
+    public boolean isInitial() {
+        return isInitial;
     }
 
     public Answer getAnswer() {

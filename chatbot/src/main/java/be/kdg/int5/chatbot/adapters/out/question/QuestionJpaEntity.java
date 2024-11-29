@@ -14,6 +14,7 @@ public class QuestionJpaEntity {
     private UUID id;
     private String text;
     private LocalDateTime submittedAt;
+    private Boolean isInitial;
 
     @ManyToOne
     @JoinColumn(name = "conversation_id")
@@ -30,11 +31,13 @@ public class QuestionJpaEntity {
     public QuestionJpaEntity(
             String text,
             LocalDateTime submittedAt,
+            Boolean isInitial,
             ConversationJpaEntity conversation,
             AnswerJpaEntity answer) {
         this.id = UUID.randomUUID();
         this.text = text;
         this.submittedAt = submittedAt;
+        this.isInitial = isInitial;
         this.conversation = conversation;
         this.answer = answer;
     }
@@ -61,6 +64,14 @@ public class QuestionJpaEntity {
 
     public void setSubmittedAt(LocalDateTime submittedAt) {
         this.submittedAt = submittedAt;
+    }
+
+    public Boolean getInitial() {
+        return isInitial;
+    }
+
+    public void setInitial(Boolean initial) {
+        isInitial = initial;
     }
 
     public ConversationJpaEntity getConversation() {

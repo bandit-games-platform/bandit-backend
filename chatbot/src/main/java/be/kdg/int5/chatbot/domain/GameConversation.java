@@ -29,6 +29,6 @@ public class GameConversation extends Conversation {
     public Question start() {
         LocalDateTime submittedAt = LocalDateTime.now();
         this.setLastMessageTime(submittedAt);
-        return new Question(INITIAL_PROMPT, submittedAt);
+        return new Question(INITIAL_PROMPT, submittedAt, true);
     }
 }

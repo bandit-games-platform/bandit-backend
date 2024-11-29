@@ -26,8 +26,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -41,7 +40,7 @@ class ChatbotControllerIntegrationTest extends AbstractDatabaseTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Autowired
+    @MockBean
     private ConversationJpaRepository conversationJpaRepository;
 
     @MockBean
@@ -80,12 +79,39 @@ class ChatbotControllerIntegrationTest extends AbstractDatabaseTest {
 
     @Test
     @WithMockUser(authorities = {"player"})
+    void shouldReturnAnswerWhenConversationWithInitialQuestionAlreadyExists() throws Exception {
+        // Arrange
+        LocalDateTime submittedAt = LocalDateTime.now();
+        GameConversationJpaEntity existingConversation = getGameConversationJpaEntity(submittedAt);
+
+        when(conversationJpaRepository.findByUserIdAndGameIdWithQuestions(userId, gameId))
+                .thenReturn(existingConversation);
+
+        InitialQuestionDto initialQuestionDto = new InitialQuestionDto(String.valueOf(userId), String.valueOf(gameId));
+
+        // Act
+        final ResultActions result = mockMvc.perform(post("/initial-question")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(initialQuestionDto)));
+
+        // Assert
+        result.andExpect(status().isOk())
+                .andExpect(jsonPath("$.text").value("Initial Answer."));
+
+        verify(conversationJpaRepository).findByUserIdAndGameIdWithQuestions(userId, gameId);
+        verify(pythonClientAdapter, times(0)).getAnswerForInitialQuestion(any(), any());
+    }
+
+    @Test
+    @WithMockUser(authorities = {"player"})
     void shouldReturnAnswerWhenUserContinuesAConversation() throws Exception {
 
         // Arrange
         final LocalDateTime submittedAt = LocalDateTime.now();
         final GameConversationJpaEntity existingConversation = getGameConversationJpaEntity(submittedAt);
-        conversationJpaRepository.save(existingConversation);
+
+        when(conversationJpaRepository.findByUserIdAndGameIdWithQuestions(userId, gameId))
+                .thenReturn(existingConversation);
 
         QuestionDto questionDto = new QuestionDto("Tell me more about the game.");
         FollowUpQuestionDto followUpQuestionDto = new FollowUpQuestionDto(String.valueOf(userId), String.valueOf(gameId), questionDto);
@@ -145,7 +171,7 @@ class ChatbotControllerIntegrationTest extends AbstractDatabaseTest {
     private GameConversationJpaEntity getGameConversationJpaEntity(LocalDateTime submittedAt) {
         final GameConversationJpaEntity existingConversation = new GameConversationJpaEntity();
         final AnswerJpaEntity initialAnswer = new AnswerJpaEntity("Initial Answer.");
-        final QuestionJpaEntity initialQuestion = new QuestionJpaEntity("Initial Question", submittedAt, existingConversation, initialAnswer);
+        final QuestionJpaEntity initialQuestion = new QuestionJpaEntity("Initial Question", submittedAt, true, existingConversation, initialAnswer);
 
         existingConversation.setUserId(userId);
         existingConversation.setGameId(gameId);

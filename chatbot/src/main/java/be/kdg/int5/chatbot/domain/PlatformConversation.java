@@ -33,6 +33,6 @@ public class PlatformConversation extends Conversation {
     public Question start() {
         LocalDateTime submittedAt = LocalDateTime.now();
         this.setLastMessageTime(submittedAt);
-        return new Question(PLATFORM_DESCRIPTION, submittedAt);
+        return new Question(PLATFORM_DESCRIPTION, submittedAt, true);
     }
 }
