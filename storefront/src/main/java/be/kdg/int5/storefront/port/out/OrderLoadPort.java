@@ -5,7 +5,10 @@ import be.kdg.int5.storefront.domain.Order;
 import be.kdg.int5.storefront.domain.OrderId;
 import be.kdg.int5.storefront.domain.ProductId;
 
+import java.util.List;
+
 public interface OrderLoadPort {
     Order loadOrderById(OrderId orderId);
     Order loadCompletedOrderByProductAndCustomer(ProductId productId, CustomerId customerId);
+    List<Order> loadPendingOrders();
 }

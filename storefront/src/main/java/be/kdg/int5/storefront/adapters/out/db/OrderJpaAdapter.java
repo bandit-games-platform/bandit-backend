@@ -6,6 +6,9 @@ import be.kdg.int5.storefront.port.out.OrderLoadPort;
 import be.kdg.int5.storefront.port.out.OrderUpdatePort;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Repository
 public class OrderJpaAdapter implements OrderLoadPort, OrderUpdatePort, OrderCreatePort {
     private final OrderJpaRepository orderJpaRepository;
@@ -35,6 +38,13 @@ public class OrderJpaAdapter implements OrderLoadPort, OrderUpdatePort, OrderCre
         );
         if (orderJpaEntity == null) return null;
         return orderJpaToDomain(orderJpaEntity);
+    }
+
+    @Override
+    public List<Order> loadPendingOrders() {
+        List<OrderJpaEntity> orderJpaEntities = orderJpaRepository.findAllPendingOrders();
+        if (orderJpaEntities == null) return null;
+        return orderJpaEntities.stream().map(this::orderJpaToDomain).collect(Collectors.toList());
     }
 
     @Override
