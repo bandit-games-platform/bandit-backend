@@ -1,5 +1,6 @@
 package be.kdg.int5.statistics.domain;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -98,5 +99,10 @@ public class CompletedSession {
 
     public Boolean getWasFirstToGo() {
         return wasFirstToGo;
+    }
+
+    public long getPlayDurationInSeconds() {
+        Duration timeDuration = Duration.between(startTime, endTime);
+        return timeDuration.toSeconds();
     }
 }

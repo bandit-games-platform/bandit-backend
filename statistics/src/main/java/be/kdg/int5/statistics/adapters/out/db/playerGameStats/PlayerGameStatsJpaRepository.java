@@ -4,6 +4,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.UUID;
+
 @Repository
 public interface PlayerGameStatsJpaRepository extends JpaRepository<PlayerGameStatsJpaEntity, PlayerGameStatsJpaId> {
 
@@ -14,4 +17,10 @@ public interface PlayerGameStatsJpaRepository extends JpaRepository<PlayerGameSt
     WHERE stats.id = :id
     """)
     PlayerGameStatsJpaEntity findByIdWithAllRelationships(PlayerGameStatsJpaId id);
+
+    @Query("""
+    SELECT stats FROM PlayerGameStatsJpaEntity stats
+    WHERE stats.id.playerId = :playerId
+    """)
+    List<PlayerGameStatsJpaEntity> findAllByPlayerId(UUID playerId);
 }

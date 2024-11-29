@@ -1,9 +1,6 @@
 package be.kdg.int5.statistics.adapters.out.db.playerGameStats;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
-
 import java.util.UUID;
 
 @Entity
@@ -11,10 +8,10 @@ import java.util.UUID;
 public class AchievementProgressJpaEntity {
 
     @Id
-    @Column(name = "achievement_progress_id", columnDefinition = "varchar(36)")
-    @JdbcTypeCode(SqlTypes.VARCHAR)
+    @Column(name = "achievement_progress_id")
     private UUID achievementProgressId;
 
+    @Column(name = "achievement_id")
     private UUID achievementId;
 
     @ManyToOne(fetch = FetchType.LAZY)

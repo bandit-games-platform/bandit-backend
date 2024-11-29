@@ -1,16 +1,18 @@
 package be.kdg.int5.statistics.adapters.out.db.playerGameStats;
 
+import be.kdg.int5.common.exceptions.PlayerGameStatsNotFound;
 import be.kdg.int5.statistics.domain.*;
 import be.kdg.int5.statistics.port.out.PlayerGameStatisticsLoadPort;
 import be.kdg.int5.statistics.port.out.PlayerGameStatisticsUpdatePort;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.Comparator;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Component
+@Repository
 public class PlayerGameStatsJpaAdapter implements PlayerGameStatisticsLoadPort, PlayerGameStatisticsUpdatePort {
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(PlayerGameStatsJpaAdapter.class);
     private final PlayerGameStatsJpaRepository playerGameStatsJpaRepository;
@@ -18,7 +20,7 @@ public class PlayerGameStatsJpaAdapter implements PlayerGameStatisticsLoadPort, 
 
     public PlayerGameStatsJpaAdapter(
             final PlayerGameStatsJpaRepository playerGameStatsJpaRepository,
-            AchievementProgressJpaRepository achievementProgressJpaRepository) {
+            final AchievementProgressJpaRepository achievementProgressJpaRepository) {
         this.playerGameStatsJpaRepository = playerGameStatsJpaRepository;
         this.achievementProgressJpaRepository = achievementProgressJpaRepository;
     }
@@ -29,7 +31,7 @@ public class PlayerGameStatsJpaAdapter implements PlayerGameStatisticsLoadPort, 
         PlayerGameStatsJpaId playerGameStatsJpaId = new PlayerGameStatsJpaId(playerId.uuid(), gameId.uuid());
         PlayerGameStatsJpaEntity playerGameStatsJpaEntity = playerGameStatsJpaRepository
                 .findById(playerGameStatsJpaId)
-                .orElseThrow();
+                .orElseThrow(PlayerGameStatsNotFound::new);
 
         return this.playerGameStatsJpaToDomain(playerGameStatsJpaEntity);
     }
@@ -42,6 +44,15 @@ public class PlayerGameStatsJpaAdapter implements PlayerGameStatisticsLoadPort, 
                 .orElseThrow();
 
         return this.playerGameStatisticsJpaToDomain(playerGameStatsJpaEntity);
+    }
+
+    @Override
+    public List<PlayerGameStats> loadAllPlayerGameStatsForPlayer(PlayerId playerId) {
+        List<PlayerGameStatsJpaEntity> playerGameStatsJpaEntities = playerGameStatsJpaRepository.findAllByPlayerId(
+                playerId.uuid()
+        );
+        if (playerGameStatsJpaEntities == null) return null;
+        return playerGameStatsJpaEntities.stream().map(this::playerGameStatisticsJpaToDomain).collect(Collectors.toList());
     }
 
 
@@ -119,7 +130,6 @@ public class PlayerGameStatsJpaAdapter implements PlayerGameStatisticsLoadPort, 
                 .stream()
                 .map(this::achievementProgressJpaToDomain)
                 .collect(Collectors.toSet());
-
 
         playerGameStats.addAchievementProgressSet(achievementProgressSet);
 
@@ -220,7 +230,7 @@ public class PlayerGameStatsJpaAdapter implements PlayerGameStatisticsLoadPort, 
 
         return new AchievementProgressJpaEntity(
                 achievementProgressJpaEntity.getAchievementProgressId(),
-                achievementProgressJpaEntity.getAchievementId(),
+                achievementProgress.getAchievementId().uuid(),
                 achievementProgressJpaEntity.getPlayerGameStatsJpaEntity(),
                 achievementProgress.getCounterValue()
                 );

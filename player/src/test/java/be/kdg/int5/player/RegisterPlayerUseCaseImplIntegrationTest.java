@@ -14,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -62,7 +63,7 @@ public class RegisterPlayerUseCaseImplIntegrationTest extends AbstractDatabaseTe
     void playerShouldBeUpdatedWhenNewPlayerRegisters() throws Exception {
         // Arrange
         when(playerJpaRepository.findById(Variables.PLAYER_TWO_UUID)).thenReturn(
-                Optional.of(new PlayerJpaEntity(Variables.PLAYER_TWO_UUID, Variables.PLAYER_TWO_USERNAME))
+                Optional.of(new PlayerJpaEntity(Variables.PLAYER_TWO_UUID, LocalDateTime.now(), Variables.PLAYER_TWO_USERNAME))
         );
 
         UUID urlId = UUID.nameUUIDFromBytes((authorizationId + "-" + Variables.PLAYER_TWO_UUID + "-" + Variables.PLAYER_TWO_NEW_USERNAME).getBytes());

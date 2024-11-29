@@ -15,6 +15,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 @RestController
@@ -72,10 +73,10 @@ public class SubmitStatisticsRestController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/statistics/achievements/{achievementId}")
+    @PostMapping("/statistics/achievements/{achievementNumber}")
     @PreAuthorize("hasAuthority('developer')")
     public ResponseEntity<Void> updateAchievementProgress(
-            @PathVariable String achievementId,
+            @PathVariable int achievementNumber,
             @RequestParam String gameId,
             @RequestParam String playerId,
             @Valid @RequestBody NewAchievementProgressDto dto,
@@ -87,9 +88,12 @@ public class SubmitStatisticsRestController {
                 developerId, gameIdObj)
         );
         if (!ownsGame) return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        AchievementId achievementId = new AchievementId(UUID.nameUUIDFromBytes(
+                (gameId+":"+achievementNumber).getBytes(StandardCharsets.UTF_8)
+        ));
 
         boolean belongsToGame = verifyIfAchievementBelongsToGameUseCase.doesAchievementBelongToGame(
-                new VerifyIfAchievementBelongsToGameCommand(gameIdObj, new AchievementId(UUID.fromString(achievementId)))
+                new VerifyIfAchievementBelongsToGameCommand(gameIdObj, achievementId)
         );
         if (!belongsToGame) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
@@ -97,7 +101,7 @@ public class SubmitStatisticsRestController {
                 new UpdateAchievementProgressCommand(
                         new PlayerId(UUID.fromString(playerId)),
                         new GameId(UUID.fromString(gameId)),
-                        new AchievementId(UUID.fromString(achievementId)),
+                        achievementId,
                         dto.getNewProgressAmount() != null ? dto.getNewProgressAmount() : null
                 )
         );

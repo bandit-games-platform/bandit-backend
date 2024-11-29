@@ -6,6 +6,7 @@ import be.kdg.int5.player.domain.Gender;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,6 +15,7 @@ import java.util.UUID;
 public class PlayerJpaEntity {
     @Id
     private UUID id;
+    private LocalDateTime joinDate;
     private String displayName;
     @Enumerated(EnumType.STRING)
     private Gender gender;
@@ -34,12 +36,13 @@ public class PlayerJpaEntity {
     public PlayerJpaEntity() {
     }
 
-    public PlayerJpaEntity(UUID id, String displayName) {
-        this(id, displayName, null, null, null, null, null);
+    public PlayerJpaEntity(UUID id, LocalDateTime joinDate, String displayName) {
+        this(id, joinDate, displayName, null, null, null, null, null);
     }
 
-    public PlayerJpaEntity(UUID id, String displayName, Gender gender, Country location, LocalDate birthdate, ImageResourceJpaEmbed avatar, List<PlayerJpaEntity> friendsList) {
+    public PlayerJpaEntity(UUID id, LocalDateTime joinDate, String displayName, Gender gender, Country location, LocalDate birthdate, ImageResourceJpaEmbed avatar, List<PlayerJpaEntity> friendsList) {
         this.id = id;
+        this.joinDate = joinDate;
         this.displayName = displayName;
         this.gender = gender;
         this.location = location;
@@ -54,6 +57,14 @@ public class PlayerJpaEntity {
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public LocalDateTime getJoinDate() {
+        return joinDate;
+    }
+
+    public void setJoinDate(LocalDateTime joinDate) {
+        this.joinDate = joinDate;
     }
 
     public String getDisplayName() {

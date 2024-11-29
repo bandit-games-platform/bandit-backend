@@ -39,7 +39,7 @@ public class GameRegistrySecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/registry/auth").permitAll()
                         .requestMatchers("/games/*").permitAll()
                         .requestMatchers("/games/*/developer").permitAll()
-                        .requestMatchers("/games/*/achievements").permitAll()
+                        .requestMatchers("/games/*/achievement-ids").permitAll()
                         .anyRequest().authenticated()
                 ).sessionManagement(mgmt -> mgmt.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .oauth2ResourceServer(rs -> rs.jwt(jwt -> jwtAuthenticationConverter()))

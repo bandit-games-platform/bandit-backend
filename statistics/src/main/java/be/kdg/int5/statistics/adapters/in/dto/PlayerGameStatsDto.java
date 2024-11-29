@@ -1,21 +1,25 @@
 package be.kdg.int5.statistics.adapters.in.dto;
+import jakarta.validation.constraints.NotNull;
+
 import java.util.*;
 
 import java.util.List;
 import java.util.UUID;
 
-public class PlayerGameStatsDTO {
-
+public class PlayerGameStatsDto {
+    @NotNull
     private final UUID playerId;
-    private final UUID gameId;
-    private final List<CompletedSessionDTO> completedSessions;
-    private final List<AchievementProgressDTO> achievementProgress;
 
-    public PlayerGameStatsDTO(
+    @NotNull
+    private final UUID gameId;
+    private final List<CompletedSessionDto> completedSessions;
+    private final List<AchievementProgressDto> achievementProgress;
+
+    public PlayerGameStatsDto(
             UUID playerId,
             UUID gameId,
-            List<CompletedSessionDTO> completedSessions,
-            List<AchievementProgressDTO> achievementProgress
+            List<CompletedSessionDto> completedSessions,
+            List<AchievementProgressDto> achievementProgress
     ) {
         this.playerId = Objects.requireNonNull(playerId);
         this.gameId = Objects.requireNonNull(gameId);
@@ -31,11 +35,11 @@ public class PlayerGameStatsDTO {
         return gameId;
     }
 
-    public List<CompletedSessionDTO> getCompletedSessions() {
+    public List<CompletedSessionDto> getCompletedSessions() {
         return completedSessions;
     }
 
-    public List<AchievementProgressDTO> getAchievementProgress() {
+    public List<AchievementProgressDto> getAchievementProgress() {
         return achievementProgress;
     }
 }

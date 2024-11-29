@@ -1,5 +1,4 @@
 package be.kdg.int5.gameRegistry.adapters.in.dto;
-import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -21,34 +20,6 @@ public class LoadGameDto {
     private Set<LoadAchievementDto> achievements;
 
     public LoadGameDto() {
-    }
-
-    public LoadGameDto(UUID id, String title, String description, String icon) {
-        this(id, title, description, icon, "", Set.of(), "", List.of(), Set.of());
-    }
-
-    public LoadGameDto(
-            UUID id,
-            String title,
-            String description,
-            BigDecimal price,
-            String background,
-            DeveloperDto developer,
-            List<String> screenshots
-    ) {
-        this(
-                id,
-                title,
-                description,
-                price,
-                null,
-                background,
-                null,
-                null,
-                developer,
-                screenshots,
-                null
-        );
     }
 
     public LoadGameDto(
@@ -87,6 +58,33 @@ public class LoadGameDto {
             Set<LoadRuleDto> rules,
             String currentHost,
             DeveloperDto developer,
+            List<String> screenshots
+    ) {
+        this(
+                id,
+                title,
+                description,
+                price,
+                icon,
+                background,
+                rules,
+                currentHost,
+                developer,
+                screenshots,
+                null
+        );
+    }
+
+    public LoadGameDto(
+            UUID id,
+            String title,
+            String description,
+            BigDecimal price,
+            String icon,
+            String background,
+            Set<LoadRuleDto> rules,
+            String currentHost,
+            DeveloperDto developer,
             List<String> screenshots,
             Set<LoadAchievementDto> achievements
     ) {
@@ -101,6 +99,28 @@ public class LoadGameDto {
         this.developer = developer;
         this.screenshots = screenshots;
         this.achievements = achievements;
+    }
+
+    public LoadGameDto(
+            UUID id,
+            String title,
+            String description,
+            BigDecimal price,
+            String icon,
+            UUID uuid) {
+        this(
+                id,
+                title,
+                description,
+                price,
+                icon,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
     }
 
     public UUID getId() {

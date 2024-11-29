@@ -11,6 +11,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
+import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
@@ -30,7 +32,7 @@ public class RegisterPlayerUseCaseImplMockingTest {
         when(playerLoadPort.loadPlayerById(Variables.PLAYER_ONE_UUID))
                 .thenReturn(null);
         when(playerLoadPort.loadPlayerById(Variables.PLAYER_TWO_UUID))
-                .thenReturn(new Player(new PlayerId(Variables.PLAYER_TWO_UUID), Variables.PLAYER_TWO_USERNAME));
+                .thenReturn(new Player(new PlayerId(Variables.PLAYER_TWO_UUID), LocalDateTime.now().minusMonths(2), Variables.PLAYER_TWO_USERNAME));
 
         registerPlayerUseCase = new RegisterPlayerUseCaseImpl(playerCreatePort, playerLoadPort, playerUpdatePort);
     }
