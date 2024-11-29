@@ -4,15 +4,15 @@ package be.kdg.int5.gameRegistry.adapters.in;
 import be.kdg.int5.gameRegistry.adapters.in.dto.*;
 import be.kdg.int5.gameRegistry.domain.Achievement;
 import be.kdg.int5.gameRegistry.domain.Game;
+import be.kdg.int5.gameRegistry.domain.GameId;
+import be.kdg.int5.gameRegistry.port.in.query.GameListQuery;
 import be.kdg.int5.gameRegistry.port.in.query.GetGameAchievementsQuery;
 import jakarta.validation.Valid;
 import be.kdg.int5.gameRegistry.port.in.query.GameDetailsQuery;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Set;
@@ -23,10 +23,12 @@ import java.util.stream.Collectors;
 @RequestMapping("/games")
 public class GameDetailsRestController {
     private final GameDetailsQuery gameDetailsQuery;
+    private final GameListQuery gameListQuery;
     private final GetGameAchievementsQuery getGameAchievementsQuery;
 
-    public GameDetailsRestController(GameDetailsQuery gameDetailsQuery, GetGameAchievementsQuery getGameAchievementsQuery) {
+    public GameDetailsRestController(GameDetailsQuery gameDetailsQuery, GameListQuery gameListQuery, GetGameAchievementsQuery getGameAchievementsQuery) {
         this.gameDetailsQuery = gameDetailsQuery;
+        this.gameListQuery = gameListQuery;
         this.getGameAchievementsQuery = getGameAchievementsQuery;
     }
 
@@ -95,5 +97,40 @@ public class GameDetailsRestController {
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(achievementDtoList);
+    }
+
+    @PostMapping
+    @PreAuthorize("hasAuthority('player')")
+    public ResponseEntity<List<LoadGameDto>> getGameInformationFromListOfIds(
+            @RequestBody List<GetGameDto> gameIds
+    ) {
+        List<GameId> gameIdList = gameIds.stream().map(
+                gameId -> new GameId(gameId.getGameId())
+        ).collect(Collectors.toList());
+
+        List<Game> games = gameListQuery.getGamesByIdInList(gameIdList);
+
+        if (games.isEmpty()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        List<LoadGameDto> loadGameDtoList = games.stream().map(
+                game -> new LoadGameDto(game.getId().uuid(),
+                        game.getTitle(),
+                        game.getDescription(),
+                        game.getIcon().url().url(),
+                        game.getBackground().url().url(),
+                        null,
+                        game.getCurrentHost().url(),
+                        null,
+                        game.getAchievements().stream().map(
+                                achievement -> new LoadAchievementDto(
+                                        achievement.getId().uuid(),
+                                        achievement.getTitle(),
+                                        achievement.getCounterTotal(),
+                                        achievement.getDescription()
+                                )
+                        ).collect(Collectors.toSet()))
+        ).collect(Collectors.toList());
+
+        return ResponseEntity.ok(loadGameDtoList);
     }
 }
