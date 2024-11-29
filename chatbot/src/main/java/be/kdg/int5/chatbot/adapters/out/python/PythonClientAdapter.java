@@ -2,7 +2,6 @@ package be.kdg.int5.chatbot.adapters.out.python;
 
 import be.kdg.int5.chatbot.adapters.out.python.dto.*;
 import be.kdg.int5.chatbot.domain.Answer;
-import be.kdg.int5.chatbot.domain.GameConversation;
 import be.kdg.int5.chatbot.domain.GameDetails;
 import be.kdg.int5.chatbot.domain.Question;
 import be.kdg.int5.chatbot.ports.out.AnswerAskPort;

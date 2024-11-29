@@ -36,6 +36,7 @@ public class FollowUpGameConversationUseCaseImpl implements FollowUpGameConversa
         final GameDetails gameDetails = gameDetailsLoadPort.loadGameDetailsByGameId(command.gameId());
 
         final GameConversation gameConversation = conversationLoadPort.loadGameConversation(command.userId(), command.gameId());
+        // TODO: deal with null conversation
 
         final Question followUpQuestion = gameConversation.addFollowUpQuestion(command.question());
         final List<Question> previousQuestionWindowList = gameConversation.getPreviousQuestionsInWindow();
