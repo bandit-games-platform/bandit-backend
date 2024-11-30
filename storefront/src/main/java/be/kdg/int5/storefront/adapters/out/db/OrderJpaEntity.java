@@ -11,6 +11,8 @@ import java.util.UUID;
 public class OrderJpaEntity {
     @Id
     private UUID id;
+    @Column(unique = true, nullable = false)
+    private String stripeSessionId;
     private UUID productId;
     private UUID customerId;
     private LocalDateTime orderDate;
@@ -21,11 +23,11 @@ public class OrderJpaEntity {
     public OrderJpaEntity() {
     }
 
-    public OrderJpaEntity(UUID id, UUID productId, UUID customerId, LocalDateTime orderDate, OrderStatus orderStatus) {
-        this(id, productId, customerId, orderDate, null, orderStatus);
+    public OrderJpaEntity(UUID id, String stripeSessionId, UUID productId, UUID customerId, LocalDateTime orderDate, OrderStatus orderStatus) {
+        this(id, stripeSessionId, productId, customerId, orderDate, null, orderStatus);
     }
 
-    public OrderJpaEntity(UUID id, UUID productId, UUID customerId, LocalDateTime orderDate, LocalDateTime orderCompletedAt, OrderStatus orderStatus) {
+    public OrderJpaEntity(UUID id, String stripeSessionId, UUID productId, UUID customerId, LocalDateTime orderDate, LocalDateTime orderCompletedAt, OrderStatus orderStatus) {
         this.id = id;
         this.productId = productId;
         this.customerId = customerId;
@@ -40,6 +42,14 @@ public class OrderJpaEntity {
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public String getStripeSessionId() {
+        return stripeSessionId;
+    }
+
+    public void setStripeSessionId(String stripeSessionId) {
+        this.stripeSessionId = stripeSessionId;
     }
 
     public UUID getProductId() {

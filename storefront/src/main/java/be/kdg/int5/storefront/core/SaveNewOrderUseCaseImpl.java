@@ -32,9 +32,17 @@ public class SaveNewOrderUseCaseImpl implements SaveNewOrderUseCase {
         ProductId productId = new ProductId(command.productId());
         CustomerId customerId = new CustomerId(command.customerId());
         Order order = orderLoadPort.loadCompletedOrderByProductAndCustomer(productId, customerId);
-        if (order != null) throw new OrderAlreadyExistsException("An order with this product and customer already exists");
+        if (order != null) {
+            logger.error("A completed order with this product and customer already exists");
+            throw new OrderAlreadyExistsException("An order with this product and customer already exists");
+        }
 
-        order = new Order(new ProductId(command.productId()), new CustomerId(command.customerId()), LocalDateTime.now());
+        order = new Order(new ProductId(
+                command.productId()),
+                new CustomerId(command.customerId()),
+                LocalDateTime.now(),
+                command.stripeSessionId()
+        );
         orderCreatePort.createNewOrder(order);
         logger.info("New order created with id {} for customer {} and product {}",
                 order.getId().uuid(), order.getCustomerId().uuid(), order.getProductId().uuid());

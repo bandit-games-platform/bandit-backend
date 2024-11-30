@@ -62,6 +62,7 @@ public class OrderJpaAdapter implements OrderLoadPort, OrderUpdatePort, OrderCre
     private Order orderJpaToDomain(OrderJpaEntity orderJpaEntity) {
         return new Order(
                 new OrderId(orderJpaEntity.getId()),
+                orderJpaEntity.getStripeSessionId(),
                 new ProductId(orderJpaEntity.getProductId()),
                 new CustomerId(orderJpaEntity.getCustomerId()),
                 orderJpaEntity.getOrderDate(),
@@ -73,6 +74,7 @@ public class OrderJpaAdapter implements OrderLoadPort, OrderUpdatePort, OrderCre
     private OrderJpaEntity orderDomainToJpa(Order order) {
         return new OrderJpaEntity(
                 order.getId().uuid(),
+                order.getStripeSessionId(),
                 order.getProductId().uuid(),
                 order.getCustomerId().uuid(),
                 order.getOrderDate(),

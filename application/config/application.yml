@@ -46,3 +46,5 @@ spring:
 contexts:
   gameRegistry:
     baseUrl: http://localhost:8090/api
+  frontend:
+    baseUrl: http://localhost:5173
