@@ -3,6 +3,8 @@ package be.kdg.int5.storefront.adapters.in;
 import be.kdg.int5.common.exceptions.OrderAlreadyExistsException;
 import be.kdg.int5.storefront.adapters.in.dto.CreatedOrderIdDto;
 import be.kdg.int5.storefront.domain.Order;
+import be.kdg.int5.storefront.port.in.CompleteOrderCommand;
+import be.kdg.int5.storefront.port.in.CompleteOrderUseCase;
 import be.kdg.int5.storefront.port.in.SaveNewOrderCommand;
 import be.kdg.int5.storefront.port.in.SaveNewOrderUseCase;
 import com.stripe.Stripe;
@@ -20,13 +22,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 @RestController
@@ -36,9 +37,11 @@ public class PaymentManagementController {
     @Value("${contexts.frontend.baseUrl}")
     private static String FRONTEND_URL;
     private final SaveNewOrderUseCase saveNewOrderUseCase;
+    private final CompleteOrderUseCase completeOrderUseCase;
 
-    public PaymentManagementController(SaveNewOrderUseCase saveNewOrderUseCase) {
+    public PaymentManagementController(SaveNewOrderUseCase saveNewOrderUseCase, CompleteOrderUseCase completeOrderUseCase) {
         this.saveNewOrderUseCase = saveNewOrderUseCase;
+        this.completeOrderUseCase = completeOrderUseCase;
     }
 
     @PostMapping("/games/{gameId}/create-order")
@@ -83,6 +86,35 @@ public class PaymentManagementController {
 
             Map<String, String> map = new HashMap();
             map.put("clientSecret", session.getClientSecret());
+            return map;
+        } catch (StripeException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
+    @GetMapping("/games/{gameId}/order-status")
+    public Map<String, String> getOrderSessionStatus(
+            @AuthenticationPrincipal Jwt token,
+            @PathVariable String gameId,
+            @RequestParam String sessionId
+    ) {
+        UUID customerId = UUID.fromString(token.getClaimAsString("sub"));
+        UUID productId = UUID.fromString(gameId);
+        try {
+            Session session = Session.retrieve(sessionId);
+
+            if (Objects.equals(session.getStatus(), "complete")) {
+                boolean completed = completeOrderUseCase.completeOrder(new CompleteOrderCommand(
+                        productId, customerId
+                ));
+                if (!completed) return null;
+            }
+
+            Map<String, String> map = new HashMap();
+            map.put("status", session.getStatus());
+            map.put("customer_email", session.getCustomerEmail());
+
             return map;
         } catch (StripeException e) {
             System.out.println(e.getMessage());

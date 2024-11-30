@@ -78,4 +78,9 @@ public class Order {
     public void cancelOrder() {
         this.orderStatus = OrderStatus.CANCELLED;
     }
+
+    public void completeOrder() {
+        this.orderStatus = OrderStatus.COMPLETED;
+        this.orderCompletedAt = LocalDateTime.now();
+    }
 }
