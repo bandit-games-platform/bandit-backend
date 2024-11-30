@@ -41,6 +41,17 @@ public class OrderJpaAdapter implements OrderLoadPort, OrderUpdatePort, OrderCre
     }
 
     @Override
+    public Order loadOrderByProductAndCustomerAndStripeId(String sessionId, ProductId productId, CustomerId customerId) {
+        OrderJpaEntity orderJpaEntity = orderJpaRepository.findPendingByProductIdAndCustomerIdAndStripeSessionId(
+                sessionId,
+                productId.uuid(),
+                customerId.uuid()
+        );
+        if (orderJpaEntity == null) return null;
+        return orderJpaToDomain(orderJpaEntity);
+    }
+
+    @Override
     public List<Order> loadPendingOrders() {
         List<OrderJpaEntity> orderJpaEntities = orderJpaRepository.findAllPendingOrders();
         if (orderJpaEntities == null) return null;

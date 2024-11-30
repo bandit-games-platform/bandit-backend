@@ -17,6 +17,14 @@ public interface OrderJpaRepository extends JpaRepository<OrderJpaEntity, UUID> 
 
     @Query("""
     SELECT orderEntity FROM OrderJpaEntity orderEntity
+    WHERE orderEntity.productId = :productId
+    AND orderEntity.customerId = :customerId
+    AND orderEntity.stripeSessionId = :sessionId
+    """)
+    OrderJpaEntity findPendingByProductIdAndCustomerIdAndStripeSessionId(String sessionId, UUID productId, UUID customerId);
+
+    @Query("""
+    SELECT orderEntity FROM OrderJpaEntity orderEntity
     WHERE orderEntity.orderStatus = 'PENDING'
     """)
     List<OrderJpaEntity> findAllPendingOrders();

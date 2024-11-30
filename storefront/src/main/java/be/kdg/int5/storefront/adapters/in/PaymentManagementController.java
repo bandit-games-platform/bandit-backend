@@ -32,10 +32,10 @@ import java.util.UUID;
 
 @RestController
 public class PaymentManagementController {
-    @Value("${STRIPE_API_KEY}")
-    private static String apiKey;
+    @Value("${stripe.apiKey}")
+    private String apiKey;
     @Value("${contexts.frontend.baseUrl}")
-    private static String FRONTEND_URL;
+    private String FRONTEND_URL;
     private final SaveNewOrderUseCase saveNewOrderUseCase;
     private final CompleteOrderUseCase completeOrderUseCase;
 
@@ -99,6 +99,8 @@ public class PaymentManagementController {
             @PathVariable String gameId,
             @RequestParam String sessionId
     ) {
+        Stripe.apiKey = apiKey;
+
         UUID customerId = UUID.fromString(token.getClaimAsString("sub"));
         UUID productId = UUID.fromString(gameId);
         try {
@@ -106,14 +108,13 @@ public class PaymentManagementController {
 
             if (Objects.equals(session.getStatus(), "complete")) {
                 boolean completed = completeOrderUseCase.completeOrder(new CompleteOrderCommand(
-                        productId, customerId
+                        sessionId, productId, customerId
                 ));
                 if (!completed) return null;
             }
 
             Map<String, String> map = new HashMap();
             map.put("status", session.getStatus());
-            map.put("customer_email", session.getCustomerEmail());
 
             return map;
         } catch (StripeException e) {

@@ -41,3 +41,6 @@ spring:
 contexts:
   frontend:
     baseUrl: http://localhost:5173
+
+stripe:
+  apiKey: ${STRIPE_API_KEY}

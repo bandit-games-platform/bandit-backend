@@ -29,6 +29,7 @@ public class OrderJpaEntity {
 
     public OrderJpaEntity(UUID id, String stripeSessionId, UUID productId, UUID customerId, LocalDateTime orderDate, LocalDateTime orderCompletedAt, OrderStatus orderStatus) {
         this.id = id;
+        this.stripeSessionId = stripeSessionId;
         this.productId = productId;
         this.customerId = customerId;
         this.orderDate = orderDate;

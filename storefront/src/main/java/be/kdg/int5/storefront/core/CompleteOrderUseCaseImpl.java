@@ -2,6 +2,7 @@ package be.kdg.int5.storefront.core;
 
 import be.kdg.int5.storefront.domain.CustomerId;
 import be.kdg.int5.storefront.domain.Order;
+import be.kdg.int5.storefront.domain.OrderStatus;
 import be.kdg.int5.storefront.domain.ProductId;
 import be.kdg.int5.storefront.port.in.CompleteOrderCommand;
 import be.kdg.int5.storefront.port.in.CompleteOrderUseCase;
@@ -27,8 +28,13 @@ public class CompleteOrderUseCaseImpl implements CompleteOrderUseCase {
     public boolean completeOrder(CompleteOrderCommand command) {
         ProductId productId = new ProductId(command.productId());
         CustomerId customerId = new CustomerId(command.customerId());
-        Order order = orderLoadPort.loadCompletedOrderByProductAndCustomer(productId, customerId);
+        Order order = orderLoadPort.loadOrderByProductAndCustomerAndStripeId(
+                command.stripeSessionId(),
+                productId,
+                customerId
+        );
         if (order == null) return false;
+        if (order.getOrderStatus() == OrderStatus.COMPLETED) return true;
         order.completeOrder();
 
         logger.info("Order {} has now been {} at time {}", order.getId().uuid(), order.getOrderStatus(), order.getOrderCompletedAt());
