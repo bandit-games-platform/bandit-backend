@@ -12,13 +12,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CompleteOrderUseCaseImpl implements CompleteOrderUseCase {
     private static final Logger logger = LoggerFactory.getLogger(CompleteOrderUseCaseImpl.class);
     private final OrderLoadPort orderLoadPort;
-    private final OrderUpdatePort orderUpdatePort;
+    private final List<OrderUpdatePort> orderUpdatePort;
 
-    public CompleteOrderUseCaseImpl(OrderLoadPort orderLoadPort, OrderUpdatePort orderUpdatePort) {
+    public CompleteOrderUseCaseImpl(OrderLoadPort orderLoadPort, List<OrderUpdatePort> orderUpdatePort) {
         this.orderLoadPort = orderLoadPort;
         this.orderUpdatePort = orderUpdatePort;
     }
@@ -37,8 +39,10 @@ public class CompleteOrderUseCaseImpl implements CompleteOrderUseCase {
         if (order.getOrderStatus() == OrderStatus.COMPLETED) return true;
         order.completeOrder();
 
-        logger.info("Order {} has now been {} at time {}", order.getId().uuid(), order.getOrderStatus(), order.getOrderCompletedAt());
-        orderUpdatePort.updateOrderStatus(order);
+        logger.info("storefront: Order {} has now been {} at time {}", order.getId().uuid(), order.getOrderStatus(), order.getOrderCompletedAt());
+        for (OrderUpdatePort updatePort : orderUpdatePort) {
+            updatePort.updateOrderStatus(order);
+        }
         return true;
     }
 }

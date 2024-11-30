@@ -16,9 +16,9 @@ import java.util.List;
 public class CancelAllOldOrdersUseCaseImpl implements CancelAllOldOrdersUseCase {
     private static final Logger logger = LoggerFactory.getLogger(CancelAllOldOrdersUseCaseImpl.class);
     private final OrderLoadPort orderLoadPort;
-    private final OrderUpdatePort orderUpdatePort;
+    private final List<OrderUpdatePort> orderUpdatePort;
 
-    public CancelAllOldOrdersUseCaseImpl(OrderLoadPort orderLoadPort, OrderUpdatePort orderUpdatePort) {
+    public CancelAllOldOrdersUseCaseImpl(OrderLoadPort orderLoadPort, List<OrderUpdatePort> orderUpdatePort) {
         this.orderLoadPort = orderLoadPort;
         this.orderUpdatePort = orderUpdatePort;
     }
@@ -32,8 +32,10 @@ public class CancelAllOldOrdersUseCaseImpl implements CancelAllOldOrdersUseCase 
             Duration duration = Duration.between(order.getOrderDate(), currentTime);
             if (duration.toHours() >= 12) {
                 order.cancelOrder();
-                logger.info("Order {} has now been {}, it was {} hours old", order.getId().uuid(), order.getOrderStatus(), duration.toHours());
-                orderUpdatePort.updateOrderStatus(order);
+                logger.info("storefront: Order {} has now been {}, it was {} hours old", order.getId().uuid(), order.getOrderStatus(), duration.toHours());
+                for (OrderUpdatePort updatePort : orderUpdatePort) {
+                    updatePort.updateOrderStatus(order);
+                }
             }
         }
     }
