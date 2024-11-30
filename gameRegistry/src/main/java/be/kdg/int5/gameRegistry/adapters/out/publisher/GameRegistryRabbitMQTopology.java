@@ -31,9 +31,4 @@ public class GameRegistryRabbitMQTopology {
                 .with("game.*.registered");
 
     }
-
-    @Bean
-    Jackson2JsonMessageConverter gameRegistryJackson2JsonMessageConverter() {
-        return new Jackson2JsonMessageConverter();
-    }
 }
