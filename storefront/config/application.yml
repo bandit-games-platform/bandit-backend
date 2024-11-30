@@ -39,6 +39,8 @@ spring:
           jwk-set-uri: http://localhost:8180/realms/bandit-realm/protocol/openid-connect/certs
 
 contexts:
+  gameRegistry:
+    baseUrl: http://localhost:8092/game-registry
   frontend:
     baseUrl: http://localhost:5173
 

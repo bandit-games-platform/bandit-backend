@@ -25,7 +25,6 @@ public class CompleteOrderUseCaseImpl implements CompleteOrderUseCase {
         this.orderUpdatePort = orderUpdatePort;
     }
 
-    // TODO: Send async command to player context to update player library
     @Override
     public boolean completeOrder(CompleteOrderCommand command) {
         ProductId productId = new ProductId(command.productId());

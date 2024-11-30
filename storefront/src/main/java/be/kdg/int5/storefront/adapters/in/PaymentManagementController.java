@@ -7,6 +7,7 @@ import be.kdg.int5.storefront.port.in.CompleteOrderCommand;
 import be.kdg.int5.storefront.port.in.CompleteOrderUseCase;
 import be.kdg.int5.storefront.port.in.SaveNewOrderCommand;
 import be.kdg.int5.storefront.port.in.SaveNewOrderUseCase;
+import be.kdg.int5.storefront.port.in.query.GameBasicDetailsQuery;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Price;
@@ -38,10 +39,16 @@ public class PaymentManagementController {
     private String FRONTEND_URL;
     private final SaveNewOrderUseCase saveNewOrderUseCase;
     private final CompleteOrderUseCase completeOrderUseCase;
+    private final GameBasicDetailsQuery gameBasicDetailsQuery;
 
-    public PaymentManagementController(SaveNewOrderUseCase saveNewOrderUseCase, CompleteOrderUseCase completeOrderUseCase) {
+    public PaymentManagementController(
+            SaveNewOrderUseCase saveNewOrderUseCase,
+            CompleteOrderUseCase completeOrderUseCase,
+            GameBasicDetailsQuery gameBasicDetailsQuery
+    ) {
         this.saveNewOrderUseCase = saveNewOrderUseCase;
         this.completeOrderUseCase = completeOrderUseCase;
+        this.gameBasicDetailsQuery = gameBasicDetailsQuery;
     }
 
     @PostMapping("/games/{gameId}/create-order")
@@ -56,9 +63,12 @@ public class PaymentManagementController {
         Stripe.apiKey = apiKey;
 
         try {
-            // TODO: Somehow get game details and such from the other context, either projection or direct call
-            String productName = "Battleship";
-            BigDecimal productPrice = BigDecimal.valueOf((0.5 * 100)); // Convert euro price into cent price
+            // This can be changed to use a projection, by simply swapping out the adapter for the port
+            Map<String, String> basicGameDetails = gameBasicDetailsQuery.getBasicGameDetails(productId);
+            if (basicGameDetails == null) return null;
+
+            String productName = basicGameDetails.get("title");
+            BigDecimal productPrice = new BigDecimal(basicGameDetails.get("price")).multiply(BigDecimal.valueOf(100)); // Convert euro price into cent price
 
             Price price = findProductPrice(productId.toString(), productName, productPrice);
 
@@ -198,7 +208,7 @@ public class PaymentManagementController {
         Product product;
         if (foundProducts.getData().isEmpty()) {
             ProductCreateParams productParams = ProductCreateParams.builder()
-                    .setName("Battleship")
+                    .setName(productName)
                     .setId(productId)
                     .build();
             product = Product.create(productParams);
