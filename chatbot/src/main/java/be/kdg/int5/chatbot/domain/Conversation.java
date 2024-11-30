@@ -9,7 +9,7 @@ public abstract class Conversation {
     private LocalDateTime lastMessageTime;
     private List<Question> questions;
 
-    private static final int QUESTION_WINDOW = 5;
+    private static final int QUESTION_WINDOW = 0;
 
     public Conversation(UserId userId) {
         this(userId, LocalDateTime.now(), null, null);

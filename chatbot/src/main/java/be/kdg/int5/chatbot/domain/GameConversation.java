@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class GameConversation extends Conversation {
-    private static final String INITIAL_PROMPT = "Provide a very short paragraph to describe the game. Additionally, can you summarize the rules for this game in as few words as possible? For all subsequent answers, keep your responses shorter than 5000 characters.";
+    private static final String INITIAL_PROMPT = "Provide a very short paragraph to describe the game. Additionally, can you summarize the rules for this game in as few words as possible?";
     private final GameId gameId;
 
     public GameConversation(UserId userId, GameId gameId) {
