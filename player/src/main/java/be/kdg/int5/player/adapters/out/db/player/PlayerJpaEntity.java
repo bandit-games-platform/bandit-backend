@@ -42,8 +42,8 @@ public class PlayerJpaEntity {
         this.friendsList = friendsList;
     }
 
-    public PlayerJpaEntity(String displayName, ImageResourceJpaEmbed avatar) {
-        this(null, displayName, null, null, null, avatar, null);
+    public PlayerJpaEntity(UUID id, String displayName, ImageResourceJpaEmbed avatar) {
+        this(id, displayName, null, null, null, avatar, null);
     }
 
     public UUID getId() {

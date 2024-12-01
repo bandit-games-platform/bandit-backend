@@ -4,10 +4,7 @@ import be.kdg.int5.player.adapters.in.dto.PlayerFriendBioDto;
 import be.kdg.int5.player.adapters.in.dto.PlayerSearchBioDto;
 import be.kdg.int5.player.domain.Player;
 import be.kdg.int5.player.domain.PlayerId;
-import be.kdg.int5.player.port.in.FriendsListQuery;
-import be.kdg.int5.player.port.in.GetFriendsListCommand;
-import be.kdg.int5.player.port.in.SearchForNewFriendsCommand;
-import be.kdg.int5.player.port.in.SearchForNewFriendsUseCase;
+import be.kdg.int5.player.port.in.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,10 +20,12 @@ import java.util.UUID;
 public class    PlayerFriendsController {
     private final SearchForNewFriendsUseCase searchForNewFriendsUseCase;
     private final FriendsListQuery friendsListQuery;
+    private final SendFriendInviteUseCase sendFriendInviteUseCase;
 
-    public PlayerFriendsController(SearchForNewFriendsUseCase searchForNewFriendsUseCase, FriendsListQuery friendsListQuery) {
+    public PlayerFriendsController(SearchForNewFriendsUseCase searchForNewFriendsUseCase, FriendsListQuery friendsListQuery, SendFriendInviteUseCase sendFriendInviteUseCase) {
         this.searchForNewFriendsUseCase = searchForNewFriendsUseCase;
         this.friendsListQuery = friendsListQuery;
+        this.sendFriendInviteUseCase = sendFriendInviteUseCase;
     }
 
     @GetMapping("")
@@ -54,6 +53,19 @@ public class    PlayerFriendsController {
                 .toList();
         return new ResponseEntity<>(newPlayersList, HttpStatus.OK);
     }
+
+    @PostMapping("/friend-invites/{friendId}")
+    @PreAuthorize("hasAuthority('player')")
+    ResponseEntity<Boolean> sendNewFriendInvite(@PathVariable UUID friendId, @AuthenticationPrincipal Jwt token){
+        String userId = token.getClaimAsString("sub");
+        UUID playerId = UUID.fromString(userId);
+        SendFriendInviteCommand command = new SendFriendInviteCommand(new PlayerId(playerId), new PlayerId(friendId));
+        if (sendFriendInviteUseCase.sendFriendInvite(command)){
+            return new ResponseEntity<>(true, HttpStatus.CREATED);
+        }
+        return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
+    }
+
 
     private PlayerFriendBioDto mapFriendToDto(Player player){
         return new PlayerFriendBioDto(player.getId().uuid().toString(), player.getDisplayName(), player.getAvatar().url().url(), true);

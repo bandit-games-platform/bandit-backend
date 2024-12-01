@@ -2,12 +2,16 @@ package be.kdg.int5.player.domain;
 
 import be.kdg.int5.common.domain.ImageResource;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+
 import static java.util.Objects.requireNonNull;
 
 public class Player {
     private final PlayerId id;
+    private final LocalDateTime joinDate;
     private String displayName;
     private Gender gender;
     private Country location;
@@ -15,15 +19,23 @@ public class Player {
     private ImageResource avatar;
     private List<Player> friendsList;
 
-    public Player(final PlayerId id, final String displayName, ImageResource avatar) {
+    public Player(final PlayerId id, final LocalDateTime joinDate, final String displayName, ImageResource avatar) {
         requireNonNull(id);
+        requireNonNull(joinDate);
         requireNonNull(displayName);
-        requireNonNull(avatar);
 
         this.id = id;
+        this.joinDate = joinDate;
         this.displayName = displayName;
         this.avatar = avatar;
-        this.friendsList = new ArrayList<>();
+    }
+
+    public Player(final PlayerId id, final LocalDateTime joinDate, final String displayName) {
+        this(id, joinDate, displayName, null);
+    }
+
+    public Player(final PlayerId id, final String displayName, ImageResource avatar) {
+        this(id, null, displayName, avatar);
     }
 
     public Player(final PlayerId id, final String displayName) {
@@ -33,7 +45,7 @@ public class Player {
 
     public FriendInvite sendFriendInvite(final PlayerId invited){
         requireNonNull(invited);
-        return new FriendInvite(this.id, invited);
+        return new FriendInvite(new FriendInviteId(UUID.randomUUID()), this.id, invited, InviteStatus.PENDING, LocalDateTime.now());
     }
 
     public PlayerId getId() {
