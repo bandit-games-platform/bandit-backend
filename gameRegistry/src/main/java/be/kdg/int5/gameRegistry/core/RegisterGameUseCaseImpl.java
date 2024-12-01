@@ -23,11 +23,11 @@ public class RegisterGameUseCaseImpl implements RegisterGameUseCase {
     private final Logger logger = LoggerFactory.getLogger(RegisterGameUseCaseImpl.class);
 
     private final GamesLoadPort gamesLoadPort;
-    private final GamesCreatePort gamesCreatePort;
+    private final List<GamesCreatePort> gamesCreatePort;
     private final DeveloperLoadPort developerLoadPort;
-    private final GamesUpdatePort gamesUpdatePort;
+    private final List<GamesUpdatePort> gamesUpdatePort;
 
-    public RegisterGameUseCaseImpl(GamesLoadPort gamesLoadPort, GamesCreatePort gamesCreatePort, DeveloperLoadPort developerLoadPort, GamesUpdatePort gamesUpdatePort) {
+    public RegisterGameUseCaseImpl(GamesLoadPort gamesLoadPort, List<GamesCreatePort> gamesCreatePort, DeveloperLoadPort developerLoadPort, List<GamesUpdatePort> gamesUpdatePort) {
         this.gamesLoadPort = gamesLoadPort;
         this.gamesCreatePort = gamesCreatePort;
         this.developerLoadPort = developerLoadPort;
@@ -68,7 +68,11 @@ public class RegisterGameUseCaseImpl implements RegisterGameUseCase {
                     achievements
             );
 
-            if(gamesCreatePort.create(newGame)) return gameId;
+            boolean gameCreated = false;
+            for (GamesCreatePort gamesCreate: gamesCreatePort) {
+                gameCreated |= gamesCreate.create(newGame);
+            }
+            if(gameCreated) return gameId;
         }else {
             //Patch mode
             logger.info("gameRegistry:register-game [PATCH MODE] for existing game: '{}'", existingGame);
@@ -84,7 +88,11 @@ public class RegisterGameUseCaseImpl implements RegisterGameUseCase {
                     achievements
             );
 
-            if(gamesUpdatePort.update(existingGame)) return gameId;
+            boolean gameUpdated = false;
+            for (GamesUpdatePort gamesUpdate: gamesUpdatePort) {
+                gameUpdated |= gamesUpdate.update(existingGame);
+            }
+            if(gameUpdated) return gameId;
         }
         return null;
     }

@@ -3,7 +3,6 @@ package be.kdg.int5.player.domain;
 import be.kdg.int5.common.domain.ImageResource;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -50,6 +49,10 @@ public class Player {
 
     public PlayerId getId() {
         return id;
+    }
+
+    public LocalDateTime getJoinDate() {
+        return joinDate;
     }
 
     public String getDisplayName() {

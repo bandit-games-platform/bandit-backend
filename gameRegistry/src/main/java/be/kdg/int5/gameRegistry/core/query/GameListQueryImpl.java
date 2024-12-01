@@ -1,5 +1,6 @@
 package be.kdg.int5.gameRegistry.core.query;
 import be.kdg.int5.gameRegistry.domain.Game;
+import be.kdg.int5.gameRegistry.domain.GameId;
 import be.kdg.int5.gameRegistry.port.in.query.GameListQuery;
 import be.kdg.int5.gameRegistry.port.out.GamesLoadPort;
 import org.springframework.stereotype.Service;
@@ -26,5 +27,11 @@ public class GameListQueryImpl implements GameListQuery {
     @Transactional(readOnly = true)
     public List<Game> retrieveGamesByTitleLikeAndPriceBelowWithIcon(String title, BigDecimal price) {
         return gamesLoadPort.loadAllGamesByTitleLikeAndPriceBelowWithIcon(title,price);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Game> getGamesByIdInList(List<GameId> gameIds) {
+        return gamesLoadPort.loadAllGamesWithIdInList(gameIds);
     }
 }

@@ -12,6 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 public class RegisterPlayerUseCaseImpl implements RegisterPlayerUseCase {
     private static final Logger LOGGER = LoggerFactory.getLogger(RegisterPlayerUseCaseImpl.class);
@@ -37,7 +39,7 @@ public class RegisterPlayerUseCaseImpl implements RegisterPlayerUseCase {
             return;
         }
 
-        playerCreatePort.createPlayer(new Player(new PlayerId(command.id()), command.username()));
+        playerCreatePort.createPlayer(new Player(new PlayerId(command.id()), LocalDateTime.now(), command.username()));
         LOGGER.info("player: New player persisted to database with username: {} and id: {}", command.username(), command.id());
     }
 }
