@@ -1,4 +1,4 @@
-package be.kdg.int5.chatbot.adapters.out.gameRule;
+package be.kdg.int5.chatbot.adapters.out.db.gameRule;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -46,3 +46,6 @@ spring:
 contexts:
   gameRegistry:
     baseUrl: http://localhost:8090/api
+
+python:
+  url: http://localhost:8000

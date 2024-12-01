@@ -1,14 +1,13 @@
-package be.kdg.int5.chatbot.adapters.out.conversation;
+package be.kdg.int5.chatbot.adapters.out.db.conversation;
 
-import be.kdg.int5.chatbot.adapters.out.answer.AnswerJpaEntity;
-import be.kdg.int5.chatbot.adapters.out.question.QuestionJpaEntity;
+import be.kdg.int5.chatbot.adapters.out.db.answer.AnswerJpaEntity;
+import be.kdg.int5.chatbot.adapters.out.db.question.QuestionJpaEntity;
 import be.kdg.int5.chatbot.domain.*;
 import be.kdg.int5.chatbot.ports.out.ConversationLoadPort;
 import be.kdg.int5.chatbot.ports.out.ConversationSavePort;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -41,7 +40,7 @@ public class ConversationJpaAdapter implements ConversationLoadPort, Conversatio
                     question.setAnswer(answer);
                     return question;
                 })
-                .collect(Collectors.toCollection(ArrayList::new)); // .toList() would return an immutable list (to which I need to add to in the use case)
+                .collect(Collectors.toList());
 
         gameConversation.setQuestions(questionList);
 

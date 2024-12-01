@@ -1,6 +1,6 @@
-package be.kdg.int5.chatbot.adapters.out.gameDetails;
+package be.kdg.int5.chatbot.adapters.out.db.gameDetails;
 
-import be.kdg.int5.chatbot.adapters.out.gameRule.GameRuleJpaEntity;
+import be.kdg.int5.chatbot.adapters.out.db.gameRule.GameRuleJpaEntity;
 import jakarta.persistence.*;
 
 import java.util.Set;

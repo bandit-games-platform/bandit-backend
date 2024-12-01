@@ -1,4 +1,4 @@
-package be.kdg.int5.chatbot.adapters.out.gameDetails;
+package be.kdg.int5.chatbot.adapters.out.db.gameDetails;
 
 import be.kdg.int5.chatbot.domain.GameDetails;
 import be.kdg.int5.chatbot.domain.GameId;
@@ -6,7 +6,6 @@ import be.kdg.int5.chatbot.domain.GameRule;
 import be.kdg.int5.chatbot.ports.out.GameDetailsLoadPort;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 

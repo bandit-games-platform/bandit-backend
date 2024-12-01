@@ -21,8 +21,8 @@ import java.util.List;
 
 @Repository
 public class PythonClientAdapter implements AnswerAskPort {
-    @Value("${python.backend.url:http://localhost:8000}")
-    private String pythonBackendUrl;
+    @Value("${python.url:http://localhost:8000}")
+    private String pythonUrl;
     private static final String INITIAL_QUESTION = "/initial-question";
     private static final String FOLLOW_UP_QUESTION = "/follow-up-question";
 
@@ -48,7 +48,7 @@ public class PythonClientAdapter implements AnswerAskPort {
         HttpEntity<InitialQuestionDto> entity = new HttpEntity<>(initialQuestionDto, headers);
 
         try {
-            String response = restTemplate.postForObject(pythonBackendUrl + INITIAL_QUESTION, entity, String.class);
+            String response = restTemplate.postForObject(pythonUrl + INITIAL_QUESTION, entity, String.class);
             logger.debug("Response Out Adapter - Inital: {}", response);
 
             String extractedAnswer = parseResponse(response);
@@ -74,7 +74,7 @@ public class PythonClientAdapter implements AnswerAskPort {
         HttpEntity<FollowUpQuestionDto> entity = new HttpEntity<>(followUpQuestionDto, headers);
 
         try {
-            String response = restTemplate.postForObject(pythonBackendUrl + FOLLOW_UP_QUESTION, entity, String.class);
+            String response = restTemplate.postForObject(pythonUrl + FOLLOW_UP_QUESTION, entity, String.class);
             logger.debug("Response Out Adapter - FollowUp: {}", response);
 
             String extractedResponse = parseResponse(response);

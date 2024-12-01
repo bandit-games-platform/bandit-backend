@@ -1,4 +1,4 @@
-package be.kdg.int5.chatbot.adapters.out.gameDetails;
+package be.kdg.int5.chatbot.adapters.out.db.gameDetails;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

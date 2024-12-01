@@ -10,6 +10,8 @@ public abstract class Conversation {
     private List<Question> questions;
 
     private static final int QUESTION_WINDOW = 0;
+    // This variable defines the nº of Question/Answer pairs we give to the chatbot as context.
+    // Currently set to 0 as this is where we get the best results for responses.
 
     public Conversation(UserId userId) {
         this(userId, LocalDateTime.now(), null, null);

@@ -1,7 +1,7 @@
-package be.kdg.int5.chatbot.adapters.out.question;
+package be.kdg.int5.chatbot.adapters.out.db.question;
 
-import be.kdg.int5.chatbot.adapters.out.answer.AnswerJpaEntity;
-import be.kdg.int5.chatbot.adapters.out.conversation.ConversationJpaEntity;
+import be.kdg.int5.chatbot.adapters.out.db.answer.AnswerJpaEntity;
+import be.kdg.int5.chatbot.adapters.out.db.conversation.ConversationJpaEntity;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;

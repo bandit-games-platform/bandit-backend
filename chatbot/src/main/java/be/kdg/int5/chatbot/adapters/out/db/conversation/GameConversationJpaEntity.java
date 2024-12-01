@@ -1,4 +1,4 @@
-package be.kdg.int5.chatbot.adapters.out.conversation;
+package be.kdg.int5.chatbot.adapters.out.db.conversation;
 
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;

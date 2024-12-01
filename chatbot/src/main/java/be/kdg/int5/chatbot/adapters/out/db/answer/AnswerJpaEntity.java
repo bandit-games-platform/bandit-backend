@@ -1,4 +1,4 @@
-package be.kdg.int5.chatbot.adapters.out.answer;
+package be.kdg.int5.chatbot.adapters.out.db.answer;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
