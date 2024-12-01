@@ -1,9 +1,7 @@
 package be.kdg.int5.chatbot.domain;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public abstract class Conversation {
     private final UserId userId;
@@ -11,8 +9,18 @@ public abstract class Conversation {
     private LocalDateTime lastMessageTime;
     private List<Question> questions;
 
-    public Conversation(UserId userId, LocalDateTime lastMessageTime, LocalDateTime startTime) {
-        this(userId, startTime, lastMessageTime, null);
+    private static final int QUESTION_WINDOW = 0;
+    // This variable defines the nº of Question/Answer pairs we give to the chatbot as context.
+    // Currently set to 0 as this is where we get the best results for responses.
+
+    public Conversation(UserId userId) {
+        this(userId, LocalDateTime.now(), null, null);
+    }
+
+    public Conversation(UserId userId, LocalDateTime startTime, LocalDateTime lastMessageTime) {
+        this.userId = userId;
+        this.startTime = startTime;
+        this.lastMessageTime = lastMessageTime;
     }
 
     public Conversation(UserId userId, LocalDateTime startTime, LocalDateTime lastMessageTime, List<Question> questions) {
@@ -49,8 +57,42 @@ public abstract class Conversation {
         this.lastMessageTime = lastMessageTime;
     }
 
-    public void addQuestion(Question question) {
-        if (this.questions == null) this.questions = new ArrayList<>();
-        questions.add(question);
+    public abstract Question start();
+
+    public Question addFollowUpQuestion(String text) {
+        Question question = new Question(text, LocalDateTime.now(), false);
+        update(question);
+        return question;
+    }
+
+    public void update(Question question) {
+        // if question was added but no answer for it yet
+        Optional<Question> existingQuestion = questions.stream()
+                .filter(q -> q.getSubmittedAt().isEqual(question.getSubmittedAt()))
+                .findAny();
+
+        if (existingQuestion.isPresent()) {
+            existingQuestion.get().update(question.getAnswer());
+        } else {
+            questions.add(question);
+        }
+
+        this.setLastMessageTime(question.getSubmittedAt());
+    }
+
+    public List<Question> getPreviousQuestionsInWindow() {
+        questions.sort(Comparator.comparing(Question::getSubmittedAt));
+
+        return questions.size() <= QUESTION_WINDOW
+                ? questions
+                : questions.subList(questions.size() - QUESTION_WINDOW, questions.size());
+    }
+
+    public Question getInitialQuestion() {
+        return this.questions
+                .stream()
+                .filter(Question::isInitial)
+                .findAny()
+                .orElseThrow();
     }
 }
