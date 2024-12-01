@@ -46,7 +46,7 @@ public class PlayerJpaEntity {
     }
 
     public PlayerJpaEntity(UUID id, String displayName, ImageResourceJpaEmbed avatar) {
-        this(id, displayName, null, null, null, avatar, null);
+        this(id, null, displayName, null, null, null, avatar, null);
     }
 
     public UUID getId() {
