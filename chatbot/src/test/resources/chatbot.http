@@ -14,7 +14,6 @@ Content-Type: application/json
 Authorization: Bearer {{player}}
 
 {
-  "userId": "e4a40c63-2edf-4592-8d36-46b902db69d7",
   "gameId": "d77e1d1f-6b46-4c89-9290-3b9cf8a7c001"
 }
 
@@ -25,7 +24,6 @@ Content-Type: application/json
 Authorization: Bearer {{player}}
 
 {
-  "userId": "e4a40c63-2edf-4592-8d36-46b902db69d7",
   "gameId": "d77e1d1f-6b46-4c89-9290-3b9cf8a7c001",
   "question": {
     "text": "Tell me more about the game."

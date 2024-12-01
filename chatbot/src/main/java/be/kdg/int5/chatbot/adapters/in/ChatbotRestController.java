@@ -9,9 +9,12 @@ import be.kdg.int5.chatbot.ports.in.FollowUpGameConversationUseCase;
 import be.kdg.int5.chatbot.ports.in.StartGameConversationUseCase;
 import be.kdg.int5.chatbot.ports.in.StartGameConversationCommand;
 import be.kdg.int5.common.exceptions.PythonServiceException;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.*;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 
@@ -32,8 +35,10 @@ public class ChatbotRestController {
 
     @PostMapping("/initial-question")
     @PreAuthorize("hasAuthority('player')")
-    public ResponseEntity<AnswerDto> postInitialQuestion(@RequestBody InitialQuestionDto initialQuestionDto) {
-        final UserId userUUID = new UserId(UUID.fromString(initialQuestionDto.getUserId()));
+    public ResponseEntity<AnswerDto> postInitialQuestion(
+            @Valid @RequestBody InitialQuestionDto initialQuestionDto,
+            @AuthenticationPrincipal Jwt token) {
+        final UserId userUUID = new UserId(UUID.fromString(token.getClaimAsString("sub")));
         final GameId gameUUID = new GameId(UUID.fromString(initialQuestionDto.getGameId()));
 
         try {
@@ -52,8 +57,10 @@ public class ChatbotRestController {
 
     @PostMapping("/follow-up-question")
     @PreAuthorize("hasAuthority('player')")
-    public ResponseEntity<AnswerDto> postFollowUpQuestion(@RequestBody FollowUpQuestionDto followUpQuestionDto) {
-        final UserId userUUID = new UserId(UUID.fromString(followUpQuestionDto.getUserId()));
+    public ResponseEntity<AnswerDto> postFollowUpQuestion(
+            @Valid @RequestBody FollowUpQuestionDto followUpQuestionDto,
+            @AuthenticationPrincipal Jwt token) {
+        final UserId userUUID = new UserId(UUID.fromString(token.getClaimAsString("sub")));
         final GameId gameUUID = new GameId(UUID.fromString(followUpQuestionDto.getGameId()));
         final String question = followUpQuestionDto.getQuestion().getText();
 

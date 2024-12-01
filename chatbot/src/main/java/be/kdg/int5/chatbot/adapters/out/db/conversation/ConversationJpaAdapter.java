@@ -26,25 +26,7 @@ public class ConversationJpaAdapter implements ConversationLoadPort, Conversatio
 
         if (gameConversationJpa == null) return null;
 
-        final GameConversation gameConversation = new GameConversation(
-                new UserId(gameConversationJpa.getUserId()),
-                gameConversationJpa.getStartTime(),
-                gameConversationJpa.getLastMessageTime(),
-                new GameId(gameConversationJpa.getGameId())
-        );
-
-        final List<Question> questionList = gameConversationJpa.getQuestions().stream()
-                .map(q -> {
-                    final Question question = new Question(q.getText(), q.getSubmittedAt(), q.getInitial());
-                    final Answer answer = new Answer(q.getAnswer().getText());
-                    question.setAnswer(answer);
-                    return question;
-                })
-                .collect(Collectors.toList());
-
-        gameConversation.setQuestions(questionList);
-
-        return gameConversation;
+        return toGameConversation(gameConversationJpa);
     }
 
     @Override
@@ -83,6 +65,27 @@ public class ConversationJpaAdapter implements ConversationLoadPort, Conversatio
         }
 
         conversationJpaRepository.save(conversationJpa);
+    }
+
+    private GameConversation toGameConversation(GameConversationJpaEntity gameConversationJpa) {
+        final GameConversation gameConversation = new GameConversation(
+                new UserId(gameConversationJpa.getUserId()),
+                gameConversationJpa.getStartTime(),
+                gameConversationJpa.getLastMessageTime(),
+                new GameId(gameConversationJpa.getGameId())
+        );
+
+        final List<Question> questionList = gameConversationJpa.getQuestions().stream()
+                .map(q -> {
+                    final Question question = new Question(q.getText(), q.getSubmittedAt(), q.getInitial());
+                    final Answer answer = new Answer(q.getAnswer().getText());
+                    question.setAnswer(answer);
+                    return question;
+                })
+                .collect(Collectors.toList());
+
+        gameConversation.setQuestions(questionList);
+        return gameConversation;
     }
 
     private ConversationJpaEntity toConservationJpa(Conversation conversation) {

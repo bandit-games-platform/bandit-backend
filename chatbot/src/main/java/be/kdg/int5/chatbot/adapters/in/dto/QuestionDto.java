@@ -1,6 +1,9 @@
 package be.kdg.int5.chatbot.adapters.in.dto;
 
+import jakarta.validation.constraints.NotNull;
+
 public class QuestionDto {
+    @NotNull
     private String text;
 
     public QuestionDto() {

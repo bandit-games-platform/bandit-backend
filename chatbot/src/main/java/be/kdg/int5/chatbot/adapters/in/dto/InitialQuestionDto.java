@@ -1,23 +1,16 @@
 package be.kdg.int5.chatbot.adapters.in.dto;
 
+import jakarta.validation.constraints.NotNull;
+
 public class InitialQuestionDto {
-    private String userId;
+    @NotNull
     private String gameId;
 
     public InitialQuestionDto() {
     }
 
-    public InitialQuestionDto(String userId, String gameId) {
-        this.userId = userId;
+    public InitialQuestionDto(String gameId) {
         this.gameId = gameId;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
     }
 
     public String getGameId() {

@@ -18,6 +18,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -27,6 +29,7 @@ import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -46,6 +49,9 @@ class ChatbotControllerIntegrationTest extends AbstractDatabaseTest {
     @MockBean
     private PythonClientAdapter pythonClientAdapter;
 
+    @MockBean
+    private JwtDecoder jwtDecoder;
+
     private UUID userId;
     private UUID gameId;
 
@@ -56,11 +62,10 @@ class ChatbotControllerIntegrationTest extends AbstractDatabaseTest {
     }
 
     @Test
-    @WithMockUser(authorities = {"player"})
     void shouldReturnAnswerWhenUserStartsAConversation() throws Exception {
 
         // Arrange
-        InitialQuestionDto initialQuestionDto = new InitialQuestionDto(String.valueOf(userId), String.valueOf(gameId));
+        InitialQuestionDto initialQuestionDto = new InitialQuestionDto(String.valueOf(gameId));
         String expectedAnswerText = "Here are the main rules of the game...";
 
         when(pythonClientAdapter.getAnswerForInitialQuestion(any(), any())).thenReturn(new Answer(expectedAnswerText));
@@ -68,7 +73,10 @@ class ChatbotControllerIntegrationTest extends AbstractDatabaseTest {
         // Act
         final ResultActions result = mockMvc.perform(post("/initial-question")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(initialQuestionDto)));
+                .content(objectMapper.writeValueAsString(initialQuestionDto))
+                .with(jwt()
+                        .jwt(jwt -> jwt.claim("sub", String.valueOf(userId)))
+                        .authorities(new SimpleGrantedAuthority("player"))));
 
         // Assert
         result.andExpect(status().isOk())
@@ -78,7 +86,6 @@ class ChatbotControllerIntegrationTest extends AbstractDatabaseTest {
     }
 
     @Test
-    @WithMockUser(authorities = {"player"})
     void shouldReturnAnswerWhenConversationWithInitialQuestionAlreadyExists() throws Exception {
         // Arrange
         LocalDateTime submittedAt = LocalDateTime.now();
@@ -87,12 +94,15 @@ class ChatbotControllerIntegrationTest extends AbstractDatabaseTest {
         when(conversationJpaRepository.findByUserIdAndGameIdWithQuestions(userId, gameId))
                 .thenReturn(existingConversation);
 
-        InitialQuestionDto initialQuestionDto = new InitialQuestionDto(String.valueOf(userId), String.valueOf(gameId));
+        InitialQuestionDto initialQuestionDto = new InitialQuestionDto(String.valueOf(gameId));
 
         // Act
         final ResultActions result = mockMvc.perform(post("/initial-question")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(initialQuestionDto)));
+                .content(objectMapper.writeValueAsString(initialQuestionDto))
+                .with(jwt()
+                        .jwt(jwt -> jwt.claim("sub", String.valueOf(userId)))
+                        .authorities(new SimpleGrantedAuthority("player"))));
 
         // Assert
         result.andExpect(status().isOk())
@@ -103,7 +113,6 @@ class ChatbotControllerIntegrationTest extends AbstractDatabaseTest {
     }
 
     @Test
-    @WithMockUser(authorities = {"player"})
     void shouldReturnAnswerWhenUserContinuesAConversation() throws Exception {
 
         // Arrange
@@ -114,7 +123,7 @@ class ChatbotControllerIntegrationTest extends AbstractDatabaseTest {
                 .thenReturn(existingConversation);
 
         QuestionDto questionDto = new QuestionDto("Tell me more about the game.");
-        FollowUpQuestionDto followUpQuestionDto = new FollowUpQuestionDto(String.valueOf(userId), String.valueOf(gameId), questionDto);
+        FollowUpQuestionDto followUpQuestionDto = new FollowUpQuestionDto(String.valueOf(gameId), questionDto);
 
         final String expectedAnswerText = "This is additional information about the game.";
 
@@ -123,7 +132,10 @@ class ChatbotControllerIntegrationTest extends AbstractDatabaseTest {
         // Act
         final ResultActions result = mockMvc.perform(post("/follow-up-question")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(followUpQuestionDto)));
+                .content(objectMapper.writeValueAsString(followUpQuestionDto))
+                .with(jwt()
+                        .jwt(jwt -> jwt.claim("sub", String.valueOf(userId)))
+                        .authorities(new SimpleGrantedAuthority("player"))));
 
         // Assert
         result.andExpect(status().isOk())
@@ -133,11 +145,10 @@ class ChatbotControllerIntegrationTest extends AbstractDatabaseTest {
     }
 
     @Test
-    @WithMockUser(authorities = {"player"})
     void shouldReturnServiceUnavailableWhenPythonServiceFails() throws Exception {
 
         // Arrange
-        InitialQuestionDto initialQuestionDto = new InitialQuestionDto(userId.toString(), gameId.toString());
+        InitialQuestionDto initialQuestionDto = new InitialQuestionDto(gameId.toString());
 
         when(pythonClientAdapter.getAnswerForInitialQuestion(any(), any()))
                 .thenThrow(new PythonServiceException("An error occurred while calling the Python service."));
@@ -145,7 +156,10 @@ class ChatbotControllerIntegrationTest extends AbstractDatabaseTest {
         // Act
         final ResultActions result = mockMvc.perform(post("/initial-question")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(initialQuestionDto)));
+                .content(objectMapper.writeValueAsString(initialQuestionDto))
+                .with(jwt()
+                        .jwt(jwt -> jwt.claim("sub", String.valueOf(userId)))
+                        .authorities(new SimpleGrantedAuthority("player"))));
 
         // Assert
         result.andExpect(status().isServiceUnavailable())
@@ -153,16 +167,17 @@ class ChatbotControllerIntegrationTest extends AbstractDatabaseTest {
     }
 
     @Test
-    @WithMockUser // no specific authority
     void shouldReturnForbiddenWhenUserHasNoAuthority() throws Exception {
 
         // Arrange
-        InitialQuestionDto initialQuestionDto = new InitialQuestionDto(userId.toString(), gameId.toString());
+        InitialQuestionDto initialQuestionDto = new InitialQuestionDto(gameId.toString());
 
         // Act
         final ResultActions result = mockMvc.perform(post("/initial-question")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(initialQuestionDto)));
+                .content(objectMapper.writeValueAsString(initialQuestionDto))
+                .with(jwt()
+                        .jwt(jwt -> jwt.claim("sub", String.valueOf(userId)))));
 
         // Assert
         result.andExpect(status().isForbidden());
