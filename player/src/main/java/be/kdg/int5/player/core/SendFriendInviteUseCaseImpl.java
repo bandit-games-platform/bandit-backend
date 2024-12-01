@@ -27,7 +27,7 @@ public class SendFriendInviteUseCaseImpl implements SendFriendInviteUseCase {
         PlayerId playerId = command.playerId();
         PlayerId friendId = command.friendId();
 
-        Player player = playerLoadPort.loadPlayerById(playerId.uuid());
+        Player player = playerLoadPort.loadPlayerByIdWithoutJoinDate(playerId.uuid());
         FriendInvite newFriendInvite = player.sendFriendInvite(friendId);
         friendInviteStatusCreatePort.createFriendInviteStatus(newFriendInvite);
         return newFriendInvite != null;

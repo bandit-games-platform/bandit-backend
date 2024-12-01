@@ -34,7 +34,7 @@ public class Player {
     }
 
     public Player(final PlayerId id, final String displayName, ImageResource avatar) {
-        this(id, null, displayName, avatar);
+        this(id, LocalDateTime.now(), displayName, avatar);
     }
 
     public Player(final PlayerId id, final String displayName) {
