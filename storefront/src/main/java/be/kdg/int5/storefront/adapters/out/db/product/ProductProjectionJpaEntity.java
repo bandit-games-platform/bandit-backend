@@ -1,20 +1,24 @@
-package be.kdg.int5.storefront.adapters.out.other.dto;
+package be.kdg.int5.storefront.adapters.out.db.product;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class GameDetailsDto {
+@Entity
+@Table(schema = "storefront", name = "product")
+public class ProductProjectionJpaEntity {
+    @Id
     private UUID id;
     private String title;
     private BigDecimal price;
 
-    public GameDetailsDto() {
+    public ProductProjectionJpaEntity() {
     }
 
-    public GameDetailsDto(UUID id, String title, BigDecimal price) {
+    public ProductProjectionJpaEntity(UUID id, String title, BigDecimal price) {
         this.id = id;
         this.title = title;
         this.price = price;

@@ -1,22 +1,22 @@
 package be.kdg.int5.storefront.core;
 
+import be.kdg.int5.storefront.domain.ProductProjection;
 import be.kdg.int5.storefront.port.in.query.GameBasicDetailsQuery;
-import be.kdg.int5.storefront.port.out.GameRegistryContextCallPort;
+import be.kdg.int5.storefront.port.out.ProductLoadPort;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
 import java.util.UUID;
 
 @Service
 public class GameBasicDetailsQueryImpl implements GameBasicDetailsQuery {
-    private final GameRegistryContextCallPort gameRegistryContextCallPort;
+    private final ProductLoadPort productLoadPort;
 
-    public GameBasicDetailsQueryImpl(GameRegistryContextCallPort gameRegistryContextCallPort) {
-        this.gameRegistryContextCallPort = gameRegistryContextCallPort;
+    public GameBasicDetailsQueryImpl(ProductLoadPort productLoadPort) {
+        this.productLoadPort = productLoadPort;
     }
 
     @Override
-    public Map<String, String> getBasicGameDetails(UUID gameId) {
-        return gameRegistryContextCallPort.getGameTitleAndPriceFromId(gameId);
+    public ProductProjection getBasicGameDetails(UUID gameId) {
+        return productLoadPort.loadProductById(gameId);
     }
 }

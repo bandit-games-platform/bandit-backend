@@ -1,4 +1,4 @@
-package be.kdg.int5.storefront.adapters.out.db;
+package be.kdg.int5.storefront.adapters.out.db.order;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

@@ -1,4 +1,4 @@
-package be.kdg.int5.storefront.adapters.out.db;
+package be.kdg.int5.storefront.adapters.out.db.order;
 
 import be.kdg.int5.storefront.domain.OrderStatus;
 import jakarta.persistence.*;

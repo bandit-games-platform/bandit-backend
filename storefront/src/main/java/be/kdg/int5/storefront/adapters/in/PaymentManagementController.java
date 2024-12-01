@@ -3,6 +3,7 @@ package be.kdg.int5.storefront.adapters.in;
 import be.kdg.int5.common.exceptions.OrderAlreadyExistsException;
 import be.kdg.int5.storefront.adapters.in.dto.CreatedOrderIdDto;
 import be.kdg.int5.storefront.domain.Order;
+import be.kdg.int5.storefront.domain.ProductProjection;
 import be.kdg.int5.storefront.port.in.CompleteOrderCommand;
 import be.kdg.int5.storefront.port.in.CompleteOrderUseCase;
 import be.kdg.int5.storefront.port.in.SaveNewOrderCommand;
@@ -63,12 +64,11 @@ public class PaymentManagementController {
         Stripe.apiKey = apiKey;
 
         try {
-            // This can be changed to use a projection, by simply swapping out the adapter for the port
-            Map<String, String> basicGameDetails = gameBasicDetailsQuery.getBasicGameDetails(productId);
+            ProductProjection basicGameDetails = gameBasicDetailsQuery.getBasicGameDetails(productId);
             if (basicGameDetails == null) return null;
 
-            String productName = basicGameDetails.get("title");
-            BigDecimal productPrice = new BigDecimal(basicGameDetails.get("price")).multiply(BigDecimal.valueOf(100)); // Convert euro price into cent price
+            String productName = basicGameDetails.getTitle();
+            BigDecimal productPrice = basicGameDetails.getPrice().multiply(BigDecimal.valueOf(100)); // Convert euro price into cent price
 
             Price price = findProductPrice(productId.toString(), productName, productPrice);
 
