@@ -1,6 +1,6 @@
 package be.kdg.int5.player.adapters.out.db.player;
 
-import be.kdg.int5.common.domain.ImageResource;
+import be.kdg.int5.player.adapters.out.db.playerFriend.PlayerFriendsJpaEntity;
 import be.kdg.int5.player.domain.Country;
 import be.kdg.int5.player.domain.Gender;
 import jakarta.persistence.*;
@@ -22,14 +22,8 @@ public class PlayerJpaEntity {
     private LocalDate birthdate;
     @Embedded
     private ImageResourceJpaEmbed avatar;
-    @ManyToMany
-    @JoinTable(
-            schema = "player",
-            name = "friends",
-            joinColumns = @JoinColumn(name = "player_id"),
-            inverseJoinColumns = @JoinColumn(name = "friend_id")
-    )
-    private List<PlayerJpaEntity> friendsList;
+    @OneToMany(mappedBy = "player", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<PlayerFriendsJpaEntity> friendsList;
 
     public PlayerJpaEntity() {
     }
@@ -38,7 +32,7 @@ public class PlayerJpaEntity {
         this(id, displayName, null, null, null, null, null);
     }
 
-    public PlayerJpaEntity(UUID id, String displayName, Gender gender, Country location, LocalDate birthdate, ImageResourceJpaEmbed avatar, List<PlayerJpaEntity> friendsList) {
+    public PlayerJpaEntity(UUID id, String displayName, Gender gender, Country location, LocalDate birthdate, ImageResourceJpaEmbed avatar, List<PlayerFriendsJpaEntity> friendsList) {
         this.id = id;
         this.displayName = displayName;
         this.gender = gender;
@@ -46,6 +40,10 @@ public class PlayerJpaEntity {
         this.birthdate = birthdate;
         this.avatar = avatar;
         this.friendsList = friendsList;
+    }
+
+    public PlayerJpaEntity(String displayName, ImageResourceJpaEmbed avatar) {
+        this(null, displayName, null, null, null, avatar, null);
     }
 
     public UUID getId() {
@@ -96,11 +94,11 @@ public class PlayerJpaEntity {
         this.avatar = avatar;
     }
 
-    public List<PlayerJpaEntity> getFriendsList() {
+    public List<PlayerFriendsJpaEntity> getFriendsList() {
         return friendsList;
     }
 
-    public void setFriendsList(List<PlayerJpaEntity> friendsList) {
+    public void setFriendsList(List<PlayerFriendsJpaEntity> friendsList) {
         this.friendsList = friendsList;
     }
 }

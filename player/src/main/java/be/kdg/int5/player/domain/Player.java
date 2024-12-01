@@ -2,6 +2,7 @@ package be.kdg.int5.player.domain;
 
 import be.kdg.int5.common.domain.ImageResource;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import static java.util.Objects.requireNonNull;
 
@@ -14,12 +15,25 @@ public class Player {
     private ImageResource avatar;
     private List<Player> friendsList;
 
-    public Player(final PlayerId id, final String displayName) {
+    public Player(final PlayerId id, final String displayName, ImageResource avatar) {
         requireNonNull(id);
         requireNonNull(displayName);
+        requireNonNull(avatar);
 
         this.id = id;
         this.displayName = displayName;
+        this.avatar = avatar;
+        this.friendsList = new ArrayList<>();
+    }
+
+    public Player(final PlayerId id, final String displayName) {
+        this(id, displayName, null);
+    }
+
+
+    public FriendInvite sendFriendInvite(final PlayerId invited){
+        requireNonNull(invited);
+        return new FriendInvite(this.id, invited);
     }
 
     public PlayerId getId() {
