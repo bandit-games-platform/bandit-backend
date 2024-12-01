@@ -1,0 +1,31 @@
+#### Get access token with player user
+
+POST http://localhost:8180/realms/bandit-realm/protocol/openid-connect/token HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+
+client_id=bandit-backend&client_secret=**********&username=gamora_the_player@gmail.com&password=password&grant_type=password&scope=openid
+
+> {%client.global.set("player", response.body.access_token);%}
+
+
+### Post initial question
+POST http://localhost:8091/chatbot/initial-question
+Content-Type: application/json
+Authorization: Bearer {{player}}
+
+{
+  "gameId": "d77e1d1f-6b46-4c89-9290-3b9cf8a7c001"
+}
+
+
+### Post follow-up question
+POST http://localhost:8091/chatbot/follow-up-question
+Content-Type: application/json
+Authorization: Bearer {{player}}
+
+{
+  "gameId": "d77e1d1f-6b46-4c89-9290-3b9cf8a7c001",
+  "question": {
+    "text": "Tell me more about the game."
+  }
+}
