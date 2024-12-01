@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 public class FollowUpQuestionDto {
     @NotNull
     private String gameId;
+    @NotNull
     private QuestionDto question;
 
     public FollowUpQuestionDto() {
