@@ -66,7 +66,7 @@ public class OrderJpaAdapter implements OrderLoadPort, OrderUpdatePort, OrderCre
             return;
         }
         orderJpaEntity.setOrderStatus(order.getOrderStatus());
-        if (order.getOrderStatus() == OrderStatus.COMPLETED) orderJpaEntity.setOrderStatus(order.getOrderStatus());
+        if (order.getOrderStatus() == OrderStatus.COMPLETED) orderJpaEntity.setOrderCompletedAt(order.getOrderCompletedAt());
         orderJpaRepository.save(orderJpaEntity);
     }
 
