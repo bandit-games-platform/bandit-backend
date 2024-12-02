@@ -7,7 +7,11 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(schema = "player", name = "friend_invite_status")
+@Table(
+        schema = "player",
+        name = "friend_invite_status",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"inviter_id", "invited_id"})
+)
 public class FriendInviteStatusJpaEntity {
     @Id
     @GeneratedValue(generator = "UUID")

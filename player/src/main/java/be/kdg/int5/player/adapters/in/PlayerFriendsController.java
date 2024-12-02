@@ -54,7 +54,7 @@ public class    PlayerFriendsController {
         return new ResponseEntity<>(newPlayersList, HttpStatus.OK);
     }
 
-    @PostMapping("/friend-invites/{friendId}")
+    @PostMapping("/invite-new-friends/{friendId}")
     @PreAuthorize("hasAuthority('player')")
     ResponseEntity<Boolean> sendNewFriendInvite(@PathVariable UUID friendId, @AuthenticationPrincipal Jwt token){
         String userId = token.getClaimAsString("sub");
@@ -63,7 +63,7 @@ public class    PlayerFriendsController {
         if (sendFriendInviteUseCase.sendFriendInvite(command)){
             return new ResponseEntity<>(true, HttpStatus.CREATED);
         }
-        return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(false, HttpStatus.CONFLICT);
     }
 
 

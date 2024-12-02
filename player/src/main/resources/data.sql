@@ -16,7 +16,7 @@ VALUES
 INSERT INTO player.player (id, birthdate, avatar, display_name, gender, location)
 VALUES
     ('e47369ed-5cf2-48ec-a1f2-42cf7fa10836', '1985-03-22', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHfd3PPulVSp4ZbuBFNkePoUR_fLJQe474Ag&s', 'Challenger', 'MALE', 'INDIA'),
-    ('86da4cad-2dc1-4a43-981f-d900e8ad9dc7', '2002-07-15', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHfd3PPulVSp4ZbuBFNkePoUR_fLJQe474Ag&s', 'Ines', 'FEMALE', 'GERMANY'),
+    ('86da4cad-2dc1-4a43-981f-d900e8ad9dc7', '2002-07-15', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHfd3PPulVSp4ZbuBFNkePoUR_fLJQe474Ag&s', 'Inês', 'FEMALE', 'GERMANY'),
     ('74053627-749b-4076-ba15-888444c09878', '1997-12-10', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHfd3PPulVSp4ZbuBFNkePoUR_fLJQe474Ag&s', 'Dean', 'OTHER', 'BRAZIL'),
     ('c7ca1ac8-f9cf-43de-a82c-fb85f84348f2', '1993-02-18', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHfd3PPulVSp4ZbuBFNkePoUR_fLJQe474Ag&s', 'Boldi', 'MALE', 'SOUTH_AFRICA'),
     ('4939923a-d359-45d1-ad39-9b36d9d23a0d', '2005-09-05', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHfd3PPulVSp4ZbuBFNkePoUR_fLJQe474Ag&s', 'SkyBlazer', 'FEMALE', 'AUSTRALIA'),

@@ -2,6 +2,7 @@ package be.kdg.int5.player.adapters.out.db.playerFriend;
 
 import be.kdg.int5.common.domain.ImageResource;
 import be.kdg.int5.common.domain.ResourceURL;
+import be.kdg.int5.common.exceptions.InviteStatusExists;
 import be.kdg.int5.player.adapters.out.db.player.ImageResourceJpaEmbed;
 import be.kdg.int5.player.adapters.out.db.player.PlayerJpaEntity;
 import be.kdg.int5.player.adapters.out.db.player.PlayerJpaRepository;
@@ -59,10 +60,12 @@ public class PlayerFriendJpaAdapter implements PlayerUsernameLoadPort, FriendsLi
     }
 
     @Override
-    public void createFriendInviteStatus(FriendInvite friendInvite) {
+    public FriendInvite createFriendInviteStatus(FriendInvite friendInvite) {
         PlayerJpaEntity inviter = playerJpaRepository.getReferenceById(friendInvite.getInviter().uuid());
         PlayerJpaEntity invited = playerJpaRepository.getReferenceById(friendInvite.getInvited().uuid());
 
+        FriendInviteStatusJpaEntity oldFriendInviteStatusJpaEntity = friendInviteStatusJpaRepository.findByInviter_IdAndInvited_Id(inviter.getId(), invited.getId());
+        if (oldFriendInviteStatusJpaEntity != null) throw new InviteStatusExists();
         FriendInviteStatusJpaEntity friendInviteStatusJpaEntity = new FriendInviteStatusJpaEntity(
                 friendInvite.getId().uuid(),
                 inviter,
@@ -71,6 +74,7 @@ public class PlayerFriendJpaAdapter implements PlayerUsernameLoadPort, FriendsLi
                 LocalDateTime.now()
         );
         friendInviteStatusJpaRepository.save(friendInviteStatusJpaEntity);
+        return friendInviteJpaToDomain(friendInviteStatusJpaEntity);
     }
 
     @Override

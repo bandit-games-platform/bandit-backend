@@ -19,6 +19,6 @@ Accept: application/json
 Authorization: Bearer {{logged-in-user}}
 
 ### Create a new friend Invite
-POST http://localhost:8090/api/player/friend-invites/8913596b-1968-4e06-9e62-7f4f89d33dde
+POST http://localhost:8090/api/player/invite-new-friends/8913596b-1968-4e06-9e62-7f4f89d33dde
 Accept: application/json
 Authorization: Bearer {{logged-in-user}}
