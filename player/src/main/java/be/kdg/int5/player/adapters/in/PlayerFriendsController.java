@@ -1,10 +1,16 @@
 package be.kdg.int5.player.adapters.in;
 
+import be.kdg.int5.player.adapters.in.dto.FriendInviteBioDto;
 import be.kdg.int5.player.adapters.in.dto.PlayerFriendBioDto;
 import be.kdg.int5.player.adapters.in.dto.PlayerSearchBioDto;
+import be.kdg.int5.player.domain.InviteStatus;
 import be.kdg.int5.player.domain.Player;
 import be.kdg.int5.player.domain.PlayerId;
 import be.kdg.int5.player.port.in.*;
+import be.kdg.int5.player.port.in.query.FriendsListQuery;
+import be.kdg.int5.player.port.in.query.GetFriendsListCommand;
+import be.kdg.int5.player.port.in.query.GetPendingFriendInvitesCommand;
+import be.kdg.int5.player.port.in.query.PendingFriendInvitesQuery;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,11 +27,13 @@ public class    PlayerFriendsController {
     private final SearchForNewFriendsUseCase searchForNewFriendsUseCase;
     private final FriendsListQuery friendsListQuery;
     private final SendFriendInviteUseCase sendFriendInviteUseCase;
+    private final PendingFriendInvitesQuery pendingFriendInvitesQuery;
 
-    public PlayerFriendsController(SearchForNewFriendsUseCase searchForNewFriendsUseCase, FriendsListQuery friendsListQuery, SendFriendInviteUseCase sendFriendInviteUseCase) {
+    public PlayerFriendsController(SearchForNewFriendsUseCase searchForNewFriendsUseCase, FriendsListQuery friendsListQuery, SendFriendInviteUseCase sendFriendInviteUseCase, PendingFriendInvitesQuery pendingFriendInvitesQuery) {
         this.searchForNewFriendsUseCase = searchForNewFriendsUseCase;
         this.friendsListQuery = friendsListQuery;
         this.sendFriendInviteUseCase = sendFriendInviteUseCase;
+        this.pendingFriendInvitesQuery = pendingFriendInvitesQuery;
     }
 
     @GetMapping("")
@@ -64,6 +72,16 @@ public class    PlayerFriendsController {
             return new ResponseEntity<>(true, HttpStatus.CREATED);
         }
         return new ResponseEntity<>(false, HttpStatus.CONFLICT);
+    }
+
+    @GetMapping("/friends/pending-invites")
+    @PreAuthorize("hasAuthority('player')")
+    ResponseEntity<List<FriendInviteBioDto>> getAllPendingFriendInvites(@AuthenticationPrincipal Jwt token){
+        String userId = token.getClaimAsString("sub");
+        UUID playerId = UUID.fromString(userId);
+        GetPendingFriendInvitesCommand command = new GetPendingFriendInvitesCommand(new PlayerId(playerId));
+        List<FriendInviteBioDto> friendInviteList = pendingFriendInvitesQuery.getAllPendingFriendInvites(command);
+        return new ResponseEntity<>(friendInviteList, HttpStatus.OK);
     }
 
 

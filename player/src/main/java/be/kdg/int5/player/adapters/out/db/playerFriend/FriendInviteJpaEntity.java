@@ -12,7 +12,7 @@ import java.util.UUID;
         name = "friend_invite_status",
         uniqueConstraints = @UniqueConstraint(columnNames = {"inviter_id", "invited_id"})
 )
-public class FriendInviteStatusJpaEntity {
+public class FriendInviteJpaEntity {
     @Id
     @GeneratedValue(generator = "UUID")
     private UUID id;
@@ -32,10 +32,10 @@ public class FriendInviteStatusJpaEntity {
     @Column(name = "time_of_invite", nullable = false)
     private LocalDateTime invitedTime;
 
-    public FriendInviteStatusJpaEntity() {
+    public FriendInviteJpaEntity() {
     }
 
-    public FriendInviteStatusJpaEntity(UUID id, PlayerJpaEntity inviter, PlayerJpaEntity invited, InviteStatus status, LocalDateTime invitedTime) {
+    public FriendInviteJpaEntity(UUID id, PlayerJpaEntity inviter, PlayerJpaEntity invited, InviteStatus status, LocalDateTime invitedTime) {
         this.id = id;
         this.inviter = inviter;
         this.invited = invited;

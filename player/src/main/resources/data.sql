@@ -34,3 +34,8 @@ VALUES
     ('11b6cd2c-25a5-460d-8b62-51c43de57744', '8449ba7c-194c-4e51-b060-cd88cc498836', 'c7ca1ac8-f9cf-43de-a82c-fb85f84348f2'),
     ('3cda5cb3-07e5-4973-9994-465b61c8a2f9', '8449ba7c-194c-4e51-b060-cd88cc498836', '81c15287-4975-4def-815f-67c82718fd70'),
     ('03fd91f3-217e-40ee-8dd2-2df90c66951b', '8449ba7c-194c-4e51-b060-cd88cc498836', '10dae503-0132-439b-86e9-b649a058cbe8');
+
+INSERT INTO player.friend_invite_status (time_of_invite, id, invited_id, inviter_id, status)
+VALUES
+    ('2024-12-02 10:30:00', 'fba3f186-8351-4cac-83d4-c1a58ae6cf81', '8449ba7c-194c-4e51-b060-cd88cc498836', 'b1a2e3f4-5678-1234-5678-90abcdef1234', 'PENDING'),
+    ('2024-12-02 09:30:00', 'fba3f186-8351-4cac-83d4-c1a58ae6cf82', '8449ba7c-194c-4e51-b060-cd88cc498836', '8913596b-1968-4e06-9e62-7f4f89d33dde', 'PENDING');
