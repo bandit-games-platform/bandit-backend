@@ -20,9 +20,9 @@ build_statistics:
   stage: build
   script:
     - echo "Building statistics project"
-    - cd ./statistics
     - chmod +x gradlew
-    - ./gradlew bootJar
+    - cd ./statistics
+    - ../gradlew bootJar
     - cd ..
   artifacts:
     name: "build-statistics-artifact"
@@ -56,9 +56,9 @@ test_statistics:
 
   script:
     - echo "Running statistics tests"
-    - cd ./statistics
     - chmod +x gradlew
-    - ./gradlew test
+    - cd ./statistics
+    - ../gradlew test
     - cd ..
 
   artifacts:
