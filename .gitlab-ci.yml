@@ -48,11 +48,16 @@ test_statistics:
     # How do we specify a network and port to use?
     - name: postgres:16.1-alpine
       alias: postgres_main_db
-      entrypoint: ["docker-entrypoint.sh"]
+      entrypoint:
+        - '/bin/bash'
+        - '-c'
+        - |
+          until [-f "$CI_PROJECT_DIR/.git/index]; do sleep 1; done;
+          until [-f "$CI_PROJECT_DIR/.git/index.lock]; do sleep 1; done;
+          cp -R "$CI_PROJECT_DIR/infrastructure/init.sql" /docker-entrypoint-initdb.d/db.sql
+          exec /usr/local/bin/docker-entrypoint.sh "$@"
+        - '/bin/bash'
       command: ["postgres"]
-
-  before_script:
-      - cp ./infrastructure/init.sql /docker-entrypoint-initdb.d/db.sql
 
   script:
     - echo "Running statistics tests"
