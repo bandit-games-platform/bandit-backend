@@ -99,6 +99,22 @@ public class PlayerFriendJpaAdapter implements PlayerUsernameLoadPort, FriendsLi
     }
 
     @Override
+    public List<FriendInviteBioDto> loadAllSentPendingFriendInvitesForPlayer(PlayerId playerId) {
+        List<FriendInviteJpaEntity> friendInviteJpaEntities = friendInviteJpaRepository.getAllByInviter_Id(playerId.uuid());
+        if (friendInviteJpaEntities.isEmpty()) return null;
+
+        return friendInviteJpaEntities.stream()
+                .filter(invite -> invite.getStatus() == InviteStatus.PENDING) // Filter pending invites
+                .map(invite -> {
+                    Optional<PlayerJpaEntity> inviterEntity = playerJpaRepository.findById(invite.getInvited().getId());
+                    return inviterEntity.map(player -> mapToFriendInviteBioDto(playerJpaToDomain(player), invite));
+                })
+                .filter(Optional::isPresent) // Remove empty results
+                .map(Optional::get)
+                .toList();
+    }
+
+    @Override
     public void updateFriendInviteStatusToAccepted(FriendInviteId friendInviteId) {
         FriendInviteJpaEntity friendInviteJpaEntity = friendInviteJpaRepository.getReferenceById(friendInviteId.uuid());
         FriendInvite friendInvite = this.friendInviteJpaToDomain(friendInviteJpaEntity);

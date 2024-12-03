@@ -11,4 +11,5 @@ import java.util.List;
 public interface FriendInviteStatusLoadPort {
     FriendInvite loadFriendInviteStatus(FriendInviteId friendInviteId);
     List<FriendInviteBioDto> loadAllPendingFriendInvitesForPlayer(PlayerId playerId);
+    List<FriendInviteBioDto> loadAllSentPendingFriendInvitesForPlayer(PlayerId playerId);
 }

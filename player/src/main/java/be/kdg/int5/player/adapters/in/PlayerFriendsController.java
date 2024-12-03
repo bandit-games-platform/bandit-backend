@@ -3,14 +3,10 @@ package be.kdg.int5.player.adapters.in;
 import be.kdg.int5.player.adapters.in.dto.FriendInviteBioDto;
 import be.kdg.int5.player.adapters.in.dto.PlayerFriendBioDto;
 import be.kdg.int5.player.adapters.in.dto.PlayerSearchBioDto;
-import be.kdg.int5.player.domain.InviteStatus;
 import be.kdg.int5.player.domain.Player;
 import be.kdg.int5.player.domain.PlayerId;
 import be.kdg.int5.player.port.in.*;
-import be.kdg.int5.player.port.in.query.FriendsListQuery;
-import be.kdg.int5.player.port.in.query.GetFriendsListCommand;
-import be.kdg.int5.player.port.in.query.GetPendingFriendInvitesCommand;
-import be.kdg.int5.player.port.in.query.PendingFriendInvitesQuery;
+import be.kdg.int5.player.port.in.query.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -74,13 +70,23 @@ public class    PlayerFriendsController {
         return new ResponseEntity<>(false, HttpStatus.CONFLICT);
     }
 
-    @GetMapping("/friends/pending-invites")
+    @GetMapping("/friends/pending-invites/received")
     @PreAuthorize("hasAuthority('player')")
-    ResponseEntity<List<FriendInviteBioDto>> getAllPendingFriendInvites(@AuthenticationPrincipal Jwt token){
+    ResponseEntity<List<FriendInviteBioDto>> getAllPendingReceivedFriendInvites(@AuthenticationPrincipal Jwt token){
         String userId = token.getClaimAsString("sub");
         UUID playerId = UUID.fromString(userId);
-        GetPendingFriendInvitesCommand command = new GetPendingFriendInvitesCommand(new PlayerId(playerId));
-        List<FriendInviteBioDto> friendInviteList = pendingFriendInvitesQuery.getAllPendingFriendInvites(command);
+        GetPendingReceivedFriendInvitesCommand command = new GetPendingReceivedFriendInvitesCommand(new PlayerId(playerId));
+        List<FriendInviteBioDto> friendInviteList = pendingFriendInvitesQuery.getAllReceivedPendingFriendInvites(command);
+        return new ResponseEntity<>(friendInviteList, HttpStatus.OK);
+    }
+
+    @GetMapping("/friends/pending-invites/sent")
+    @PreAuthorize("hasAuthority('player')")
+    ResponseEntity<List<FriendInviteBioDto>> getAllPendingSentFriendInvites(@AuthenticationPrincipal Jwt token){
+        String userId = token.getClaimAsString("sub");
+        UUID playerId = UUID.fromString(userId);
+        GetPendingSentFriendInvitesCommand command = new GetPendingSentFriendInvitesCommand(new PlayerId(playerId));
+        List<FriendInviteBioDto> friendInviteList = pendingFriendInvitesQuery.getAllSentPendingFriendInvites(command);
         return new ResponseEntity<>(friendInviteList, HttpStatus.OK);
     }
 
