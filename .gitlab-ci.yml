@@ -63,7 +63,7 @@ test_statistics:
     - echo "Running statistics tests"
     - chmod +x gradlew
     - cd ./statistics
-    - ../gradlew test
+    - ../gradlew test --scan
     - cd ..
 
   artifacts:
