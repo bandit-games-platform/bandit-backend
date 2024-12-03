@@ -35,17 +35,18 @@ test_statistics:
   stage: test
   needs: []
   variables:
-    POSTGRES_DB: $TEST_PG_DB
-    POSTGRES_USER: $TEST_PG_USER
-    POSTGRES_PASSWORD: $TEST_PG_PASS
-    POSTGRES_ROOT_PASSWORD: $TEST_PG_RPASS
+#    POSTGRES_DB: $TEST_PG_DB
+#    POSTGRES_USER: $TEST_PG_USER
+#    POSTGRES_PASSWORD: $TEST_PG_PASS
+#    POSTGRES_ROOT_PASSWORD: $TEST_PG_RPASS
     DATASOURCE_URL: "jdbc:postgresql://localhost:5432/bandit_db"
     DATASOURCE_USER: $TEST_PG_USER
     DATASOURCE_PASS: $TEST_PG_PASS
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
   # Do we need keycloak? Rabbit? for the tests
-#  services:
-#    # How do we specify an init script like we do with volumes in docker-compose.yml?
-#    # How do we specify a network and port to use?
+  services:
+    - docker:dind
 #    - name: postgres:16.1-alpine
 #      alias: postgres_main_db
 #      entrypoint:
@@ -59,11 +60,15 @@ test_statistics:
 #        - '/bin/bash'
 #      command: ["postgres"]
 
+  before_script:
+    - apk add --no-cache docker
+    - docker info
+
   script:
     - echo "Running statistics tests"
     - chmod +x gradlew
     - cd ./statistics
-    - ../gradlew test --scan
+    - ../gradlew test
     - cd ..
 
   artifacts:
