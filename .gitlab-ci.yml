@@ -52,8 +52,8 @@ test_statistics:
         - '/bin/bash'
         - '-c'
         - |
-          until [-f "$CI_PROJECT_DIR/.git/index]; do sleep 1; done;
-          until [-f "$CI_PROJECT_DIR/.git/index.lock]; do sleep 1; done;
+          until [ -f "$CI_PROJECT_DIR/.git/index" ]; do sleep 1; done;
+          until [ -f "$CI_PROJECT_DIR/.git/index.lock" ]; do sleep 1; done;
           cp -R "$CI_PROJECT_DIR/infrastructure/init.sql" /docker-entrypoint-initdb.d/db.sql
           exec /usr/local/bin/docker-entrypoint.sh "$@"
         - '/bin/bash'
