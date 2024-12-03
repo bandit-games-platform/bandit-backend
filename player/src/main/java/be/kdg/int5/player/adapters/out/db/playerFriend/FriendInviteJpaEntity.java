@@ -27,6 +27,7 @@ public class FriendInviteJpaEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
+
     private InviteStatus status;
 
     @Column(name = "time_of_invite", nullable = false)
