@@ -16,6 +16,72 @@ stages:
 #  - deploy
 #  - destroy
 
+
+# ----------------------- BUILD ---------------------------------- #
+
+build_chatbot:
+  stage: build
+  script:
+    - echo "Building chatbot project"
+    - chmod +x gradlew
+    - cd ./chatbot
+    - ../gradlew bootJar
+    - cd ..
+  artifacts:
+    name: "build-chatbot-artifact"
+    when: on_success
+    expire_in: 2 days
+    paths:
+      - "chatbot/build/libs/*.jar"
+
+
+build_gameplay:
+  stage: build
+  script:
+    - echo "Building gameplay project"
+    - chmod +x gradlew
+    - cd ./gameplay
+    - ../gradlew bootJar
+    - cd ..
+  artifacts:
+    name: "build-gameplay-artifact"
+    when: on_success
+    expire_in: 2 days
+      - "gameplay/build/libs/*.jar"
+
+
+build_game_registry:
+  stage: build
+  script:
+    - echo "Building game registry project"
+    - chmod +x gradlew
+    - cd ./gameRegistry
+    - ../gradlew bootJar
+    - cd ..
+  artifacts:
+    name: "build-game-registry-artifact"
+    when: on_success
+    expire_in: 2 days
+    paths:
+      - "gameRegistry/build/libs/*.jar"
+
+
+build_player:
+  stage: build
+  script:
+    - echo "Building player project"
+    - chmod +x gradlew
+    - cd ./player
+    - ../gradlew bootJar
+    - cd ..
+  artifacts:
+    name: "build-player-artifact"
+    when: on_success
+    expire_in: 2 days
+    paths:
+      - "player/build/libs/*.jar"
+
+
 build_statistics:
   stage: build
   script:
@@ -30,6 +96,129 @@ build_statistics:
     expire_in: 2 days
     paths:
       - "statistics/build/libs/*.jar"
+
+
+build_storefront:
+  stage: build
+  script:
+    - echo "Building storefront project"
+    - chmod +x gradlew
+    - cd ./storefront
+    - ../gradlew bootJar
+    - cd ..
+  artifacts:
+    name: "build-storefront-artifact"
+    when: on_success
+    expire_in: 2 days
+    paths:
+      - "storefront/build/libs/*.jar"
+
+
+# ----------------------- TEST ---------------------------------- #
+
+test_chatbot:
+  stage: test
+  needs: []
+  variables:
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
+  services:
+    - docker:dind
+
+  before_script:
+    - apk add --no-cache docker
+    - docker info
+
+  script:
+    - echo "Running chatbot tests"
+    - chmod +x gradlew
+    - cd ./chatbot
+    - ../gradlew test
+    - cd ..
+
+  artifacts:
+    when: always
+    reports:
+      junit: "chatbot/build/test-results/test/**/TEST-*.xml"
+
+
+test_gameplay:
+  stage: test
+  needs: []
+  variables:
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
+  services:
+    - docker:dind
+
+  before_script:
+    - apk add --no-cache docker
+    - docker info
+
+  script:
+    - echo "Running gameplay tests"
+    - chmod +x gradlew
+    - cd ./gameplay
+    - ../gradlew test
+    - cd ..
+
+  artifacts:
+    when: always
+    reports:
+      junit: "gameplay/build/test-results/test/**/TEST-*.xml"
+
+
+test_game_registry:
+  stage: test
+  needs: []
+  variables:
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
+  services:
+    - docker:dind
+
+  before_script:
+    - apk add --no-cache docker
+    - docker info
+
+  script:
+    - echo "Running game registry tests"
+    - chmod +x gradlew
+    - cd ./gameRegistry
+    - ../gradlew test
+    - cd ..
+
+  artifacts:
+    when: always
+    reports:
+      junit: "gameRegistry/build/test-results/test/**/TEST-*.xml"
+
+
+test_player:
+  stage: test
+  needs: []
+  variables:
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
+  services:
+    - docker:dind
+
+  before_script:
+    - apk add --no-cache docker
+    - docker info
+
+  script:
+    - echo "Running player tests"
+    - chmod +x gradlew
+    - cd ./player
+    - ../gradlew test
+    - cd ..
+
+  artifacts:
+    when: always
+    reports:
+      junit: "player/build/test-results/test/**/TEST-*.xml"
+
 
 test_statistics:
   stage: test
@@ -55,3 +244,29 @@ test_statistics:
     when: always
     reports:
       junit: "statistics/build/test-results/test/**/TEST-*.xml"
+
+
+test_storefront:
+  stage: test
+  needs: []
+  variables:
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
+  services:
+    - docker:dind
+
+  before_script:
+    - apk add --no-cache docker
+    - docker info
+
+  script:
+    - echo "Running storefront tests"
+    - chmod +x gradlew
+    - cd ./storefront
+    - ../gradlew test
+    - cd ..
+
+  artifacts:
+    when: always
+    reports:
+      junit: "storefront/build/test-results/test/**/TEST-*.xml"
