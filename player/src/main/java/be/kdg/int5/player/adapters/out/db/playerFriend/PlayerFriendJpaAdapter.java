@@ -3,7 +3,7 @@ package be.kdg.int5.player.adapters.out.db.playerFriend;
 import be.kdg.int5.common.domain.ImageResource;
 import be.kdg.int5.common.domain.ResourceURL;
 import be.kdg.int5.common.exceptions.InviteStatusExists;
-import be.kdg.int5.player.adapters.in.dto.FriendInviteBioDto;
+import be.kdg.int5.player.domain.FriendInviteBio;
 import be.kdg.int5.player.adapters.out.db.player.ImageResourceJpaEmbed;
 import be.kdg.int5.player.adapters.out.db.player.PlayerJpaEntity;
 import be.kdg.int5.player.adapters.out.db.player.PlayerJpaRepository;
@@ -75,7 +75,7 @@ public class PlayerFriendJpaAdapter implements PlayerUsernameLoadPort, FriendsLi
     }
 
     @Override
-    public List<FriendInviteBioDto> loadAllReceivedPendingFriendInvitesForPlayer(PlayerId playerId) {
+    public List<FriendInviteBio> loadAllReceivedPendingFriendInvitesForPlayer(PlayerId playerId) {
         List<FriendInviteJpaEntity> friendInviteJpaEntities = friendInviteJpaRepository.getAllByInvited_Id(playerId.uuid());
         if (friendInviteJpaEntities.isEmpty()) return null;
 
@@ -91,7 +91,7 @@ public class PlayerFriendJpaAdapter implements PlayerUsernameLoadPort, FriendsLi
     }
 
     @Override
-    public List<FriendInviteBioDto> loadAllSentPendingFriendInvitesForPlayer(PlayerId playerId) {
+    public List<FriendInviteBio> loadAllSentPendingFriendInvitesForPlayer(PlayerId playerId) {
         List<FriendInviteJpaEntity> friendInviteJpaEntities = friendInviteJpaRepository.getAllByInviter_Id(playerId.uuid());
         if (friendInviteJpaEntities.isEmpty()) return null;
 
@@ -177,8 +177,8 @@ public class PlayerFriendJpaAdapter implements PlayerUsernameLoadPort, FriendsLi
         );
     }
 
-    private FriendInviteBioDto mapToFriendInviteBioDto(Player player, FriendInviteJpaEntity invite) {
-        return new FriendInviteBioDto(
+    private FriendInviteBio mapToFriendInviteBioDto(Player player, FriendInviteJpaEntity invite) {
+        return new FriendInviteBio(
                 player.getId().uuid().toString(),
                 invite.getId(),
                 player.getDisplayName(),

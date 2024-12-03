@@ -34,6 +34,10 @@ public class PlayerJpaEntity {
         this(id, null, null, null, null, null, null, null);
     }
 
+    public PlayerJpaEntity(UUID id, String displayName) {
+        this(id, null, displayName, null, null, null, null, null);
+    }
+
     public PlayerJpaEntity(UUID id, LocalDateTime joinDate, String displayName) {
         this(id, joinDate, displayName, null, null, null, null, null);
     }

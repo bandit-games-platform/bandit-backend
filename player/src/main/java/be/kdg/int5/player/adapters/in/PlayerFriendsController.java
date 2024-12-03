@@ -1,6 +1,6 @@
 package be.kdg.int5.player.adapters.in;
 
-import be.kdg.int5.player.adapters.in.dto.FriendInviteBioDto;
+import be.kdg.int5.player.domain.FriendInviteBio;
 import be.kdg.int5.player.adapters.in.dto.PlayerFriendBioDto;
 import be.kdg.int5.player.adapters.in.dto.PlayerSearchBioDto;
 import be.kdg.int5.player.domain.FriendInviteId;
@@ -76,21 +76,21 @@ public class    PlayerFriendsController {
 
     @GetMapping("/friends/pending-invites/received")
     @PreAuthorize("hasAuthority('player')")
-    ResponseEntity<List<FriendInviteBioDto>> getAllPendingReceivedFriendInvites(@AuthenticationPrincipal Jwt token){
+    ResponseEntity<List<FriendInviteBio>> getAllPendingReceivedFriendInvites(@AuthenticationPrincipal Jwt token){
         String userId = token.getClaimAsString("sub");
         UUID playerId = UUID.fromString(userId);
         GetPendingReceivedFriendInvitesCommand command = new GetPendingReceivedFriendInvitesCommand(new PlayerId(playerId));
-        List<FriendInviteBioDto> friendInviteList = pendingFriendInvitesQuery.getAllReceivedPendingFriendInvites(command);
+        List<FriendInviteBio> friendInviteList = pendingFriendInvitesQuery.getAllReceivedPendingFriendInvites(command);
         return new ResponseEntity<>(friendInviteList, HttpStatus.OK);
     }
 
     @GetMapping("/friends/pending-invites/sent")
     @PreAuthorize("hasAuthority('player')")
-    ResponseEntity<List<FriendInviteBioDto>> getAllPendingSentFriendInvites(@AuthenticationPrincipal Jwt token){
+    ResponseEntity<List<FriendInviteBio>> getAllPendingSentFriendInvites(@AuthenticationPrincipal Jwt token){
         String userId = token.getClaimAsString("sub");
         UUID playerId = UUID.fromString(userId);
         GetPendingSentFriendInvitesCommand command = new GetPendingSentFriendInvitesCommand(new PlayerId(playerId));
-        List<FriendInviteBioDto> friendInviteList = pendingFriendInvitesQuery.getAllSentPendingFriendInvites(command);
+        List<FriendInviteBio> friendInviteList = pendingFriendInvitesQuery.getAllSentPendingFriendInvites(command);
         return new ResponseEntity<>(friendInviteList, HttpStatus.OK);
     }
 

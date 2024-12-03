@@ -1,6 +1,6 @@
 package be.kdg.int5.player.core.query;
 
-import be.kdg.int5.player.adapters.in.dto.FriendInviteBioDto;
+import be.kdg.int5.player.domain.FriendInviteBio;
 import be.kdg.int5.player.port.in.query.GetPendingReceivedFriendInvitesCommand;
 import be.kdg.int5.player.port.in.query.GetPendingSentFriendInvitesCommand;
 import be.kdg.int5.player.port.in.query.PendingFriendInvitesQuery;
@@ -20,13 +20,13 @@ public class PendingFriendInvitesQueryImpl implements PendingFriendInvitesQuery 
 
     @Override
     @Transactional(readOnly = true)
-    public List<FriendInviteBioDto> getAllReceivedPendingFriendInvites(GetPendingReceivedFriendInvitesCommand command) {
+    public List<FriendInviteBio> getAllReceivedPendingFriendInvites(GetPendingReceivedFriendInvitesCommand command) {
         return friendInviteStatusLoadPort.loadAllReceivedPendingFriendInvitesForPlayer(command.playerId());
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<FriendInviteBioDto> getAllSentPendingFriendInvites(GetPendingSentFriendInvitesCommand command) {
+    public List<FriendInviteBio> getAllSentPendingFriendInvites(GetPendingSentFriendInvitesCommand command) {
         return friendInviteStatusLoadPort.loadAllSentPendingFriendInvitesForPlayer(command.playerId());
     }
 }

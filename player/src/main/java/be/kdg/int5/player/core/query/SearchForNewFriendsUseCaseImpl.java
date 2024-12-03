@@ -1,4 +1,4 @@
-package be.kdg.int5.player.core;
+package be.kdg.int5.player.core.query;
 
 import be.kdg.int5.player.domain.Player;
 import be.kdg.int5.player.port.in.SearchForNewFriendsCommand;
