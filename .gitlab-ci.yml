@@ -47,6 +47,7 @@ build_gameplay:
     name: "build-gameplay-artifact"
     when: on_success
     expire_in: 2 days
+    paths:
       - "gameplay/build/libs/*.jar"
 
 
