@@ -23,8 +23,20 @@ public class LobbyJpaAdapter implements LobbyLoadPort, LobbySavePort {
     @Override
     public Lobby loadWithoutInvites(LobbyId lobbyId) {
         return repository.findById(lobbyId.uuid())
-                .map(this::mapLobbyEntityToDomain)
+                .map(this::mapLobbyEntityToDomainWithoutInvites)
                 .orElse(null);
+    }
+
+    public Lobby mapLobbyEntityToDomainWithoutInvites(LobbyJpaEntity jpa) {
+        return new Lobby(
+                new LobbyId(jpa.getId()),
+                new GameId(jpa.getGameId()),
+                jpa.getMaxPlayers(),
+                new PlayerId(jpa.getOwnerId()),
+                jpa.getCurrentPlayerCount(),
+                jpa.isClosed(),
+                null
+        );
     }
 
     public Lobby mapLobbyEntityToDomain(LobbyJpaEntity jpa) {

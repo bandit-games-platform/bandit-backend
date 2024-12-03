@@ -3,12 +3,13 @@ package be.kdg.int5.gameplay.domain;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 public class Lobby {
     private final LobbyId id;
     private final GameId gameId;
-    private int maxPlayers;
-    private final PlayerId ownerId;
+    private final int maxPlayers;
+    private PlayerId ownerId;
     private int currentPlayerCount;
     private boolean closed;
     private List<GameInvite> gameInviteList;
@@ -43,15 +44,33 @@ public class Lobby {
         return ownerId;
     }
 
+    public void setOwnerId(PlayerId ownerId) {
+        this.ownerId = ownerId;
+    }
+
     public int getCurrentPlayerCount() {
         return currentPlayerCount;
+    }
+
+    public void setCurrentPlayerCount(int currentPlayerCount) {
+        this.currentPlayerCount = currentPlayerCount;
     }
 
     public boolean isClosed() {
         return closed;
     }
 
+    public void setClosed(boolean closed) {
+        this.closed = closed;
+    }
+
     public List<GameInvite> getGameInviteList() {
         return gameInviteList;
+    }
+
+    public void patch(UUID ownerId, Integer currentPlayerCount, Boolean closed) {
+        if (ownerId != null) setOwnerId(new PlayerId(ownerId));
+        if (currentPlayerCount != null) setCurrentPlayerCount(currentPlayerCount);
+        if (closed != null) setClosed(closed);
     }
 }
