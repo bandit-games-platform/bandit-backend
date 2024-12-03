@@ -31,9 +31,9 @@ INSERT INTO player.friends (id, player_id, friend_id)
 VALUES
     ('bac812ea-8422-4dea-84db-ee09f62170fa', '8449ba7c-194c-4e51-b060-cd88cc498836', '86da4cad-2dc1-4a43-981f-d900e8ad9dc7'),
     ('45603958-1204-4960-86ab-8cb8bf7be683', '8449ba7c-194c-4e51-b060-cd88cc498836', '74053627-749b-4076-ba15-888444c09878'),
-    ('11b6cd2c-25a5-460d-8b62-51c43de57744', '8449ba7c-194c-4e51-b060-cd88cc498836', 'c7ca1ac8-f9cf-43de-a82c-fb85f84348f2'),
+    ('11b6cd2c-25a5-460d-8b62-51c43de57744', 'c7ca1ac8-f9cf-43de-a82c-fb85f84348f2', '8449ba7c-194c-4e51-b060-cd88cc498836'),
     ('3cda5cb3-07e5-4973-9994-465b61c8a2f9', '8449ba7c-194c-4e51-b060-cd88cc498836', '81c15287-4975-4def-815f-67c82718fd70'),
-    ('03fd91f3-217e-40ee-8dd2-2df90c66951b', '8449ba7c-194c-4e51-b060-cd88cc498836', '10dae503-0132-439b-86e9-b649a058cbe8');
+    ('03fd91f3-217e-40ee-8dd2-2df90c66951b', '10dae503-0132-439b-86e9-b649a058cbe8', '8449ba7c-194c-4e51-b060-cd88cc498836');
 
 INSERT INTO player.friend_invite_status (time_of_invite, id, invited_id, inviter_id, status)
 VALUES

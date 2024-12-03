@@ -3,8 +3,10 @@ package be.kdg.int5.player.adapters.in;
 import be.kdg.int5.player.adapters.in.dto.FriendInviteBioDto;
 import be.kdg.int5.player.adapters.in.dto.PlayerFriendBioDto;
 import be.kdg.int5.player.adapters.in.dto.PlayerSearchBioDto;
+import be.kdg.int5.player.domain.FriendInviteId;
 import be.kdg.int5.player.domain.Player;
 import be.kdg.int5.player.domain.PlayerId;
+import be.kdg.int5.player.port.in.ProcessPendingFriendInvite;
 import be.kdg.int5.player.port.in.*;
 import be.kdg.int5.player.port.in.query.*;
 import org.springframework.http.HttpStatus;
@@ -24,12 +26,14 @@ public class    PlayerFriendsController {
     private final FriendsListQuery friendsListQuery;
     private final SendFriendInviteUseCase sendFriendInviteUseCase;
     private final PendingFriendInvitesQuery pendingFriendInvitesQuery;
+    private final ProcessPendingFriendInvite processPendingFriendInvite;
 
-    public PlayerFriendsController(SearchForNewFriendsUseCase searchForNewFriendsUseCase, FriendsListQuery friendsListQuery, SendFriendInviteUseCase sendFriendInviteUseCase, PendingFriendInvitesQuery pendingFriendInvitesQuery) {
+    public PlayerFriendsController(SearchForNewFriendsUseCase searchForNewFriendsUseCase, FriendsListQuery friendsListQuery, SendFriendInviteUseCase sendFriendInviteUseCase, PendingFriendInvitesQuery pendingFriendInvitesQuery, ProcessPendingFriendInvite processPendingFriendInvite) {
         this.searchForNewFriendsUseCase = searchForNewFriendsUseCase;
         this.friendsListQuery = friendsListQuery;
         this.sendFriendInviteUseCase = sendFriendInviteUseCase;
         this.pendingFriendInvitesQuery = pendingFriendInvitesQuery;
+        this.processPendingFriendInvite = processPendingFriendInvite;
     }
 
     @GetMapping("")
@@ -88,6 +92,34 @@ public class    PlayerFriendsController {
         GetPendingSentFriendInvitesCommand command = new GetPendingSentFriendInvitesCommand(new PlayerId(playerId));
         List<FriendInviteBioDto> friendInviteList = pendingFriendInvitesQuery.getAllSentPendingFriendInvites(command);
         return new ResponseEntity<>(friendInviteList, HttpStatus.OK);
+    }
+
+    @PostMapping("/friends/pending-invites/{friendInviteId}")
+    @PreAuthorize("hasAuthority('player')")
+    ResponseEntity<Void> processFriendInvite(
+            @PathVariable UUID friendInviteId,
+            @RequestParam("action") String action,
+            @AuthenticationPrincipal Jwt token) {
+
+        String userId = token.getClaimAsString("sub");
+        UUID playerId = UUID.fromString(userId);
+        ProcessPendingFriendInviteCommand command = new ProcessPendingFriendInviteCommand(
+                new FriendInviteId(friendInviteId),
+                new PlayerId(playerId)
+        );
+
+        if ("accept".equalsIgnoreCase(action)) {
+            if (processPendingFriendInvite.acceptPendingFriendInvite(command)) {
+                return new ResponseEntity<>(HttpStatus.CREATED);
+            }
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else if ("reject".equalsIgnoreCase(action)) {
+            if (processPendingFriendInvite.rejectPendingFriendInvite(command)){
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
 

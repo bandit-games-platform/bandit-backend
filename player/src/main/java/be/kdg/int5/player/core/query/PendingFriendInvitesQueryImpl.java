@@ -21,7 +21,7 @@ public class PendingFriendInvitesQueryImpl implements PendingFriendInvitesQuery 
     @Override
     @Transactional(readOnly = true)
     public List<FriendInviteBioDto> getAllReceivedPendingFriendInvites(GetPendingReceivedFriendInvitesCommand command) {
-        return friendInviteStatusLoadPort.loadAllPendingFriendInvitesForPlayer(command.playerId());
+        return friendInviteStatusLoadPort.loadAllReceivedPendingFriendInvitesForPlayer(command.playerId());
     }
 
     @Override

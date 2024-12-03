@@ -3,7 +3,9 @@ package be.kdg.int5.player.domain;
 import be.kdg.int5.common.domain.ImageResource;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import static java.util.Objects.requireNonNull;
@@ -27,6 +29,7 @@ public class Player {
         this.joinDate = joinDate;
         this.displayName = displayName;
         this.avatar = avatar;
+        friendsList = new ArrayList<>();
     }
 
     public Player(final PlayerId id, final LocalDateTime joinDate, final String displayName) {
@@ -101,5 +104,10 @@ public class Player {
 
     public void setFriendsList(List<Player> friendsList) {
         this.friendsList = friendsList;
+    }
+
+    public void addToFriendList(Player player) {
+        Objects.requireNonNull(player);
+        this.friendsList.add(player);
     }
 }

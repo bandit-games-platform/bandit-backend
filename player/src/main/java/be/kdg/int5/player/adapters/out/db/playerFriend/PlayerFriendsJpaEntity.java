@@ -23,6 +23,12 @@ public class PlayerFriendsJpaEntity {
     public PlayerFriendsJpaEntity() {
     }
 
+    public PlayerFriendsJpaEntity(UUID id, PlayerJpaEntity player, PlayerJpaEntity friend) {
+        this.id = id;
+        this.player = player;
+        this.friend = friend;
+    }
+
     public UUID getId() {
         return id;
     }
@@ -47,4 +53,3 @@ public class PlayerFriendsJpaEntity {
         this.friend = friend;
     }
 }
-

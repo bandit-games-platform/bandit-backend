@@ -3,9 +3,11 @@ import be.kdg.int5.player.domain.InviteStatus;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class FriendInviteBioDto {
     private final String id;
+    private final UUID friendInviteId;
     @NotNull
     private final String username;
     @NotNull
@@ -13,8 +15,9 @@ public class FriendInviteBioDto {
     private final LocalDateTime invitedTime;
     private final InviteStatus status;
 
-    public FriendInviteBioDto(String id, String username, String avatar, LocalDateTime invitedTime, InviteStatus status) {
+    public FriendInviteBioDto(String id, UUID friendInviteId, String username, String avatar, LocalDateTime invitedTime, InviteStatus status) {
         this.id = id;
+        this.friendInviteId = friendInviteId;
         this.username = username;
         this.avatar = avatar;
         this.invitedTime = invitedTime;
@@ -23,6 +26,10 @@ public class FriendInviteBioDto {
 
     public String getId() {
         return id;
+    }
+
+    public UUID getFriendInviteId() {
+        return friendInviteId;
     }
 
     public String getUsername() {
