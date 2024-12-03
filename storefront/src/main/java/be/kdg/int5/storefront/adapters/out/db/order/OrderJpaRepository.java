@@ -21,7 +21,7 @@ public interface OrderJpaRepository extends JpaRepository<OrderJpaEntity, UUID> 
     AND orderEntity.customerId = :customerId
     AND orderEntity.stripeSessionId = :sessionId
     """)
-    OrderJpaEntity findPendingByProductIdAndCustomerIdAndStripeSessionId(String sessionId, UUID productId, UUID customerId);
+    OrderJpaEntity findByProductIdAndCustomerIdAndStripeSessionId(String sessionId, UUID productId, UUID customerId);
 
     @Query("""
     SELECT orderEntity FROM OrderJpaEntity orderEntity

@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public interface PlayerLibraryJpaRepository extends JpaRepository<PlayerLibraryJpaEntity, UUID> {
     @Query("""
-    SELECT library FROm PlayerLibraryJpaEntity library
+    SELECT library FROM PlayerLibraryJpaEntity library
     LEFT JOIN FETCH library.playerLibraryItems
     WHERE library.playerId = :playerId
     """)

@@ -192,8 +192,8 @@ public class PaymentManagementController {
     }
 
     /**
-     * This method is responsible for finding a product on name, and if no such product is found then a new one
-     * is created
+     * This method is responsible for finding a product on name,
+     * and if no such product is found then a new one is created
      * @param productId The id of the product to use in creation if no existing product is found
      * @param productName The name of the product to search for, which in our case is game title
      * @return Returns a stripe product object

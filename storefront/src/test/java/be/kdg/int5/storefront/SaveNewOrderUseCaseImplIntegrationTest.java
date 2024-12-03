@@ -34,7 +34,7 @@ public class SaveNewOrderUseCaseImplIntegrationTest extends AbstractDatabaseTest
         ));
 
         // Assert
-        OrderJpaEntity orderJpaEntity = orderJpaRepository.findPendingByProductIdAndCustomerIdAndStripeSessionId(
+        OrderJpaEntity orderJpaEntity = orderJpaRepository.findByProductIdAndCustomerIdAndStripeSessionId(
                 Variables.STRIPE_SESSION_ID,
                 Variables.GAME_ID,
                 Variables.PLAYER_ONE_ID

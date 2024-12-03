@@ -21,7 +21,7 @@ public class PlayerLibraryJpaAdapter implements PlayerLibraryLoadPort, PlayerLib
     }
 
     @Override
-    public void saveNewPlayerLibrary(PlayerLibrary playerLibrary) {
+    public void createNewPlayerLibrary(PlayerLibrary playerLibrary) {
         playerLibraryJpaRepository.save(toJpa(playerLibrary));
     }
 
@@ -38,7 +38,7 @@ public class PlayerLibraryJpaAdapter implements PlayerLibraryLoadPort, PlayerLib
                 playerLibrary.getPlayerId().uuid()
         );
         if (loadedLibrary == null) {
-            saveNewPlayerLibrary(playerLibrary);
+            createNewPlayerLibrary(playerLibrary);
             return;
         }
 

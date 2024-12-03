@@ -7,9 +7,7 @@ public class PlayerLibraryItem {
     private boolean hidden;
 
     public PlayerLibraryItem(final GameId gameId) {
-        requireNonNull(gameId);
-
-        this.gameId = gameId;
+        this(gameId, false, false);
     }
 
     public PlayerLibraryItem(GameId gameId, boolean favourite, boolean hidden) {

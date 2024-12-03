@@ -23,11 +23,26 @@ public class OrderJpaEntity {
     public OrderJpaEntity() {
     }
 
-    public OrderJpaEntity(UUID id, String stripeSessionId, UUID productId, UUID customerId, LocalDateTime orderDate, OrderStatus orderStatus) {
+    public OrderJpaEntity(
+            UUID id,
+            String stripeSessionId,
+            UUID productId,
+            UUID customerId,
+            LocalDateTime orderDate,
+            OrderStatus orderStatus
+    ) {
         this(id, stripeSessionId, productId, customerId, orderDate, null, orderStatus);
     }
 
-    public OrderJpaEntity(UUID id, String stripeSessionId, UUID productId, UUID customerId, LocalDateTime orderDate, LocalDateTime orderCompletedAt, OrderStatus orderStatus) {
+    public OrderJpaEntity(
+            UUID id,
+            String stripeSessionId,
+            UUID productId,
+            UUID customerId,
+            LocalDateTime orderDate,
+            LocalDateTime orderCompletedAt,
+            OrderStatus orderStatus
+    ) {
         this.id = id;
         this.stripeSessionId = stripeSessionId;
         this.productId = productId;

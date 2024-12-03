@@ -46,7 +46,7 @@ public class AddGameToPlayerLibraryUseCaseImpl implements AddGameToPlayerLibrary
             playerLibrary.addNewLibraryItem(new PlayerLibraryItem(command.gameId()));
             logger.info("player: New game {}, added to new player library for player {}",
                     command.gameId().uuid(), command.playerId().uuid());
-            playerLibraryCreatePort.saveNewPlayerLibrary(playerLibrary);
+            playerLibraryCreatePort.createNewPlayerLibrary(playerLibrary);
         }
     }
 }
