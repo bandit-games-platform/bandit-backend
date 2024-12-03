@@ -128,7 +128,6 @@ test_chatbot:
 
   before_script:
     - apk add --no-cache docker
-    - docker info
 
   script:
     - echo "Running chatbot tests"
@@ -154,7 +153,6 @@ test_gameplay:
 
   before_script:
     - apk add --no-cache docker
-    - docker info
 
   script:
     - echo "Running gameplay tests"
@@ -180,7 +178,6 @@ test_game_registry:
 
   before_script:
     - apk add --no-cache docker
-    - docker info
 
   script:
     - echo "Running game registry tests"
@@ -206,7 +203,6 @@ test_player:
 
   before_script:
     - apk add --no-cache docker
-    - docker info
 
   script:
     - echo "Running player tests"
@@ -232,7 +228,6 @@ test_statistics:
 
   before_script:
     - apk add --no-cache docker
-    - docker info
 
   script:
     - echo "Running statistics tests"
@@ -258,7 +253,6 @@ test_storefront:
 
   before_script:
     - apk add --no-cache docker
-    - docker info
 
   script:
     - echo "Running storefront tests"
@@ -271,3 +265,24 @@ test_storefront:
     when: always
     reports:
       junit: "storefront/build/test-results/test/**/TEST-*.xml"
+
+
+# ----------------------- SAST ---------------------------------- #
+
+sast:
+  stage: test
+  needs: []
+  variables:
+    SAST_EXCLUDED_PATHS: src/test
+    SEARCH_MAX_DEPTH: '10'
+include:
+  - template: Security/SAST.gitlab-ci.yml
+semgrep-sast:
+  rules:
+    - if: $SAST_DISABLED == 'true' || $SAST_DISABLED == '1'
+      when: never
+    - if: $SAST_EXCLUDED_ANALYZERS =~ /semgrep/
+      when: never
+    - if: $CI_COMMIT_BRANCH || $CI_PIPELINE_SOURCE == "merge_request_event"
+      exists:
+        - '**/*.java'
