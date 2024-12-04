@@ -76,7 +76,7 @@ public class PaymentManagementController {
                 SessionCreateParams.builder()
                     .setUiMode(SessionCreateParams.UiMode.EMBEDDED)
                     .setMode(SessionCreateParams.Mode.PAYMENT)
-                    .setReturnUrl(FRONTEND_URL + "/game/" + gameId + "/purchased?session_id={CHECKOUT_SESSION_ID}")
+                    .setReturnUrl(FRONTEND_URL + "/store/" + gameId + "/purchased?session_id={CHECKOUT_SESSION_ID}")
                     .addLineItem(
                         SessionCreateParams.LineItem.builder()
                             .setQuantity(1L)
