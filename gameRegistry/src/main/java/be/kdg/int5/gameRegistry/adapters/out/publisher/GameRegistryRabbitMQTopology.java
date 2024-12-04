@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 public class GameRegistryRabbitMQTopology {
     public static final String GAME_REGISTRY_EVENTS_EXCHANGE = "game_registry_events";
     public static final String GAME_REGISTERED_QUEUE = "game_registered";
+    public static final String GAME_REGISTERED_GAMEPLAY_QUEUE = "game_registered_gameplay";
 
     @Bean
     TopicExchange gameRegistryEventExchange() {
@@ -30,6 +31,19 @@ public class GameRegistryRabbitMQTopology {
                 .to(gameRegistryEventExchange)
                 .with("game.*.registered");
 
+    }
+
+    @Bean
+    Queue gameRegisteredGameplayQueue() {
+        return new Queue(GAME_REGISTERED_GAMEPLAY_QUEUE);
+    }
+
+    @Bean
+    Binding gameRegisteredGameplayBinding(TopicExchange gameRegistryEventExchange, Queue gameRegisteredGameplayQueue) {
+        return BindingBuilder
+                .bind(gameRegisteredGameplayQueue)
+                .to(gameRegistryEventExchange)
+                .with("game.*.registered");
     }
 
     @Bean
