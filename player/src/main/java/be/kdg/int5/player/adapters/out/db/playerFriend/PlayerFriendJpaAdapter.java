@@ -2,7 +2,8 @@ package be.kdg.int5.player.adapters.out.db.playerFriend;
 
 import be.kdg.int5.common.domain.ImageResource;
 import be.kdg.int5.common.domain.ResourceURL;
-import be.kdg.int5.common.exceptions.InviteStatusExists;
+import be.kdg.int5.common.exceptions.InviteStatusExistsException;
+import be.kdg.int5.common.exceptions.UnauthorizedPlayerException;
 import be.kdg.int5.player.domain.FriendInviteBio;
 import be.kdg.int5.player.adapters.out.db.player.ImageResourceJpaEmbed;
 import be.kdg.int5.player.adapters.out.db.player.PlayerJpaEntity;
@@ -62,7 +63,7 @@ public class PlayerFriendJpaAdapter implements PlayerUsernameLoadPort, FriendsLi
         PlayerJpaEntity invited = playerJpaRepository.getReferenceById(friendInvite.getInvited().uuid());
 
         FriendInviteJpaEntity oldFriendInviteJpaEntity = friendInviteJpaRepository.findByInviter_IdAndInvited_Id(inviter.getId(), invited.getId());
-        if (oldFriendInviteJpaEntity != null) throw new InviteStatusExists();
+        if (oldFriendInviteJpaEntity != null) throw new InviteStatusExistsException();
         FriendInviteJpaEntity friendInviteJpaEntity = new FriendInviteJpaEntity(
                 friendInvite.getId().uuid(),
                 inviter,
@@ -116,7 +117,7 @@ public class PlayerFriendJpaAdapter implements PlayerUsernameLoadPort, FriendsLi
 
         PlayerJpaEntity playerJpaEntity = new PlayerJpaEntity(friendInviteJpaEntity.getInvited().getId());
         PlayerJpaEntity friendJpaEntity = new PlayerJpaEntity(friendInviteJpaEntity.getInviter().getId());
-        if (!playerJpaEntity.getId().equals(playerId.uuid())) return false;
+        if (!playerJpaEntity.getId().equals(playerId.uuid())) throw new UnauthorizedPlayerException();
 
         PlayerFriendsJpaEntity newPlayerFriendsJpaEntity = new PlayerFriendsJpaEntity(
                 UUID.randomUUID(),
@@ -133,7 +134,7 @@ public class PlayerFriendJpaAdapter implements PlayerUsernameLoadPort, FriendsLi
         FriendInviteJpaEntity friendInviteJpaEntity = friendInviteJpaRepository.getReferenceById(friendInviteId.uuid());
         FriendInvite friendInvite = this.friendInviteJpaToDomain(friendInviteJpaEntity);
         PlayerJpaEntity playerJpaEntity = new PlayerJpaEntity(friendInviteJpaEntity.getInvited().getId());
-        if (!playerJpaEntity.getId().equals(playerId.uuid())) return false;
+        if (!playerJpaEntity.getId().equals(playerId.uuid())) throw new UnauthorizedPlayerException();
 
         friendInvite.setStatusToRejected();
         friendInviteJpaRepository.save(this.friendInviteDomainToJpa(friendInvite));

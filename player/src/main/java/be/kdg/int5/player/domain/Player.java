@@ -29,7 +29,6 @@ public class Player {
         this.joinDate = joinDate;
         this.displayName = displayName;
         this.avatar = avatar;
-        friendsList = new ArrayList<>();
     }
 
     public Player(final PlayerId id, final LocalDateTime joinDate, final String displayName) {
@@ -100,14 +99,5 @@ public class Player {
 
     public List<Player> getFriendsList() {
         return friendsList;
-    }
-
-    public void setFriendsList(List<Player> friendsList) {
-        this.friendsList = friendsList;
-    }
-
-    public void addToFriendList(Player player) {
-        Objects.requireNonNull(player);
-        this.friendsList.add(player);
     }
 }

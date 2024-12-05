@@ -5,27 +5,22 @@ import be.kdg.int5.player.adapters.out.db.playerFriend.FriendInviteJpaRepository
 import be.kdg.int5.player.adapters.out.db.player.PlayerJpaEntity;
 import be.kdg.int5.player.adapters.out.db.player.PlayerJpaRepository;
 import be.kdg.int5.player.domain.InviteStatus;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
-import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
-
+import static be.kdg.int5.player.Variables.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -41,16 +36,11 @@ public class SendFriendInviteUseCaseImplIntegrationTest extends AbstractDatabase
     @MockBean
     private FriendInviteJpaRepository friendInviteJpaRepository;
 
-    private static final UUID PLAYER_ID = UUID.randomUUID();
-    private static final UUID FRIEND_ID = UUID.randomUUID();
-
-
     @Test
-    @WithMockUser(username = "test-player", authorities = {"player"})
     void shouldCreateFriendInviteWhenValidInput() throws Exception {
         // Arrange
         when(playerJpaRepository.getReferenceById(PLAYER_ID))
-                .thenReturn(new PlayerJpaEntity(PLAYER_ID, "TestPlayer"));
+                .thenReturn(new PlayerJpaEntity(player.getId().uuid(), player.getDisplayName()));
         when(playerJpaRepository.getReferenceById(FRIEND_ID))
                 .thenReturn(new PlayerJpaEntity(FRIEND_ID, "FriendPlayer"));
 
@@ -60,18 +50,16 @@ public class SendFriendInviteUseCaseImplIntegrationTest extends AbstractDatabase
         when(friendInviteJpaRepository.save(any(FriendInviteJpaEntity.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0)); // Simulate save operation.
 
-        // Mock the JWT token
-        Jwt jwt = Jwt.withTokenValue("mock-token")
-                .header("alg", "none")
-                .claim("sub", PLAYER_ID.toString())
-                .claim("scope", "player")
-                .build();
+        when(playerJpaRepository.findById(PLAYER_ID))
+                .thenReturn(Optional.of(playerJpaEntity));
 
         // Act
         final ResultActions result = mockMvc
-                .perform(post("/friends/invite-new-friends/" + FRIEND_ID)
+                .perform(post("/player/friends/invite-new-friends/" + FRIEND_ID)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .with(authentication(new JwtAuthenticationToken(jwt))));
+                        .with(jwt()
+                                .jwt(jwt -> jwt.claim("sub", String.valueOf(PLAYER_ID)))
+                                .authorities(new SimpleGrantedAuthority("player"))));
 
         // Assert
         result.andExpect(status().isCreated());
@@ -85,7 +73,6 @@ public class SendFriendInviteUseCaseImplIntegrationTest extends AbstractDatabase
     }
 
     @Test
-    @WithMockUser(authorities = {"player"})
     void shouldReturnConflictWhenFriendInviteAlreadyExists() throws Exception {
         // Arrange
         when(playerJpaRepository.getReferenceById(PLAYER_ID))
@@ -102,17 +89,16 @@ public class SendFriendInviteUseCaseImplIntegrationTest extends AbstractDatabase
         when(friendInviteJpaRepository.findByInviter_IdAndInvited_Id(PLAYER_ID, FRIEND_ID))
                 .thenReturn(existingInvite); // Simulate an existing invite.
 
-        // Mock the JWT token
-        Jwt jwt = Jwt.withTokenValue("mock-token")
-                .header("alg", "none")
-                .claim("sub", PLAYER_ID.toString())
-                .build();
+        when(playerJpaRepository.findById(PLAYER_ID))
+                .thenReturn(Optional.of(playerJpaEntity));
 
         // Act
         final ResultActions result = mockMvc
-                .perform(post("/friends/invite-new-friends/" + FRIEND_ID)
+                .perform(post("/player/friends/invite-new-friends/" + FRIEND_ID)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .with(authentication(new JwtAuthenticationToken(jwt))));
+                        .with(jwt()
+                                .jwt(jwt -> jwt.claim("sub", String.valueOf(PLAYER_ID)))
+                                .authorities(new SimpleGrantedAuthority("player"))));
 
         // Assert
         result.andExpect(status().isConflict());
