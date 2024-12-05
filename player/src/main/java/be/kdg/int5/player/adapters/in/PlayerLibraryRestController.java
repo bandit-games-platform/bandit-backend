@@ -26,10 +26,10 @@ public class PlayerLibraryRestController {
 
     @GetMapping("/players/library")
     @PreAuthorize("hasAuthority('player')")
-    public ResponseEntity<List<GameInLibraryDto>> getAllGamesInPlayerLibrary(
-            @AuthenticationPrincipal Jwt token
-    ) {
-        PlayerLibrary playerLibrary = playerLibraryQuery.getPlayerLibrary(new PlayerId(UUID.fromString(token.getClaimAsString("sub"))));
+    public ResponseEntity<List<GameInLibraryDto>> getAllGamesInPlayerLibrary(@AuthenticationPrincipal Jwt token) {
+        PlayerLibrary playerLibrary = playerLibraryQuery.getPlayerLibrary(
+                new PlayerId(UUID.fromString(token.getClaimAsString("sub")))
+        );
 
         if (playerLibrary == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 

@@ -32,7 +32,9 @@ public class CancelAllOldOrdersUseCaseImpl implements CancelAllOldOrdersUseCase 
             Duration duration = Duration.between(order.getOrderDate(), currentTime);
             if (duration.toHours() >= 12) {
                 order.cancelOrder();
-                logger.info("storefront: Order {} has now been {}, it was {} hours old", order.getId().uuid(), order.getOrderStatus(), duration.toHours());
+                logger.info("storefront: Order {} has now been {}, it was {} hours old",
+                        order.getId().uuid(), order.getOrderStatus(), duration.toHours()
+                );
                 for (OrderUpdatePort updatePort : orderUpdatePort) {
                     updatePort.updateOrderStatus(order);
                 }

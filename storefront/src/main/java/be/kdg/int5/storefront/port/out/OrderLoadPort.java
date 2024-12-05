@@ -10,6 +10,6 @@ import java.util.List;
 public interface OrderLoadPort {
     Order loadOrderById(OrderId orderId);
     Order loadCompletedOrderByProductAndCustomer(ProductId productId, CustomerId customerId);
-    Order loadOrderByProductAndCustomerAndStripeId(String sessionId, ProductId productId, CustomerId customerId);
+    Order loadOrderByStripeIdAndProductAndCustomer(String sessionId, ProductId productId, CustomerId customerId);
     List<Order> loadPendingOrders();
 }

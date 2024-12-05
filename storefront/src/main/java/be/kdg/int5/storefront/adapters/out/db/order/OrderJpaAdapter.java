@@ -41,7 +41,7 @@ public class OrderJpaAdapter implements OrderLoadPort, OrderUpdatePort, OrderCre
     }
 
     @Override
-    public Order loadOrderByProductAndCustomerAndStripeId(String sessionId, ProductId productId, CustomerId customerId) {
+    public Order loadOrderByStripeIdAndProductAndCustomer(String sessionId, ProductId productId, CustomerId customerId) {
         OrderJpaEntity orderJpaEntity = orderJpaRepository.findByProductIdAndCustomerIdAndStripeSessionId(
                 sessionId,
                 productId.uuid(),

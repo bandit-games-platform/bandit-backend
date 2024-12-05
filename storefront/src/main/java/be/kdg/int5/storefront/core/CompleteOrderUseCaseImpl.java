@@ -29,7 +29,7 @@ public class CompleteOrderUseCaseImpl implements CompleteOrderUseCase {
     public boolean completeOrder(CompleteOrderCommand command) {
         ProductId productId = new ProductId(command.productId());
         CustomerId customerId = new CustomerId(command.customerId());
-        Order order = orderLoadPort.loadOrderByProductAndCustomerAndStripeId(
+        Order order = orderLoadPort.loadOrderByStripeIdAndProductAndCustomer(
                 command.stripeSessionId(),
                 productId,
                 customerId
