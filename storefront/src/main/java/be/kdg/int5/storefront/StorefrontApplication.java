@@ -1,7 +1,5 @@
 package be.kdg.int5.storefront;
 
-import com.stripe.Stripe;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
