@@ -1,15 +1,15 @@
-
 -- Insert developers
 INSERT INTO game_registry.developer (id, studio_name) VALUES
 ('d7df9644-7803-4b70-8997-0f246665cb01', 'Integration Studio'),
-('3c0b923c-c267-498e-88a4-eee3a629fea4', 'BanditGames');
+('3c0b923c-c267-498e-88a4-eee3a629fea4', 'BanditGames'),
+('31893d63-1fd8-4871-b20a-5bfe414bfaf1', 'button Game');
 
 -- give them a revoked and an active api key
 INSERT INTO game_registry.dev_api_key(developer_id, api_key, revoked)
 VALUES ('3c0b923c-c267-498e-88a4-eee3a629fea4', 'band1TAAA', true),
        ('3c0b923c-c267-498e-88a4-eee3a629fea4', 'band1TBBB', false),
-       ('d7df9644-7803-4b70-8997-0f246665cb01', 'band1TCCC', false);
-
+       ('d7df9644-7803-4b70-8997-0f246665cb01', 'band1TCCC', false),
+       ('31893d63-1fd8-4871-b20a-5bfe414bfaf1', 'band1T-button', false);
 
 -- Seeding data for `game` table
 INSERT INTO game_registry.game (id, title, description, current_price, developer_id, current_host, icon_url, background_url) VALUES
@@ -28,7 +28,6 @@ INSERT INTO game_registry.game_screenshots (game_id, url) VALUES
 ('d77e1d1f-6b46-4c89-9290-3b9cf8a7c001', 'https://cdn.discordapp.com/attachments/1306721570122633317/1307301634770210877/Screenshot_2024-11-16_at_12.09.46.png?ex=6739cf06&is=67387d86&hm=01283906f71c99eac55324664f1f06640880caa69e8bf69b535892d4504eb7dd&'),
 ('d77e1d1f-6b46-4c89-9290-3b9cf8a7c001', 'https://bloob.io/img/meta/games/BATTLESHIP.png'),
 ('d77e1d1f-6b46-4c89-9290-3b9cf8a7c001', 'https://cdn.discordapp.com/attachments/1306721570122633317/1307301893491523674/Screenshot_2024-11-16_at_12.10.53.png?ex=6739cf43&is=67387dc3&hm=51edc2787e862ef4cd3e37d92186a8d9a4255c72d97838e35d1c8fe7a23d964c&');
-
 
 -- Seeding data for `achievement` table
 INSERT INTO game_registry.achievement (id, title, counter_total, description, game_id) VALUES
