@@ -2,9 +2,7 @@ package be.kdg.int5.storefront.adapters.in;
 
 import be.kdg.int5.common.exceptions.OrderAlreadyExistsException;
 import be.kdg.int5.storefront.domain.Order;
-import be.kdg.int5.storefront.domain.ProductProjection;
 import be.kdg.int5.storefront.port.in.*;
-import be.kdg.int5.storefront.port.in.query.GameBasicDetailsQuery;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.checkout.Session;
@@ -25,18 +23,15 @@ public class PaymentManagementController {
     private String apiKey;
     private final SaveNewOrderUseCase saveNewOrderUseCase;
     private final CompleteOrderUseCase completeOrderUseCase;
-    private final GameBasicDetailsQuery gameBasicDetailsQuery;
     private final CreateStripeSessionUseCase createStripeSessionUseCase;
 
     public PaymentManagementController(
             SaveNewOrderUseCase saveNewOrderUseCase,
             CompleteOrderUseCase completeOrderUseCase,
-            GameBasicDetailsQuery gameBasicDetailsQuery,
             CreateStripeSessionUseCase createStripeSessionUseCase
     ) {
         this.saveNewOrderUseCase = saveNewOrderUseCase;
         this.completeOrderUseCase = completeOrderUseCase;
-        this.gameBasicDetailsQuery = gameBasicDetailsQuery;
         this.createStripeSessionUseCase = createStripeSessionUseCase;
     }
 
@@ -52,12 +47,11 @@ public class PaymentManagementController {
         Stripe.apiKey = apiKey;
 
         try {
-            ProductProjection basicGameDetails = gameBasicDetailsQuery.getBasicGameDetails(productId);
-            if (basicGameDetails == null) return null;
-
             Session session = createStripeSessionUseCase.createStripeSession(new CreateStripeSessionCommand(
-                    basicGameDetails, productId, gameId
+                    productId, gameId
             ));
+
+            if (session == null) return null;
 
             try {
                 Order order = saveNewOrderUseCase.saveNewOrder(new SaveNewOrderCommand(

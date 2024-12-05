@@ -1,7 +1,9 @@
 package be.kdg.int5.storefront.core;
 
+import be.kdg.int5.storefront.domain.ProductProjection;
 import be.kdg.int5.storefront.port.in.CreateStripeSessionCommand;
 import be.kdg.int5.storefront.port.in.CreateStripeSessionUseCase;
+import be.kdg.int5.storefront.port.out.ProductLoadPort;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Price;
 import com.stripe.model.PriceSearchResult;
@@ -19,11 +21,19 @@ import java.math.BigDecimal;
 public class CreateStripeSessionUseCaseImpl implements CreateStripeSessionUseCase {
     @Value("${contexts.frontend.baseUrl}")
     private String FRONTEND_URL;
+    private final ProductLoadPort productLoadPort;
+
+    public CreateStripeSessionUseCaseImpl(ProductLoadPort productLoadPort) {
+        this.productLoadPort = productLoadPort;
+    }
 
     @Override
     public Session createStripeSession(CreateStripeSessionCommand command) throws StripeException {
-        String productName = command.basicGameDetails().getTitle();
-        BigDecimal productPrice = command.basicGameDetails().getPrice().multiply(BigDecimal.valueOf(100)); // Convert euro price into cent price
+        ProductProjection basicGameDetails = productLoadPort.loadProductById(command.productId());
+        if (basicGameDetails == null) return null;
+
+        String productName = basicGameDetails.getTitle();
+        BigDecimal productPrice = basicGameDetails.getPrice().multiply(BigDecimal.valueOf(100)); // Convert euro price into cent price
 
         Price price = findProductPrice(command.productId().toString(), productName, productPrice);
 
