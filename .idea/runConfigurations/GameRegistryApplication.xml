@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="GameRegistryApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
     <envs>
-      <env name="KEYCLOAK_CLIENT_SECRET" value="9g4Z7ryvFmYATtIjOkZlnqDMNM2oDtvu" />
+      <env name="KEYCLOAK_CLIENT_SECRET" value="**********" />
     </envs>
     <module name="bandit-backend.gameRegistry.main" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="be.kdg.int5.gameRegistry.GameRegistryApplication" />
