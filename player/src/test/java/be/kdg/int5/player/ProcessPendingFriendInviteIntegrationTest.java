@@ -8,6 +8,7 @@ import be.kdg.int5.player.adapters.out.db.playerFriend.PlayerFriendsJpaEntity;
 import be.kdg.int5.player.domain.InviteStatus;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -37,6 +38,9 @@ public class ProcessPendingFriendInviteIntegrationTest extends AbstractDatabaseT
 
     @MockBean
     private PlayerFriendJpaRepository playerFriendJpaRepository;
+
+    @MockBean
+    private RabbitTemplate rabbitTemplate;
 
     @Test
     void shouldAcceptFriendInviteWhenValidInput() throws Exception {

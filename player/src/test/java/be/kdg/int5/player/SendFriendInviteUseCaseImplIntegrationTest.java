@@ -7,6 +7,7 @@ import be.kdg.int5.player.adapters.out.db.player.PlayerJpaRepository;
 import be.kdg.int5.player.domain.InviteStatus;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -35,6 +36,9 @@ public class SendFriendInviteUseCaseImplIntegrationTest extends AbstractDatabase
 
     @MockBean
     private FriendInviteJpaRepository friendInviteJpaRepository;
+
+    @MockBean
+    private RabbitTemplate rabbitTemplate;
 
     @Test
     void shouldCreateFriendInviteWhenValidInput() throws Exception {
