@@ -1,25 +1,30 @@
-package be.kdg.int5.player.domain;
-import static java.util.Objects.requireNonNull;
+package be.kdg.int5.player.adapters.out.db.playerLibrary;
 
-public class PlayerLibraryItem {
-    private final GameId gameId;
+import jakarta.persistence.Embeddable;
+
+import java.util.UUID;
+
+@Embeddable
+public class PlayerLibraryItemEmbeddable {
+    private UUID gameId;
     private boolean favourite;
     private boolean hidden;
 
-    public PlayerLibraryItem(final GameId gameId) {
-        this(gameId, false, false);
+    public PlayerLibraryItemEmbeddable() {
     }
 
-    public PlayerLibraryItem(GameId gameId, boolean favourite, boolean hidden) {
-        requireNonNull(gameId);
-
+    public PlayerLibraryItemEmbeddable(UUID gameId, boolean favourite, boolean hidden) {
         this.gameId = gameId;
         this.favourite = favourite;
         this.hidden = hidden;
     }
 
-    public GameId getGameId() {
+    public UUID getGameId() {
         return gameId;
+    }
+
+    public void setGameId(UUID gameId) {
+        this.gameId = gameId;
     }
 
     public boolean isFavourite() {

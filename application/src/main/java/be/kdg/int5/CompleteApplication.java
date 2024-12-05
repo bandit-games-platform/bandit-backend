@@ -10,7 +10,8 @@ import org.springframework.web.client.RestTemplate;
 @SpringBootApplication
 @ComponentScan(excludeFilters = {
         @ComponentScan.Filter(type = FilterType.REGEX, pattern="be.kdg.int5.*.*Application"),
-        @ComponentScan.Filter(type = FilterType.REGEX, pattern="be.kdg.int5.*.config.*SecurityConfig")
+        @ComponentScan.Filter(type = FilterType.REGEX, pattern="be.kdg.int5.*.config.*SecurityConfig"),
+        @ComponentScan.Filter(type = FilterType.REGEX, pattern="be.kdg.int5.*.config.*ApplicationConfig")
 })
 public class CompleteApplication {
 
