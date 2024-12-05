@@ -20,7 +20,7 @@ public class GameplayRabbitListener {
         this.gameDeveloperProjectionUseCase = gameDeveloperProjectionUseCase;
     }
 
-    @RabbitListener(queues = "game_registered_gameplay", messageConverter = "#{gameplayJackson2JsonMessageConverter}")
+    @RabbitListener(queues = "game_registered_gameplay", messageConverter = "#{jackson2JsonMessageConverter}")
     public void gameRegistered(GameRegisteredEvent event) {
         logger.info("gameplay: updating game-developer projection with game '{}' and developer '{}'", event.gameId(), event.developerId());
 

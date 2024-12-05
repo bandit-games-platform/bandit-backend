@@ -5,9 +5,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class GameplayRabbitMQTopology {
+public class GameplayApplicationConfig {
     @Bean
-    Jackson2JsonMessageConverter gameplayJackson2JsonMessageConverter() {
+    Jackson2JsonMessageConverter jackson2JsonMessageConverter() {
         return new Jackson2JsonMessageConverter();
     }
 }
