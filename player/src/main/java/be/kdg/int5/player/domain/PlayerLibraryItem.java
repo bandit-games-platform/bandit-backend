@@ -7,9 +7,15 @@ public class PlayerLibraryItem {
     private boolean hidden;
 
     public PlayerLibraryItem(final GameId gameId) {
+        this(gameId, false, false);
+    }
+
+    public PlayerLibraryItem(GameId gameId, boolean favourite, boolean hidden) {
         requireNonNull(gameId);
 
         this.gameId = gameId;
+        this.favourite = favourite;
+        this.hidden = hidden;
     }
 
     public GameId getGameId() {
