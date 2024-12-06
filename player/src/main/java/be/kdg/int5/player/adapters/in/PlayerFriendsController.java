@@ -28,7 +28,13 @@ public class    PlayerFriendsController {
     private final PendingFriendInvitesQuery pendingFriendInvitesQuery;
     private final ProcessPendingFriendInvite processPendingFriendInvite;
 
-    public PlayerFriendsController(SearchForNewFriendsUseCase searchForNewFriendsUseCase, FriendsListQuery friendsListQuery, SendFriendInviteUseCase sendFriendInviteUseCase, PendingFriendInvitesQuery pendingFriendInvitesQuery, ProcessPendingFriendInvite processPendingFriendInvite) {
+    public PlayerFriendsController(
+            SearchForNewFriendsUseCase searchForNewFriendsUseCase,
+            FriendsListQuery friendsListQuery,
+            SendFriendInviteUseCase sendFriendInviteUseCase,
+            PendingFriendInvitesQuery pendingFriendInvitesQuery,
+            ProcessPendingFriendInvite processPendingFriendInvite
+    ) {
         this.searchForNewFriendsUseCase = searchForNewFriendsUseCase;
         this.friendsListQuery = friendsListQuery;
         this.sendFriendInviteUseCase = sendFriendInviteUseCase;
