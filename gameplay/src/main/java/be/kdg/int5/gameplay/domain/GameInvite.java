@@ -7,8 +7,12 @@ public class GameInvite {
     private boolean accepted;
 
     public GameInvite(PlayerId invited) {
-        this.accepted = false;
+        this(invited, false);
+    }
+
+    public GameInvite(PlayerId invited, boolean accepted) {
         this.invited = Objects.requireNonNull(invited);
+        this.accepted = accepted;
     }
 
     public PlayerId getInvited() {
