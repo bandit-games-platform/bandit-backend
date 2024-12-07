@@ -336,7 +336,6 @@ deploy_statistics_dev:
 #    - az role assignment create --assignee-object-id $PRINCIPAL_ID --role "AcrPull" --scope $REGISTRY_ID
 
     - az containerapp update --name statistics-dev-container --resource-group rg_bandit_games_dev
-#      --image $REGISTRY_USERNAME.azurecr.io/statistics-context:${CI_COMMIT_SHORT_SHA::-1}
       --cpu 1 --memory 2Gi
       --min-replicas 0 --max-replicas 1
       --set-env-vars
