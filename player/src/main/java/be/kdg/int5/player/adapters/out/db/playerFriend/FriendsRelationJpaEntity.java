@@ -6,24 +6,23 @@ import java.util.UUID;
 
 @Entity
 @Table(schema = "player", name = "friends")
-public class PlayerFriendsJpaEntity {
-
+public class PlayerFriendsRelationJpaEntity {
     @Id
     @GeneratedValue(generator = "UUID")
     private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "player_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private PlayerJpaEntity player;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "friend_id", nullable = false)
     private PlayerJpaEntity friend;
 
-    public PlayerFriendsJpaEntity() {
+    public PlayerFriendsRelationJpaEntity() {
     }
 
-    public PlayerFriendsJpaEntity(UUID id, PlayerJpaEntity player, PlayerJpaEntity friend) {
+    public PlayerFriendsRelationJpaEntity(UUID id, PlayerJpaEntity player, PlayerJpaEntity friend) {
         this.id = id;
         this.player = player;
         this.friend = friend;

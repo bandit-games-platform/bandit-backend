@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface PlayerFriendJpaRepository extends JpaRepository<PlayerFriendsJpaEntity, UUID> {
+public interface PlayerFriendsRelationJpaRepository extends JpaRepository<PlayerFriendsRelationJpaEntity, UUID> {
 
     @Query("""
         SELECT\s
@@ -16,7 +16,7 @@ public interface PlayerFriendJpaRepository extends JpaRepository<PlayerFriendsJp
                 WHEN pf.player.id = :playerId THEN pf.friend.id
                 ELSE pf.player.id
             END
-        FROM PlayerFriendsJpaEntity pf
+        FROM PlayerFriendsRelationJpaEntity pf
         WHERE pf.player.id = :playerId\s
            OR pf.friend.id = :playerId
     """)

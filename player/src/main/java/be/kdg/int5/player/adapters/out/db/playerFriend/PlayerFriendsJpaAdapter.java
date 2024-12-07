@@ -2,8 +2,8 @@ package be.kdg.int5.player.adapters.out.db.playerFriend;
 
 import be.kdg.int5.common.domain.ImageResource;
 import be.kdg.int5.common.domain.ResourceURL;
+import be.kdg.int5.common.exceptions.FriendInviteNotFoundException;
 import be.kdg.int5.common.exceptions.InviteStatusExistsException;
-import be.kdg.int5.common.exceptions.UnauthorizedPlayerException;
 import be.kdg.int5.player.domain.FriendInviteBio;
 import be.kdg.int5.player.adapters.out.db.player.ImageResourceJpaEmbed;
 import be.kdg.int5.player.adapters.out.db.player.PlayerJpaEntity;
@@ -19,17 +19,18 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public class PlayerFriendJpaAdapter implements PlayerUsernameLoadPort, FriendsListLoadPort, FriendInviteStatusCreatePort, FriendInviteStatusLoadPort, FriendInviteStatusUpdatePort {
+public class PlayerFriendsJpaAdapter implements PlayerUsernameLoadPort, FriendsListLoadPort, FriendInviteCreatePort, FriendInviteLoadPort, FriendInviteUpdatePort {
     private final PlayerJpaRepository playerJpaRepository;
-    private final PlayerFriendJpaRepository playerFriendJpaRepository;
     private final FriendInviteJpaRepository friendInviteJpaRepository;
+    private final PlayerFriendsRelationJpaRepository playerFriendsRelationJpaRepository;
 
-    public PlayerFriendJpaAdapter(final PlayerJpaRepository playerJpaRepository,
-                                  final PlayerFriendJpaRepository playerFriendJpaRepository,
-                                  final FriendInviteJpaRepository friendInviteJpaRepository) {
+    public PlayerFriendsJpaAdapter(final PlayerJpaRepository playerJpaRepository,
+                                   final FriendInviteJpaRepository friendInviteJpaRepository,
+                                   PlayerFriendsRelationJpaRepository playerFriendsRelationJpaRepository
+    ) {
         this.playerJpaRepository = playerJpaRepository;
-        this.playerFriendJpaRepository = playerFriendJpaRepository;
         this.friendInviteJpaRepository = friendInviteJpaRepository;
+        this.playerFriendsRelationJpaRepository = playerFriendsRelationJpaRepository;
     }
 
     @Override
@@ -49,7 +50,7 @@ public class PlayerFriendJpaAdapter implements PlayerUsernameLoadPort, FriendsLi
 
     @Override
     public List<Player> getAllFriendsOfPlayer(PlayerId playerId) {
-        List<UUID> playerJpaEntitiesUUID = playerFriendJpaRepository.findAllByPlayerIdOrFriendId(playerId.uuid());
+        List<UUID> playerJpaEntitiesUUID = playerFriendsRelationJpaRepository.findAllByPlayerIdOrFriendId(playerId.uuid());
         return playerJpaRepository.findAllById(playerJpaEntitiesUUID)
                 .stream()
                 .map(this::playerJpaToDomain)
@@ -108,37 +109,15 @@ public class PlayerFriendJpaAdapter implements PlayerUsernameLoadPort, FriendsLi
     }
 
     @Override
-    @Transactional
-    public boolean updateFriendInviteStatusToAccepted(FriendInviteId friendInviteId, PlayerId playerId) {
-        FriendInviteJpaEntity friendInviteJpaEntity = friendInviteJpaRepository.getReferenceById(friendInviteId.uuid());
-        FriendInvite friendInvite = this.friendInviteJpaToDomain(friendInviteJpaEntity);
-        friendInvite.setStatusToAccepted();
-        friendInviteJpaRepository.save(this.friendInviteDomainToJpa(friendInvite));
-
-        PlayerJpaEntity playerJpaEntity = new PlayerJpaEntity(friendInviteJpaEntity.getInvited().getId());
-        PlayerJpaEntity friendJpaEntity = new PlayerJpaEntity(friendInviteJpaEntity.getInviter().getId());
-        if (!playerJpaEntity.getId().equals(playerId.uuid())) throw new UnauthorizedPlayerException();
-
-        PlayerFriendsJpaEntity newPlayerFriendsJpaEntity = new PlayerFriendsJpaEntity(
-                UUID.randomUUID(),
-                playerJpaEntity,
-                friendJpaEntity
-        );
-        playerFriendJpaRepository.save(newPlayerFriendsJpaEntity);
-        return true;
+    public FriendInvite loadFriendInviteById(FriendInviteId friendInviteId) {
+        FriendInviteJpaEntity friendInviteJpaEntity = friendInviteJpaRepository.findById(friendInviteId.uuid()).orElseThrow(FriendInviteNotFoundException::new);
+        return this.friendInviteJpaToDomain(friendInviteJpaEntity);
     }
 
     @Override
-    @Transactional
-    public boolean updateFriendInviteStatusToRejected(FriendInviteId friendInviteId, PlayerId playerId) {
-        FriendInviteJpaEntity friendInviteJpaEntity = friendInviteJpaRepository.getReferenceById(friendInviteId.uuid());
-        FriendInvite friendInvite = this.friendInviteJpaToDomain(friendInviteJpaEntity);
-        PlayerJpaEntity playerJpaEntity = new PlayerJpaEntity(friendInviteJpaEntity.getInvited().getId());
-        if (!playerJpaEntity.getId().equals(playerId.uuid())) throw new UnauthorizedPlayerException();
-
-        friendInvite.setStatusToRejected();
-        friendInviteJpaRepository.save(this.friendInviteDomainToJpa(friendInvite));
-        return true;
+    public void updateFriendInvite(FriendInvite friendInvite) {
+        FriendInviteJpaEntity friendInviteJpaEntity = this.friendInviteDomainToJpa(friendInvite);
+        friendInviteJpaRepository.save(friendInviteJpaEntity);
     }
 
     private FriendInvite friendInviteJpaToDomain(FriendInviteJpaEntity friendInviteJpaEntity){
