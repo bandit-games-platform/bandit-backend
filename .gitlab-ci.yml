@@ -105,7 +105,7 @@ build_statistics:
     - echo "Building statistics project"
     - chmod +x gradlew
     - cd ./statistics
-    - ../gradlew clean bootBuildImage
+    - ../gradlew clean bootBuildImage --stacktrace
     - cd ..
   artifacts:
     name: "build-statistics-artifact"
