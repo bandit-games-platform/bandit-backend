@@ -325,7 +325,7 @@ deploy_statistics_dev:
     - az extension add --name containerapp --upgrade
   script:
     - tag=$CI_COMMIT_REF_NAME
-    - az containerapp env create --name dev-containers --resource-group rg_bandit_games_dev --location northeurope
+#    - az containerapp env create --name dev-containers --resource-group rg_bandit_games_dev --location northeurope
     - az containerapp up --name statistics-dev-container --resource-group rg_bandit_games_dev --location northeurope --environment dev-containers --image $REGISTRY_USERNAME.azurecr.io/statistics-context:${CI_COMMIT_SHORT_SHA::-1}
     - target-port 8095 --ingress external
     - image "acrbanditgamesdev.azurecr.io/statistics-context:latest"
