@@ -105,7 +105,7 @@ build_statistics:
     - echo "Building statistics project"
     - chmod +x gradlew
     - cd ./statistics
-    - ../gradlew bootJar
+    - ../gradlew clean bootBuildImage
     - cd ..
   artifacts:
     name: "build-statistics-artifact"
@@ -300,6 +300,8 @@ sast:
     SEARCH_MAX_DEPTH: '10'
 include:
   - template: Security/SAST.gitlab-ci.yml
+  - template: Security/Secret-Detection.gitlab-ci.yml
+
 semgrep-sast:
   rules:
     - if: $SAST_DISABLED == 'true' || $SAST_DISABLED == '1'
@@ -309,3 +311,53 @@ semgrep-sast:
     - if: $CI_COMMIT_BRANCH || $CI_PIPELINE_SOURCE == "merge_request_event"
       exists:
         - '**/*.java'
+
+# ---------------------- DEPLOY --------------------------------- #
+# ----------------- DEV ----------------- #
+
+deploy_statistics_dev:
+  image: mcr.microsoft.com/azure-cli
+  stage: deploy
+  when: on_success
+  needs:
+    - build_statistics
+  before_script:
+    - az login --service-principal -u $AZURE_APP_ID -p $AZURE_PASSWORD --tenant $AZURE_TENANT
+    - az extension add --name containerapp --upgrade
+  script:
+    - tag=$CI_COMMIT_REF_NAME
+    - az containerapp env create --name test --resource-group rg_bandit_games_dev --location northeurope
+    - az containerapp up --name statistics-dev-container --resource-group rg_bandit_games_dev --location northeurope --environment test
+    - target-port 8095 --ingress external
+    - image "acrbanditgamesdev.azurecr.io/statistics-context:latest"
+    - az containerapp update --name statistics-dev-container --resource-group rg_bandit_games_dev
+      --cpu 1 --memory 2Gi
+      --min-replicas 0 --max-replicas 1
+      --set-env-vars
+      ENV_VAR=someEnVar
+
+  # This will only run when you commit to a merge request or to the ci-cd branch
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_COMMIT_BRANCH == 'ci-cd'
+
+# ----------------- PROD ---------------- #
+
+#deploy_statistics_prod:
+#  stage: deploy
+#  when: manual
+#  needs:
+#    - build_statistics
+#  script:
+#    -
+#  # This will only be available if you perform a tag, or you commit to main
+#  rules:
+#    - if: $CI_COMMIT_TAG
+#    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+
+# ---------------------- DESTROY -------------------------------- #
+# ----------------- DEV ----------------- #
+
+# ----------------- PROD ---------------- #
+
