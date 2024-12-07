@@ -54,6 +54,11 @@ public class Player {
         return new FriendInvite(new FriendInviteId(UUID.randomUUID()), this.id, invited, LocalDateTime.now());
     }
 
+    public FriendRelation addFriend(final Player player){
+        requireNonNull(player);
+        return new FriendRelation(this, player);
+    }
+
     public PlayerId getId() {
         return id;
     }

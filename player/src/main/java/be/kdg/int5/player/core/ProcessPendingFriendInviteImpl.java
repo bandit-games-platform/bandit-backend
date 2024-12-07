@@ -16,7 +16,6 @@ public class ProcessPendingFriendInviteImpl implements ProcessPendingFriendInvit
     private final FriendInviteLoadPort friendInviteLoadPort;
     private final FriendRelationCreatePort friendRelationCreatePort;
 
-
     public ProcessPendingFriendInviteImpl(
             FriendInviteUpdatePort friendInviteUpdatePort,
             FriendInviteLoadPort friendInviteLoadPort,
@@ -38,7 +37,7 @@ public class ProcessPendingFriendInviteImpl implements ProcessPendingFriendInvit
         friendInviteUpdatePort.updateFriendInvite(friendInvite);
         Player invitingPlayer = new Player(new PlayerId(friendInvite.getInviter().uuid()));
         Player newFriend = new Player(new PlayerId(friendInvite.getInvited().uuid()));
-        FriendRelation friendRelation = new FriendRelation(invitingPlayer, newFriend);
+        FriendRelation friendRelation = invitingPlayer.addFriend(newFriend);
         friendRelationCreatePort.CreateFriendRelation(friendRelation);
         return true;
     }
