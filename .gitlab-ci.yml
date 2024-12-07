@@ -107,6 +107,11 @@ build_statistics:
     - cd ./statistics
     - ../gradlew clean bootBuildImage --stacktrace
     - cd ..
+  variables:
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
+  services:
+    - docker:dind
   artifacts:
     name: "build-statistics-artifact"
     when: on_success
