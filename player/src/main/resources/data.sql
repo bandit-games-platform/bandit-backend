@@ -1,7 +1,7 @@
-INSERT INTO player.player (id, join_date, display_name)
-VALUES ('d7f9b8e3-3c4f-4b9f-8d7e-e1c0f4a7b901', '2024-09-10 11:30', 'jake'),
-       ('c5b8f7a1-d34e-4e19-9d0f-b4c5d0e1f501', '2024-10-09 23:55', 'pete'),
-       ('94dad160-f5c8-4817-8f2d-611e1436ffcd', '2024-08-08 06:35', 'roman');
+INSERT INTO player.player (id, join_date, display_name, avatar)
+VALUES ('d7f9b8e3-3c4f-4b9f-8d7e-e1c0f4a7b901', '2024-09-10 11:30', 'jake', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHfd3PPulVSp4ZbuBFNkePoUR_fLJQe474Ag&s'),
+       ('c5b8f7a1-d34e-4e19-9d0f-b4c5d0e1f501', '2024-10-09 23:55', 'pete', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHfd3PPulVSp4ZbuBFNkePoUR_fLJQe474Ag&s'),
+       ('94dad160-f5c8-4817-8f2d-611e1436ffcd', '2024-08-08 06:35', 'roman', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHfd3PPulVSp4ZbuBFNkePoUR_fLJQe474Ag&s');
 
 INSERT INTO player.player_library (player_id)
 VALUES ('94dad160-f5c8-4817-8f2d-611e1436ffcd');
@@ -35,7 +35,7 @@ VALUES
     ('8067be3e-d09a-47db-8ed7-3bced86cba13', '1996-08-16', null, 'WindWalker', 'FEMALE', 'UNITED_KINGDOM');
 
 
-INSERT INTO player.friends (id, player_id, friend_id)
+INSERT INTO player.friends (id, player_a_id, player_b_id)
 VALUES
     ('bac812ea-8422-4dea-84db-ee09f62170fa', '8449ba7c-194c-4e51-b060-cd88cc498836', '86da4cad-2dc1-4a43-981f-d900e8ad9dc7'),
     ('45603958-1204-4960-86ab-8cb8bf7be683', '8449ba7c-194c-4e51-b060-cd88cc498836', '74053627-749b-4076-ba15-888444c09878'),

@@ -3,8 +3,8 @@ package be.kdg.int5.player;
 import be.kdg.int5.player.adapters.out.db.player.PlayerJpaEntity;
 import be.kdg.int5.player.adapters.out.db.playerFriend.FriendInviteJpaEntity;
 import be.kdg.int5.player.adapters.out.db.playerFriend.FriendInviteJpaRepository;
-import be.kdg.int5.player.adapters.out.db.playerFriend.PlayerFriendJpaRepository;
-import be.kdg.int5.player.adapters.out.db.playerFriend.PlayerFriendsJpaEntity;
+import be.kdg.int5.player.adapters.out.db.playerFriend.FriendsRelationJpaRepository;
+import be.kdg.int5.player.adapters.out.db.playerFriend.FriendsRelationJpaEntity;
 import be.kdg.int5.player.domain.InviteStatus;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 import static be.kdg.int5.player.Variables.*;
@@ -37,7 +38,7 @@ public class ProcessPendingFriendInviteIntegrationTest extends AbstractDatabaseT
     private FriendInviteJpaRepository friendInviteJpaRepository;
 
     @MockBean
-    private PlayerFriendJpaRepository playerFriendJpaRepository;
+    private FriendsRelationJpaRepository friendsRelationJpaRepository;
 
     @MockBean
     private RabbitTemplate rabbitTemplate;
@@ -63,22 +64,22 @@ public class ProcessPendingFriendInviteIntegrationTest extends AbstractDatabaseT
                 LocalDateTime.now()
         );
 
-        PlayerFriendsJpaEntity storedFriendEntity = new PlayerFriendsJpaEntity(
+        FriendsRelationJpaEntity storedFriendEntity = new FriendsRelationJpaEntity(
                 UUID.randomUUID(),
                 new PlayerJpaEntity(savedEntity.getInvited().getId()),
                 new PlayerJpaEntity(savedEntity.getInviter().getId()
-                ));
+                ), LocalDateTime.now());
 
         // Mocks the repository behavior for fetching the invite
-        when(friendInviteJpaRepository.getReferenceById(friendInviteId)).thenReturn(inviteEntity);
+        when(friendInviteJpaRepository.findById(friendInviteId)).thenReturn(Optional.of(inviteEntity));
 
         // Captures the entities being saved
         ArgumentCaptor<FriendInviteJpaEntity> saveCaptor = ArgumentCaptor.forClass(FriendInviteJpaEntity.class);
-        ArgumentCaptor<PlayerFriendsJpaEntity> playerFriendCaptor = ArgumentCaptor.forClass(PlayerFriendsJpaEntity.class);
+        ArgumentCaptor<FriendsRelationJpaEntity> playerFriendCaptor = ArgumentCaptor.forClass(FriendsRelationJpaEntity.class);
 
         // Mocks save methods
         when(friendInviteJpaRepository.save(saveCaptor.capture())).thenReturn(savedEntity);
-        when(playerFriendJpaRepository.save(playerFriendCaptor.capture())).thenReturn(storedFriendEntity);
+        when(friendsRelationJpaRepository.save(playerFriendCaptor.capture())).thenReturn(storedFriendEntity);
 
         // Act
         ResultActions result = mockMvc.perform(
@@ -98,11 +99,11 @@ public class ProcessPendingFriendInviteIntegrationTest extends AbstractDatabaseT
         assertEquals(InviteStatus.ACCEPTED, savedInviteEntity.getStatus());
 
         // Assert friendship creation
-        PlayerFriendsJpaEntity savedFriendEntity = playerFriendCaptor.getValue();
-        assertEquals(PLAYER_ID, savedFriendEntity.getPlayer().getId());
-        assertEquals(INVITER_ID, savedFriendEntity.getFriend().getId());
+        FriendsRelationJpaEntity savedFriendEntity = playerFriendCaptor.getValue();
+        assertEquals(INVITER_ID, savedFriendEntity.getPlayerA().getId());
+        assertEquals(PLAYER_ID, savedFriendEntity.getPlayerB().getId());
 
-        verify(playerFriendJpaRepository, times(1)).save(playerFriendCaptor.capture());
+        verify(friendsRelationJpaRepository, times(1)).save(playerFriendCaptor.capture());
     }
 
 
@@ -127,18 +128,18 @@ public class ProcessPendingFriendInviteIntegrationTest extends AbstractDatabaseT
         );
 
         // Mocks the repository behavior for fetching the invite
-        when(friendInviteJpaRepository.getReferenceById(friendInviteId)).thenReturn(inviteEntity);
+        when(friendInviteJpaRepository.findById(friendInviteId)).thenReturn(Optional.of(inviteEntity));
 
         // Captures the entities being saved
         ArgumentCaptor<FriendInviteJpaEntity> saveCaptor = ArgumentCaptor.forClass(FriendInviteJpaEntity.class);
-        ArgumentCaptor<PlayerFriendsJpaEntity> playerFriendCaptor = ArgumentCaptor.forClass(PlayerFriendsJpaEntity.class);
+        ArgumentCaptor<FriendsRelationJpaEntity> playerFriendCaptor = ArgumentCaptor.forClass(FriendsRelationJpaEntity.class);
 
         // Mocks save methods
         when(friendInviteJpaRepository.save(saveCaptor.capture())).thenReturn(savedEntity);
-        when(playerFriendJpaRepository.save(playerFriendCaptor.capture())).thenReturn(new PlayerFriendsJpaEntity(
+        when(friendsRelationJpaRepository.save(playerFriendCaptor.capture())).thenReturn(new FriendsRelationJpaEntity(
                 UUID.randomUUID(),
                 new PlayerJpaEntity(savedEntity.getInvited().getId()),
-                new PlayerJpaEntity(savedEntity.getInviter().getId())));
+                new PlayerJpaEntity(savedEntity.getInviter().getId()), LocalDateTime.now()));
 
         // Act
         ResultActions result = mockMvc.perform(
@@ -151,7 +152,7 @@ public class ProcessPendingFriendInviteIntegrationTest extends AbstractDatabaseT
 
         // Assert
         result.andExpect(status().isNoContent());
-        verify(playerFriendJpaRepository, never()).save(playerFriendCaptor.capture());
+        verify(friendsRelationJpaRepository, never()).save(playerFriendCaptor.capture());
     }
 
     @Test
@@ -176,18 +177,18 @@ public class ProcessPendingFriendInviteIntegrationTest extends AbstractDatabaseT
         );
 
         // Mocks the repository behavior for fetching the invite
-        when(friendInviteJpaRepository.getReferenceById(friendInviteId)).thenReturn(inviteEntity);
+        when(friendInviteJpaRepository.findById(friendInviteId)).thenReturn(Optional.of(inviteEntity));
 
         // Captures the entities being saved
         ArgumentCaptor<FriendInviteJpaEntity> saveCaptor = ArgumentCaptor.forClass(FriendInviteJpaEntity.class);
-        ArgumentCaptor<PlayerFriendsJpaEntity> playerFriendCaptor = ArgumentCaptor.forClass(PlayerFriendsJpaEntity.class);
+        ArgumentCaptor<FriendsRelationJpaEntity> playerFriendCaptor = ArgumentCaptor.forClass(FriendsRelationJpaEntity.class);
 
         // Mocks save methods
         when(friendInviteJpaRepository.save(saveCaptor.capture())).thenReturn(savedEntity);
-        when(playerFriendJpaRepository.save(playerFriendCaptor.capture())).thenReturn(new PlayerFriendsJpaEntity(
+        when(friendsRelationJpaRepository.save(playerFriendCaptor.capture())).thenReturn(new FriendsRelationJpaEntity(
                 UUID.randomUUID(),
                 new PlayerJpaEntity(savedEntity.getInvited().getId()),
-                new PlayerJpaEntity(savedEntity.getInviter().getId())));
+                new PlayerJpaEntity(savedEntity.getInviter().getId()), LocalDateTime.now()));
 
         // Act
         ResultActions result = mockMvc.perform(

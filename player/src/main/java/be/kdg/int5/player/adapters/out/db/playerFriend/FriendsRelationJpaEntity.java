@@ -2,30 +2,33 @@ package be.kdg.int5.player.adapters.out.db.playerFriend;
 
 import be.kdg.int5.player.adapters.out.db.player.PlayerJpaEntity;
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
 @Table(schema = "player", name = "friends")
-public class PlayerFriendsRelationJpaEntity {
+public class FriendsRelationJpaEntity {
     @Id
     @GeneratedValue(generator = "UUID")
     private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private PlayerJpaEntity player;
+    @JoinColumn(name = "player_a_id", nullable = false)
+    private PlayerJpaEntity playerA;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "friend_id", nullable = false)
-    private PlayerJpaEntity friend;
+    @JoinColumn(name = "player_b_id", nullable = false)
+    private PlayerJpaEntity playerB;
+    private LocalDateTime friendshipStartDate;
 
-    public PlayerFriendsRelationJpaEntity() {
+    public FriendsRelationJpaEntity() {
     }
 
-    public PlayerFriendsRelationJpaEntity(UUID id, PlayerJpaEntity player, PlayerJpaEntity friend) {
+    public FriendsRelationJpaEntity(UUID id, PlayerJpaEntity playerA, PlayerJpaEntity playerB, LocalDateTime friendshipStartDate) {
         this.id = id;
-        this.player = player;
-        this.friend = friend;
+        this.playerA = playerA;
+        this.playerB = playerB;
+        this.friendshipStartDate = friendshipStartDate;
     }
 
     public UUID getId() {
@@ -36,19 +39,27 @@ public class PlayerFriendsRelationJpaEntity {
         this.id = id;
     }
 
-    public PlayerJpaEntity getPlayer() {
-        return player;
+    public PlayerJpaEntity getPlayerA() {
+        return playerA;
     }
 
-    public void setPlayer(PlayerJpaEntity player) {
-        this.player = player;
+    public void setPlayerA(PlayerJpaEntity player) {
+        this.playerA = player;
     }
 
-    public PlayerJpaEntity getFriend() {
-        return friend;
+    public PlayerJpaEntity getPlayerB() {
+        return playerB;
     }
 
-    public void setFriend(PlayerJpaEntity friend) {
-        this.friend = friend;
+    public void setPlayerB(PlayerJpaEntity friend) {
+        this.playerB = friend;
+    }
+
+    public LocalDateTime getFriendshipStartDate() {
+        return friendshipStartDate;
+    }
+
+    public void setFriendshipStartDate(LocalDateTime friendshipStartDate) {
+        this.friendshipStartDate = friendshipStartDate;
     }
 }

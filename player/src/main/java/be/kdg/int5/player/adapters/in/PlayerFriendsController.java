@@ -1,5 +1,6 @@
 package be.kdg.int5.player.adapters.in;
 
+import be.kdg.int5.player.adapters.in.dto.Action;
 import be.kdg.int5.player.domain.FriendInviteBio;
 import be.kdg.int5.player.adapters.in.dto.PlayerFriendBioDto;
 import be.kdg.int5.player.adapters.in.dto.PlayerSearchBioDto;
@@ -104,7 +105,7 @@ public class    PlayerFriendsController {
     @PreAuthorize("hasAuthority('player')")
     ResponseEntity<Void> processFriendInvite(
             @PathVariable UUID friendInviteId,
-            @RequestParam("action") String action,
+            @RequestParam("action") Action action,
             @AuthenticationPrincipal Jwt token) {
 
         String userId = token.getClaimAsString("sub");
@@ -114,12 +115,12 @@ public class    PlayerFriendsController {
                 new PlayerId(playerId)
         );
 
-        if ("accept".equalsIgnoreCase(action)) {
+        if (Action.ACCEPT.equals(action)) {
             if (processPendingFriendInvite.acceptPendingFriendInvite(command)) {
                 return new ResponseEntity<>(HttpStatus.CREATED);
             }
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else if ("reject".equalsIgnoreCase(action)) {
+        } else if (Action.REJECT.equals(action)) {
             if (processPendingFriendInvite.rejectPendingFriendInvite(command)){
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }

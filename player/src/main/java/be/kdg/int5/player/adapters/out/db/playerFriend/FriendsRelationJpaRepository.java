@@ -8,17 +8,17 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface PlayerFriendsRelationJpaRepository extends JpaRepository<PlayerFriendsRelationJpaEntity, UUID> {
+public interface FriendsRelationJpaRepository extends JpaRepository<FriendsRelationJpaEntity, UUID> {
 
     @Query("""
         SELECT\s
             CASE\s
-                WHEN pf.player.id = :playerId THEN pf.friend.id
-                ELSE pf.player.id
+                WHEN pf.playerA.id = :playerId THEN pf.playerB.id
+                ELSE pf.playerA.id
             END
-        FROM PlayerFriendsRelationJpaEntity pf
-        WHERE pf.player.id = :playerId\s
-           OR pf.friend.id = :playerId
+        FROM FriendsRelationJpaEntity pf
+        WHERE pf.playerA.id = :playerId\s
+           OR pf.playerB.id = :playerId
     """)
     List<UUID> findAllByPlayerIdOrFriendId(UUID playerId);
 }

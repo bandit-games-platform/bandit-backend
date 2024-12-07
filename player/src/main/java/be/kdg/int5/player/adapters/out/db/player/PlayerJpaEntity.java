@@ -1,6 +1,6 @@
 package be.kdg.int5.player.adapters.out.db.player;
 
-import be.kdg.int5.player.adapters.out.db.playerFriend.PlayerFriendsJpaEntity;
+import be.kdg.int5.player.adapters.out.db.playerFriend.FriendsRelationJpaEntity;
 import be.kdg.int5.player.domain.Country;
 import be.kdg.int5.player.domain.Gender;
 import jakarta.persistence.*;
@@ -24,10 +24,30 @@ public class PlayerJpaEntity {
     private LocalDate birthdate;
     @Embedded
     private ImageResourceJpaEmbed avatar;
-    @OneToMany(mappedBy = "player", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<PlayerFriendsJpaEntity> friendsList;
+    @OneToMany(mappedBy = "playerA", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<FriendsRelationJpaEntity> friendsList;
 
     public PlayerJpaEntity() {
+    }
+
+    public PlayerJpaEntity(
+            UUID id,
+            LocalDateTime joinDate,
+            String displayName,
+            Gender gender,
+            Country location,
+            LocalDate birthdate,
+            ImageResourceJpaEmbed avatar,
+            List<FriendsRelationJpaEntity> friendsList
+    ) {
+        this.id = id;
+        this.joinDate = joinDate;
+        this.displayName = displayName;
+        this.gender = gender;
+        this.location = location;
+        this.birthdate = birthdate;
+        this.avatar = avatar;
+        this.friendsList = friendsList;
     }
 
     public PlayerJpaEntity(UUID id) {
@@ -40,17 +60,6 @@ public class PlayerJpaEntity {
 
     public PlayerJpaEntity(UUID id, LocalDateTime joinDate, String displayName) {
         this(id, joinDate, displayName, null, null, null, null, null);
-    }
-
-    public PlayerJpaEntity(UUID id, LocalDateTime joinDate, String displayName, Gender gender, Country location, LocalDate birthdate, ImageResourceJpaEmbed avatar, List<PlayerFriendsJpaEntity> friendsList) {
-        this.id = id;
-        this.joinDate = joinDate;
-        this.displayName = displayName;
-        this.gender = gender;
-        this.location = location;
-        this.birthdate = birthdate;
-        this.avatar = avatar;
-        this.friendsList = friendsList;
     }
 
     public PlayerJpaEntity(UUID id, String displayName, ImageResourceJpaEmbed avatar) {
@@ -113,11 +122,11 @@ public class PlayerJpaEntity {
         this.avatar = avatar;
     }
 
-    public List<PlayerFriendsJpaEntity> getFriendsList() {
+    public List<FriendsRelationJpaEntity> getFriendsList() {
         return friendsList;
     }
 
-    public void setFriendsList(List<PlayerFriendsJpaEntity> friendsList) {
+    public void setFriendsList(List<FriendsRelationJpaEntity> friendsList) {
         this.friendsList = friendsList;
     }
 }

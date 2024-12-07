@@ -10,6 +10,7 @@ import be.kdg.int5.player.adapters.out.db.player.PlayerJpaEntity;
 import be.kdg.int5.player.adapters.out.db.player.PlayerJpaRepository;
 import be.kdg.int5.player.domain.*;
 import be.kdg.int5.player.port.out.*;
+import be.kdg.int5.player.port.out.friends.*;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,18 +20,18 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public class PlayerFriendsJpaAdapter implements PlayerUsernameLoadPort, FriendsListLoadPort, FriendInviteCreatePort, FriendInviteLoadPort, FriendInviteUpdatePort {
+public class PlayerFriendsJpaAdapter implements PlayerUsernameLoadPort, FriendsListLoadPort, FriendInviteCreatePort, FriendInviteLoadPort, FriendInviteUpdatePort, FriendRelationCreatePort {
     private final PlayerJpaRepository playerJpaRepository;
     private final FriendInviteJpaRepository friendInviteJpaRepository;
-    private final PlayerFriendsRelationJpaRepository playerFriendsRelationJpaRepository;
+    private final FriendsRelationJpaRepository friendsRelationJpaRepository;
 
     public PlayerFriendsJpaAdapter(final PlayerJpaRepository playerJpaRepository,
                                    final FriendInviteJpaRepository friendInviteJpaRepository,
-                                   PlayerFriendsRelationJpaRepository playerFriendsRelationJpaRepository
+                                   FriendsRelationJpaRepository friendsRelationJpaRepository
     ) {
         this.playerJpaRepository = playerJpaRepository;
         this.friendInviteJpaRepository = friendInviteJpaRepository;
-        this.playerFriendsRelationJpaRepository = playerFriendsRelationJpaRepository;
+        this.friendsRelationJpaRepository = friendsRelationJpaRepository;
     }
 
     @Override
@@ -50,7 +51,7 @@ public class PlayerFriendsJpaAdapter implements PlayerUsernameLoadPort, FriendsL
 
     @Override
     public List<Player> getAllFriendsOfPlayer(PlayerId playerId) {
-        List<UUID> playerJpaEntitiesUUID = playerFriendsRelationJpaRepository.findAllByPlayerIdOrFriendId(playerId.uuid());
+        List<UUID> playerJpaEntitiesUUID = friendsRelationJpaRepository.findAllByPlayerIdOrFriendId(playerId.uuid());
         return playerJpaRepository.findAllById(playerJpaEntitiesUUID)
                 .stream()
                 .map(this::playerJpaToDomain)
@@ -82,7 +83,7 @@ public class PlayerFriendsJpaAdapter implements PlayerUsernameLoadPort, FriendsL
         if (friendInviteJpaEntities.isEmpty()) return null;
 
        return friendInviteJpaEntities.stream()
-                .filter(invite -> invite.getStatus() == InviteStatus.PENDING) // Filter pending invites
+                .filter(invite -> invite.getStatus() == InviteStatus.PENDING)
                 .map(invite -> {
                     Optional<PlayerJpaEntity> inviterEntity = playerJpaRepository.findById(invite.getInviter().getId());
                     return inviterEntity.map(player -> mapToFriendInviteBioDto(playerJpaToDomain(player), invite));
@@ -120,14 +121,29 @@ public class PlayerFriendsJpaAdapter implements PlayerUsernameLoadPort, FriendsL
         friendInviteJpaRepository.save(friendInviteJpaEntity);
     }
 
+    @Override
+    public void CreateFriendRelation(FriendRelation friendRelation) {
+        friendsRelationJpaRepository.save(this.friendsRelationDomainToJpa(friendRelation));
+    }
+
+    private FriendsRelationJpaEntity friendsRelationDomainToJpa(FriendRelation friendRelation){
+        return new FriendsRelationJpaEntity(
+                friendRelation.getId(),
+                this.playerIdDomainToJpa(friendRelation.getFriendA()),
+                this.playerIdDomainToJpa(friendRelation.getFriendB()),
+                friendRelation.getFriendshipStartDate()
+        );
+    }
+
     private FriendInvite friendInviteJpaToDomain(FriendInviteJpaEntity friendInviteJpaEntity){
-       return new FriendInvite(
+       FriendInvite friendInvite = new FriendInvite(
                 new FriendInviteId(friendInviteJpaEntity.getId()),
                 new PlayerId(friendInviteJpaEntity.getInviter().getId()),
                 new PlayerId(friendInviteJpaEntity.getInvited().getId()),
-                friendInviteJpaEntity.getStatus(),
                 friendInviteJpaEntity.getInvitedTime()
         );
+       friendInvite.setStatus(friendInviteJpaEntity.getStatus());
+       return friendInvite;
     }
 
     private FriendInviteJpaEntity friendInviteDomainToJpa(FriendInvite friendInvite){
@@ -149,12 +165,8 @@ public class PlayerFriendsJpaAdapter implements PlayerUsernameLoadPort, FriendsL
                 new ImageResource(new ResourceURL(playerJpaEntity.getAvatar().getUrl())));
     }
 
-    private PlayerJpaEntity playerDomainToJpa(Player player) {
-        return new PlayerJpaEntity(
-                player.getId().uuid(),
-                player.getDisplayName(),
-                new ImageResourceJpaEmbed(player.getAvatar().url().url())
-        );
+    private PlayerJpaEntity playerIdDomainToJpa(Player player) {
+        return new PlayerJpaEntity(player.getId().uuid());
     }
 
     private FriendInviteBio mapToFriendInviteBioDto(Player player, FriendInviteJpaEntity invite) {

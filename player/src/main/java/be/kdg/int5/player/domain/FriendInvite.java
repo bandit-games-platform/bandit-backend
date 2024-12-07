@@ -11,7 +11,7 @@ public class FriendInvite {
     private InviteStatus status;
     private final LocalDateTime invitedTime;
 
-    public FriendInvite(FriendInviteId id, final PlayerId inviter, final PlayerId invited, InviteStatus status, LocalDateTime invitedTime) {
+    public FriendInvite(FriendInviteId id, final PlayerId inviter, final PlayerId invited, LocalDateTime invitedTime) {
         requireNonNull(id);
         requireNonNull(inviter);
         requireNonNull(invited);
@@ -19,9 +19,16 @@ public class FriendInvite {
         this.id = id;
         this.inviter = inviter;
         this.invited = invited;
-        this.status = status;
+        this.status = InviteStatus.PENDING;
         this.invitedTime = invitedTime;
 
+    }
+    public void accept() {
+        this.status = InviteStatus.ACCEPTED;
+    }
+
+    public void reject() {
+        this.status = InviteStatus.REJECTED;
     }
 
     public FriendInviteId getId() {
@@ -44,11 +51,7 @@ public class FriendInvite {
         return invitedTime;
     }
 
-    public void setStatusToAccepted() {
-        this.status = InviteStatus.ACCEPTED;
-    }
-
-    public void setStatusToRejected() {
-        this.status = InviteStatus.REJECTED;
+    public void setStatus(InviteStatus status) {
+        this.status = status;
     }
 }

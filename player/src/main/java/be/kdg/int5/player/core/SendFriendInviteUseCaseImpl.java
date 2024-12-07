@@ -5,19 +5,19 @@ import be.kdg.int5.player.domain.Player;
 import be.kdg.int5.player.domain.PlayerId;
 import be.kdg.int5.player.port.in.SendFriendInviteCommand;
 import be.kdg.int5.player.port.in.SendFriendInviteUseCase;
-import be.kdg.int5.player.port.out.FriendInviteStatusCreatePort;
+import be.kdg.int5.player.port.out.friends.FriendInviteCreatePort;
 import be.kdg.int5.player.port.out.PlayerLoadPort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class SendFriendInviteUseCaseImpl implements SendFriendInviteUseCase {
-    private final FriendInviteStatusCreatePort friendInviteStatusCreatePort;
+    private final FriendInviteCreatePort friendInviteCreatePort;
     private final PlayerLoadPort playerLoadPort;
 
-    public SendFriendInviteUseCaseImpl(FriendInviteStatusCreatePort friendInviteStatusCreatePort,
+    public SendFriendInviteUseCaseImpl(FriendInviteCreatePort friendInviteCreatePort,
                                        PlayerLoadPort playerLoadPort) {
-        this.friendInviteStatusCreatePort = friendInviteStatusCreatePort;
+        this.friendInviteCreatePort = friendInviteCreatePort;
         this.playerLoadPort = playerLoadPort;
     }
 
@@ -29,7 +29,7 @@ public class SendFriendInviteUseCaseImpl implements SendFriendInviteUseCase {
 
         Player player = playerLoadPort.loadPlayerByIdWithoutJoinDate(playerId.uuid());
         FriendInvite newFriendInvite = player.sendFriendInvite(friendId);
-        FriendInvite created = friendInviteStatusCreatePort.createFriendInviteStatus(newFriendInvite);
+        FriendInvite created = friendInviteCreatePort.createFriendInviteStatus(newFriendInvite);
         return created != null;
     }
 }
