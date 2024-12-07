@@ -327,7 +327,7 @@ deploy_statistics_dev:
   needs:
     - build_statistics
   before_script:
-    - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT --image acrbanditgamesdev.azurecr.io/statistics-context:${CI_COMMIT_SHORT_SHA::-1}
+    - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT --image acrbanditgamesdev.azurecr.io/statistics-context:latest
     - az extension add --name containerapp --upgrade
   script:
     - tag=$CI_COMMIT_REF_NAME
