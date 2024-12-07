@@ -48,7 +48,7 @@ public class SendFriendInviteUseCaseImplIntegrationTest extends AbstractDatabase
         when(playerJpaRepository.getReferenceById(FRIEND_ID))
                 .thenReturn(new PlayerJpaEntity(FRIEND_ID, "FriendPlayer"));
 
-        when(friendInviteJpaRepository.findByInviter_IdAndInvited_Id(PLAYER_ID, FRIEND_ID))
+        when(friendInviteJpaRepository.findByPlayers(PLAYER_ID, FRIEND_ID))
                 .thenReturn(null); // No existing invite.
 
         when(friendInviteJpaRepository.save(any(FriendInviteJpaEntity.class)))
@@ -90,7 +90,7 @@ public class SendFriendInviteUseCaseImplIntegrationTest extends AbstractDatabase
                 InviteStatus.PENDING,
                 LocalDateTime.now());
 
-        when(friendInviteJpaRepository.findByInviter_IdAndInvited_Id(PLAYER_ID, FRIEND_ID))
+        when(friendInviteJpaRepository.findByPlayers(PLAYER_ID, FRIEND_ID))
                 .thenReturn(existingInvite); // Simulate an existing invite.
 
         when(playerJpaRepository.findById(PLAYER_ID))

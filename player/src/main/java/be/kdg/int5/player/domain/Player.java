@@ -1,6 +1,7 @@
 package be.kdg.int5.player.domain;
 
 import be.kdg.int5.common.domain.ImageResource;
+import be.kdg.int5.common.domain.ResourceURL;
 import be.kdg.int5.common.exceptions.AlreadyFriendsException;
 
 import java.time.LocalDate;
@@ -17,6 +18,8 @@ public class Player {
     private Country location;
     private LocalDate birthdate;
     private ImageResource avatar;
+    public static final String DEFAULT_AVATAR_URL = "https://shorturl.at/f38Dr";
+
 
     public Player(final PlayerId id, final LocalDateTime joinDate, final String displayName, ImageResource avatar) {
         requireNonNull(id);
@@ -26,7 +29,7 @@ public class Player {
         this.id = id;
         this.joinDate = joinDate;
         this.displayName = displayName;
-        this.avatar = avatar;
+        this.avatar = avatar != null ? avatar : new ImageResource(new ResourceURL(DEFAULT_AVATAR_URL));
     }
 
     public Player(final PlayerId id) {

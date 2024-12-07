@@ -64,7 +64,7 @@ public class PlayerFriendsJpaAdapter implements PlayerUsernameLoadPort, FriendsL
         PlayerJpaEntity inviter = playerJpaRepository.getReferenceById(friendInvite.getInviter().uuid());
         PlayerJpaEntity invited = playerJpaRepository.getReferenceById(friendInvite.getInvited().uuid());
 
-        FriendInviteJpaEntity oldFriendInviteJpaEntity = friendInviteJpaRepository.findByInviter_IdAndInvited_Id(inviter.getId(), invited.getId());
+        FriendInviteJpaEntity oldFriendInviteJpaEntity = friendInviteJpaRepository.findByPlayers(inviter.getId(), invited.getId());
         if (oldFriendInviteJpaEntity != null) throw new InviteStatusExistsException();
         FriendInviteJpaEntity friendInviteJpaEntity = new FriendInviteJpaEntity(
                 friendInvite.getId().uuid(),
