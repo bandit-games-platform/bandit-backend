@@ -100,12 +100,12 @@ build_player:
 
 
 build_statistics:
-  image: gradle:8.11.0-jdk21
   stage: build
   script:
     - echo "Building statistics project"
+    - chmod +x gradlew
     - cd ./statistics
-    - gradle clean bootBuildImage
+    - ../gradlew clean bootBuildImage --stacktrace
     - cd ..
   artifacts:
     name: "build-statistics-artifact"
