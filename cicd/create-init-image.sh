@@ -16,6 +16,8 @@ FROM postgres:latest
 COPY ../infrastructure/init.sql /init-script.sql
 EOF
 
+docker login acrbanditgamesdev.azurecr.io -u "$REGISTRY_USERNAME" -p "$REGISTRY_PASSWORD"
+
 # Build the Docker image
 docker build -t $IMAGE_NAME temp
 # Push the Docker image to the registry
