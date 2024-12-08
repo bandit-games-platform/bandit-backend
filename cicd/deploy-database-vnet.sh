@@ -47,9 +47,18 @@ if [ -z "$DB_EXISTS" ]; then
 
     echo "Database has been created, waiting for it to be ready before initialising and creating user"
 
+    MAX_RETRIES=30
+    COUNT=0
     # Wait for the database server to be ready
-    while [ "$(az postgres flexible-server show --name \"$DB_SERVER_NAME\" --resource-group \"$RG_NAME\" --query \"state\")" != '"Ready"' ]
+    while [ "$(az postgres flexible-server show --name $DB_SERVER_NAME --resource-group $RG_NAME --query \"state\" -o tsv)" != '"Ready"' ]
     do
+      COUNT=$((COUNT + 1))
+      if [ $COUNT -ge $MAX_RETRIES ]; then
+        echo "Error: PostgreSQL server did not become ready in time."
+        exit 1
+      fi
+
+      echo "Waiting for PostgreSQL server to be ready... ($COUNT/$MAX_RETRIES)"
       sleep 10
     done
 
