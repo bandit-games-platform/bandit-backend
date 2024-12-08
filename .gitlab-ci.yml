@@ -324,7 +324,7 @@ deploy_postgres_dev:
   before_script:
     - tdnf install -y postgresql
     - tdnf install -y moby-engine moby-cli
-    - dockerd & sleep 5
+    - dockerd & sleep 10
     - docker --version
     - psql --version
     - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
