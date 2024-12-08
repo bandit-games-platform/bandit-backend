@@ -50,7 +50,7 @@ if [ -z "$DB_EXISTS" ]; then
     MAX_RETRIES=30
     COUNT=0
     # Wait for the database server to be ready
-    while [ "$(az postgres flexible-server show --name $DB_SERVER_NAME --resource-group $RG_NAME --query \"state\" -o tsv)" != '"Ready"' ]
+    while [ "$(az postgres flexible-server show --name $DB_SERVER_NAME --resource-group $RG_NAME --query \"state\" -o tsv)" != "Ready" ]
     do
       COUNT=$((COUNT + 1))
       if [ $COUNT -ge $MAX_RETRIES ]; then
