@@ -12,7 +12,7 @@ RESOURCE_GROUP="rg_bandit_games_dev"
 PG_USER=$DEV_PG_USR
 PG_PASSWORD=$DEV_PG_PWD
 # Database fully qualified name
-DB_FQDN=$(az postgres flexible-server show --name mypgserver --resource-group rg_bandit_games_dev --query "fullyQualifiedDomainName" --output tsv)
+DB_FQDN=$(az postgres flexible-server show --name "banditdevpostgres" --resource-group rg_bandit_games_dev --query "fullyQualifiedDomainName" --output tsv)
 JDBC_URL="jdbc:postgresql://$DB_FQDN:5432/bandit_db"
 
 echo "Bringing up container app"
@@ -21,7 +21,7 @@ az containerapp up --name $CONTAINER_NAME --resource-group $RESOURCE_GROUP \
   --image "$REGISTRY_USERNAME".azurecr.io/statistics-context:"${CI_COMMIT_SHORT_SHA::-1}" \
   --target-port 8095 --ingress external
 
-az containerapp secret set --name hello-app-container --resource-group TestForWorkshop \
+az containerapp secret set --name $CONTAINER_NAME --resource-group $RESOURCE_GROUP \
       --secrets \
       database-usr-pwd="$PG_PASSWORD"
 

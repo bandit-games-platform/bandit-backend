@@ -38,7 +38,7 @@ if [ -z "$DB_EXISTS" ]; then
      --admin-user "$PG_ADMIN_USER" \
      --admin-password "$PG_ADMIN_PASSWORD" \
      --tier Burstable \
-     --sku-name B1ms \
+     --sku-name standard_b1ms \
      --storage-size 32 \
      --vnet $VNET_NAME \
      --subnet $SUBNET_NAME \
