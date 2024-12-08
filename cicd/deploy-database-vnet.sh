@@ -38,9 +38,9 @@ DB_EXISTS=$(az postgres flexible-server list --resource-group $RG_NAME --query "
 if [ -z "$DB_EXISTS" ]; then
     mkdir -p temp
     # Write the Dockerfile
-    cat <<EOF > "test/Dockerfile"
+    cat <<EOF > "temp/Dockerfile"
 FROM postgres:latest
-COPY init-script.sql /path/to/init-script.sql
+COPY ../infrastructure/init.sql /init-script.sql
 EOF
     # Build the Docker image
     docker build -t $IMAGE_NAME temp
