@@ -42,20 +42,11 @@ if [ -z "$DB_EXISTS" ]; then
      --tier Burstable \
      --sku-name standard_b1ms \
      --storage-size 32 \
-     --vnet $VNET_NAME \
-     --subnet $SUBNET_NAME \
+     --public-access 0.0.0.0-255.255.255.255 \
      --database-name "bandit_db" \
      --yes
 
     echo "Database has been created, waiting for it to be ready before initialising and creating user"
-
-    # Add a firewall rule to allow access from this IP
-    az postgres flexible-server firewall-rule create \
-        --resource-group $RG_NAME \
-        --name $DB_SERVER_NAME \
-        --rule-name AllowMyIP \
-        --start-ip-address "$MY_IP" \
-        --end-ip-address "$MY_IP"
 
     MAX_RETRIES=30
     COUNT=0
@@ -79,6 +70,12 @@ if [ -z "$DB_EXISTS" ]; then
 
     # Create a non-admin user
     PGPASSWORD=$PG_ADMIN_PASSWORD psql -h $DB_SERVER_NAME.postgres.database.azure.com -U "$PG_ADMIN_USER" -d postgres -c "CREATE USER $PG_NON_ADMIN_USER WITH PASSWORD '$PG_NON_ADMIN_PASSWORD';"
+
+    az postgres flexible-server update \
+        --name $DB_SERVER_NAME \
+        --resource-group $RG_NAME \
+        --vnet $VNET_NAME \
+        --subnet $SUBNET_NAME
 
     echo "PostgreSQL server $DB_SERVER_NAME created."
 else
