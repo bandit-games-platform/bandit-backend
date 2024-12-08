@@ -316,8 +316,11 @@ semgrep-sast:
 build_init_image:
   image: docker:20.10.16
   stage: deploy
+  when: on_success
   needs:
     - build_statistics
+  before_script:
+    - apk add --no-cache bash
   script:
     - chmod +x cicd/create-init-image.sh
     - cicd/create-init-image.sh
