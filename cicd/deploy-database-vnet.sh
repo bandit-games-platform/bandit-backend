@@ -14,11 +14,12 @@ DB_SERVER_NAME="banditdevpostgres"
 ENV_NAME="dev-containers"
 RG_NAME="rg_bandit_games_dev"
 
+IMAGE_NAME="acrbanditgamesdev.azurecr.io/init-script-image:latest"
+
 PG_ADMIN_USER=$DEV_PG_ADMIN_USR
 PG_ADMIN_PASSWORD=$DEV_PG_ADMIN_PWD
 PG_NON_ADMIN_USER=$DEV_PG_USER
 PG_NON_ADMIN_PASSWORD=$DEV_PG_PWD
-PG_INIT_SCRIPT="infrastructure/init.sql"
 
 # Check and create VNet if it doesn't exist
 VNET_EXISTS=$(az network vnet list --resource-group $RG_NAME --query "[?name=='$VNET_NAME'].name" -o tsv)
