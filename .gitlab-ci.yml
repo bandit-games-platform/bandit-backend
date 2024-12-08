@@ -323,7 +323,10 @@ deploy_postgres_dev:
     - build_statistics
   before_script:
     - tdnf install -y postgresql
-    - tdnf install -y docker-ce
+    - tdnf install -y moby-engine moby-cli
+    - systemctl start docker
+    - systemctl enable docker
+    - docker --version
     - psql --version
     - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
   script:
