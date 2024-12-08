@@ -42,7 +42,8 @@ if [ -z "$DB_EXISTS" ]; then
      --storage-size 32 \
      --vnet $VNET_NAME \
      --subnet $SUBNET_NAME \
-     --database-name "bandit_db"
+     --database-name "bandit_db" \
+     --yes
 
     # Wait for the database server to be ready
     sleep 60
