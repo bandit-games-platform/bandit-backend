@@ -14,6 +14,8 @@ DB_SERVER_NAME="banditdevpostgres"
 ENV_NAME="dev-containers"
 RG_NAME="rg_bandit_games_dev"
 
+MY_IP=$(curl -s ifconfig.me)
+
 PG_ADMIN_USER=$DEV_PG_ADMIN_USR
 PG_ADMIN_PASSWORD=$DEV_PG_ADMIN_PWD
 PG_NON_ADMIN_USER=$DEV_PG_USR
@@ -46,6 +48,14 @@ if [ -z "$DB_EXISTS" ]; then
      --yes
 
     echo "Database has been created, waiting for it to be ready before initialising and creating user"
+
+    # Add a firewall rule to allow access from this IP
+    az postgres flexible-server firewall-rule create \
+        --resource-group $RG_NAME \
+        --name $DB_SERVER_NAME \
+        --rule-name AllowMyIP \
+        --start-ip-address "$MY_IP" \
+        --end-ip-address "$MY_IP"
 
     MAX_RETRIES=30
     COUNT=0
