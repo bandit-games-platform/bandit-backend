@@ -313,18 +313,6 @@ semgrep-sast:
 
 # ---------------------- DEPLOY --------------------------------- #
 
-build_init_image:
-  image: docker:20.10.16
-  stage: deploy
-  when: on_success
-  needs:
-    - build_statistics
-  before_script:
-    - apk add --no-cache bash
-  script:
-    - chmod +x cicd/create-init-image.sh
-    - cicd/create-init-image.sh
-
 # ----------------- DEV ----------------- #
 
 deploy_postgres_dev:
@@ -334,7 +322,6 @@ deploy_postgres_dev:
   needs:
     # In here add all other build stages when setup
     - build_statistics
-    - build_init_image
   before_script:
     - tdnf install -y postgresql
     - psql --version

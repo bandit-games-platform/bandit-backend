@@ -13,10 +13,14 @@ mkdir -p temp
 # Write the Dockerfile
 cat <<EOF > "temp/Dockerfile"
 FROM postgres:latest
-COPY ../infrastructure/init.sql /init-script.sql
+RUN echo "\
+CREATE SCHEMA IF NOT EXISTS chatbot; \
+CREATE SCHEMA IF NOT EXISTS gameplay; \
+CREATE SCHEMA IF NOT EXISTS game_registry; \
+CREATE SCHEMA IF NOT EXISTS player; \
+CREATE SCHEMA IF NOT EXISTS statistics; \
+CREATE SCHEMA IF NOT EXISTS storefront;" > /docker-entrypoint-initdb.d/init.sql
 EOF
-
-docker login acrbanditgamesdev.azurecr.io -u "$REGISTRY_USERNAME" -p "$REGISTRY_PASSWORD"
 
 # Build the Docker image
 docker build -t $IMAGE_NAME temp

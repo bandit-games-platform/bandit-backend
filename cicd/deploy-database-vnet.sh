@@ -73,7 +73,7 @@ if [ -z "$DB_EXISTS" ]; then
         --image $IMAGE_NAME \
         --vnet $VNET_NAME \
         --subnet $SUBNET_NAME \
-        --command "sh -c 'PGPASSWORD=$PG_ADMIN_PASSWORD psql -h $DB_SERVER_NAME.postgres.database.azure.com -U $PG_ADMIN_USER -d postgres -f /init-script.sql && PGPASSWORD=$PG_ADMIN_PASSWORD psql -h $DB_SERVER_NAME.postgres.database.azure.com -U $PG_ADMIN_USER -d postgres -c \"CREATE USER $PG_NON_ADMIN_USER WITH PASSWORD '$PG_NON_ADMIN_PASSWORD';\" && az containerapp delete --name init-container --resource-group $RG_NAME --yes'"
+        --command "sh -c 'PGPASSWORD=$PG_ADMIN_PASSWORD psql -h $DB_SERVER_NAME.postgres.database.azure.com -U $PG_ADMIN_USER -d postgres -c \"CREATE USER $PG_NON_ADMIN_USER WITH PASSWORD '$PG_NON_ADMIN_PASSWORD';\"'"
 
     az containerapp delete --name init-container --resource-group $RG_NAME --yes
 
