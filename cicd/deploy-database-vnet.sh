@@ -14,11 +14,11 @@ DB_SERVER_NAME="banditdevpostgres"
 ENV_NAME="dev-containers"
 RG_NAME="rg_bandit_games_dev"
 
-MY_IP=$(curl -s ifconfig.me)
+IMAGE_NAME="acrbanditgamesdev.azurecr.io/init-script-image:latest"
 
 PG_ADMIN_USER=$DEV_PG_ADMIN_USR
 PG_ADMIN_PASSWORD=$DEV_PG_ADMIN_PWD
-PG_NON_ADMIN_USER=$DEV_PG_USR
+PG_NON_ADMIN_USER=$DEV_PG_USER
 PG_NON_ADMIN_PASSWORD=$DEV_PG_PWD
 PG_INIT_SCRIPT="infrastructure/init.sql"
 
@@ -35,16 +35,31 @@ fi
 # Check and create PostgreSQL server if it doesn't exist
 DB_EXISTS=$(az postgres flexible-server list --resource-group $RG_NAME --query "[?name=='$DB_SERVER_NAME'].name" -o tsv)
 if [ -z "$DB_EXISTS" ]; then
+    mkdir -p temp
+    # Write the Dockerfile
+    cat <EOF> temp/Dockerfile
+    FROM postgres:latest
+    COPY init-script.sql /init-script.sql
+    EOF
+    # Build the Docker image
+    docker build -t $IMAGE_NAME temp
+    # Push the Docker image to the registry
+    docker push $IMAGE_NAME
+    # Clean up the temporary directory
+    rm -rf temp
+    echo "Docker image $IMAGE_NAME built and pushed successfully."
+
     az postgres flexible-server create --name $DB_SERVER_NAME --resource-group $RG_NAME \
-     --location northeurope \
-     --admin-user "$PG_ADMIN_USER" \
-     --admin-password "$PG_ADMIN_PASSWORD" \
-     --tier Burstable \
-     --sku-name standard_b1ms \
-     --storage-size 32 \
-     --public-access 0.0.0.0-255.255.255.255 \
-     --database-name "bandit_db" \
-     --yes
+       --location northeurope \
+       --admin-user "$PG_ADMIN_USER" \
+       --admin-password "$PG_ADMIN_PASSWORD" \
+       --tier Burstable \
+       --sku-name standard_b1ms \
+       --storage-size 32 \
+       --vnet $VNET_NAME \
+       --subnet $SUBNET_NAME \
+       --database-name "bandit_db" \
+       --yes
 
     echo "Database has been created, waiting for it to be ready before initialising and creating user"
 
@@ -65,17 +80,16 @@ if [ -z "$DB_EXISTS" ]; then
 
     echo "Database is now ready"
 
-    # Run the initialization script
-    PGPASSWORD=$PG_ADMIN_PASSWORD psql -h $DB_SERVER_NAME.postgres.database.azure.com -U "$PG_ADMIN_USER" -d postgres -f $PG_INIT_SCRIPT
-
-    # Create a non-admin user
-    PGPASSWORD=$PG_ADMIN_PASSWORD psql -h $DB_SERVER_NAME.postgres.database.azure.com -U "$PG_ADMIN_USER" -d postgres -c "CREATE USER $PG_NON_ADMIN_USER WITH PASSWORD '$PG_NON_ADMIN_PASSWORD';"
-
-    az postgres flexible-server update \
-        --name $DB_SERVER_NAME \
+    az containerapp create \
+        --name init-container \
         --resource-group $RG_NAME \
+        --environment dev-containers \
+        --image $IMAGE_NAME \
         --vnet $VNET_NAME \
-        --subnet $SUBNET_NAME
+        --subnet $SUBNET_NAME \
+        --command "sh -c 'PGPASSWORD=$PG_ADMIN_PASSWORD psql -h $DB_SERVER_NAME.postgres.database.azure.com -U $PG_ADMIN_USER -d postgres -f /init-script.sql && PGPASSWORD=$PG_ADMIN_PASSWORD psql -h $DB_SERVER_NAME.postgres.database.azure.com -U $PG_ADMIN_USER -d postgres -c \"CREATE USER $PG_NON_ADMIN_USER WITH PASSWORD '$PG_NON_ADMIN_PASSWORD';\" && az containerapp delete --name init-container --resource-group $RG_NAME --yes'"
+
+    az containerapp delete --name init-container --resource-group $RG_NAME --yes
 
     echo "PostgreSQL server $DB_SERVER_NAME created."
 else
