@@ -312,6 +312,16 @@ semgrep-sast:
         - '**/*.java'
 
 # ---------------------- DEPLOY --------------------------------- #
+
+build_init_image:
+  image: docker:20.10.16
+  stage: deploy
+  needs:
+    - build_statistics
+  script:
+    - chmod +x cicd/create-init-image.sh
+    - cicd/create-init-image.sh
+
 # ----------------- DEV ----------------- #
 
 deploy_postgres_dev:
@@ -321,16 +331,11 @@ deploy_postgres_dev:
   needs:
     # In here add all other build stages when setup
     - build_statistics
+    - build_init_image
   before_script:
     - tdnf install -y postgresql
-    - docker --version
     - psql --version
     - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
-  variables:
-    DOCKER_HOST: tcp://docker:2375
-    DOCKER_TLS_CERTDIR: ""
-  services:
-    - docker:dind
   script:
     - chmod +x cicd/deploy-database-vnet.sh
     - cicd/deploy-database-vnet.sh

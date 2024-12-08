@@ -14,8 +14,6 @@ DB_SERVER_NAME="banditdevpostgres"
 ENV_NAME="dev-containers"
 RG_NAME="rg_bandit_games_dev"
 
-IMAGE_NAME="acrbanditgamesdev.azurecr.io/init-script-image:latest"
-
 PG_ADMIN_USER=$DEV_PG_ADMIN_USR
 PG_ADMIN_PASSWORD=$DEV_PG_ADMIN_PWD
 PG_NON_ADMIN_USER=$DEV_PG_USER
@@ -36,20 +34,6 @@ fi
 # Check and create PostgreSQL server if it doesn't exist
 DB_EXISTS=$(az postgres flexible-server list --resource-group $RG_NAME --query "[?name=='$DB_SERVER_NAME'].name" -o tsv)
 if [ -z "$DB_EXISTS" ]; then
-    mkdir -p temp
-    # Write the Dockerfile
-    cat <<EOF > "temp/Dockerfile"
-FROM postgres:latest
-COPY ../infrastructure/init.sql /init-script.sql
-EOF
-    # Build the Docker image
-    docker build -t $IMAGE_NAME temp
-    # Push the Docker image to the registry
-    docker push $IMAGE_NAME
-    # Clean up the temporary directory
-    rm -rf temp
-    echo "Docker image $IMAGE_NAME built and pushed successfully."
-
     az postgres flexible-server create --name $DB_SERVER_NAME --resource-group $RG_NAME \
        --location northeurope \
        --admin-user "$PG_ADMIN_USER" \
