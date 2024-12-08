@@ -323,6 +323,7 @@ deploy_postgres_dev:
     - build_statistics
   before_script:
     - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
+    - apt-get update && apt-get install -y postgresql-client
   script:
     - chmod +x cicd/deploy-database-vnet.sh
     - cicd/deploy-database-vnet.sh

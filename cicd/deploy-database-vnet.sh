@@ -45,8 +45,15 @@ if [ -z "$DB_EXISTS" ]; then
      --database-name "bandit_db" \
      --yes
 
+    echo "Database has been created, waiting for it to be ready before initialising and creating user"
+
     # Wait for the database server to be ready
-    sleep 60
+    while [ "$(az postgres flexible-server show --name \"$DB_SERVER_NAME\" --resource-group \"$RG_NAME\" --query \"state\")" != '"Ready"' ]
+    do
+      sleep 10
+    done
+
+    echo "Database is now ready"
 
     # Run the initialization script
     PGPASSWORD=$PG_ADMIN_PASSWORD psql -h $DB_SERVER_NAME.postgres.database.azure.com -U "$PG_ADMIN_USER" -d postgres -f $PG_INIT_SCRIPT
