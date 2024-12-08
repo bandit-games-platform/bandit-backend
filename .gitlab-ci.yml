@@ -331,8 +331,7 @@ deploy_statistics_dev:
     #    - az containerapp env create --name dev-containers --resource-group rg_bandit_games_dev --location northeurope
     - az containerapp up --name statistics-dev-container --resource-group $RESOURCE_GROUP --location northeurope --environment dev-containers --image $REGISTRY_USERNAME.azurecr.io/statistics-context:${CI_COMMIT_SHORT_SHA::-1} --target-port 8095 --ingress external
 #    - az containerapp up --name statistics-dev-container --resource-group $RESOURCE_GROUP --location northeurope --environment dev-containers --image alpine:latest --target-port 8095 --ingress external
-    - PRINCIPAL_ID=$(az containerapp show --name $CONTAINER_NAME --resource-group $RESOURCE_GROUP --query "identity.principalId" -o tsv)
-
+#    - PRINCIPAL_ID=$(az containerapp show --name $CONTAINER_NAME --resource-group $RESOURCE_GROUP --query "identity.principalId" -o tsv)
 #    - az role assignment create --assignee-object-id $PRINCIPAL_ID --role "AcrPull" --scope $REGISTRY_ID
 
     - az containerapp update --name statistics-dev-container --resource-group rg_bandit_games_dev
