@@ -314,27 +314,38 @@ semgrep-sast:
 # ---------------------- DEPLOY --------------------------------- #
 # ----------------- DEV ----------------- #
 
+deploy_postgres_dev:
+  image: mcr.microsoft.com/azure-cli
+  stage: deploy
+  when: on_success
+  needs:
+    # In here add all other build stages when setup
+    - build_statistics
+  before_script:
+    - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
+  script:
+    - chmod +x cicd/deploy-database-vnet.sh
+    - cicd/deploy-database-vnet.sh
+  # This will only run when you commit to a merge request or to the ci-cd branch
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_COMMIT_BRANCH == 'ci-cd'
+
+
 deploy_statistics_dev:
   image: mcr.microsoft.com/azure-cli
   stage: deploy
   when: on_success
   needs:
+    - deploy_postgres_dev
     - build_statistics
   before_script:
     - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
     - az extension add --name containerapp --upgrade
   script:
     - tag=$CI_COMMIT_REF_NAME
-    - CONTAINER_NAME="statistics-dev-container"
-    - RESOURCE_GROUP="rg_bandit_games_dev"
-    #    - az containerapp env create --name dev-containers --resource-group rg_bandit_games_dev --location northeurope
-    - echo "Bringing up container app"
-    - az containerapp up --name $CONTAINER_NAME --resource-group $RESOURCE_GROUP --location northeurope --environment dev-containers --image $REGISTRY_USERNAME.azurecr.io/statistics-context:${CI_COMMIT_SHORT_SHA::-1} --target-port 8095 --ingress external
-
-    - az containerapp update --name $CONTAINER_NAME --resource-group $RESOURCE_GROUP
-      --cpu 1 --memory 2Gi
-      --min-replicas 0 --max-replicas 1
-      --set-env-vars ENV_VAR=someEnVar
+    - chmod +x cicd/deploy-statistics-dev.sh
+    - cicd/deploy-statistics-dev.sh
   environment:
     name: statistics-dev
     deployment_tier: testing
@@ -368,8 +379,6 @@ destroy_statistics_dev:
   image: mcr.microsoft.com/azure-cli
   stage: destroy
   when: manual
-  needs:
-    - build_statistics
   before_script:
     - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
     - az extension add --name containerapp --upgrade
