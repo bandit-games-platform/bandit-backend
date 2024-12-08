@@ -322,7 +322,7 @@ deploy_postgres_dev:
     # In here add all other build stages when setup
     - build_statistics
   before_script:
-    - dnf install -y postgresql-client
+    - tdnf install -y postgresql-client
     - psql --version
     - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
   script:
