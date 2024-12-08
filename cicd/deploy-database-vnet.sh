@@ -37,8 +37,11 @@ if [ -z "$DB_EXISTS" ]; then
      --location northeurope \
      --admin-user "$PG_ADMIN_USER" \
      --admin-password "$PG_ADMIN_PASSWORD" \
-     --sku-name B1ms --storage-size 32 \
-     --vnet $VNET_NAME --subnet $SUBNET_NAME \
+     --tier Burstable \
+     --sku-name B1ms \
+     --storage-size 32 \
+     --vnet $VNET_NAME \
+     --subnet $SUBNET_NAME \
      --database-name "bandit_db"
 
     # Wait for the database server to be ready
