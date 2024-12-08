@@ -325,21 +325,22 @@ deploy_statistics_dev:
     - az extension add --name containerapp --upgrade
   script:
     - tag=$CI_COMMIT_REF_NAME
-    - REGISTRY_ID=$(az acr show --name $REGISTRY_USERNAME --query "id" -o tsv)
     - CONTAINER_NAME="statistics-dev-container"
     - RESOURCE_GROUP="rg_bandit_games_dev"
     #    - az containerapp env create --name dev-containers --resource-group rg_bandit_games_dev --location northeurope
-    - az containerapp up --name statistics-dev-container --resource-group $RESOURCE_GROUP --location northeurope --environment dev-containers --image $REGISTRY_USERNAME.azurecr.io/statistics-context:${CI_COMMIT_SHORT_SHA::-1} --target-port 8095 --ingress external
-#    - az containerapp up --name statistics-dev-container --resource-group $RESOURCE_GROUP --location northeurope --environment dev-containers --image alpine:latest --target-port 8095 --ingress external
-#    - PRINCIPAL_ID=$(az containerapp show --name $CONTAINER_NAME --resource-group $RESOURCE_GROUP --query "identity.principalId" -o tsv)
-#    - az role assignment create --assignee-object-id $PRINCIPAL_ID --role "AcrPull" --scope $REGISTRY_ID
+    - echo "Bringing up container app"
+    - az containerapp up --name $CONTAINER_NAME --resource-group $RESOURCE_GROUP --location northeurope --environment dev-containers --image $REGISTRY_USERNAME.azurecr.io/statistics-context:${CI_COMMIT_SHORT_SHA::-1} --target-port 8095 --ingress external
 
-    - az containerapp update --name statistics-dev-container --resource-group rg_bandit_games_dev
+    - az containerapp update --name $CONTAINER_NAME --resource-group $RESOURCE_GROUP
       --cpu 1 --memory 2Gi
       --min-replicas 0 --max-replicas 1
-      --set-env-vars
-      ENV_VAR=someEnVar
-
+      --set-env-vars ENV_VAR=someEnVar
+  environment:
+    name: statistics-dev
+    deployment_tier: testing
+    action: start
+    auto_stop_in: 1 hours
+    on_stop: destroy_statistics_dev
   # This will only run when you commit to a merge request or to the ci-cd branch
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
@@ -362,6 +363,27 @@ deploy_statistics_dev:
 
 # ---------------------- DESTROY -------------------------------- #
 # ----------------- DEV ----------------- #
+
+destroy_statistics_dev:
+  image: mcr.microsoft.com/azure-cli
+  stage: destroy
+  when: manual
+  needs:
+    - build_statistics
+  before_script:
+    - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
+    - az extension add --name containerapp --upgrade
+  script:
+    - CONTAINER_NAME="statistics-dev-container"
+    - RESOURCE_GROUP="rg_bandit_games_dev"
+    - echo "Deleting container app"
+    - az containerapp delete --name $CONTAINER_NAME --resource-group $RESOURCE_GROUP --yes
+  environment:
+    name: statistics-dev
+    action: stop
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_COMMIT_BRANCH == 'ci-cd'
 
 # ----------------- PROD ---------------- #
 
