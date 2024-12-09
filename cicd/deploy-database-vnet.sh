@@ -28,7 +28,7 @@ if [ -z "$VNET_EXISTS" ]; then
       --resource-group $RG_NAME \
       --vnet-name $VNET_NAME \
       --name $SUBNET_NAME \
-      --delegations Microsoft.App/environments
+      --delegations Microsoft.App/environments Microsoft.DBforPostgreSQL/flexibleServers
 
     echo "VNet $VNET_NAME created."
 else
