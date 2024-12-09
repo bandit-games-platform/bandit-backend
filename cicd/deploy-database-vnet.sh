@@ -12,7 +12,7 @@ VNET_NAME="banditDevVnet"
 SUBNET_NAME="devSubnet"
 SUBNET_DB_NAME="devDbSubnet"
 DB_SERVER_NAME="banditdevpostgres"
-ENV_NAME="dev-containers"
+ENV_NAME="env-dev-containers"
 RG_NAME="rg_bandit_games_dev"
 
 PG_ADMIN_USER=$DEV_PG_ADMIN_USR
@@ -31,7 +31,7 @@ if [ -z "$VNET_EXISTS" ]; then
       --name $SUBNET_NAME \
       --delegations Microsoft.App/environments
 
-    az network vnet subnet create --name $SUBNET_DB_NAME --resource-group $RG_NAME --vnet-name $VNET_NAME --address-prefix 10.0.1.0/24
+    az network vnet subnet create --name $SUBNET_DB_NAME --resource-group $RG_NAME --vnet-name $VNET_NAME --address-prefix 10.0.2.0/24
     az network vnet subnet update \
       --resource-group $RG_NAME \
       --vnet-name $VNET_NAME \
@@ -93,7 +93,7 @@ if [ -z "$DB_EXISTS" ]; then
     az containerapp create \
         --name init-container \
         --resource-group $RG_NAME \
-        --environment dev-containers \
+        --environment $ENV_NAME \
         --image postgres:latest \
         --command "sh -c 'PGPASSWORD=$PG_ADMIN_PASSWORD psql -h $DB_SERVER_NAME.postgres.database.azure.com -U $PG_ADMIN_USER -d bandit_db -c \"
         CREATE SCHEMA IF NOT EXISTS chatbot;

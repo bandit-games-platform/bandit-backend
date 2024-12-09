@@ -17,7 +17,7 @@ JDBC_URL="jdbc:postgresql://$DB_FQDN:5432/bandit_db"
 
 echo "Bringing up container app"
 az containerapp up --name $CONTAINER_NAME --resource-group $RESOURCE_GROUP \
-  --location northeurope --environment dev-containers \
+  --location northeurope --environment env-dev-containers \
   --image "$REGISTRY_USERNAME".azurecr.io/statistics-context:"${CI_COMMIT_SHORT_SHA::-1}" \
   --target-port 8095 --ingress external
 
