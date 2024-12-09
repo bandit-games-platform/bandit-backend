@@ -78,7 +78,7 @@ if [ -z "$DB_EXISTS" ]; then
         CREATE SCHEMA IF NOT EXISTS storefront;
         \" && PGPASSWORD=$PG_ADMIN_PASSWORD psql -h $DB_SERVER_NAME.postgres.database.azure.com -U $PG_ADMIN_USER -d bandit_db -c \"CREATE USER $PG_NON_ADMIN_USER WITH PASSWORD '$PG_NON_ADMIN_PASSWORD';\" && PGPASSWORD=$PG_ADMIN_PASSWORD psql -h $DB_SERVER_NAME.postgres.database.azure.com -U $PG_ADMIN_USER -d bandit_db -c \"SELECT * FROM information_schema.schemata;\"'"
 
-    az containerapp delete --name init-container --resource-group $RG_NAME --yes
+#    az containerapp delete --name init-container --resource-group $RG_NAME --yes
 
     echo "PostgreSQL server $DB_SERVER_NAME created."
 else
