@@ -8,7 +8,7 @@ import java.util.UUID;
 public interface FriendInviteJpaRepository extends JpaRepository<FriendInviteJpaEntity, UUID> {
     @Query(
             """
-            SELECT f FROM FriendInviteJpaEntity f\s
+            SELECT f FROM FriendInviteJpaEntity f
             WHERE (f.inviter.id = :userId1 AND f.invited.id = :userId2)
             OR (f.inviter.id = :userId2 AND f.invited.id = :userId1)
             """

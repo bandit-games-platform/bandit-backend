@@ -11,13 +11,13 @@ import java.util.UUID;
 public interface FriendsRelationJpaRepository extends JpaRepository<FriendsRelationJpaEntity, UUID> {
 
     @Query("""
-        SELECT\s
-            CASE\s
+        SELECT
+            CASE
                 WHEN pf.playerA.id = :playerId THEN pf.playerB.id
                 ELSE pf.playerA.id
             END
         FROM FriendsRelationJpaEntity pf
-        WHERE pf.playerA.id = :playerId\s
+        WHERE pf.playerA.id = :playerId
            OR pf.playerB.id = :playerId
     """)
     List<UUID> findAllByPlayerIdOrFriendId(UUID playerId);
