@@ -43,7 +43,7 @@ public class PlayerFriendsController {
         this.processPendingFriendInvite = processPendingFriendInvite;
     }
 
-    @GetMapping("")
+    @GetMapping()
     @PreAuthorize("hasAuthority('player')")
     ResponseEntity<List<PlayerSearchBioDto>> searchForNewFriend(@RequestParam String username, @AuthenticationPrincipal Jwt token){
         String userId = token.getClaimAsString("sub");
