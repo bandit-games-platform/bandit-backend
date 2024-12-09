@@ -82,7 +82,7 @@ public class ProcessPendingFriendInviteIntegrationTest extends AbstractDatabaseT
 
         // Act
         ResultActions result = mockMvc.perform(
-                post("/player/friends/pending-invites/" + friendInviteId + "?action=accept")
+                post("/players/friends/pending-invites/" + friendInviteId + "?action=accept")
                         .with(jwt()
                                 .jwt(jwt -> jwt.claim("sub", PLAYER_ID.toString()))
                                 .authorities(new SimpleGrantedAuthority("player")))
@@ -142,7 +142,7 @@ public class ProcessPendingFriendInviteIntegrationTest extends AbstractDatabaseT
 
         // Act
         ResultActions result = mockMvc.perform(
-                post("/player/friends/pending-invites/" + friendInviteId + "?action=reject")
+                post("/players/friends/pending-invites/" + friendInviteId + "?action=reject")
                         .with(jwt()
                                 .jwt(jwt -> jwt.claim("sub", PLAYER_ID.toString()))
                                 .authorities(new SimpleGrantedAuthority("player")))
@@ -191,7 +191,7 @@ public class ProcessPendingFriendInviteIntegrationTest extends AbstractDatabaseT
 
         // Act
         ResultActions result = mockMvc.perform(
-                post("/player/friends/pending-invites/" + friendInviteId + "?action=accept")
+                post("/players/friends/pending-invites/" + friendInviteId + "?action=accept")
                         .with(jwt()
                                 .jwt(jwt -> jwt.claim("sub", PLAYER_ID.toString()))
                                 .authorities(new SimpleGrantedAuthority("player")))
@@ -209,7 +209,7 @@ public class ProcessPendingFriendInviteIntegrationTest extends AbstractDatabaseT
 
         // Act & Assert
         mockMvc.perform(
-                post("/player/friends/pending-invites/" + friendInviteId + "?action=invalid")
+                post("/players/friends/pending-invites/" + friendInviteId + "?action=invalid")
                         .with(jwt()
                                 .jwt(jwt -> jwt.claim("sub", playerId.toString()))
                                 .authorities(new SimpleGrantedAuthority("player")))

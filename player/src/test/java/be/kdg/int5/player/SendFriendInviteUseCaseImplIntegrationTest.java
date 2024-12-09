@@ -59,7 +59,7 @@ public class SendFriendInviteUseCaseImplIntegrationTest extends AbstractDatabase
 
         // Act
         final ResultActions result = mockMvc
-                .perform(post("/player/friends/invite-new-friends/" + FRIEND_ID)
+                .perform(post("/players/friends/invite-new-friends/" + FRIEND_ID)
                         .contentType(MediaType.APPLICATION_JSON)
                         .with(jwt()
                                 .jwt(jwt -> jwt.claim("sub", String.valueOf(PLAYER_ID)))
@@ -98,7 +98,7 @@ public class SendFriendInviteUseCaseImplIntegrationTest extends AbstractDatabase
 
         // Act
         final ResultActions result = mockMvc
-                .perform(post("/player/friends/invite-new-friends/" + FRIEND_ID)
+                .perform(post("/players/friends/invite-new-friends/" + FRIEND_ID)
                         .contentType(MediaType.APPLICATION_JSON)
                         .with(jwt()
                                 .jwt(jwt -> jwt.claim("sub", String.valueOf(PLAYER_ID)))
