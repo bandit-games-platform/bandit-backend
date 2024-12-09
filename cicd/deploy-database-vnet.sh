@@ -33,7 +33,7 @@ fi
 # Check and create Container Apps environment if it doesn't exist
 ENV_EXISTS=$(az containerapp env list --resource-group $RG_NAME --query "[?name=='$ENV_NAME'].name" -o tsv)
 if [ -z "$ENV_EXISTS" ]; then
-    az containerapp env create --name $ENV_NAME --resource-group $RG_NAME --location northeurope --infrastructure-subnet $SUBNET_NAME --vnet $VNET_NAME
+    az containerapp env create --name $ENV_NAME --resource-group $RG_NAME --location northeurope --infrastructure-subnet $SUBNET_NAME
     echo "Container Apps environment $ENV_NAME created."
 else
     echo "Container Apps environment $ENV_NAME already exists."
