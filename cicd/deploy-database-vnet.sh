@@ -30,6 +30,16 @@ else
 fi
 
 
+# Check and create Container Apps environment if it doesn't exist
+ENV_EXISTS=$(az containerapp env list --resource-group $RG_NAME --query "[?name=='$ENV_NAME'].name" -o tsv)
+if [ -z "$ENV_EXISTS" ]; then
+    az containerapp env create --name $ENV_NAME --resource-group $RG_NAME --location northeurope --infrastructure-subnet $SUBNET_NAME --vnet $VNET_NAME
+    echo "Container Apps environment $ENV_NAME created."
+else
+    echo "Container Apps environment $ENV_NAME already exists."
+fi
+
+
 # Check and create PostgreSQL server if it doesn't exist
 DB_EXISTS=$(az postgres flexible-server list --resource-group $RG_NAME --query "[?name=='$DB_SERVER_NAME'].name" -o tsv)
 if [ -z "$DB_EXISTS" ]; then
@@ -76,20 +86,11 @@ if [ -z "$DB_EXISTS" ]; then
         CREATE SCHEMA IF NOT EXISTS player;
         CREATE SCHEMA IF NOT EXISTS statistics;
         CREATE SCHEMA IF NOT EXISTS storefront;
-        \" && PGPASSWORD=$PG_ADMIN_PASSWORD psql -h $DB_SERVER_NAME.postgres.database.azure.com -U $PG_ADMIN_USER -d bandit_db -c \"CREATE USER $PG_NON_ADMIN_USER WITH PASSWORD '$PG_NON_ADMIN_PASSWORD';\" && PGPASSWORD=$PG_ADMIN_PASSWORD psql -h $DB_SERVER_NAME.postgres.database.azure.com -U $PG_ADMIN_USER -d bandit_db -c \"SELECT * FROM information_schema.schemata;\"'"
+        \"'"
 
 #    az containerapp delete --name init-container --resource-group $RG_NAME --yes
 
     echo "PostgreSQL server $DB_SERVER_NAME created."
 else
     echo "PostgreSQL server $DB_SERVER_NAME already exists."
-fi
-
-# Check and create Container Apps environment if it doesn't exist
-ENV_EXISTS=$(az containerapp env list --resource-group $RG_NAME --query "[?name=='$ENV_NAME'].name" -o tsv)
-if [ -z "$ENV_EXISTS" ]; then
-    az containerapp env create --name $ENV_NAME --resource-group $RG_NAME --location northeurope --infrastructure-subnet $SUBNET_NAME --vnet $VNET_NAME
-    echo "Container Apps environment $ENV_NAME created."
-else
-    echo "Container Apps environment $ENV_NAME already exists."
 fi
