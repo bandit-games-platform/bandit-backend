@@ -70,12 +70,12 @@ if [ -z "$DB_EXISTS" ]; then
         --environment dev-containers \
         --image postgres:latest \
         --command "sh -c 'PGPASSWORD=$PG_ADMIN_PASSWORD psql -h $DB_SERVER_NAME.postgres.database.azure.com -U $PG_ADMIN_USER -d postgres -c \"
-        CREATE SCHEMA IF NOT EXISTS chatbot;
-        CREATE SCHEMA IF NOT EXISTS gameplay;
-        CREATE SCHEMA IF NOT EXISTS game_registry;
-        CREATE SCHEMA IF NOT EXISTS player;
-        CREATE SCHEMA IF NOT EXISTS statistics;
-        CREATE SCHEMA IF NOT EXISTS storefront;
+        CREATE SCHEMA IF NOT EXISTS bandit_db.chatbot;
+        CREATE SCHEMA IF NOT EXISTS bandit_db.gameplay;
+        CREATE SCHEMA IF NOT EXISTS bandit_db.game_registry;
+        CREATE SCHEMA IF NOT EXISTS bandit_db.player;
+        CREATE SCHEMA IF NOT EXISTS bandit_db.statistics;
+        CREATE SCHEMA IF NOT EXISTS bandit_db.storefront;
         \" && PGPASSWORD=$PG_ADMIN_PASSWORD psql -h $DB_SERVER_NAME.postgres.database.azure.com -U $PG_ADMIN_USER -d postgres -c \"CREATE USER $PG_NON_ADMIN_USER WITH PASSWORD '$PG_NON_ADMIN_PASSWORD';\" && az containerapp delete --name init-container --resource-group $RG_NAME --yes'"
 
     az containerapp delete --name init-container --resource-group $RG_NAME --yes
