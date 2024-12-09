@@ -7,7 +7,13 @@ client_id=bandit-backend&client_secret=**********&username=john@gmail.com&passwo
 
 > {%client.global.set("logged-in-user", response.body.access_token);%}
 
-### Search player
+### Get player Library
+GET http://localhost:8090/api/players/library
+Accept: application/json
+Authorization: Bearer {{logged-in-user}}
+
+
+### Change game favorite status for a authenticated player
 PATCH http://localhost:8090/api/players/library/d77e1d1f-6b46-4c89-9290-3b9cf8a7c001/favourites
 Content-Type: application/json
 Authorization: Bearer {{logged-in-user}}
