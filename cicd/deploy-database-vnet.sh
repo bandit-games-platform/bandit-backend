@@ -24,6 +24,12 @@ VNET_EXISTS=$(az network vnet list --resource-group $RG_NAME --query "[?name=='$
 if [ -z "$VNET_EXISTS" ]; then
     az network vnet create --name $VNET_NAME --resource-group $RG_NAME --location northeurope --address-prefix 10.0.0.0/16
     az network vnet subnet create --name $SUBNET_NAME --resource-group $RG_NAME --vnet-name $VNET_NAME --address-prefix 10.0.1.0/24
+    az network vnet subnet update \
+      --resource-group $RG_NAME \
+      --vnet-name $VNET_NAME \
+      --name $SUBNET_NAME \
+      --delegations Microsoft.App/environments
+
     echo "VNet $VNET_NAME created."
 else
     echo "VNet $VNET_NAME already exists."
