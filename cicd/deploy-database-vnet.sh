@@ -14,8 +14,6 @@ DB_SERVER_NAME="banditdevpostgres"
 ENV_NAME="dev-containers"
 RG_NAME="rg_bandit_games_dev"
 
-IMAGE_NAME="acrbanditgamesdev.azurecr.io/init-script-image:latest"
-
 PG_ADMIN_USER=$DEV_PG_ADMIN_USR
 PG_ADMIN_PASSWORD=$DEV_PG_ADMIN_PWD
 PG_NON_ADMIN_USER=$DEV_PG_USER
@@ -70,8 +68,15 @@ if [ -z "$DB_EXISTS" ]; then
         --name init-container \
         --resource-group $RG_NAME \
         --environment dev-containers \
-        --image $IMAGE_NAME \
-        --command "sh -c 'PGPASSWORD=$PG_ADMIN_PASSWORD psql -h $DB_SERVER_NAME.postgres.database.azure.com -U $PG_ADMIN_USER -d postgres -c \"CREATE USER $PG_NON_ADMIN_USER WITH PASSWORD '$PG_NON_ADMIN_PASSWORD';\"'"
+        --image postgres:latest \
+        --command "sh -c 'PGPASSWORD=$PG_ADMIN_PASSWORD psql -h $DB_SERVER_NAME.postgres.database.azure.com -U $PG_ADMIN_USER -d postgres -c \"
+        CREATE SCHEMA IF NOT EXISTS chatbot;
+        CREATE SCHEMA IF NOT EXISTS gameplay;
+        CREATE SCHEMA IF NOT EXISTS game_registry;
+        CREATE SCHEMA IF NOT EXISTS player;
+        CREATE SCHEMA IF NOT EXISTS statistics;
+        CREATE SCHEMA IF NOT EXISTS storefront;
+        \" && PGPASSWORD=$PG_ADMIN_PASSWORD psql -h $DB_SERVER_NAME.postgres.database.azure.com -U $PG_ADMIN_USER -d postgres -c \"CREATE USER $PG_NON_ADMIN_USER WITH PASSWORD '$PG_NON_ADMIN_PASSWORD';\" && az containerapp delete --name init-container --resource-group $RG_NAME --yes'"
 
     az containerapp delete --name init-container --resource-group $RG_NAME --yes
 
