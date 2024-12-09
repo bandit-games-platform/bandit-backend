@@ -94,7 +94,6 @@ if [ -z "$DB_EXISTS" ]; then
         --name init-container \
         --resource-group $RG_NAME \
         --environment $ENV_NAME \
-        --location switzerlandnorth \
         --image postgres:latest \
         --command "sh -c 'PGPASSWORD=$PG_ADMIN_PASSWORD psql -h $DB_SERVER_NAME.postgres.database.azure.com -U $PG_ADMIN_USER -d bandit_db -c \"
         CREATE SCHEMA IF NOT EXISTS chatbot;
