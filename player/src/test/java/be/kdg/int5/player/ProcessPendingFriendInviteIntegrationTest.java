@@ -30,7 +30,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 public class ProcessPendingFriendInviteIntegrationTest extends AbstractDatabaseTest {
-
     @Autowired
     private MockMvc mockMvc;
 

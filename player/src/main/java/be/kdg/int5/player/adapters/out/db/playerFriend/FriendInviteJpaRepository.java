@@ -7,9 +7,11 @@ import java.util.UUID;
 
 public interface FriendInviteJpaRepository extends JpaRepository<FriendInviteJpaEntity, UUID> {
     @Query(
-            "SELECT f FROM FriendInviteJpaEntity f " +
-            "WHERE (f.inviter.id = :userId1 AND f.invited.id = :userId2) " +
-            "OR (f.inviter.id = :userId2 AND f.invited.id = :userId1)"
+            """
+            SELECT f FROM FriendInviteJpaEntity f\s
+            WHERE (f.inviter.id = :userId1 AND f.invited.id = :userId2)
+            OR (f.inviter.id = :userId2 AND f.invited.id = :userId1)
+            """
     )
     FriendInviteJpaEntity findByPlayers(UUID userId1, UUID userId2);
     List<FriendInviteJpaEntity> getAllByInvited_Id(UUID invitedId);

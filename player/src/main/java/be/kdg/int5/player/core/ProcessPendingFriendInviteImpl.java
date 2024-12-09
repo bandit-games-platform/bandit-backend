@@ -38,7 +38,7 @@ public class ProcessPendingFriendInviteImpl implements ProcessPendingFriendInvit
         Player invitingPlayer = new Player(new PlayerId(friendInvite.getInviter().uuid()));
         Player newFriend = new Player(new PlayerId(friendInvite.getInvited().uuid()));
         FriendRelation friendRelation = invitingPlayer.addFriend(newFriend);
-        friendRelationCreatePort.CreateFriendRelation(friendRelation);
+        friendRelationCreatePort.createFriendRelation(friendRelation);
         return true;
     }
 

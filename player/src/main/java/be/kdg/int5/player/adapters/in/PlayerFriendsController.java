@@ -21,8 +21,8 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/player")
-public class    PlayerFriendsController {
+@RequestMapping("/players")
+public class PlayerFriendsController {
     private final SearchForNewFriendsUseCase searchForNewFriendsUseCase;
     private final FriendsListQuery friendsListQuery;
     private final SendFriendInviteUseCase sendFriendInviteUseCase;
@@ -35,7 +35,7 @@ public class    PlayerFriendsController {
             SendFriendInviteUseCase sendFriendInviteUseCase,
             PendingFriendInvitesQuery pendingFriendInvitesQuery,
             ProcessPendingFriendInvite processPendingFriendInvite
-    ) {
+    ){
         this.searchForNewFriendsUseCase = searchForNewFriendsUseCase;
         this.friendsListQuery = friendsListQuery;
         this.sendFriendInviteUseCase = sendFriendInviteUseCase;

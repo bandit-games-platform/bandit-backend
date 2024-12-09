@@ -1,11 +1,8 @@
 package be.kdg.int5.player.adapters.in.dto;
-import jakarta.validation.constraints.NotNull;
 
 public class PlayerFriendBioDto {
     private final String id;
-    @NotNull
     private final String username;
-    @NotNull
     private final String avatar;
     private final boolean isExistingFriend;
 

@@ -27,7 +27,7 @@ public class PlayerFriendsJpaAdapter implements PlayerUsernameLoadPort, FriendsL
 
     public PlayerFriendsJpaAdapter(final PlayerJpaRepository playerJpaRepository,
                                    final FriendInviteJpaRepository friendInviteJpaRepository,
-                                   FriendsRelationJpaRepository friendsRelationJpaRepository
+                                   final FriendsRelationJpaRepository friendsRelationJpaRepository
     ) {
         this.playerJpaRepository = playerJpaRepository;
         this.friendInviteJpaRepository = friendInviteJpaRepository;
@@ -122,7 +122,7 @@ public class PlayerFriendsJpaAdapter implements PlayerUsernameLoadPort, FriendsL
     }
 
     @Override
-    public void CreateFriendRelation(FriendRelation friendRelation) {
+    public void createFriendRelation(FriendRelation friendRelation) {
         friendsRelationJpaRepository.save(this.friendsRelationDomainToJpa(friendRelation));
     }
 

@@ -8,45 +8,45 @@ client_id=bandit-backend&client_secret=**********&username=john@gmail.com&passwo
 > {%client.global.set("logged-in-user", response.body.access_token);%}
 
 ### Search player
-GET http://localhost:8090/api/player?username=Pla
+GET http://localhost:8090/api/players?username=Pla
 Accept: application/json
 Authorization: Bearer {{logged-in-user}}
 
 
 ### Get all player friends
-GET http://localhost:8090/api/player/friends
+GET http://localhost:8090/api/players/friends
 Accept: application/json
 Authorization: Bearer {{logged-in-user}}
 
 
 ### Create a new friend Invite
-POST http://localhost:8090/api/player/friends/invite-new-friends/8913596b-1968-4e06-9e62-7f4f89d33dde
+POST http://localhost:8090/api/players/friends/invite-new-friends/8913596b-1968-4e06-9e62-7f4f89d33dde
 Accept: application/json
 Content-Type: application/json
 Authorization: Bearer {{logged-in-user}}
 
 
 ### Get all pending friend received Invites
-GET http://localhost:8090/api/player/friends/pending-invites/received
+GET http://localhost:8090/api/players/friends/pending-invites/received
 Accept: application/json
 Authorization: Bearer {{logged-in-user}}
 
 
 ### Get all pending friend sent Invites
-GET http://localhost:8090/api/player/friends/pending-invites/sent
+GET http://localhost:8090/api/players/friends/pending-invites/sent
 Accept: application/json
 Authorization: Bearer {{logged-in-user}}
 
 
 ### Accept a pending friend Invite
-POST http://localhost:8090/api/player/friends/pending-invites/fba3f186-8351-4cac-83d4-c1a58ae6cf81?action=accept
+POST http://localhost:8090/api/players/friends/pending-invites/fba3f186-8351-4cac-83d4-c1a58ae6cf81?action=accept
 Accept: application/json
 Content-Type: application/json
 Authorization: Bearer {{logged-in-user}}
 
 
 ### Reject a pending friend Invite
-POST http://localhost:8090/api/player/friends/pending-invites/fba3f186-8351-4cac-83d4-c1a58ae6cf82?action=reject
+POST http://localhost:8090/api/players/friends/pending-invites/fba3f186-8351-4cac-83d4-c1a58ae6cf82?action=reject
 Accept: application/json
 Content-Type: application/json
 Authorization: Bearer {{logged-in-user}}
