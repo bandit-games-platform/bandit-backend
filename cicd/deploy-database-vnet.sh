@@ -10,6 +10,7 @@
 # Variables
 VNET_NAME="banditDevVnet"
 SUBNET_NAME="devSubnet"
+SUBNET_DB_NAME="devDbSubnet"
 DB_SERVER_NAME="banditdevpostgres"
 ENV_NAME="dev-containers"
 RG_NAME="rg_bandit_games_dev"
@@ -28,7 +29,14 @@ if [ -z "$VNET_EXISTS" ]; then
       --resource-group $RG_NAME \
       --vnet-name $VNET_NAME \
       --name $SUBNET_NAME \
-      --delegations Microsoft.App/environments Microsoft.DBforPostgreSQL/flexibleServers
+      --delegations Microsoft.App/environments
+
+    az network vnet subnet create --name $SUBNET_DB_NAME --resource-group $RG_NAME --vnet-name $VNET_NAME --address-prefix 10.0.1.0/24
+    az network vnet subnet update \
+      --resource-group $RG_NAME \
+      --vnet-name $VNET_NAME \
+      --name $SUBNET_DB_NAME \
+      --delegations Microsoft.DBforPostgreSQL/flexibleServers
 
     echo "VNet $VNET_NAME created."
 else
@@ -59,7 +67,7 @@ if [ -z "$DB_EXISTS" ]; then
        --sku-name standard_b1ms \
        --storage-size 32 \
        --vnet $VNET_NAME \
-       --subnet $SUBNET_NAME \
+       --subnet $SUBNET_DB_NAME \
        --database-name "bandit_db" \
        --yes
 
