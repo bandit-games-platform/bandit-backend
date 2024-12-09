@@ -4,12 +4,14 @@ VALUES ('d7f9b8e3-3c4f-4b9f-8d7e-e1c0f4a7b901', '2024-09-10 11:30', 'jake', 'htt
        ('94dad160-f5c8-4817-8f2d-611e1436ffcd', '2024-08-08 06:35', 'roman', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHfd3PPulVSp4ZbuBFNkePoUR_fLJQe474Ag&s');
 
 INSERT INTO player.player_library (player_id)
-VALUES ('94dad160-f5c8-4817-8f2d-611e1436ffcd');
+VALUES ('94dad160-f5c8-4817-8f2d-611e1436ffcd'),
+    ('8449ba7c-194c-4e51-b060-cd88cc498836');
 
 INSERT INTO player.library_items (player_id, game_id, favourite, hidden)
 VALUES ('94dad160-f5c8-4817-8f2d-611e1436ffcd', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c001', false, false),
-       ('94dad160-f5c8-4817-8f2d-611e1436ffcd', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c002', false, false);
-
+       ('94dad160-f5c8-4817-8f2d-611e1436ffcd', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c002', false, false),
+       ('8449ba7c-194c-4e51-b060-cd88cc498836', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c001', false, false),
+       ('8449ba7c-194c-4e51-b060-cd88cc498836', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c002', false, false);
 
 INSERT INTO player.player (id, birthdate, avatar, display_name, gender, location)
 VALUES

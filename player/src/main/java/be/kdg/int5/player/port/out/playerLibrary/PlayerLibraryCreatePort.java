@@ -1,4 +1,4 @@
-package be.kdg.int5.player.port.out;
+package be.kdg.int5.player.port.out.playerLibrary;
 
 import be.kdg.int5.player.domain.PlayerLibrary;
 
