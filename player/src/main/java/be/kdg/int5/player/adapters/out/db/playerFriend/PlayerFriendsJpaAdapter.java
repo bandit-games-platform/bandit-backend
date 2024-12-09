@@ -25,9 +25,10 @@ public class PlayerFriendsJpaAdapter implements PlayerUsernameLoadPort, FriendsL
     private final FriendInviteJpaRepository friendInviteJpaRepository;
     private final FriendsRelationJpaRepository friendsRelationJpaRepository;
 
-    public PlayerFriendsJpaAdapter(final PlayerJpaRepository playerJpaRepository,
-                                   final FriendInviteJpaRepository friendInviteJpaRepository,
-                                   final FriendsRelationJpaRepository friendsRelationJpaRepository
+    public PlayerFriendsJpaAdapter(
+            final PlayerJpaRepository playerJpaRepository,
+            final FriendInviteJpaRepository friendInviteJpaRepository,
+            final FriendsRelationJpaRepository friendsRelationJpaRepository
     ) {
         this.playerJpaRepository = playerJpaRepository;
         this.friendInviteJpaRepository = friendInviteJpaRepository;
