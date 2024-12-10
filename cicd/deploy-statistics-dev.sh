@@ -7,17 +7,17 @@
 #- Usage:	    ./deploy-statistics-dev.sh
 #---------------------------------------------------------------
 
-CONTAINER_NAME="statistics-dev-container-ch"
+CONTAINER_NAME="statistics-dev-container"
 RESOURCE_GROUP="rg_bandit_games_dev"
 PG_USER=$DEV_PG_USR
 PG_PASSWORD=$DEV_PG_PWD
 # Database fully qualified name
-DB_FQDN=$(az postgres flexible-server show --name "banditdevpostgresch" --resource-group rg_bandit_games_dev --query "fullyQualifiedDomainName" --output tsv)
+DB_FQDN=$(az postgres flexible-server show --name "banditdevpostgres" --resource-group rg_bandit_games_dev --query "fullyQualifiedDomainName" --output tsv)
 JDBC_URL="jdbc:postgresql://$DB_FQDN:5432/bandit_db"
 
 echo "Bringing up container app"
 az containerapp up --name $CONTAINER_NAME --resource-group $RESOURCE_GROUP \
-  --location switzerlandnorth --environment env-dev-containers \
+  --location northeurope --environment env-dev-containers \
   --image "$REGISTRY_USERNAME".azurecr.io/statistics-context:"${CI_COMMIT_SHORT_SHA::-1}" \
   --target-port 8095 --ingress external
 

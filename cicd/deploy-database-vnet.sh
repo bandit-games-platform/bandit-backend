@@ -8,11 +8,11 @@
 #---------------------------------------------------------------
 
 # Variables
-VNET_NAME="banditDevVnetCh"
-SUBNET_NAME="devSubnetCh"
-SUBNET_DB_NAME="devDbSubnetCh"
-DB_SERVER_NAME="banditdevpostgresch"
-ENV_NAME="env-dev-containers-ch"
+VNET_NAME="banditDevVnet"
+SUBNET_NAME="devSubnet"
+SUBNET_DB_NAME="devDbSubnet"
+DB_SERVER_NAME="banditdevpostgres"
+ENV_NAME="env-dev-containers"
 RG_NAME="rg_bandit_games_dev"
 
 PG_ADMIN_USER=$DEV_PG_ADMIN_USR
@@ -23,7 +23,7 @@ PG_NON_ADMIN_PASSWORD=$DEV_PG_PWD
 # Check and create VNet if it doesn't exist
 VNET_EXISTS=$(az network vnet list --resource-group $RG_NAME --query "[?name=='$VNET_NAME'].name" -o tsv)
 if [ -z "$VNET_EXISTS" ]; then
-    az network vnet create --name $VNET_NAME --resource-group $RG_NAME --location switzerlandnorth --address-prefix 10.0.0.0/16
+    az network vnet create --name $VNET_NAME --resource-group $RG_NAME --location northeurope --address-prefix 10.0.0.0/16
     az network vnet subnet create --name $SUBNET_NAME --resource-group $RG_NAME --vnet-name $VNET_NAME --address-prefix 10.0.1.0/24
     az network vnet subnet update \
       --resource-group $RG_NAME \
@@ -49,7 +49,7 @@ ENV_EXISTS=$(az containerapp env list --resource-group $RG_NAME --query "[?name=
 if [ -z "$ENV_EXISTS" ]; then
     INFRASTRUCTURE_SUBNET=$(az network vnet subnet show --resource-group ${RG_NAME} --vnet-name $VNET_NAME --name ${SUBNET_NAME} --query "id" -o tsv | tr -d '[:space:]')
 
-    az containerapp env create --name $ENV_NAME --resource-group $RG_NAME --location switzerlandnorth --infrastructure-subnet-resource-id "$INFRASTRUCTURE_SUBNET"
+    az containerapp env create --name $ENV_NAME --resource-group $RG_NAME --location northeurope --infrastructure-subnet-resource-id "$INFRASTRUCTURE_SUBNET"
     echo "Container Apps environment $ENV_NAME created."
 else
     echo "Container Apps environment $ENV_NAME already exists."
@@ -60,7 +60,7 @@ fi
 DB_EXISTS=$(az postgres flexible-server list --resource-group $RG_NAME --query "[?name=='$DB_SERVER_NAME'].name" -o tsv)
 if [ -z "$DB_EXISTS" ]; then
     az postgres flexible-server create --name $DB_SERVER_NAME --resource-group $RG_NAME \
-       --location switzerlandnorth \
+       --location northeurope \
        --admin-user "$PG_ADMIN_USER" \
        --admin-password "$PG_ADMIN_PASSWORD" \
        --tier Burstable \
@@ -95,14 +95,8 @@ if [ -z "$DB_EXISTS" ]; then
         --resource-group $RG_NAME \
         --environment $ENV_NAME \
         --image postgres:latest \
-        --command "sh -c 'PGPASSWORD=$PG_ADMIN_PASSWORD psql -h $DB_SERVER_NAME.postgres.database.azure.com -U $PG_ADMIN_USER -d bandit_db -c \"
-        CREATE SCHEMA IF NOT EXISTS chatbot;
-        CREATE SCHEMA IF NOT EXISTS gameplay;
-        CREATE SCHEMA IF NOT EXISTS game_registry;
-        CREATE SCHEMA IF NOT EXISTS player;
-        CREATE SCHEMA IF NOT EXISTS statistics;
-        CREATE SCHEMA IF NOT EXISTS storefront;
-        \" && PGPASSWORD=$PG_ADMIN_PASSWORD psql -h $DB_SERVER_NAME.postgres.database.azure.com -U $PG_ADMIN_USER -d bandit_db -c \"CREATE USER $PG_NON_ADMIN_USER WITH PASSWORD '$PG_NON_ADMIN_PASSWORD';\" && PGPASSWORD=$PG_ADMIN_PASSWORD psql -h $DB_SERVER_NAME.postgres.database.azure.com -U $PG_ADMIN_USER -d bandit_db -c \"SELECT * FROM information_schema.schemata;\"'"
+        --command "sh" \
+        --args "-c", "PGPASSWORD=$PG_ADMIN_PASSWORD psql -h $DB_SERVER_NAME.postgres.database.azure.com -U $PG_ADMIN_USER -d bandit_db -c \"CREATE SCHEMA IF NOT EXISTS chatbot; CREATE SCHEMA IF NOT EXISTS gameplay; CREATE SCHEMA IF NOT EXISTS game_registry; CREATE SCHEMA IF NOT EXISTS player; CREATE SCHEMA IF NOT EXISTS statistics; CREATE SCHEMA IF NOT EXISTS storefront;\" && PGPASSWORD=$PG_ADMIN_PASSWORD psql -h $DB_SERVER_NAME.postgres.database.azure.com -U $PG_ADMIN_USER -d bandit_db -c \"CREATE USER $PG_NON_ADMIN_USER WITH PASSWORD '$PG_NON_ADMIN_PASSWORD';\" && PGPASSWORD=$PG_ADMIN_PASSWORD psql -h $DB_SERVER_NAME.postgres.database.azure.com -U $PG_ADMIN_USER -d bandit_db -c \"SELECT * FROM information_schema.schemata;\""
 
 #    az containerapp delete --name init-container --resource-group $RG_NAME --yes
 
