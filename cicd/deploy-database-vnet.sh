@@ -95,7 +95,6 @@ if [ -z "$DB_EXISTS" ]; then
         --resource-group $RG_NAME \
         --environment $ENV_NAME \
         --image postgres:latest \
-        --env-vars PG_ADMIN_PASSWORD="$PG_ADMIN_PASSWORD" DB_SERVER_NAME=$DB_SERVER_NAME PG_ADMIN_USER="$PG_ADMIN_USER" PG_NON_ADMIN_USER="$PG_NON_ADMIN_USER" PG_NON_ADMIN_PASSWORD="$PG_NON_ADMIN_PASSWORD" \
         --command "sh -c 'PGPASSWORD=$PG_ADMIN_PASSWORD psql -h $DB_SERVER_NAME.postgres.database.azure.com -U $PG_ADMIN_USER -d bandit_db -c \"
             CREATE SCHEMA IF NOT EXISTS chatbot;
             CREATE SCHEMA IF NOT EXISTS gameplay;
@@ -103,7 +102,8 @@ if [ -z "$DB_EXISTS" ]; then
             CREATE SCHEMA IF NOT EXISTS player;
             CREATE SCHEMA IF NOT EXISTS statistics;
             CREATE SCHEMA IF NOT EXISTS storefront;
-            \" && PGPASSWORD=$PG_ADMIN_PASSWORD psql -h $DB_SERVER_NAME.postgres.database.azure.com -U $PG_ADMIN_USER -d bandit_db -c \"CREATE USER $PG_NON_ADMIN_USER WITH PASSWORD '$PG_NON_ADMIN_PASSWORD';\" && PGPASSWORD=$PG_ADMIN_PASSWORD psql -h $DB_SERVER_NAME.postgres.database.azure.com -U $PG_ADMIN_USER -d bandit_db -c \"SELECT * FROM information_schema.schemata;\"'"
+            \" && PGPASSWORD=$PG_ADMIN_PASSWORD psql -h $DB_SERVER_NAME.postgres.database.azure.com -U $PG_ADMIN_USER -d bandit_db -c \"CREATE USER $PG_NON_ADMIN_USER WITH PASSWORD '$PG_NON_ADMIN_PASSWORD';\" && PGPASSWORD=$PG_ADMIN_PASSWORD psql -h $DB_SERVER_NAME.postgres.database.azure.com -U $PG_ADMIN_USER -d bandit_db -c \"SELECT * FROM information_schema.schemata;\"'
+            docker-entrypoint.sh"
 
 #    az containerapp delete --name init-container --resource-group $RG_NAME --yes
 
