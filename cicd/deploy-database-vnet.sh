@@ -95,8 +95,7 @@ if [ -z "$DB_EXISTS" ]; then
         --resource-group $RG_NAME \
         --environment $ENV_NAME \
         --image postgres:16-bookworm \
-        --command "/bin/sh" \
-        --args "-c", "curl -o /tmp/init-db.sh ${DB_INIT_URL} && chmod +x /tmp/init-db.sh && /tmp/init-db.sh"
+        --command "/bin/sh -c 'curl -o /tmp/init-db.sh ${DB_INIT_URL} && chmod +x /tmp/init-db.sh && /tmp/init-db.sh'" "docker-entrypoint.sh"
 
 #    az containerapp delete --name init-container --resource-group $RG_NAME --yes
 
