@@ -97,7 +97,7 @@ if [ -z "$DB_EXISTS" ]; then
         --image postgres:latest \
         --env-vars PG_ADMIN_PASSWORD="$PG_ADMIN_PASSWORD" DB_SERVER_NAME=$DB_SERVER_NAME PG_ADMIN_USER="$PG_ADMIN_USER" PG_NON_ADMIN_USER="$PG_NON_ADMIN_USER" PG_NON_ADMIN_PASSWORD="$PG_NON_ADMIN_PASSWORD" \
         --command "/bin/sh" \
-        --args "-c", "curl -o /tmp/init-db.sh ${DB_INIT_URL} && chmod +x /tmp/init-db.sh && /tmp/init-db.sh"
+        --args "-c" "curl -o /tmp/init-db.sh ${DB_INIT_URL} && chmod +x /tmp/init-db.sh && /tmp/init-db.sh"
 
 #    az containerapp delete --name init-container --resource-group $RG_NAME --yes
 
