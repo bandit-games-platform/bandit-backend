@@ -95,6 +95,7 @@ if [ -z "$DB_EXISTS" ]; then
         --resource-group $RG_NAME \
         --environment $ENV_NAME \
         --image postgres:16-bookworm \
+        --env-vars PG_ADMIN_PASSWORD="$PG_ADMIN_PASSWORD" DB_SERVER_NAME=$DB_SERVER_NAME PG_ADMIN_USER="$PG_ADMIN_USER" PG_NON_ADMIN_USER="$PG_NON_ADMIN_USER" PG_NON_ADMIN_PASSWORD="$PG_NON_ADMIN_PASSWORD" \
         --command "/bin/sh -c 'curl -o /tmp/init-db.sh ${DB_INIT_URL} && chmod +x /tmp/init-db.sh && /tmp/init-db.sh'" "docker-entrypoint.sh"
 
 #    az containerapp delete --name init-container --resource-group $RG_NAME --yes
