@@ -114,32 +114,35 @@ build_storefront:
 
 test_chatbot:
   stage: test
+  needs: []
   variables:
     CONTEXT_NAME: chatbot
   <<: *test_job_template
 
 test_gameplay:
   stage: test
+  needs: []
   variables:
     CONTEXT_NAME: gameplay
   <<: *test_job_template
 
 test_game_registry:
   stage: test
+  needs: []
   variables:
     CONTEXT_NAME: gameRegistry
   <<: *test_job_template
 
 test_player:
   stage: test
+  needs: []
   variables:
     CONTEXT_NAME: player
   <<: *test_job_template
 
 test_statistics:
   stage: test
-  services:
-    - docker:dind
+  needs: []
   variables:
     DOCKER_HOST: "tcp://docker:2375"
     DOCKER_TLS_CERTDIR: ""
@@ -150,6 +153,7 @@ test_statistics:
 
 test_storefront:
   stage: test
+  needs: []
   variables:
     CONTEXT_NAME: storefront
   <<: *test_job_template
