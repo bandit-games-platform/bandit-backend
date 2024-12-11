@@ -17,279 +17,178 @@ stages:
   - destroy
 
 
-# ----------------------- BUILD ---------------------------------- #
+# -- reusable configurations --
 
-#build_chatbot:
-#  stage: build
-#  script:
-#    - echo "Building chatbot project"
-#    - chmod +x gradlew
-#    - cd ./chatbot
-#    - ../gradlew bootJar
-#    - cd ..
-#  artifacts:
-#    name: "build-chatbot-artifact"
-#    when: on_success
-#    expire_in: 2 days
-#    paths:
-#      - "chatbot/build/libs/*.jar"
-#  rules:
-#    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-#    - if: $CI_COMMIT_TAG
-#    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_COMMIT_BRANCH == 'ci-cd'
-#
-#
-#build_gameplay:
-#  stage: build
-#  script:
-#    - echo "Building gameplay project"
-#    - chmod +x gradlew
-#    - cd ./gameplay
-#    - ../gradlew bootJar
-#    - cd ..
-#  artifacts:
-#    name: "build-gameplay-artifact"
-#    when: on_success
-#    expire_in: 2 days
-#    paths:
-#      - "gameplay/build/libs/*.jar"
-#  rules:
-#    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-#    - if: $CI_COMMIT_TAG
-#    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_COMMIT_BRANCH == 'ci-cd'
-#
-#
-#build_game_registry:
-#  stage: build
-#  script:
-#    - echo "Building game registry project"
-#    - chmod +x gradlew
-#    - cd ./gameRegistry
-#    - ../gradlew bootJar
-#    - cd ..
-#  artifacts:
-#    name: "build-game-registry-artifact"
-#    when: on_success
-#    expire_in: 2 days
-#    paths:
-#      - "gameRegistry/build/libs/*.jar"
-#  rules:
-#    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-#    - if: $CI_COMMIT_TAG
-#    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_COMMIT_BRANCH == 'ci-cd'
-#
-#
-#build_player:
-#  stage: build
-#  script:
-#    - echo "Building player project"
-#    - chmod +x gradlew
-#    - cd ./player
-#    - ../gradlew bootJar
-#    - cd ..
-#  artifacts:
-#    name: "build-player-artifact"
-#    when: on_success
-#    expire_in: 2 days
-#    paths:
-#      - "player/build/libs/*.jar"
-#  rules:
-#    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-#    - if: $CI_COMMIT_TAG
-#    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_COMMIT_BRANCH == 'ci-cd'
+common-services: &common_services
+  - docker:dind
 
+common-variables: &common_variables
+  DOCKER_HOST: "tcp://docker:2375"
+  DOCKER_TLS_CERTDIR: ""
+
+# build
+
+.build-script: &build_script
+  - echo "Building $CONTEXT_NAME project"
+  - chmod +x gradlew
+  - cd ./$CONTEXT_NAME
+  - ../gradlew bootJar
+  - cd ..
+
+.build-artifacts: &build_artifacts
+  name: "build-$CONTEXT_NAME-artifact"
+  when: on_success
+  expire_in: 2 days
+  paths:
+    - "$CONTEXT_NAME/build/libs/*.jar"
+
+.build-rules: &build_rules
+  - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+  - if: $CI_COMMIT_TAG
+  - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_COMMIT_BRANCH == 'ci-cd' || $CI_COMMIT_BRANCH == 'prod'
+
+# test
+
+.test-script: &test_script
+  - echo "Running $CONTEXT_NAME tests"
+  - chmod +x gradlew
+  - cd ./$CONTEXT_NAME
+  - ../gradlew test
+  - cd ..
+
+.test-artifacts: &test_artifacts
+  when: always
+  reports:
+    junit: "$CONTEXT_NAME/build/test-results/test/**/TEST-*.xml"
+
+
+# ----------------------- BUILD ----------------------- #
+
+build_chatbot:
+  stage: build
+  variables:
+    PROJECT_NAME: chatbot
+  script: *build_script
+  artifacts: *build_artifacts
+  rules: *build_rules
+
+build_gameplay:
+  stage: build
+  variables:
+    PROJECT_NAME: gameplay
+  script: *build_script
+  artifacts: *build_artifacts
+  rules: *build_rules
+
+build_game_registry:
+  stage: build
+  variables:
+    PROJECT_NAME: gameRegistry
+  script: *build_script
+  artifacts: *build_artifacts
+  rules: *build_rules
+
+build_player:
+  stage: build
+  variables:
+    PROJECT_NAME: player
+  script: *build_script
+  artifacts: *build_artifacts
+  rules: *build_rules
 
 build_statistics:
   stage: build
-  script:
-    - echo "Building statistics project"
-    - chmod +x gradlew
-    - cd ./statistics
-    - ../gradlew clean bootBuildImage --stacktrace
-    - cd ..
   variables:
+    PROJECT_NAME: statistics
     DOCKER_HOST: "tcp://docker:2375"
     DOCKER_TLS_CERTDIR: ""
-  services:
-    - docker:dind
-  rules:
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-    - if: $CI_COMMIT_TAG
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_COMMIT_BRANCH == 'ci-cd'
+  services: *common_services
+  script: *build_script
+  rules: *build_rules
 
+build_storefront:
+  stage: build
+  variables:
+    PROJECT_NAME: storefront
+  script: *build_script
+  artifacts: *build_artifacts
+  rules: *build_rules
 
-#build_storefront:
-#  stage: build
-#  script:
-#    - echo "Building storefront project"
-#    - chmod +x gradlew
-#    - cd ./storefront
-#    - ../gradlew bootJar
-#    - cd ..
-#  artifacts:
-#    name: "build-storefront-artifact"
-#    when: on_success
-#    expire_in: 2 days
-#    paths:
-#      - "storefront/build/libs/*.jar"
-#  rules:
-#    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-#    - if: $CI_COMMIT_TAG
-#    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_COMMIT_BRANCH == 'ci-cd'
+# ----------------------- TEST ----------------------- #
 
-# ----------------------- TEST ---------------------------------- #
+test_chatbot:
+  stage: test
+  needs: []
+  variables:
+    <<: *common_variables
+    PROJECT_NAME: chatbot
+  services: *common_services
+  before_script:
+    - apk add --no-cache docker
+  script: *test_script
+  artifacts: *test_artifacts
 
-#test_chatbot:
-#  stage: test
-#  needs: []
-#  variables:
-#    DOCKER_HOST: "tcp://docker:2375"
-#    DOCKER_TLS_CERTDIR: ""
-#  services:
-#    - docker:dind
-#
-#  before_script:
-#    - apk add --no-cache docker
-#
-#  script:
-#    - echo "Running chatbot tests"
-#    - chmod +x gradlew
-#    - cd ./chatbot
-#    - ../gradlew test
-#    - cd ..
-#
-#  artifacts:
-#    when: always
-#    reports:
-#      junit: "chatbot/build/test-results/test/**/TEST-*.xml"
-#
-#
-#test_gameplay:
-#  stage: test
-#  needs: []
-#  variables:
-#    DOCKER_HOST: "tcp://docker:2375"
-#    DOCKER_TLS_CERTDIR: ""
-#  services:
-#    - docker:dind
-#
-#  before_script:
-#    - apk add --no-cache docker
-#
-#  script:
-#    - echo "Running gameplay tests"
-#    - chmod +x gradlew
-#    - cd ./gameplay
-#    - ../gradlew test
-#    - cd ..
-#
-#  artifacts:
-#    when: always
-#    reports:
-#      junit: "gameplay/build/test-results/test/**/TEST-*.xml"
-#
-#
-#test_game_registry:
-#  stage: test
-#  needs: []
-#  variables:
-#    DOCKER_HOST: "tcp://docker:2375"
-#    DOCKER_TLS_CERTDIR: ""
-#  services:
-#    - docker:dind
-#
-#  before_script:
-#    - apk add --no-cache docker
-#
-#  script:
-#    - echo "Running game registry tests"
-#    - chmod +x gradlew
-#    - cd ./gameRegistry
-#    - ../gradlew test
-#    - cd ..
-#
-#  artifacts:
-#    when: always
-#    reports:
-#      junit: "gameRegistry/build/test-results/test/**/TEST-*.xml"
-#
-#
-#test_player:
-#  stage: test
-#  needs: []
-#  variables:
-#    DOCKER_HOST: "tcp://docker:2375"
-#    DOCKER_TLS_CERTDIR: ""
-#  services:
-#    - docker:dind
-#
-#  before_script:
-#    - apk add --no-cache docker
-#
-#  script:
-#    - echo "Running player tests"
-#    - chmod +x gradlew
-#    - cd ./player
-#    - ../gradlew test
-#    - cd ..
-#
-#  artifacts:
-#    when: always
-#    reports:
-#      junit: "player/build/test-results/test/**/TEST-*.xml"
+test_gameplay:
+  stage: test
+  needs: []
+  variables:
+    <<: *common_variables
+    PROJECT_NAME: gameplay
+  services: *common_services
+  before_script:
+    - apk add --no-cache docker
+  script: *test_script
+  artifacts: *test_artifacts
 
+test_game_registry:
+  stage: test
+  needs: []
+  variables:
+    <<: *common_variables
+    PROJECT_NAME: gameRegistry
+  services: *common_services
+  before_script:
+    - apk add --no-cache docker
+  script: *test_script
+  artifacts: *test_artifacts
+
+test_player:
+  stage: test
+  needs: []
+  variables:
+    <<: *common_variables
+    PROJECT_NAME: player
+  services: *common_services
+  before_script:
+    - apk add --no-cache docker
+  script: *test_script
+  artifacts: *test_artifacts
 
 test_statistics:
   stage: test
   needs: []
   variables:
-    DOCKER_HOST: "tcp://docker:2375"
-    DOCKER_TLS_CERTDIR: ""
-  services:
-    - docker:dind
-
+    <<: *common_variables
+    PROJECT_NAME: statistics
+  services: *common_services
   before_script:
     - apk add --no-cache docker
+  script: *test_script
+  artifacts: *test_artifacts
 
-  script:
-    - echo "Running statistics tests"
-    - chmod +x gradlew
-    - cd ./statistics
-    - ../gradlew test
-    - cd ..
+test_storefront:
+  stage: test
+  needs: []
+  variables:
+    <<: *common_variables
+    PROJECT_NAME: storefront
+  services: *common_services
+  before_script:
+    - apk add --no-cache docker
+  script: *test_script
+  artifacts: *test_artifacts
 
-  artifacts:
-    when: always
-    reports:
-      junit: "statistics/build/test-results/test/**/TEST-*.xml"
-
-
-#test_storefront:
-#  stage: test
-#  needs: []
-#  variables:
-#    DOCKER_HOST: "tcp://docker:2375"
-#    DOCKER_TLS_CERTDIR: ""
-#  services:
-#    - docker:dind
-#
-#  before_script:
-#    - apk add --no-cache docker
-#
-#  script:
-#    - echo "Running storefront tests"
-#    - chmod +x gradlew
-#    - cd ./storefront
-#    - ../gradlew test
-#    - cd ..
-#
-#  artifacts:
-#    when: always
-#    reports:
-#      junit: "storefront/build/test-results/test/**/TEST-*.xml"
-
-
-# ----------------------- SAST ---------------------------------- #
+# ----------------------- SAST ----------------------- #
 
 sast:
   stage: test
@@ -311,9 +210,9 @@ semgrep-sast:
       exists:
         - '**/*.java'
 
-# ---------------------- DEPLOY --------------------------------- #
+# ----------------------- DEPLOY ----------------------- #
 
-# ----------------- DEV ----------------- #
+# DEV
 
 deploy_postgres_dev:
   image: mcr.microsoft.com/azure-cli
@@ -360,7 +259,7 @@ deploy_statistics_dev:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
     - if: $CI_COMMIT_BRANCH == 'ci-cd'
 
-# ----------------- PROD ---------------- #
+# PROD
 
 #deploy_statistics_prod:
 #  stage: deploy
@@ -375,8 +274,9 @@ deploy_statistics_dev:
 #    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
 
-# ---------------------- DESTROY -------------------------------- #
-# ----------------- DEV ----------------- #
+# ----------------------- DESTROY ----------------------- #
+
+# DEV
 
 destroy_statistics_dev:
   image: mcr.microsoft.com/azure-cli
@@ -397,5 +297,4 @@ destroy_statistics_dev:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
     - if: $CI_COMMIT_BRANCH == 'ci-cd'
 
-# ----------------- PROD ---------------- #
 
