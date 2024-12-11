@@ -19,13 +19,6 @@ stages:
 
 # -- reusable configurations --
 
-common-services: &common_services
-  - docker:dind
-
-common-variables: &common_variables
-  DOCKER_HOST: "tcp://docker:2375"
-  DOCKER_TLS_CERTDIR: ""
-
 # build
 
 .build-script: &build_script
@@ -102,7 +95,8 @@ build_statistics:
     PROJECT_NAME: statistics
     DOCKER_HOST: "tcp://docker:2375"
     DOCKER_TLS_CERTDIR: ""
-  services: *common_services
+  services:
+    - docker:dind
   script: *build_script
   rules: *build_rules
 
@@ -120,9 +114,11 @@ test_chatbot:
   stage: test
   needs: []
   variables:
-    <<: *common_variables
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
     PROJECT_NAME: chatbot
-  services: *common_services
+  services:
+    - docker:dind
   before_script:
     - apk add --no-cache docker
   script: *test_script
@@ -132,9 +128,11 @@ test_gameplay:
   stage: test
   needs: []
   variables:
-    <<: *common_variables
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
     PROJECT_NAME: gameplay
-  services: *common_services
+  services:
+    - docker:dind
   before_script:
     - apk add --no-cache docker
   script: *test_script
@@ -144,9 +142,11 @@ test_game_registry:
   stage: test
   needs: []
   variables:
-    <<: *common_variables
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
     PROJECT_NAME: gameRegistry
-  services: *common_services
+  services:
+    - docker:dind
   before_script:
     - apk add --no-cache docker
   script: *test_script
@@ -156,9 +156,11 @@ test_player:
   stage: test
   needs: []
   variables:
-    <<: *common_variables
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
     PROJECT_NAME: player
-  services: *common_services
+  services:
+    - docker:dind
   before_script:
     - apk add --no-cache docker
   script: *test_script
@@ -168,9 +170,11 @@ test_statistics:
   stage: test
   needs: []
   variables:
-    <<: *common_variables
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
     PROJECT_NAME: statistics
-  services: *common_services
+  services:
+    - docker:dind
   before_script:
     - apk add --no-cache docker
   script: *test_script
@@ -180,9 +184,11 @@ test_storefront:
   stage: test
   needs: []
   variables:
-    <<: *common_variables
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
     PROJECT_NAME: storefront
-  services: *common_services
+  services:
+    - docker:dind
   before_script:
     - apk add --no-cache docker
   script: *test_script
