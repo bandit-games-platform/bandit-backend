@@ -244,23 +244,23 @@ semgrep-sast:
 
 # DEV
 
-destroy_statistics_dev:
-  image: mcr.microsoft.com/azure-cli
-  stage: destroy
-  when: manual
-  before_script:
-    - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
-    - az extension add --name containerapp --upgrade
-  script:
-    - CONTAINER_NAME="statistics-dev-container"
-    - RESOURCE_GROUP="rg_bandit_games_dev"
-    - echo "Deleting container app"
-    - az containerapp delete --name $CONTAINER_NAME --resource-group $RESOURCE_GROUP --yes
-  environment:
-    name: statistics-dev
-    action: stop
-  rules:
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-    - if: $CI_COMMIT_BRANCH == 'ci-cd'
+#destroy_statistics_dev:
+#  image: mcr.microsoft.com/azure-cli
+#  stage: destroy
+#  when: manual
+#  before_script:
+#    - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
+#    - az extension add --name containerapp --upgrade
+#  script:
+#    - CONTAINER_NAME="statistics-dev-container"
+#    - RESOURCE_GROUP="rg_bandit_games_dev"
+#    - echo "Deleting container app"
+#    - az containerapp delete --name $CONTAINER_NAME --resource-group $RESOURCE_GROUP --yes
+#  environment:
+#    name: statistics-dev
+#    action: stop
+#  rules:
+#    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+#    - if: $CI_COMMIT_BRANCH == 'ci-cd'
 
 
