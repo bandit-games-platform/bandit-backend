@@ -37,12 +37,6 @@ dependencies {
     implementation 'com.azure.spring:spring-cloud-azure-dependencies:5.7.0'
 }
 
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
-}
-
 
 gitProperties {
     extProperty = 'gitProps'
@@ -71,4 +65,5 @@ bootBuildImage {
 }
 
 bootBuildImage.dependsOn generateGitProperties
+tasks.build.dependsOn bootBuildImage
 
