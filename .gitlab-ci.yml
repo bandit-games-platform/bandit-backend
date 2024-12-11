@@ -60,7 +60,7 @@ stages:
 build_chatbot:
   stage: build
   variables:
-    PROJECT_NAME: chatbot
+    CONTEXT_NAME: chatbot
   script: *build_script
   artifacts: *build_artifacts
   rules: *build_rules
@@ -68,7 +68,7 @@ build_chatbot:
 build_gameplay:
   stage: build
   variables:
-    PROJECT_NAME: gameplay
+    CONTEXT_NAME: gameplay
   script: *build_script
   artifacts: *build_artifacts
   rules: *build_rules
@@ -76,7 +76,7 @@ build_gameplay:
 build_game_registry:
   stage: build
   variables:
-    PROJECT_NAME: gameRegistry
+    CONTEXT_NAME: gameRegistry
   script: *build_script
   artifacts: *build_artifacts
   rules: *build_rules
@@ -84,7 +84,7 @@ build_game_registry:
 build_player:
   stage: build
   variables:
-    PROJECT_NAME: player
+    CONTEXT_NAME: player
   script: *build_script
   artifacts: *build_artifacts
   rules: *build_rules
@@ -92,7 +92,7 @@ build_player:
 build_statistics:
   stage: build
   variables:
-    PROJECT_NAME: statistics
+    CONTEXT_NAME: statistics
     DOCKER_HOST: "tcp://docker:2375"
     DOCKER_TLS_CERTDIR: ""
   services:
@@ -103,7 +103,7 @@ build_statistics:
 build_storefront:
   stage: build
   variables:
-    PROJECT_NAME: storefront
+    CONTEXT_NAME: storefront
   script: *build_script
   artifacts: *build_artifacts
   rules: *build_rules
@@ -116,7 +116,7 @@ test_chatbot:
   variables:
     DOCKER_HOST: "tcp://docker:2375"
     DOCKER_TLS_CERTDIR: ""
-    PROJECT_NAME: chatbot
+    CONTEXT_NAME: chatbot
   services:
     - docker:dind
   before_script:
@@ -130,7 +130,7 @@ test_gameplay:
   variables:
     DOCKER_HOST: "tcp://docker:2375"
     DOCKER_TLS_CERTDIR: ""
-    PROJECT_NAME: gameplay
+    CONTEXT_NAME: gameplay
   services:
     - docker:dind
   before_script:
@@ -144,7 +144,7 @@ test_game_registry:
   variables:
     DOCKER_HOST: "tcp://docker:2375"
     DOCKER_TLS_CERTDIR: ""
-    PROJECT_NAME: gameRegistry
+    CONTEXT_NAME: gameRegistry
   services:
     - docker:dind
   before_script:
@@ -158,7 +158,7 @@ test_player:
   variables:
     DOCKER_HOST: "tcp://docker:2375"
     DOCKER_TLS_CERTDIR: ""
-    PROJECT_NAME: player
+    CONTEXT_NAME: player
   services:
     - docker:dind
   before_script:
@@ -172,7 +172,7 @@ test_statistics:
   variables:
     DOCKER_HOST: "tcp://docker:2375"
     DOCKER_TLS_CERTDIR: ""
-    PROJECT_NAME: statistics
+    CONTEXT_NAME: statistics
   services:
     - docker:dind
   before_script:
@@ -186,7 +186,7 @@ test_storefront:
   variables:
     DOCKER_HOST: "tcp://docker:2375"
     DOCKER_TLS_CERTDIR: ""
-    PROJECT_NAME: storefront
+    CONTEXT_NAME: storefront
   services:
     - docker:dind
   before_script:
