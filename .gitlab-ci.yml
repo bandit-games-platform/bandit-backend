@@ -2,146 +2,203 @@ default:
   interruptible: true
   image: eclipse-temurin:21-jdk-alpine
 
-#cache:
-#  key: "$CI_COMMIT_REF_NAME"
-#  paths:
-#    - .gradle/
-#    - build/
-#  policy: pull-push
-
 workflow:
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
     - if: '$CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS'
       when: never
-    - if: '$CI_COMMIT_BRANCH || $CI_COMMIT_TAG'
+    - if: '$CI_COMMIT_BRANCH'
+    - if: $CI_COMMIT_TAG
 
 stages:
   - build
   - test
-#  - deploy
-#  - destroy
+  - deploy
+  - destroy
 
 
-# -- templates --
+# -- reusable configurations --
 
-.build-job-template: &build-job-template
-  script:
-    - echo "Building $CONTEXT_NAME project"
-    - chmod +x gradlew
-    - cd ./$CONTEXT_NAME
-    - ../gradlew clean bootBuildImage --stacktrace
-    - cd ..
-  services:
-    - docker:dind
-  variables:
-    DOCKER_HOST: "tcp://docker:2375"
-    DOCKER_TLS_CERTDIR: ""
-  rules:
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-    - if: $CI_COMMIT_TAG
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_COMMIT_BRANCH == 'ci-cd' || $CI_COMMIT_BRANCH == 'prod'
+# build
 
-.test-job-template: &test_job_template
-  before_script:
-    - apk add --no-cache docker
-  script:
-    - echo "Running $CONTEXT_NAME tests"
-    - chmod +x gradlew
-    - cd ./$CONTEXT_NAME
-    - ../gradlew test
-    - cd ..
-  services:
-    - docker:dind
-  variables:
-    DOCKER_HOST: "tcp://docker:2375"
-    DOCKER_TLS_CERTDIR: ""
-  artifacts:
-    when: always
-    reports:
-      junit: "$CONTEXT_NAME/build/test-results/test/**/TEST-*.xml"
+.build-script: &build_script
+  - echo "Building $CONTEXT_NAME project"
+  - chmod +x gradlew
+  - cd ./$CONTEXT_NAME
+  - ../gradlew bootJar
+  - cd ..
+
+.build-artifacts: &build_artifacts
+  name: "build-$CONTEXT_NAME-artifact"
+  when: on_success
+  expire_in: 2 days
+  paths:
+    - "$CONTEXT_NAME/build/libs/*.jar"
+
+.build-rules: &build_rules
+  - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+  - if: $CI_COMMIT_TAG
+  - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_COMMIT_BRANCH == 'ci-cd' || $CI_COMMIT_BRANCH == 'prod'
+
+# test
+
+.test-script: &test_script
+  - echo "Running $CONTEXT_NAME tests"
+  - chmod +x gradlew
+  - cd ./$CONTEXT_NAME
+  - ../gradlew test
+  - cd ..
+
+.test-artifacts: &test_artifacts
+  when: always
+  reports:
+    junit: "$CONTEXT_NAME/build/test-results/test/**/TEST-*.xml"
 
 
 # ----------------------- BUILD ----------------------- #
 
-#build_chatbot:
-#  stage: build
-#  variables:
-#    CONTEXT_NAME: chatbot
-#  <<: *build-job-template
-#
-#build_gameplay:
-#  stage: build
-#  variables:
-#    CONTEXT_NAME: gameplay
-#  <<: *build-job-template
-#
-#build_game_registry:
-#  stage: build
-#  variables:
-#    CONTEXT_NAME: gameRegistry
-#  <<: *build-job-template
-#
-#build_player:
-#  stage: build
-#  variables:
-#    CONTEXT_NAME: player
-#  <<: *build-job-template
+build_chatbot:
+  stage: build
+  variables:
+    CONTEXT_NAME: chatbot
+  script: *build_script
+  artifacts: *build_artifacts
+  rules: *build_rules
+
+build_gameplay:
+  stage: build
+  variables:
+    CONTEXT_NAME: gameplay
+  script: *build_script
+  artifacts: *build_artifacts
+  rules: *build_rules
+
+build_game_registry:
+  stage: build
+  variables:
+    CONTEXT_NAME: gameRegistry
+  script: *build_script
+  artifacts: *build_artifacts
+  rules: *build_rules
+
+build_player:
+  stage: build
+  variables:
+    CONTEXT_NAME: player
+  script: *build_script
+  artifacts: *build_artifacts
+  rules: *build_rules
 
 build_statistics:
   stage: build
   variables:
     CONTEXT_NAME: statistics
-  <<: *build-job-template
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
+  services:
+    - docker:dind
+  script: *build_script
+  rules: *build_rules
 
-#build_storefront:
-#  stage: build
-#  variables:
-#    CONTEXT_NAME: storefront
-#  <<: *build-job-template
+build_storefront:
+  stage: build
+  variables:
+    CONTEXT_NAME: storefront
+  script: *build_script
+  artifacts: *build_artifacts
+  rules: *build_rules
 
 # ----------------------- TEST ----------------------- #
 
-#test_chatbot:
-#  stage: test
-#  variables:
-#    CONTEXT_NAME: chatbot
-#  <<: *test_job_template
-#
-#test_gameplay:
-#  stage: test
-#  variables:
-#    CONTEXT_NAME: gameplay
-#  <<: *test_job_template
-#
-#test_game_registry:
-#  stage: test
-#  variables:
-#    CONTEXT_NAME: gameRegistry
-#  <<: *test_job_template
-#
-#test_player:
-#  stage: test
-#  variables:
-#    CONTEXT_NAME: player
-#  <<: *test_job_template
+test_chatbot:
+  stage: test
+  needs: []
+  variables:
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
+    CONTEXT_NAME: chatbot
+  services:
+    - docker:dind
+  before_script:
+    - apk add --no-cache docker
+  script: *test_script
+  artifacts: *test_artifacts
+
+test_gameplay:
+  stage: test
+  needs: []
+  variables:
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
+    CONTEXT_NAME: gameplay
+  services:
+    - docker:dind
+  before_script:
+    - apk add --no-cache docker
+  script: *test_script
+  artifacts: *test_artifacts
+
+test_game_registry:
+  stage: test
+  needs: []
+  variables:
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
+    CONTEXT_NAME: gameRegistry
+  services:
+    - docker:dind
+  before_script:
+    - apk add --no-cache docker
+  script: *test_script
+  artifacts: *test_artifacts
+
+test_player:
+  stage: test
+  needs: []
+  variables:
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
+    CONTEXT_NAME: player
+  services:
+    - docker:dind
+  before_script:
+    - apk add --no-cache docker
+  script: *test_script
+  artifacts: *test_artifacts
 
 test_statistics:
   stage: test
+  needs: []
   variables:
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
     CONTEXT_NAME: statistics
-  <<: *test_job_template
+  services:
+    - docker:dind
+  before_script:
+    - apk add --no-cache docker
+  script: *test_script
+  artifacts: *test_artifacts
 
-#test_storefront:
-#  stage: test
-#  variables:
-#    CONTEXT_NAME: storefront
-#  <<: *test_job_template
+test_storefront:
+  stage: test
+  needs: []
+  variables:
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
+    CONTEXT_NAME: storefront
+  services:
+    - docker:dind
+  before_script:
+    - apk add --no-cache docker
+  script: *test_script
+  artifacts: *test_artifacts
 
 # ----------------------- SAST ----------------------- #
 
 sast:
   stage: test
+  needs: []
   variables:
     SAST_EXCLUDED_PATHS: src/test
     SEARCH_MAX_DEPTH: '10'
@@ -163,50 +220,50 @@ semgrep-sast:
 
 # DEV
 
-#deploy_postgres_dev:
-#  image: mcr.microsoft.com/azure-cli
-#  stage: deploy
-#  when: on_success
-#  needs:
-#    # In here add all other build stages when setup
-#    - build_statistics
-#  before_script:
-#    - tdnf install -y postgresql
-#    - psql --version
-#    - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
-#  script:
-#    - chmod +x cicd/deploy-database-vnet.sh
-#    - cicd/deploy-database-vnet.sh
-#  # This will only run when you commit to a merge request or to the ci-cd branch
-#  rules:
-#    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-#    - if: $CI_COMMIT_BRANCH == 'ci-cd'
-#
-#
-#deploy_statistics_dev:
-#  image: mcr.microsoft.com/azure-cli
-#  stage: deploy
-#  when: on_success
-#  needs:
-#    - deploy_postgres_dev
-#    - build_statistics
-#  before_script:
-#    - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
-#    - az extension add --name containerapp --upgrade
-#  script:
-#    - tag=$CI_COMMIT_REF_NAME
-#    - chmod +x cicd/deploy-statistics-dev.sh
-#    - cicd/deploy-statistics-dev.sh
-#  environment:
-#    name: statistics-dev
-#    deployment_tier: testing
-#    action: start
-#    auto_stop_in: 1 hours
-#    on_stop: destroy_statistics_dev
-#  # This will only run when you commit to a merge request or to the ci-cd branch
-#  rules:
-#    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-#    - if: $CI_COMMIT_BRANCH == 'ci-cd'
+deploy_postgres_dev:
+  image: mcr.microsoft.com/azure-cli
+  stage: deploy
+  when: on_success
+  needs:
+    # In here add all other build stages when setup
+    - build_statistics
+  before_script:
+    - tdnf install -y postgresql
+    - psql --version
+    - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
+  script:
+    - chmod +x cicd/deploy-database-vnet.sh
+    - cicd/deploy-database-vnet.sh
+  # This will only run when you commit to a merge request or to the ci-cd branch
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_COMMIT_BRANCH == 'ci-cd'
+
+
+deploy_statistics_dev:
+  image: mcr.microsoft.com/azure-cli
+  stage: deploy
+  when: on_success
+  needs:
+    - deploy_postgres_dev
+    - build_statistics
+  before_script:
+    - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
+    - az extension add --name containerapp --upgrade
+  script:
+    - tag=$CI_COMMIT_REF_NAME
+    - chmod +x cicd/deploy-statistics-dev.sh
+    - cicd/deploy-statistics-dev.sh
+  environment:
+    name: statistics-dev
+    deployment_tier: testing
+    action: start
+    auto_stop_in: 1 hours
+    on_stop: destroy_statistics_dev
+  # This will only run when you commit to a merge request or to the ci-cd branch
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_COMMIT_BRANCH == 'ci-cd'
 
 # PROD
 
@@ -227,23 +284,22 @@ semgrep-sast:
 
 # DEV
 
-#destroy_statistics_dev:
-#  image: mcr.microsoft.com/azure-cli
-#  stage: destroy
-#  when: manual
-#  before_script:
-#    - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
-#    - az extension add --name containerapp --upgrade
-#  script:
-#    - CONTAINER_NAME="statistics-dev-container"
-#    - RESOURCE_GROUP="rg_bandit_games_dev"
-#    - echo "Deleting container app"
-#    - az containerapp delete --name $CONTAINER_NAME --resource-group $RESOURCE_GROUP --yes
-#  environment:
-#    name: statistics-dev
-#    action: stop
-#  rules:
-#    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-#    - if: $CI_COMMIT_BRANCH == 'ci-cd'
-
+destroy_statistics_dev:
+  image: mcr.microsoft.com/azure-cli
+  stage: destroy
+  when: manual
+  before_script:
+    - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
+    - az extension add --name containerapp --upgrade
+  script:
+    - CONTAINER_NAME="statistics-dev-container"
+    - RESOURCE_GROUP="rg_bandit_games_dev"
+    - echo "Deleting container app"
+    - az containerapp delete --name $CONTAINER_NAME --resource-group $RESOURCE_GROUP --yes
+  environment:
+    name: statistics-dev
+    action: stop
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_COMMIT_BRANCH == 'ci-cd'
 
