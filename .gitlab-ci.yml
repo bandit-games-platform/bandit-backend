@@ -268,6 +268,20 @@ deploy_statistics_dev:
 #    - if: $CI_COMMIT_TAG
 #    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
+deploy_rabbitmq_prod:
+  stage: deploy
+  image: acrbanditgamesdev.azurecr.io/rabbitmq:3.13.7-management-alpine
+  before_script:
+    - az login --service-principal -u $PROD_AZURE_APP_ID -p $PROD_AZURE_PASSWORD --tenant $PROD_AZURE_TENANT
+    - az extension add --name containerapp --upgrade
+  script:
+    - chmod +x cicd/deploy-rabbitmq-prod.sh
+    - cicd/deploy-rabbitmq-prod.sh
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_COMMIT_BRANCH == 'prod'
+
+
 
 # ----------------------- DESTROY ----------------------- #
 
