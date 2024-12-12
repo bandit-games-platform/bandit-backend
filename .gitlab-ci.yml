@@ -343,17 +343,19 @@ deploy_statistics_dev:
   script:
     - tag=$CI_COMMIT_REF_NAME
     - declare -A value_map=(
-          ["DB_USER"]=$DEV_PG_USER 
-          ["DB_PWD"]=$DEV_PG_PWD 
-          ["DB_NAME"]="banditdevpostgres" 
+          ["PG_USER"]=$DEV_PG_USER 
+          ["PG_PASSWORD"]=$DEV_PG_PWD 
+          ["PG_DB_NAME"]="banditdevpostgres" 
           ["RESOURCE_GROUP"]="rg_bandit_games_dev" 
           ["CONTAINER_NAME"]="statistics-dev-container" 
           ["ENVIRONMENT"]="env-dev-containers"
+          ["IMAGE_NAME"]="statistics-context"
+          ["PORT"]=8095
       )
     - serialized_map=""
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
-    - chmod +x cicd/deploy-statistics-dev.sh
-    - cicd/deploy-statistics-dev.sh "$serialized_map"
+    - chmod +x cicd/deploy-context-container.sh
+    - cicd/deploy-context-container.sh "$serialized_map"
   environment:
     name: statistics-dev
     deployment_tier: testing
