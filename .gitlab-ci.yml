@@ -50,16 +50,16 @@ stages:
 
 # ----------------------- BUILD ----------------------- #
 
-build_chatbot:
-  <<: *build-job-template
-  stage: build
-  variables:
-    DOCKER_HOST: "tcp://docker:2375"
-    DOCKER_TLS_CERTDIR: ""
-    CONTEXT_NAME: chatbot
-  services:
-    - docker:dind
-
+#build_chatbot:
+#  <<: *build-job-template
+#  stage: build
+#  variables:
+#    DOCKER_HOST: "tcp://docker:2375"
+#    DOCKER_TLS_CERTDIR: ""
+#    CONTEXT_NAME: chatbot
+#  services:
+#    - docker:dind
+#
 #build_gameplay:
 #  <<: *build-job-template
 #  stage: build
@@ -90,15 +90,15 @@ build_chatbot:
 #  services:
 #    - docker:dind
 #
-#build_statistics:
-#  <<: *build-job-template
-#  stage: build
-#  variables:
-#    DOCKER_HOST: "tcp://docker:2375"
-#    DOCKER_TLS_CERTDIR: ""
-#    CONTEXT_NAME: statistics
-#  services:
-#    - docker:dind
+build_statistics:
+  <<: *build-job-template
+  stage: build
+  variables:
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
+    CONTEXT_NAME: statistics
+  services:
+    - docker:dind
 #
 #build_storefront:
 #  <<: *build-job-template
@@ -112,18 +112,18 @@ build_chatbot:
 
 # ----------------------- TEST ----------------------- #
 
-test_chatbot:
-  <<: *test_job_template
-  stage: test
-  variables:
-    DOCKER_HOST: "tcp://docker:2375"
-    DOCKER_TLS_CERTDIR: ""
-    CONTEXT_NAME: chatbot
-  services:
-    - docker:dind
-  before_script:
-    - apk add --no-cache docker
-
+#test_chatbot:
+#  <<: *test_job_template
+#  stage: test
+#  variables:
+#    DOCKER_HOST: "tcp://docker:2375"
+#    DOCKER_TLS_CERTDIR: ""
+#    CONTEXT_NAME: chatbot
+#  services:
+#    - docker:dind
+#  before_script:
+#    - apk add --no-cache docker
+#
 #test_gameplay:
 #  <<: *test_job_template
 #  stage: test
@@ -159,17 +159,17 @@ test_chatbot:
 #  before_script:
 #    - apk add --no-cache docker
 #
-#test_statistics:
-#  <<: *test_job_template
-#  stage: test
-#  variables:
-#    DOCKER_HOST: "tcp://docker:2375"
-#    DOCKER_TLS_CERTDIR: ""
-#    CONTEXT_NAME: statistics
-#  services:
-#    - docker:dind
-#  before_script:
-#    - apk add --no-cache docker
+test_statistics:
+  <<: *test_job_template
+  stage: test
+  variables:
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
+    CONTEXT_NAME: statistics
+  services:
+    - docker:dind
+  before_script:
+    - apk add --no-cache docker
 #
 #test_storefront:
 #  <<: *test_job_template
