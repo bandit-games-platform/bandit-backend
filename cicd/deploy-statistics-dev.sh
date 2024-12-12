@@ -7,7 +7,7 @@
 #- Usage:	    ./deploy-statistics-dev.sh
 #---------------------------------------------------------------
 
-provided_values=$1
+declare -A provided_values=$1
 for key in "${!provided_values[@]}"; do
     echo "Key: $key, Value: ${provided_values[$key]}"
 done
