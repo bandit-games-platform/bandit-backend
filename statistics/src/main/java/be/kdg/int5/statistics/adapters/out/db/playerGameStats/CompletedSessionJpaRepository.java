@@ -14,5 +14,4 @@ public interface CompletedSessionJpaRepository extends JpaRepository<CompletedSe
     WHERE session.playerGameStatsJpaEntity.id.playerId = :playerId
     """)
     List<CompletedSessionJpaEntity> findAllByPlayerId(UUID playerId);
-
 }

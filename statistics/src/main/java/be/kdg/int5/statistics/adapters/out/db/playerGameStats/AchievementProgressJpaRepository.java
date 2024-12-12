@@ -15,9 +15,4 @@ public interface AchievementProgressJpaRepository extends JpaRepository<Achievem
             @Param("achievementId") UUID achievementId,
             @Param("playerId") UUID playerId
     );
-
-    @Query("SELECT ap FROM AchievementProgressJpaEntity ap WHERE ap.playerGameStatsJpaEntity.id.gameId = :gameId")
-    List<AchievementProgressJpaEntity> findAchievementProgressByGameId(
-            @Param("gameId") UUID gameId
-    );
 }

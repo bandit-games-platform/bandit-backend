@@ -63,7 +63,6 @@ public class PlayerGameStatsJpaAdapter implements PlayerGameStatisticsLoadPort, 
         return playerGameStatsJpaEntities.stream().map(this::playerGameStatisticsJpaToDomain).collect(Collectors.toList());
     }
 
-
     @Override
     public void addNewCompletedSession(PlayerGameStats playerGameStats) {
         playerGameStatsJpaRepository.save(playerGameStatsDomainToJpa(playerGameStats));
