@@ -1,8 +1,7 @@
 plugins {
     id 'module-config'
+    id "com.gorylenko.gradle-git-properties" version "2.4.1"
 }
-
-
 
 dependencies {
     implementation project(':common')
@@ -18,4 +17,40 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-amqp'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     testImplementation 'org.springframework.amqp:spring-rabbit-test'
+
+    //Spring cloud AZURE
+    implementation 'com.azure.spring:spring-cloud-azure-starter-actuator:4.3.0'
+    implementation 'com.azure.spring:spring-cloud-azure-starter-keyvault:4.3.0'
+    implementation 'com.azure.spring:spring-cloud-azure-starter:4.3.0'
+    implementation 'com.azure.spring:spring-cloud-azure-dependencies:5.7.0'
 }
+
+
+gitProperties {
+    extProperty = 'gitProps'
+}
+generateGitProperties.outputs.upToDateWhen { false }
+
+tasks.register('printGitProperties') {
+    dependsOn 'generateGitProperties'
+    doLast {
+        println "git.commit.id.abbrev=" + project.ext.gitProps['git.commit.id.abbrev']
+    }
+}
+
+
+bootBuildImage {
+    builder = "paketobuildpacks/builder-jammy-base:latest"
+    imageName = "acrbanditgamesdev.azurecr.io/game-registry-context"
+    tags = ["acrbanditgamesdev.azurecr.io/game-registry-context:${-> project.ext.gitProps['git.commit.id.abbrev']}"]
+    publish = true
+    docker {
+        publishRegistry {
+            username =  System.getenv("REGISTRY_USERNAME")
+            password = System.getenv("REGISTRY_PASSWORD")
+        }
+    }
+}
+
+bootBuildImage.dependsOn generateGitProperties
+

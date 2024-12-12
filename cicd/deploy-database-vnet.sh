@@ -90,13 +90,24 @@ if [ -z "$DB_EXISTS" ]; then
 
     echo "Database is now ready"
 
-    az containerapp create \
-        --name init-container \
-        --resource-group $RG_NAME \
-        --environment $ENV_NAME \
-        --image postgres:16-alpine \
-        --command "/bin/sh" \
-        --args "-c 'while true; do echo hello; sleep 10; done'"
+# TODO: Since this does not work currently, schema and permissions have to be granted manually
+
+#    az containerapp create \
+#        --name init-container \
+#        --resource-group $RG_NAME \
+#        --environment $ENV_NAME \
+#        --image postgres:16-alpine \
+#        --command "/bin/sh" \
+#        --args "-c, while true; do echo hello; sleep 10; done"
+
+        # --command "/bin/sh -c 'PGPASSWORD=$PG_ADMIN_PASSWORD psql -h $DB_SERVER_NAME.postgres.database.azure.com -U $PG_ADMIN_USER -d bandit_db -c \"CREATE USER $PG_NON_ADMIN_USER WITH PASSWORD '$PG_NON_ADMIN_PASSWORD';\" && PGPASSWORD=$PG_ADMIN_PASSWORD psql -h $DB_SERVER_NAME.postgres.database.azure.com -U $PG_ADMIN_USER -d bandit_db -c \"GRANT ALL PRIVILEGES ON DATABASE bandit_db TO $DEV_PG_USER;\" && PGPASSWORD=$PG_NON_ADMIN_PASSWORD psql -h $DB_SERVER_NAME.postgres.database.azure.com -U $PG_NON_ADMIN_USER -d bandit_db -c \"
+        #    CREATE SCHEMA IF NOT EXISTS chatbot;
+        #    CREATE SCHEMA IF NOT EXISTS gameplay;
+        #    CREATE SCHEMA IF NOT EXISTS game_registry;
+        #    CREATE SCHEMA IF NOT EXISTS player;
+        #    CREATE SCHEMA IF NOT EXISTS statistics;
+        #    CREATE SCHEMA IF NOT EXISTS storefront;
+        #    \" && PGPASSWORD=$PG_ADMIN_PASSWORD psql -h $DB_SERVER_NAME.postgres.database.azure.com -U $PG_ADMIN_USER -d bandit_db -c \"SELECT * FROM information_schema.schemata;\"'" "docker-entrypoint.sh"
 
 #    az containerapp delete --name init-container --resource-group $RG_NAME --yes
 

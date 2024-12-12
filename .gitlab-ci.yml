@@ -254,7 +254,7 @@ deploy_statistics_dev:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
     - if: $CI_COMMIT_BRANCH == 'ci-cd'
 
-# PROD
+# ----------------- PROD ---------------- #
 
 #deploy_statistics_prod:
 #  stage: deploy

@@ -9,7 +9,7 @@
 
 CONTAINER_NAME="statistics-dev-container"
 RESOURCE_GROUP="rg_bandit_games_dev"
-PG_USER=$DEV_PG_USR
+PG_USER=$DEV_PG_USER
 PG_PASSWORD=$DEV_PG_PWD
 # Database fully qualified name
 DB_FQDN=$(az postgres flexible-server show --name "banditdevpostgres" --resource-group rg_bandit_games_dev --query "fullyQualifiedDomainName" --output tsv)

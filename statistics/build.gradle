@@ -37,6 +37,7 @@ dependencies {
     implementation 'com.azure.spring:spring-cloud-azure-dependencies:5.7.0'
 }
 
+
 gitProperties {
     extProperty = 'gitProps'
 }
