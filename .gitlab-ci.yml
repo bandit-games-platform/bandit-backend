@@ -383,7 +383,7 @@ deploy_gameplay_dev:
       ["CONTAINER_NAME"]="gameplay-dev-container"
       ["ENVIRONMENT"]="env-dev-containers"
       ["IMAGE_NAME"]="gameplay-context"
-      ["PORT"]=8092
+      ["PORT"]=8093
       )
     - serialized_map=""
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
@@ -420,7 +420,7 @@ deploy_game_registry_dev:
       ["CONTAINER_NAME"]="game-registry-dev-container"
       ["ENVIRONMENT"]="env-dev-containers"
       ["IMAGE_NAME"]="game-registry-context"
-      ["PORT"]=8093
+      ["PORT"]=8092
       ["KEYCLOAK_CLIENT_SECRET"]=$KEYCLOAK_BACKEND_SECRET
       )
     - serialized_map=""
