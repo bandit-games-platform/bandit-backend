@@ -10,7 +10,6 @@
 
 CONTAINER_NAME="rabbitmq-prod-container"
 RESOURCE_GROUP="rg_bandit_games_prod"
-ENV_NAME="prod-containers-env"
 IMAGE="$REGISTRY_USERNAME".azurecr.io/rabbitmq:3.13.7-management-alpine
 
 
@@ -18,7 +17,6 @@ echo "Deploying RabbitMQ containerapp..."
 az containerapp create \
   --name $CONTAINER_NAME \
   --resource-group $RESOURCE_GROUP \
-  --environment $ENV_NAME \
   --image $IMAGE \
   --target-port 5672 \
   --ingress external \
