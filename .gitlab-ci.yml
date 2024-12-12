@@ -680,7 +680,7 @@ destroy_storefront_dev:
     - echo "Deleting container app"
     - az containerapp delete --name $CONTAINER_NAME --resource-group $RESOURCE_GROUP --yes
   environment:
-    name: statistics-dev
+    name: storefront-dev
     action: stop
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
