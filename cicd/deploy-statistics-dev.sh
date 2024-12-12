@@ -23,9 +23,9 @@ az containerapp up --name $CONTAINER_NAME --resource-group $RESOURCE_GROUP \
 
 az containerapp secret set --name $CONTAINER_NAME --resource-group $RESOURCE_GROUP \
       --secrets \
-      database-usr-pwd="$DEV_PG_ADMIN_PWD"
+      database-usr-pwd="$PG_PASSWORD"
 
 az containerapp update --name $CONTAINER_NAME --resource-group $RESOURCE_GROUP \
   --cpu 1 --memory 2Gi \
   --min-replicas 0 --max-replicas 1 \
-  --set-env-vars DATASOURCE_URL="$JDBC_URL" DATASOURCE_USER="$DEV_PG_ADMIN_USR" DATASOURCE_PASS=secretref:database-usr-pwd
+  --set-env-vars DATASOURCE_URL="$JDBC_URL" DATASOURCE_USER="$PG_USER" DATASOURCE_PASS=secretref:database-usr-pwd
