@@ -25,7 +25,7 @@ stages:
   - echo "Building $CONTEXT_NAME project"
   - chmod +x gradlew
   - cd ./$CONTEXT_NAME
-  - ../gradlew clean bootBuildImage --stacktrace
+  - ../gradlew bootJar
   - cd ..
 
 .build-rules: &build_rules
