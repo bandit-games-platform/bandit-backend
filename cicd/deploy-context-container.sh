@@ -15,7 +15,9 @@ PG_DB_NAME="null"
 ENVIRONMENT="null"
 IMAGE_NAME="null"
 PORT=8080
-EXTRA_ENV_VARS=""
+STRIPE_API_KEY=
+KEYCLOAK_CLIENT_SECRET=
+EXTRA_ENV_VARS=
 
 declare -A provided_values
 for pair in $1; do
@@ -24,16 +26,13 @@ for pair in $1; do
 done
 
 for key in "${!provided_values[@]}"; do
-    echo "Key: $key, Value: ${provided_values[$key]}"
     if declare -p "$key" &>/dev/null; then
         declare "$key=${provided_values[$key]}"
     else
-        echo "Warning: Variable $key is not defined, adding to extra environment variables."
+        echo "Warning: Variable $key is not defined, adding to extra environment variables (make sure this isn't secret it won't be kept secret)."
         EXTRA_ENV_VARS+="$key=${provided_values[$key]} "
     fi
 done
-
-echo "CONTAINER_NAME=$CONTAINER_NAME, RESOURCE_GROUP=$RESOURCE_GROUP, PG_USER=$PG_USER, PG_PASSWORD=$PG_PASSWORD, PG_DB_NAME=$PG_DB_NAME, ENVIRONMENT=$ENVIRONMENT, IMAGE_NAME=$IMAGE_NAME, PORT=$PORT"
 
 # Database fully qualified name
 DB_FQDN=$(az postgres flexible-server show --name "$PG_DB_NAME" --resource-group $RESOURCE_GROUP --query "fullyQualifiedDomainName" --output tsv)
@@ -45,11 +44,38 @@ az containerapp up --name $CONTAINER_NAME --resource-group $RESOURCE_GROUP \
   --image "$REGISTRY_USERNAME".azurecr.io/$IMAGE_NAME:"${CI_COMMIT_SHORT_SHA::-1}" \
   --target-port $PORT --ingress external
 
+SECRET_STRING="database-usr-pwd=$PG_PASSWORD "
+
+if [ -n "$KEYCLOAK_CLIENT_SECRET" ]; then
+  SECRET_STRING+="keycloak-client-secret=$KEYCLOAK_CLIENT_SECRET "
+fi
+if [ -n "$STRIPE_API_KEY" ]; then
+  SECRET_STRING+="stripe-api-key=$STRIPE_API_KEY "
+fi
+
 az containerapp secret set --name $CONTAINER_NAME --resource-group $RESOURCE_GROUP \
       --secrets \
-      database-usr-pwd="$PG_PASSWORD"
+      "$SECRET_STRING"
+
+unset SECRET_STRING
+
+ENV_VAR_STRING="DATASOURCE_URL=$JDBC_URL DATASOURCE_USER=$PG_USER DATASOURCE_PASS=secretref:database-usr-pwd "
+
+if [ -n "$KEYCLOAK_CLIENT_SECRET" ]; then
+  ENV_VAR_STRING+="KEYCLOAK_CLIENT_SECRET=secretref:keycloak-client-secret "
+fi
+if [ -n "$STRIPE_API_KEY" ]; then
+  ENV_VAR_STRING+="STRIPE_API_KEY=secretref:stripe-api-key "
+fi
+if [ -n "$EXTRA_ENV_VARS" ]; then
+  ENV_VAR_STRING+="$EXTRA_ENV_VARS"
+fi
+
+echo "$ENV_VAR_STRING"
 
 az containerapp update --name $CONTAINER_NAME --resource-group $RESOURCE_GROUP \
   --cpu 1 --memory 2Gi \
   --min-replicas 0 --max-replicas 1 \
-  --set-env-vars DATASOURCE_URL="$JDBC_URL" DATASOURCE_USER="$PG_USER" DATASOURCE_PASS=secretref:database-usr-pwd "$EXTRA_ENV_VARS"
+  --set-env-vars "$ENV_VAR_STRING"
+
+unset ENV_VAR_STRING
