@@ -7,12 +7,19 @@
 #- Usage:	    ./deploy-statistics-dev.sh
 #---------------------------------------------------------------
 
+provided_values=$1
+for key in "${!provided_values[@]}"; do
+    echo "Key: $key, Value: ${provided_values[$key]}"
+done
+
+exit 0
+
 CONTAINER_NAME="statistics-dev-container"
 RESOURCE_GROUP="rg_bandit_games_dev"
 PG_USER=$DEV_PG_USER
 PG_PASSWORD=$DEV_PG_PWD
 # Database fully qualified name
-DB_FQDN=$(az postgres flexible-server show --name "banditdevpostgres" --resource-group rg_bandit_games_dev --query "fullyQualifiedDomainName" --output tsv)
+DB_FQDN=$(az postgres flexible-server show --name "banditdevpostgres" --resource-group $RESOURCE_GROUP --query "fullyQualifiedDomainName" --output tsv)
 JDBC_URL="jdbc:postgresql://$DB_FQDN:5432/bandit_db"
 
 echo "Bringing up container app"

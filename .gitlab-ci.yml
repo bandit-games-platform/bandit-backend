@@ -342,7 +342,8 @@ deploy_statistics_dev:
     - az extension add --name containerapp --upgrade
   script:
     - tag=$CI_COMMIT_REF_NAME
-    - chmod +x cicd/deploy-statistics-dev.sh
+    - declare -A value_map=(["DB_USER"]=$DEV_PG_USER ["DB_PWD"]=$DEV_PG_PWD ["DB_NAME"]="banditdevpostgres" ["RESOURCE_GROUP"]="rg_bandit_games_dev" ["CONTAINER_NAME"]="statistics-dev-container" ["ENVIRONMENT"]="env-dev-containers")
+    - chmod +x cicd/deploy-statistics-dev.sh value_map
     - cicd/deploy-statistics-dev.sh
   environment:
     name: statistics-dev
