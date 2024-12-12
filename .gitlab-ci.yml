@@ -51,32 +51,44 @@ stages:
 # ----------------------- BUILD ----------------------- #
 
 #build_chatbot:
+#  <<: *build-job-template
 #  stage: build
 #  variables:
+#    DOCKER_HOST: "tcp://docker:2375"
+#    DOCKER_TLS_CERTDIR: ""
 #    CONTEXT_NAME: chatbot
-#  script: *build_script
-#  rules: *build_rules
+#  services:
+#    - docker:dind
 #
 #build_gameplay:
+#  <<: *build-job-template
 #  stage: build
 #  variables:
+#    DOCKER_HOST: "tcp://docker:2375"
+#    DOCKER_TLS_CERTDIR: ""
 #    CONTEXT_NAME: gameplay
-#  script: *build_script
-#  rules: *build_rules
+#  services:
+#    - docker:dind
 #
 #build_game_registry:
+#  <<: *build-job-template
 #  stage: build
 #  variables:
+#    DOCKER_HOST: "tcp://docker:2375"
+#    DOCKER_TLS_CERTDIR: ""
 #    CONTEXT_NAME: gameRegistry
-#  script: *build_script
-#  rules: *build_rules
+#  services:
+#    - docker:dind
 #
 #build_player:
+#  <<: *build-job-template
 #  stage: build
 #  variables:
+#    DOCKER_HOST: "tcp://docker:2375"
+#    DOCKER_TLS_CERTDIR: ""
 #    CONTEXT_NAME: player
-#  script: *build_script
-#  rules: *build_rules
+#  services:
+#    - docker:dind
 
 build_statistics:
   <<: *build-job-template
@@ -88,76 +100,68 @@ build_statistics:
   services:
     - docker:dind
 
-
 #build_storefront:
+#  <<: *build-job-template
 #  stage: build
 #  variables:
+#    DOCKER_HOST: "tcp://docker:2375"
+#    DOCKER_TLS_CERTDIR: ""
 #    CONTEXT_NAME: storefront
-#  script: *build_script
-#  rules: *build_rules
+#  services:
+#    - docker:dind
 
 # ----------------------- TEST ----------------------- #
 
-#test_chatbot:
-#  stage: test
-#  needs: []
-#  variables:
-#    DOCKER_HOST: "tcp://docker:2375"
-#    DOCKER_TLS_CERTDIR: ""
-#    CONTEXT_NAME: chatbot
-#  services:
-#    - docker:dind
-#  before_script:
-#    - apk add --no-cache docker
-#  script: *test_script
-#  artifacts: *test_artifacts
-#
-#test_gameplay:
-#  stage: test
-#  needs: []
-#  variables:
-#    DOCKER_HOST: "tcp://docker:2375"
-#    DOCKER_TLS_CERTDIR: ""
-#    CONTEXT_NAME: gameplay
-#  services:
-#    - docker:dind
-#  before_script:
-#    - apk add --no-cache docker
-#  script: *test_script
-#  artifacts: *test_artifacts
-#
-#test_game_registry:
-#  stage: test
-#  needs: []
-#  variables:
-#    DOCKER_HOST: "tcp://docker:2375"
-#    DOCKER_TLS_CERTDIR: ""
-#    CONTEXT_NAME: gameRegistry
-#  services:
-#    - docker:dind
-#  before_script:
-#    - apk add --no-cache docker
-#  script: *test_script
-#  artifacts: *test_artifacts
-#
-#test_player:
-#  stage: test
-#  needs: []
-#  variables:
-#    DOCKER_HOST: "tcp://docker:2375"
-#    DOCKER_TLS_CERTDIR: ""
-#    CONTEXT_NAME: player
-#  services:
-#    - docker:dind
-#  before_script:
-#    - apk add --no-cache docker
-#  script: *test_script
-#  artifacts: *test_artifacts
+test_chatbot:
+  <<: *test_job_template
+  stage: test
+  variables:
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
+    CONTEXT_NAME: chatbot
+  services:
+    - docker:dind
+  before_script:
+    - apk add --no-cache docker
+
+test_gameplay:
+  <<: *test_job_template
+  stage: test
+  variables:
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
+    CONTEXT_NAME: gameplay
+  services:
+    - docker:dind
+  before_script:
+    - apk add --no-cache docker
+
+test_game_registry:
+  <<: *test_job_template
+  variables:
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
+    CONTEXT_NAME: gameRegistry
+  services:
+    - docker:dind
+  before_script:
+    - apk add --no-cache docker
+
+test_player:
+  <<: *test_job_template
+  stage: test
+  variables:
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
+    CONTEXT_NAME: player
+  services:
+    - docker:dind
+  before_script:
+    - apk add --no-cache docker
 
 test_statistics:
   <<: *test_job_template
   stage: test
-  needs: []
   variables:
     DOCKER_HOST: "tcp://docker:2375"
     DOCKER_TLS_CERTDIR: ""
@@ -167,19 +171,17 @@ test_statistics:
   before_script:
     - apk add --no-cache docker
 
-#test_storefront:
-#  stage: test
-#  needs: []
-#  variables:
-#    DOCKER_HOST: "tcp://docker:2375"
-#    DOCKER_TLS_CERTDIR: ""
-#    CONTEXT_NAME: storefront
-#  services:
-#    - docker:dind
-#  before_script:
-#    - apk add --no-cache docker
-#  script: *test_script
-#  artifacts: *test_artifacts
+test_storefront:
+  <<: *test_job_template
+  stage: test
+  variables:
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
+    CONTEXT_NAME: storefront
+  services:
+    - docker:dind
+  before_script:
+    - apk add --no-cache docker
 
 # ----------------------- SAST ----------------------- #
 
