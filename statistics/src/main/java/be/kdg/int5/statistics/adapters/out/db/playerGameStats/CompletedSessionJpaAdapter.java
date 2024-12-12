@@ -1,6 +1,7 @@
 package be.kdg.int5.statistics.adapters.out.db.playerGameStats;
 
 import be.kdg.int5.statistics.domain.CompletedSession;
+import be.kdg.int5.statistics.domain.GameId;
 import be.kdg.int5.statistics.domain.PlayerId;
 import be.kdg.int5.statistics.domain.SessionId;
 import be.kdg.int5.statistics.port.out.CompletedSessionLoadPort;
@@ -20,6 +21,12 @@ public class CompletedSessionJpaAdapter implements CompletedSessionLoadPort {
     @Override
     public List<CompletedSession> loadAllCompletedSessionsForPlayer(PlayerId playerId) {
         List<CompletedSessionJpaEntity> allSessions = completedSessionJpaRepository.findAllByPlayerId(playerId.uuid());
+        return allSessions.stream().map(this::completedSessionJpaToDomain).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CompletedSession> loadAllCompletedSessionsForGame(GameId gameId) {
+        List<CompletedSessionJpaEntity> allSessions = completedSessionJpaRepository.findAllByGameId(gameId.uuid());
         return allSessions.stream().map(this::completedSessionJpaToDomain).collect(Collectors.toList());
     }
 

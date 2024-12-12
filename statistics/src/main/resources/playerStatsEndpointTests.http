@@ -5,7 +5,6 @@ Content-Type: application/x-www-form-urlencoded
 
 client_id=bandit-backend&client_secret=**********&username=john@gmail.com&password=johnnyboy&grant_type=password&scope=openid
 
-//saving the warehouse access token
 > {%client.global.set("logged-in-user", response.body.access_token);%}
 
 
