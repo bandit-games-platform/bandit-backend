@@ -27,5 +27,5 @@ az containerapp create \
   --min-replicas 0 \
   --max-replicas 1 \
   --env-vars RABBITMQ_DEFAULT_USER="$RABBITMQ_USER" RABBITMQ_DEFAULT_PASS="$RABBITMQ_PASSWORD" \
-  --yaml ./rabbitmq-containerapp.yml
+  --yaml ./cicd/rabbitmq-containerapp.yml
 
