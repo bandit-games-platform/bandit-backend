@@ -226,7 +226,7 @@ deploy_postgres_dev:
   # This will only run when you commit to a merge request or to the ci-cd branch
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-    - if: $CI_COMMIT_BRANCH == 'ci-cd'
+    - if: $CI_COMMIT_BRANCH == 'ci-cd' || $CI_COMMIT_BRANCH == 'prod'
 
 
 deploy_statistics_dev:
@@ -252,7 +252,7 @@ deploy_statistics_dev:
   # This will only run when you commit to a merge request or to the ci-cd branch
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-    - if: $CI_COMMIT_BRANCH == 'ci-cd'
+    - if: $CI_COMMIT_BRANCH == 'ci-cd' || $CI_COMMIT_BRANCH == 'prod'
 
 # ----------------- PROD ---------------- #
 
@@ -290,5 +290,5 @@ destroy_statistics_dev:
     action: stop
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-    - if: $CI_COMMIT_BRANCH == 'ci-cd'
+    - if: $CI_COMMIT_BRANCH == 'ci-cd' || $CI_COMMIT_BRANCH == 'prod'
 
