@@ -50,45 +50,45 @@ stages:
 
 # ----------------------- BUILD ----------------------- #
 
-#build_chatbot:
-#  <<: *build-job-template
-#  stage: build
-#  variables:
-#    DOCKER_HOST: "tcp://docker:2375"
-#    DOCKER_TLS_CERTDIR: ""
-#    CONTEXT_NAME: chatbot
-#  services:
-#    - docker:dind
-#
-#build_gameplay:
-#  <<: *build-job-template
-#  stage: build
-#  variables:
-#    DOCKER_HOST: "tcp://docker:2375"
-#    DOCKER_TLS_CERTDIR: ""
-#    CONTEXT_NAME: gameplay
-#  services:
-#    - docker:dind
-#
-#build_game_registry:
-#  <<: *build-job-template
-#  stage: build
-#  variables:
-#    DOCKER_HOST: "tcp://docker:2375"
-#    DOCKER_TLS_CERTDIR: ""
-#    CONTEXT_NAME: gameRegistry
-#  services:
-#    - docker:dind
-#
-#build_player:
-#  <<: *build-job-template
-#  stage: build
-#  variables:
-#    DOCKER_HOST: "tcp://docker:2375"
-#    DOCKER_TLS_CERTDIR: ""
-#    CONTEXT_NAME: player
-#  services:
-#    - docker:dind
+build_chatbot:
+  <<: *build-job-template
+  stage: build
+  variables:
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
+    CONTEXT_NAME: chatbot
+  services:
+    - docker:dind
+
+build_gameplay:
+  <<: *build-job-template
+  stage: build
+  variables:
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
+    CONTEXT_NAME: gameplay
+  services:
+    - docker:dind
+
+build_game_registry:
+  <<: *build-job-template
+  stage: build
+  variables:
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
+    CONTEXT_NAME: gameRegistry
+  services:
+    - docker:dind
+
+build_player:
+  <<: *build-job-template
+  stage: build
+  variables:
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
+    CONTEXT_NAME: player
+  services:
+    - docker:dind
 
 build_statistics:
   <<: *build-job-template
@@ -100,15 +100,15 @@ build_statistics:
   services:
     - docker:dind
 
-#build_storefront:
-#  <<: *build-job-template
-#  stage: build
-#  variables:
-#    DOCKER_HOST: "tcp://docker:2375"
-#    DOCKER_TLS_CERTDIR: ""
-#    CONTEXT_NAME: storefront
-#  services:
-#    - docker:dind
+build_storefront:
+  <<: *build-job-template
+  stage: build
+  variables:
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
+    CONTEXT_NAME: storefront
+  services:
+    - docker:dind
 
 # ----------------------- TEST ----------------------- #
 
