@@ -2,14 +2,14 @@
 INSERT INTO game_registry.developer (id, studio_name) VALUES
 ('d7df9644-7803-4b70-8997-0f246665cb01', 'Integration Studio'),
 ('3c0b923c-c267-498e-88a4-eee3a629fea4', 'BanditGames'),
-('31893d63-1fd8-4871-b20a-5bfe414bfaf1', 'button Game');
+('cf8dedad-3387-4b1a-a09a-a18afeb8bad1', 'button Game');
 
 -- give them a revoked and an active api key
 INSERT INTO game_registry.dev_api_key(developer_id, api_key, revoked)
 VALUES ('3c0b923c-c267-498e-88a4-eee3a629fea4', 'band1TAAA', true),
        ('3c0b923c-c267-498e-88a4-eee3a629fea4', 'band1TBBB', false),
        ('d7df9644-7803-4b70-8997-0f246665cb01', 'band1TCCC', false),
-       ('31893d63-1fd8-4871-b20a-5bfe414bfaf1', 'band1T-button', false);
+       ('cf8dedad-3387-4b1a-a09a-a18afeb8bad1', 'band1T-button', false);
 
 -- Seeding data for `game` table
 INSERT INTO game_registry.game (id, title, description, current_price, developer_id, current_host, icon_url, background_url) VALUES
