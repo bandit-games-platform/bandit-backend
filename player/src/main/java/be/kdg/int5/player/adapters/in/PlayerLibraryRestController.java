@@ -20,6 +20,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
+@RequestMapping("/players/library")
 public class PlayerLibraryRestController {
     private final PlayerLibraryQuery playerLibraryQuery;
     private final FavoriteGameUseCase favoriteGameUseCase;
@@ -32,7 +33,7 @@ public class PlayerLibraryRestController {
         this.favoriteGameUseCase = favoriteGameUseCase;
     }
 
-    @GetMapping("/players/library")
+    @GetMapping()
     @PreAuthorize("hasAuthority('player')")
     public ResponseEntity<List<GameInLibraryDto>> getAllGamesInPlayerLibrary(@AuthenticationPrincipal Jwt token) {
         PlayerLibrary playerLibrary = playerLibraryQuery.getPlayerLibrary(
@@ -44,12 +45,13 @@ public class PlayerLibraryRestController {
         List<GameInLibraryDto> gameInLibraryDtoList = playerLibrary.getPlayerLibraryItems().stream()
                 .map(playerLibraryItem -> new GameInLibraryDto(
                         playerLibraryItem.getGameId().uuid(),
-                        playerLibraryItem.isFavourite(), playerLibraryItem.isHidden()
+                        playerLibraryItem.isFavourite(),
+                        playerLibraryItem.isHidden()
                 )).collect(Collectors.toList());
         return ResponseEntity.ok(gameInLibraryDtoList);
     }
 
-    @PatchMapping("players/library/{gameId}/favourites")
+    @PatchMapping("{gameId}/favourites")
     @PreAuthorize("hasAuthority('player')")
     public ResponseEntity<Void> updateGameFavoriteStatus(
             @PathVariable UUID gameId,
