@@ -1,4 +1,4 @@
-package be.kdg.int5.statistics.port.in.query;
+package be.kdg.int5.statistics.port.in;
 
 import java.util.UUID;
 

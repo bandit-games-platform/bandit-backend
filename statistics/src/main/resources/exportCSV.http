@@ -7,14 +7,14 @@ client_id=bandit-backend&client_secret=**********&username=deanadmin@kdg.be&pass
 
 > {%client.global.set("logged-in-admin", response.body.access_token);%}
 
-### Get all completedSessions for a game
+### export completedSessions for a game to CSV
 
-GET http://localhost:8095/statistics/games/d77e1d1f-6b46-4c89-9290-3b9cf8a7c001/completedSessions
+GET http://localhost:8095/export/statistics/games/d77e1d1f-6b46-4c89-9290-3b9cf8a7c001/completed-sessions
 Accept: application/json
 Authorization: Bearer {{logged-in-admin}}
 
-### Get all achievementProgress for a game
+### export achievementProgress for a game to CSV
 
-GET http://localhost:8095/statistics/games/d77e1d1f-6b46-4c89-9290-3b9cf8a7c001/achievementProgress
+GET http://localhost:8095/export/statistics/games/d77e1d1f-6b46-4c89-9290-3b9cf8a7c001/achievement-progress
 Accept: application/json
 Authorization: Bearer {{logged-in-admin}}

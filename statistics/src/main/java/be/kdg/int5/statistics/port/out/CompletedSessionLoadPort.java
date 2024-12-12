@@ -8,6 +8,4 @@ import java.util.List;
 
 public interface CompletedSessionLoadPort {
     List<CompletedSession> loadAllCompletedSessionsForPlayer(PlayerId playerId);
-
-    List<CompletedSession> loadAllCompletedSessionsForGame(GameId gameId);
 }

@@ -3,9 +3,13 @@ package be.kdg.int5.statistics.adapters.in;
 import be.kdg.int5.statistics.adapters.in.dto.AchievementProgressDto;
 import be.kdg.int5.statistics.adapters.in.dto.CompletedSessionDto;
 import be.kdg.int5.statistics.adapters.in.dto.GameProgressDto;
+import be.kdg.int5.statistics.adapters.in.dto.PlayerGameStatsDto;
 import be.kdg.int5.statistics.domain.*;
+import be.kdg.int5.statistics.port.in.ExportStatisticsCSVForGameCommand;
+import be.kdg.int5.statistics.port.in.ExportStatisticsCSVForGameUseCase;
 import be.kdg.int5.statistics.port.in.query.*;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -26,15 +31,13 @@ import java.util.stream.Collectors;
 public class OverallStatisticsRestController {
     private final PlayerTotalPlayTimeQuery playerTotalPlayTimeQuery;
     private final PlayerAchievementProgressForPlayedGamesQuery playerAchievementProgressForPlayedGamesQuery;
-    private final StatisticsForGameQuery statisticsForGameQuery;
 
     public OverallStatisticsRestController(
             PlayerTotalPlayTimeQuery playerTotalPlayTimeQuery,
-            PlayerAchievementProgressForPlayedGamesQuery playerAchievementProgressForPlayedGamesQuery, StatisticsForGameQuery statisticsForGameQuery
+            PlayerAchievementProgressForPlayedGamesQuery playerAchievementProgressForPlayedGamesQuery
     ) {
         this.playerTotalPlayTimeQuery = playerTotalPlayTimeQuery;
         this.playerAchievementProgressForPlayedGamesQuery = playerAchievementProgressForPlayedGamesQuery;
-        this.statisticsForGameQuery = statisticsForGameQuery;
     }
 
     @GetMapping("/playtime")
@@ -82,54 +85,5 @@ public class OverallStatisticsRestController {
                 )
         ).collect(Collectors.toList());
         return ResponseEntity.ok(gameProgressDtos);
-    }
-
-    @GetMapping("/games/{gameId}/completedSessions")
-    @PreAuthorize("hasAuthority('admin')")
-    public ResponseEntity<List<CompletedSessionDto>> getAllGameSessionsByGame(
-            @NotNull @PathVariable("gameId") UUID gameId
-    ) {
-        List<CompletedSession> completedSessions = statisticsForGameQuery.getAllCompletedSessionsForGame(
-                new GetStatisticsForGameCommand(new GameId(gameId))
-        );
-
-        if (completedSessions == null) return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
-
-        List<CompletedSessionDto> completedSessionDtos = completedSessions.stream().map(
-                completedSession -> new CompletedSessionDto(
-                        completedSession.getSessionId().uuid(),
-                        completedSession.getStartTime(),
-                        completedSession.getEndTime(),
-                        completedSession.getEndState().name(),
-                        completedSession.getTurnsTaken(),
-                        completedSession.getAvgSecondsPerTurn(),
-                        completedSession.getPlayerScore(),
-                        completedSession.getOpponentScore(),
-                        completedSession.getClicks(),
-                        completedSession.getCharacter(),
-                        completedSession.getWasFirstToGo()
-                )
-        ).toList();
-        return ResponseEntity.ok(completedSessionDtos);
-    }
-
-    @GetMapping("/games/{gameId}/achievementProgress")
-    @PreAuthorize("hasAuthority('admin')")
-    public ResponseEntity<List<AchievementProgressDto>> getAllAchievementProgressByGame(
-            @NotNull @PathVariable("gameId") UUID gameId
-    ) {
-        List<AchievementProgress> achievementProgressList = statisticsForGameQuery.getAllAchievementProgressForGame(
-                new GetStatisticsForGameCommand(new GameId(gameId))
-        );
-
-        if (achievementProgressList == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-
-        List<AchievementProgressDto> achievementProgressDtos = achievementProgressList.stream().map(
-                ap -> new AchievementProgressDto(
-                        ap.getAchievementId().uuid(),
-                        ap.getCounterValue()
-                )
-        ).toList();
-        return ResponseEntity.ok(achievementProgressDtos);
     }
 }

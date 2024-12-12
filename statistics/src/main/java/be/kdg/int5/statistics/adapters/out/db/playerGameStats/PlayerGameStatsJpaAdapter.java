@@ -25,7 +25,6 @@ public class PlayerGameStatsJpaAdapter implements PlayerGameStatisticsLoadPort, 
         this.achievementProgressJpaRepository = achievementProgressJpaRepository;
     }
 
-
     @Override
     public PlayerGameStats loadPlayerGameStat(PlayerId playerId, GameId gameId) {
         PlayerGameStatsJpaId playerGameStatsJpaId = new PlayerGameStatsJpaId(playerId.uuid(), gameId.uuid());
@@ -50,6 +49,15 @@ public class PlayerGameStatsJpaAdapter implements PlayerGameStatisticsLoadPort, 
     public List<PlayerGameStats> loadAllPlayerGameStatsForPlayer(PlayerId playerId) {
         List<PlayerGameStatsJpaEntity> playerGameStatsJpaEntities = playerGameStatsJpaRepository.findAllByPlayerId(
                 playerId.uuid()
+        );
+        if (playerGameStatsJpaEntities == null) return null;
+        return playerGameStatsJpaEntities.stream().map(this::playerGameStatisticsJpaToDomain).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<PlayerGameStats> loadAllPlayerGameStatsForGame(GameId gameId) {
+        List<PlayerGameStatsJpaEntity> playerGameStatsJpaEntities = playerGameStatsJpaRepository.findAllByGameId(
+                gameId.uuid()
         );
         if (playerGameStatsJpaEntities == null) return null;
         return playerGameStatsJpaEntities.stream().map(this::playerGameStatisticsJpaToDomain).collect(Collectors.toList());
