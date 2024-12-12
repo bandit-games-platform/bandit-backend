@@ -2,12 +2,12 @@ default:
   interruptible: true
   image: eclipse-temurin:21-jdk-alpine
 
-cache:
-  key: "$CI_COMMIT_REF_NAME"
-  paths:
-    - .gradle/
-    - build/
-  policy: pull-push
+#cache:
+#  key: "$CI_COMMIT_REF_NAME"
+#  paths:
+#    - .gradle/
+#    - build/
+#  policy: pull-push
 
 workflow:
   rules:
