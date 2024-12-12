@@ -3,7 +3,7 @@
 #---------------------------------------------------------------
 #- Name:	    deploy-context-container.sh
 #- Author:	  Roman Gordon
-#- Function:	Deploys the statistics container for dev on azure
+#- Function:	Deploys a context container on azure based on provided variables
 #- Usage:	    ./deploy-context-container.sh
 #---------------------------------------------------------------
 
@@ -37,6 +37,12 @@ done
 # Database fully qualified name
 DB_FQDN=$(az postgres flexible-server show --name "$PG_DB_NAME" --resource-group $RESOURCE_GROUP --query "fullyQualifiedDomainName" --output tsv)
 JDBC_URL="jdbc:postgresql://$DB_FQDN:5432/bandit_db"
+
+CONTAINER_EXISTS=$(az containerapp show --name $CONTAINER_NAME --resource-group $RESOURCE_GROUP --query "name" -o tsv)
+if [ -n "$CONTAINER_EXISTS" ]; then
+  echo "The container app already exists, deleting it!"
+  az containerapp delete --name $CONTAINER_NAME --resource-group $RESOURCE_GROUP --yes
+fi
 
 echo "Bringing up container app"
 az containerapp up --name $CONTAINER_NAME --resource-group $RESOURCE_GROUP \

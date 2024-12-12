@@ -309,14 +309,11 @@ semgrep-sast:
 # ---------------------- DEPLOY --------------------------------- #
 
 # ----------------- DEV ----------------- #
-
+# ---------- DATABASE, VNET and CONTAINER REGISTRY -------- #
 deploy_postgres_dev:
   image: mcr.microsoft.com/azure-cli
   stage: deploy
   when: on_success
-  needs:
-    # In here add all other build stages when setup
-    - build_statistics
   before_script:
     - tdnf install -y postgresql
     - psql --version
@@ -324,6 +321,155 @@ deploy_postgres_dev:
   script:
     - chmod +x cicd/deploy-database-vnet.sh
     - cicd/deploy-database-vnet.sh
+  # This will only run when you commit to a merge request or to the ci-cd branch
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_COMMIT_BRANCH == 'ci-cd'
+
+# -------- MICROSERVICES --------- #
+deploy_chatbot_dev:
+  image: mcr.microsoft.com/azure-cli
+  stage: deploy
+  when: on_success
+  needs:
+    - deploy_postgres_dev
+    - build_chatbot
+  before_script:
+    - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
+    - az extension add --name containerapp --upgrade
+  script:
+    - declare -A value_map=(
+      ["PG_USER"]=$DEV_PG_USER
+      ["PG_PASSWORD"]=$DEV_PG_PWD
+      ["PG_DB_NAME"]="banditdevpostgres"
+      ["RESOURCE_GROUP"]="rg_bandit_games_dev"
+      ["CONTAINER_NAME"]="chatbot-dev-container"
+      ["ENVIRONMENT"]="env-dev-containers"
+      ["IMAGE_NAME"]="chatbot-context"
+      ["PORT"]=8091
+      )
+    - serialized_map=""
+    - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
+    - chmod +x cicd/deploy-context-container.sh
+    - cicd/deploy-context-container.sh "$serialized_map"
+  environment:
+    name: chatbot-dev
+    deployment_tier: testing
+    action: start
+    auto_stop_in: 1 hours
+    on_stop: destroy_chatbot_dev
+  # This will only run when you commit to a merge request or to the ci-cd branch
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_COMMIT_BRANCH == 'ci-cd'
+
+
+deploy_gameplay_dev:
+  image: mcr.microsoft.com/azure-cli
+  stage: deploy
+  when: on_success
+  needs:
+    - deploy_postgres_dev
+    - build_gameplay
+  before_script:
+    - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
+    - az extension add --name containerapp --upgrade
+  script:
+    - declare -A value_map=(
+      ["PG_USER"]=$DEV_PG_USER
+      ["PG_PASSWORD"]=$DEV_PG_PWD
+      ["PG_DB_NAME"]="banditdevpostgres"
+      ["RESOURCE_GROUP"]="rg_bandit_games_dev"
+      ["CONTAINER_NAME"]="gameplay-dev-container"
+      ["ENVIRONMENT"]="env-dev-containers"
+      ["IMAGE_NAME"]="gameplay-context"
+      ["PORT"]=8092
+      )
+    - serialized_map=""
+    - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
+    - chmod +x cicd/deploy-context-container.sh
+    - cicd/deploy-context-container.sh "$serialized_map"
+  environment:
+    name: gameplay-dev
+    deployment_tier: testing
+    action: start
+    auto_stop_in: 1 hours
+    on_stop: destroy_gameplay_dev
+  # This will only run when you commit to a merge request or to the ci-cd branch
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_COMMIT_BRANCH == 'ci-cd'
+
+
+deploy_game_registry_dev:
+  image: mcr.microsoft.com/azure-cli
+  stage: deploy
+  when: on_success
+  needs:
+    - deploy_postgres_dev
+    - build_game_registry
+  before_script:
+    - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
+    - az extension add --name containerapp --upgrade
+  script:
+    - declare -A value_map=(
+      ["PG_USER"]=$DEV_PG_USER
+      ["PG_PASSWORD"]=$DEV_PG_PWD
+      ["PG_DB_NAME"]="banditdevpostgres"
+      ["RESOURCE_GROUP"]="rg_bandit_games_dev"
+      ["CONTAINER_NAME"]="game-registry-dev-container"
+      ["ENVIRONMENT"]="env-dev-containers"
+      ["IMAGE_NAME"]="game-registry-context"
+      ["PORT"]=8093
+      ["KEYCLOAK_CLIENT_SECRET"]=$KEYCLOAK_BACKEND_SECRET
+      )
+    - serialized_map=""
+    - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
+    - chmod +x cicd/deploy-context-container.sh
+    - cicd/deploy-context-container.sh "$serialized_map"
+  environment:
+    name: game-registry-dev
+    deployment_tier: testing
+    action: start
+    auto_stop_in: 1 hours
+    on_stop: destroy_game_registry_dev
+  # This will only run when you commit to a merge request or to the ci-cd branch
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_COMMIT_BRANCH == 'ci-cd'
+
+
+deploy_player_dev:
+  image: mcr.microsoft.com/azure-cli
+  stage: deploy
+  when: on_success
+  needs:
+    - deploy_postgres_dev
+    - build_player
+  before_script:
+    - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
+    - az extension add --name containerapp --upgrade
+  script:
+    - declare -A value_map=(
+      ["PG_USER"]=$DEV_PG_USER
+      ["PG_PASSWORD"]=$DEV_PG_PWD
+      ["PG_DB_NAME"]="banditdevpostgres"
+      ["RESOURCE_GROUP"]="rg_bandit_games_dev"
+      ["CONTAINER_NAME"]="player-dev-container"
+      ["ENVIRONMENT"]="env-dev-containers"
+      ["IMAGE_NAME"]="player-context"
+      ["PORT"]=8094
+      )
+    - serialized_map=""
+    - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
+    - chmod +x cicd/deploy-context-container.sh
+    - cicd/deploy-context-container.sh "$serialized_map"
+  environment:
+    name: player-dev
+    deployment_tier: testing
+    action: start
+    auto_stop_in: 1 hours
+    on_stop: destroy_player_dev
   # This will only run when you commit to a merge request or to the ci-cd branch
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
@@ -341,7 +487,6 @@ deploy_statistics_dev:
     - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
     - az extension add --name containerapp --upgrade
   script:
-    - tag=$CI_COMMIT_REF_NAME
     - declare -A value_map=(
           ["PG_USER"]=$DEV_PG_USER 
           ["PG_PASSWORD"]=$DEV_PG_PWD 
@@ -367,6 +512,43 @@ deploy_statistics_dev:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
     - if: $CI_COMMIT_BRANCH == 'ci-cd'
 
+
+deploy_storefront_dev:
+  image: mcr.microsoft.com/azure-cli
+  stage: deploy
+  when: on_success
+  needs:
+    - deploy_postgres_dev
+    - build_storefront
+  before_script:
+    - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
+    - az extension add --name containerapp --upgrade
+  script:
+    - declare -A value_map=(
+      ["PG_USER"]=$DEV_PG_USER
+      ["PG_PASSWORD"]=$DEV_PG_PWD
+      ["PG_DB_NAME"]="banditdevpostgres"
+      ["RESOURCE_GROUP"]="rg_bandit_games_dev"
+      ["CONTAINER_NAME"]="storefront-dev-container"
+      ["ENVIRONMENT"]="env-dev-containers"
+      ["IMAGE_NAME"]="storefront-context"
+      ["PORT"]=8096
+      )
+    - serialized_map=""
+    - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
+    - chmod +x cicd/deploy-context-container.sh
+    - cicd/deploy-context-container.sh "$serialized_map"
+  environment:
+    name: storefront-dev
+    deployment_tier: testing
+    action: start
+    auto_stop_in: 1 hours
+    on_stop: destroy_storefront_dev
+  # This will only run when you commit to a merge request or to the ci-cd branch
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_COMMIT_BRANCH == 'ci-cd'
+
 # ----------------- PROD ---------------- #
 
 #deploy_statistics_prod:
@@ -385,6 +567,86 @@ deploy_statistics_dev:
 # ---------------------- DESTROY -------------------------------- #
 # ----------------- DEV ----------------- #
 
+destroy_chatbot_dev:
+  image: mcr.microsoft.com/azure-cli
+  stage: destroy
+  when: manual
+  before_script:
+    - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
+    - az extension add --name containerapp --upgrade
+  script:
+    - CONTAINER_NAME="chatbot-dev-container"
+    - RESOURCE_GROUP="rg_bandit_games_dev"
+    - echo "Deleting container app"
+    - az containerapp delete --name $CONTAINER_NAME --resource-group $RESOURCE_GROUP --yes
+  environment:
+    name: chatbot-dev
+    action: stop
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_COMMIT_BRANCH == 'ci-cd'
+
+
+destroy_gameplay_dev:
+  image: mcr.microsoft.com/azure-cli
+  stage: destroy
+  when: manual
+  before_script:
+    - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
+    - az extension add --name containerapp --upgrade
+  script:
+    - CONTAINER_NAME="gameplay-dev-container"
+    - RESOURCE_GROUP="rg_bandit_games_dev"
+    - echo "Deleting container app"
+    - az containerapp delete --name $CONTAINER_NAME --resource-group $RESOURCE_GROUP --yes
+  environment:
+    name: gameplay-dev
+    action: stop
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_COMMIT_BRANCH == 'ci-cd'
+
+
+destroy_game_registry_dev:
+  image: mcr.microsoft.com/azure-cli
+  stage: destroy
+  when: manual
+  before_script:
+    - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
+    - az extension add --name containerapp --upgrade
+  script:
+    - CONTAINER_NAME="game-registry-dev-container"
+    - RESOURCE_GROUP="rg_bandit_games_dev"
+    - echo "Deleting container app"
+    - az containerapp delete --name $CONTAINER_NAME --resource-group $RESOURCE_GROUP --yes
+  environment:
+    name: game-registry-dev
+    action: stop
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_COMMIT_BRANCH == 'ci-cd'
+
+
+destroy_player_dev:
+  image: mcr.microsoft.com/azure-cli
+  stage: destroy
+  when: manual
+  before_script:
+    - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
+    - az extension add --name containerapp --upgrade
+  script:
+    - CONTAINER_NAME="player-dev-container"
+    - RESOURCE_GROUP="rg_bandit_games_dev"
+    - echo "Deleting container app"
+    - az containerapp delete --name $CONTAINER_NAME --resource-group $RESOURCE_GROUP --yes
+  environment:
+    name: player-dev
+    action: stop
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_COMMIT_BRANCH == 'ci-cd'
+
+
 destroy_statistics_dev:
   image: mcr.microsoft.com/azure-cli
   stage: destroy
@@ -394,6 +656,26 @@ destroy_statistics_dev:
     - az extension add --name containerapp --upgrade
   script:
     - CONTAINER_NAME="statistics-dev-container"
+    - RESOURCE_GROUP="rg_bandit_games_dev"
+    - echo "Deleting container app"
+    - az containerapp delete --name $CONTAINER_NAME --resource-group $RESOURCE_GROUP --yes
+  environment:
+    name: statistics-dev
+    action: stop
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_COMMIT_BRANCH == 'ci-cd'
+
+
+destroy_storefront_dev:
+  image: mcr.microsoft.com/azure-cli
+  stage: destroy
+  when: manual
+  before_script:
+    - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
+    - az extension add --name containerapp --upgrade
+  script:
+    - CONTAINER_NAME="storefront-dev-container"
     - RESOURCE_GROUP="rg_bandit_games_dev"
     - echo "Deleting container app"
     - az containerapp delete --name $CONTAINER_NAME --resource-group $RESOURCE_GROUP --yes
