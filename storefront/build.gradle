@@ -50,8 +50,8 @@ tasks.register('printGitProperties') {
 
 bootBuildImage {
     builder = "paketobuildpacks/builder-jammy-base:latest"
-    imageName = "acrbanditgamesdev.azurecr.io/statistics-context"
-    tags = ["acrbanditgamesdev.azurecr.io/statistics-context:${-> project.ext.gitProps['git.commit.id.abbrev']}"]
+    imageName = "acrbanditgamesdev.azurecr.io/storefront-context"
+    tags = ["acrbanditgamesdev.azurecr.io/storefront-context:${-> project.ext.gitProps['git.commit.id.abbrev']}"]
     publish = true
     docker {
         publishRegistry {
