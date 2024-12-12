@@ -533,6 +533,7 @@ deploy_storefront_dev:
       ["ENVIRONMENT"]="env-dev-containers"
       ["IMAGE_NAME"]="storefront-context"
       ["PORT"]=8096
+      ["STRIPE_API_KEY"]=$STRIPE_TEST_API_KEY
       )
     - serialized_map=""
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
