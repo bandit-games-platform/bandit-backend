@@ -32,12 +32,6 @@ stages:
     - cd ./$CONTEXT_NAME
     - ../gradlew clean bootBuildImage --stacktrace
     - cd ..
-  artifacts:
-    name: "build-$CONTEXT_NAME-artifact"
-    when: on_success
-    expire_in: 2 days
-    paths:
-      - "$CONTEXT_NAME/build/libs/*.jar"
   services:
     - docker:dind
   variables:
@@ -57,15 +51,15 @@ stages:
     - cd ./$CONTEXT_NAME
     - ../gradlew test
     - cd ..
-  artifacts:
-    when: always
-    reports:
-      junit: "$CONTEXT_NAME/build/test-results/test/**/TEST-*.xml"
   services:
     - docker:dind
   variables:
     DOCKER_HOST: "tcp://docker:2375"
     DOCKER_TLS_CERTDIR: ""
+  artifacts:
+    when: always
+    reports:
+      junit: "$CONTEXT_NAME/build/test-results/test/**/TEST-*.xml"
 
 
 # ----------------------- BUILD ----------------------- #
