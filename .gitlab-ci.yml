@@ -350,12 +350,8 @@ deploy_statistics_dev:
           ["CONTAINER_NAME"]="statistics-dev-container" 
           ["ENVIRONMENT"]="env-dev-containers"
       )
-    - serialized_map=""
-    - for key in "${!value_map[@]}"; do
-        serialized_map+="$key=${value_map[$key]} "
-      done
     - chmod +x cicd/deploy-statistics-dev.sh
-    - cicd/deploy-statistics-dev.sh "$serialized_map"
+    - cicd/deploy-statistics-dev.sh $value_map
   environment:
     name: statistics-dev
     deployment_tier: testing
