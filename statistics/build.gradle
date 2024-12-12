@@ -65,5 +65,4 @@ bootBuildImage {
 }
 
 bootBuildImage.dependsOn generateGitProperties
-tasks.build.dependsOn bootBuildImage
 

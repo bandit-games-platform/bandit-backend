@@ -96,7 +96,7 @@ if [ -z "$DB_EXISTS" ]; then
         --environment $ENV_NAME \
         --image postgres:16-alpine \
         --command "/bin/sh" \
-        --args "-c 'while true; do echo hello; sleep 10; done'"
+        --args "-c, while true; do echo hello; sleep 10; done"
 
         # --command "/bin/sh -c 'PGPASSWORD=$PG_ADMIN_PASSWORD psql -h $DB_SERVER_NAME.postgres.database.azure.com -U $PG_ADMIN_USER -d bandit_db -c \"
         #                    CREATE SCHEMA IF NOT EXISTS chatbot;
