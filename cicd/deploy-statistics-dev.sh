@@ -7,7 +7,12 @@
 #- Usage:	    ./deploy-statistics-dev.sh
 #---------------------------------------------------------------
 
-declare -A provided_values=$1
+declare -A provided_values
+for pair in $1; do
+    IFS='=' read -r key value <<< "$pair"
+    provided_values["$key"]="$value"
+done
+
 for key in "${!provided_values[@]}"; do
     echo "Key: $key, Value: ${provided_values[$key]}"
 done

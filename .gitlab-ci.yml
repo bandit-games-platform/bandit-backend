@@ -342,9 +342,20 @@ deploy_statistics_dev:
     - az extension add --name containerapp --upgrade
   script:
     - tag=$CI_COMMIT_REF_NAME
-    - declare -A value_map=(["DB_USER"]=$DEV_PG_USER ["DB_PWD"]=$DEV_PG_PWD ["DB_NAME"]="banditdevpostgres" ["RESOURCE_GROUP"]="rg_bandit_games_dev" ["CONTAINER_NAME"]="statistics-dev-container" ["ENVIRONMENT"]="env-dev-containers")
+    - declare -A value_map=(
+          ["DB_USER"]=$DEV_PG_USER 
+          ["DB_PWD"]=$DEV_PG_PWD 
+          ["DB_NAME"]="banditdevpostgres" 
+          ["RESOURCE_GROUP"]="rg_bandit_games_dev" 
+          ["CONTAINER_NAME"]="statistics-dev-container" 
+          ["ENVIRONMENT"]="env-dev-containers"
+      )
+    - serialized_map=""
+    - for key in "${!value_map[@]}"; do
+        serialized_map+="$key=${value_map[$key]} "
+      done
     - chmod +x cicd/deploy-statistics-dev.sh
-    - cicd/deploy-statistics-dev.sh value_map
+    - cicd/deploy-statistics-dev.sh "$serialized_map"
   environment:
     name: statistics-dev
     deployment_tier: testing
