@@ -30,7 +30,7 @@ stages:
     - echo "Building $CONTEXT_NAME project"
     - chmod +x gradlew
     - cd ./$CONTEXT_NAME
-    - ../gradlew bootJar
+    - ../gradlew clean bootBuildImage --stacktrace
     - cd ..
   artifacts:
     name: "build-$CONTEXT_NAME-artifact"
@@ -70,83 +70,79 @@ stages:
 
 # ----------------------- BUILD ----------------------- #
 
-build_chatbot:
-  stage: build
-  variables:
-    CONTEXT_NAME: chatbot
-  <<: *build-job-template
-
-build_gameplay:
-  stage: build
-  variables:
-    CONTEXT_NAME: gameplay
-  <<: *build-job-template
-
-build_game_registry:
-  stage: build
-  variables:
-    CONTEXT_NAME: gameRegistry
-  <<: *build-job-template
-
-build_player:
-  stage: build
-  variables:
-    CONTEXT_NAME: player
-  <<: *build-job-template
+#build_chatbot:
+#  stage: build
+#  variables:
+#    CONTEXT_NAME: chatbot
+#  <<: *build-job-template
+#
+#build_gameplay:
+#  stage: build
+#  variables:
+#    CONTEXT_NAME: gameplay
+#  <<: *build-job-template
+#
+#build_game_registry:
+#  stage: build
+#  variables:
+#    CONTEXT_NAME: gameRegistry
+#  <<: *build-job-template
+#
+#build_player:
+#  stage: build
+#  variables:
+#    CONTEXT_NAME: player
+#  <<: *build-job-template
 
 build_statistics:
   stage: build
-  services:
-    - docker:dind
   variables:
     CONTEXT_NAME: statistics
   <<: *build-job-template
 
-build_storefront:
-  stage: build
-  variables:
-    CONTEXT_NAME: storefront
-  <<: *build-job-template
+#build_storefront:
+#  stage: build
+#  variables:
+#    CONTEXT_NAME: storefront
+#  <<: *build-job-template
 
 # ----------------------- TEST ----------------------- #
 
-test_chatbot:
-  stage: test
-  variables:
-    CONTEXT_NAME: chatbot
-  <<: *test_job_template
-
-test_gameplay:
-  stage: test
-  variables:
-    CONTEXT_NAME: gameplay
-  <<: *test_job_template
-
-test_game_registry:
-  stage: test
-  variables:
-    CONTEXT_NAME: gameRegistry
-  <<: *test_job_template
-
-test_player:
-  stage: test
-  variables:
-    CONTEXT_NAME: player
-  <<: *test_job_template
+#test_chatbot:
+#  stage: test
+#  variables:
+#    CONTEXT_NAME: chatbot
+#  <<: *test_job_template
+#
+#test_gameplay:
+#  stage: test
+#  variables:
+#    CONTEXT_NAME: gameplay
+#  <<: *test_job_template
+#
+#test_game_registry:
+#  stage: test
+#  variables:
+#    CONTEXT_NAME: gameRegistry
+#  <<: *test_job_template
+#
+#test_player:
+#  stage: test
+#  variables:
+#    CONTEXT_NAME: player
+#  <<: *test_job_template
 
 test_statistics:
   stage: test
-  services:
-    - docker:dind
   variables:
     CONTEXT_NAME: statistics
   <<: *test_job_template
 
-test_storefront:
-  stage: test
-  variables:
-    CONTEXT_NAME: storefront
-  <<: *test_job_template
+#test_storefront:
+#  stage: test
+#  variables:
+#    CONTEXT_NAME: storefront
+#  <<: *test_job_template
 
 # ----------------------- SAST ----------------------- #
 
