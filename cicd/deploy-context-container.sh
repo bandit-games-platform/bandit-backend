@@ -44,31 +44,36 @@ az containerapp up --name $CONTAINER_NAME --resource-group $RESOURCE_GROUP \
   --image "$REGISTRY_USERNAME".azurecr.io/$IMAGE_NAME:"${CI_COMMIT_SHORT_SHA::-1}" \
   --target-port $PORT --ingress external
 
-SECRET_STRING="database-usr-pwd=$PG_PASSWORD"
+SECRET_ARGS=()
+SECRET_ARGS+=("database-usr-pwd=$PG_PASSWORD")
 
 if [ -n "$KEYCLOAK_CLIENT_SECRET" ]; then
-  SECRET_STRING+=" keycloak-client-secret=$KEYCLOAK_CLIENT_SECRET"
+  SECRET_ARGS+=("keycloak-client-secret=$KEYCLOAK_CLIENT_SECRET")
 fi
 if [ -n "$STRIPE_API_KEY" ]; then
-  SECRET_STRING+=" stripe-api-key=$STRIPE_API_KEY"
+  SECRET_ARGS+=("stripe-api-key=$STRIPE_API_KEY")
 fi
 
 az containerapp secret set --name $CONTAINER_NAME --resource-group $RESOURCE_GROUP \
-      --secrets \
-      "$SECRET_STRING"
+      --secrets "${SECRET_ARGS[@]}"
 
 unset SECRET_STRING
 
-ENV_VAR_STRING="DATASOURCE_URL=$JDBC_URL DATASOURCE_USER=$PG_USER DATASOURCE_PASS=secretref:database-usr-pwd"
+ENV_VAR_ARGS=()
+ENV_VAR_ARGS+=("DATASOURCE_URL=$JDBC_URL")
+ENV_VAR_ARGS+=("DATASOURCE_USER=$PG_USER")
+ENV_VAR_ARGS+=("DATASOURCE_PASS=secretref:database-usr-pwd")
 
 if [ -n "$KEYCLOAK_CLIENT_SECRET" ]; then
-  ENV_VAR_STRING+=" KEYCLOAK_CLIENT_SECRET=secretref:keycloak-client-secret"
+  ENV_VAR_ARGS+=("KEYCLOAK_CLIENT_SECRET=secretref:keycloak-client-secret")
 fi
 if [ -n "$STRIPE_API_KEY" ]; then
-  ENV_VAR_STRING+=" STRIPE_API_KEY=secretref:stripe-api-key"
+  ENV_VAR_ARGS+=("STRIPE_API_KEY=secretref:stripe-api-key")
 fi
 if [ -n "$EXTRA_ENV_VARS" ]; then
-  ENV_VAR_STRING+="$EXTRA_ENV_VARS"
+  for VAR in $EXTRA_ENV_VARS; do
+      ENV_VAR_ARGS+=("${VAR}")
+    done
 fi
 
 echo "$ENV_VAR_STRING"
@@ -76,6 +81,6 @@ echo "$ENV_VAR_STRING"
 az containerapp update --name $CONTAINER_NAME --resource-group $RESOURCE_GROUP \
   --cpu 1 --memory 2Gi \
   --min-replicas 0 --max-replicas 1 \
-  --set-env-vars "$ENV_VAR_STRING"
+  --set-env-vars "${ENV_VAR_ARGS[@]}"
 
 unset ENV_VAR_STRING
