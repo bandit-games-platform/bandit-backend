@@ -27,7 +27,6 @@ public class ExportStatisticsCSVForGameUseCaseImpl implements ExportStatisticsCS
         if (playerGameStatsList.isEmpty()) {
             return null;
         }
-
         return csvGeneratorUtil.convertSessionsToCsv(playerGameStatsList);
     }
 
@@ -39,7 +38,6 @@ public class ExportStatisticsCSVForGameUseCaseImpl implements ExportStatisticsCS
         if (playerGameStatsList.isEmpty()) {
             return null;
         }
-
         return csvGeneratorUtil.convertAchievementProgressListToCsv(playerGameStatsList);
     }
 }

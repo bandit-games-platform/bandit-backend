@@ -39,7 +39,6 @@ public class CSVGeneratorUtil {
                 });
             });
         });
-
         return csvBuilder.toString();
     }
 
@@ -57,7 +56,6 @@ public class CSVGeneratorUtil {
                 });
             });
         });
-
         return csvBuilder.toString();
     }
 

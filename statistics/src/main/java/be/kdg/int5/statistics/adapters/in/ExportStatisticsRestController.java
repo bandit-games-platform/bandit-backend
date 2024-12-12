@@ -30,11 +30,9 @@ public class ExportStatisticsRestController {
         String csvContent = exportStatisticsCSVForGameUseCase.generateCSVForCompletedSessionsForGame(
                 new ExportStatisticsCSVForGameCommand(gameId)
         );
-
         if (csvContent == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=completed_sessions_game_" + gameId + ".csv");
         headers.add(HttpHeaders.CONTENT_TYPE, "text/csv; charset=UTF-8");
@@ -49,11 +47,9 @@ public class ExportStatisticsRestController {
         String csvContent = exportStatisticsCSVForGameUseCase.generateCSVForAchievementProgressForGame(
                 new ExportStatisticsCSVForGameCommand(gameId)
         );
-
         if (csvContent == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=achievement_progress_game_" + gameId + ".csv");
         headers.add(HttpHeaders.CONTENT_TYPE, "text/csv; charset=UTF-8");
