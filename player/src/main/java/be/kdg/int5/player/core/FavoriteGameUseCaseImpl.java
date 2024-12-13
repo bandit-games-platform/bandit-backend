@@ -6,6 +6,7 @@ import be.kdg.int5.player.port.in.FavoriteGameCommand;
 import be.kdg.int5.player.port.in.FavoriteGameUseCase;
 import be.kdg.int5.player.port.out.playerLibrary.PlayerLibraryLoadPort;
 import be.kdg.int5.player.port.out.playerLibrary.PlayerLibraryUpdatePort;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,6 +23,7 @@ public class FavoriteGameUseCaseImpl implements FavoriteGameUseCase {
     }
 
     @Override
+    @Transactional
     public void changeGameFavoriteStatus(FavoriteGameCommand command) {
         PlayerId playerId = command.playerId();
         GameId gameId = command.gameId();
@@ -34,6 +36,5 @@ public class FavoriteGameUseCaseImpl implements FavoriteGameUseCase {
                 .orElseThrow(GameNotFoundException::new);
         playerLibraryItem.setFavourite(newStatus);
         playerLibraryUpdatePort.updatePlayerLibrary(playerLibrary);
-        System.out.println("Game updated successfully");
     }
 }

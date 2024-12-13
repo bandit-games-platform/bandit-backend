@@ -20,4 +20,7 @@ public class Variables {
     public static final UUID FRIEND_ID = UUID.randomUUID();
     public static final UUID friendInviteId = UUID.randomUUID();
     public static final UUID INVITER_ID = UUID.randomUUID();
+
+    //player library favorites
+    public static final UUID GAME_ID = UUID.randomUUID();
 }
