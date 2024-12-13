@@ -77,14 +77,6 @@ echo "Deploying RabbitMQ containerapp..."
 az containerapp create \
   --name $CONTAINER_NAME \
   --resource-group $RESOURCE_GROUP \
-  --environment $ENV_NAME \
-  --image $IMAGE \
-  --ingress external \
-  --cpu 0.5 \
-  --memory 1Gi \
-  --min-replicas 0 \
-  --max-replicas 1 \
-  --target-port 5672 \
   --env-vars RABBITMQ_DEFAULT_USER="$RABBITMQ_USER" RABBITMQ_DEFAULT_PASS="$RABBITMQ_PASSWORD" \
   --yaml ./cicd/rabbitmq-containerapp.yml
 
