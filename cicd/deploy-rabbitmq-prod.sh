@@ -39,9 +39,9 @@ if [ -z "$VNET_EXISTS" ]; then
       --name $SUBNET_NAME \
       --delegations Microsoft.App/environments
 
-    # rabbitmq subnet
+    # rabbitmq subnet - .3 (.2 database)
     echo $SUBNET_RABBITMQ_NAME
-    az network vnet subnet create --name $SUBNET_SUBNET_RABBITMQ_NAME --resource-group $RESOURCE_GROUP --vnet-name $VNET_NAME --address-prefix 10.0.2.0/24
+    az network vnet subnet create --name $SUBNET_SUBNET_RABBITMQ_NAME --resource-group $RESOURCE_GROUP --vnet-name $VNET_NAME --address-prefix 10.0.3.0/24
     az network vnet subnet update \
       --resource-group $RESOURCE_GROUP \
       --vnet-name $VNET_NAME \
@@ -78,7 +78,6 @@ az containerapp create \
   --resource-group $RESOURCE_GROUP \
   --environment $ENV_NAME \
   --image $IMAGE \
-  --target-port 5672 \
   --ingress external \
   --cpu 0.5 \
   --memory 1Gi \
