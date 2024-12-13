@@ -84,7 +84,7 @@ az containerapp create \
   --memory 1Gi \
   --min-replicas 0 \
   --max-replicas 1 \
-  --target-port 5672
+  --target-port 5672 \
   --env-vars RABBITMQ_DEFAULT_USER="$RABBITMQ_USER" RABBITMQ_DEFAULT_PASS="$RABBITMQ_PASSWORD" \
   --yaml ./cicd/rabbitmq-containerapp.yml
 
