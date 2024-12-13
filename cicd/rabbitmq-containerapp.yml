@@ -11,7 +11,7 @@ properties:
           targetPort: 15672
   template:
     containers:
-      - image: 3.13.7-management-alpine
+      - image: rabbitmq:3.13.7-management-alpine
         name: rabbit-container
         resources:
           cpu: 0.5
