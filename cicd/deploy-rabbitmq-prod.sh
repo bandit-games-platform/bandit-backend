@@ -81,6 +81,8 @@ if [ -z "$RABBITMQ_EXISTS" ]; then
     --env-vars RABBITMQ_DEFAULT_USER="$RABBITMQ_USER" RABBITMQ_DEFAULT_PASS="$RABBITMQ_PASSWORD" \
     --yaml ./cicd/rabbitmq-containerapp.yml
 
+    echo "Rabbit user: $RABBITMQ_DEFAULT_USER, $RABBITMQ_USER"
+
   echo "Creating $CONTAINER_NAME containerapp."
 else
   echo "Containerapp $CONTAINER_NAME already exists."

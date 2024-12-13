@@ -2,9 +2,9 @@ properties:
   configuration:
     ingress:
       external: true
-      targetPort: 15671
+      targetPort: 15672
       transport: auto
-      allowInsecure: false
+      allowInsecure: true
       additionalPortMappings:
         - exposedPort: 5672
           external: true
