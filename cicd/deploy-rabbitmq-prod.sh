@@ -27,9 +27,11 @@ VNET_EXISTS=$(az network vnet list --resource-group $RESOURCE_GROUP --query "[?n
 
 if [ -z "$VNET_EXISTS" ]; then
     # vnet
-    az network vnet create --name $VNET_NAME --resource-group $RESOURCE_GROUP --location northeurope --address-prefix 10.0.0.0/16
+    echo $VNET_NAME
+    az network vnet create --name "$VNET_NAME" --resource-group $RESOURCE_GROUP --location northeurope --address-prefix 10.0.0.0/16
 
     # contexts subnet
+    echo $SUBNET_NAME
     az network vnet subnet create --name $SUBNET_NAME --resource-group $RESOURCE_GROUP --vnet-name $VNET_NAME --address-prefix 10.0.1.0/24
     az network vnet subnet update \
       --resource-group $RESOURCE_GROUP \
@@ -38,6 +40,7 @@ if [ -z "$VNET_EXISTS" ]; then
       --delegations Microsoft.App/environments
 
     # rabbitmq subnet
+    echo $SUBNET_RABBITMQ_NAME
     az network vnet subnet create --name $SUBNET_SUBNET_RABBITMQ_NAME --resource-group $RESOURCE_GROUP --vnet-name $VNET_NAME --address-prefix 10.0.2.0/24
     az network vnet subnet update \
       --resource-group $RESOURCE_GROUP \
