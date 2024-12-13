@@ -1,7 +1,5 @@
 package be.kdg.int5.gameplay.domain;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -12,20 +10,18 @@ public class Lobby {
     private PlayerId ownerId;
     private int currentPlayerCount;
     private boolean closed;
-    private List<GameInvite> gameInviteList;
 
     public Lobby(LobbyId id, GameId gameId, int maxPlayers, PlayerId ownerId) {
-        this(id, gameId, maxPlayers, ownerId, 1, false, null);
+        this(id, gameId, maxPlayers, ownerId, 1, false);
     }
 
-    public Lobby(LobbyId id, GameId gameId, int maxPlayers, PlayerId ownerId, int currentPlayerCount, boolean closed, List<GameInvite> gameInviteList) {
+    public Lobby(LobbyId id, GameId gameId, int maxPlayers, PlayerId ownerId, int currentPlayerCount, boolean closed) {
         this.id = Objects.requireNonNull(id);
         this.gameId = Objects.requireNonNull(gameId);
         this.maxPlayers = maxPlayers;
         this.ownerId = Objects.requireNonNull(ownerId);
         this.currentPlayerCount = currentPlayerCount;
         this.closed = closed;
-        this.gameInviteList = Objects.requireNonNullElse(gameInviteList, new ArrayList<>());
     }
 
     public LobbyId getId() {
@@ -62,10 +58,6 @@ public class Lobby {
 
     public void setClosed(boolean closed) {
         this.closed = closed;
-    }
-
-    public List<GameInvite> getGameInviteList() {
-        return gameInviteList;
     }
 
     public void patch(UUID ownerId, Integer currentPlayerCount, Boolean closed) {

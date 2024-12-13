@@ -5,5 +5,4 @@ import be.kdg.int5.gameplay.domain.LobbyId;
 
 public interface LobbyLoadPort {
     Lobby load(LobbyId lobbyId);
-    Lobby loadWithoutInvites(LobbyId lobbyId);
 }

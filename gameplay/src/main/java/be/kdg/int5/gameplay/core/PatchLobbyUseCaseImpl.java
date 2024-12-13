@@ -21,7 +21,7 @@ public class PatchLobbyUseCaseImpl implements PatchLobbyUseCase {
     @Override
     public boolean patch(PatchLobbyCommand command) {
         LobbyId lobbyId = new LobbyId(command.lobbyId());
-        Lobby existingLobby = lobbyLoadPort.loadWithoutInvites(lobbyId);
+        Lobby existingLobby = lobbyLoadPort.load(lobbyId);
 
         if (existingLobby == null) return false;
 

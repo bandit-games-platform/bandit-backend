@@ -1,7 +1,7 @@
 package be.kdg.int5.gameplay;
 
-import be.kdg.int5.gameplay.adapters.out.db.LobbyJpaEntity;
-import be.kdg.int5.gameplay.adapters.out.db.LobbyJpaRepository;
+import be.kdg.int5.gameplay.adapters.out.db.lobby.LobbyJpaEntity;
+import be.kdg.int5.gameplay.adapters.out.db.lobby.LobbyJpaRepository;
 import be.kdg.int5.gameplay.domain.LobbyId;
 import be.kdg.int5.gameplay.port.in.CreateLobbyCommand;
 import be.kdg.int5.gameplay.port.in.CreateLobbyUseCase;

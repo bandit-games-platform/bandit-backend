@@ -1,4 +1,4 @@
-package be.kdg.int5.gameplay.adapters.out.db;
+package be.kdg.int5.gameplay.adapters.out.db.gameDeveloperProjection;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -12,13 +12,15 @@ public class GameDeveloperProjectionJpaEntity {
     @Id
     private UUID gameId;
     private UUID developerId;
+    private String gameTitle;
 
     public GameDeveloperProjectionJpaEntity() {
     }
 
-    public GameDeveloperProjectionJpaEntity(UUID gameId, UUID developerId) {
+    public GameDeveloperProjectionJpaEntity(UUID gameId, UUID developerId, String gameTitle) {
         this.gameId = gameId;
         this.developerId = developerId;
+        this.gameTitle = gameTitle;
     }
 
     public UUID getGameId() {
@@ -27,5 +29,9 @@ public class GameDeveloperProjectionJpaEntity {
 
     public UUID getDeveloperId() {
         return developerId;
+    }
+
+    public String getGameTitle() {
+        return gameTitle;
     }
 }
