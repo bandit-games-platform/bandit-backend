@@ -18,6 +18,10 @@ ENV_NAME="env-prod-containers"
 IMAGE="$REGISTRY_USERNAME".azurecr.io/rabbitmq:3.13.7-management-alpine
 
 
+echo "Checking resource group list"
+az group list
+
+
 # Vnet and Subnets
 VNET_EXISTS=$(az network vnet list --resource-group $RESOURCE_GROUP --query "[?name=='$VNET_NAME'].name" -o tsv)
 
