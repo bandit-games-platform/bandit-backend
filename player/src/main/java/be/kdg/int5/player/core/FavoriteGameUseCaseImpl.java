@@ -34,5 +34,6 @@ public class FavoriteGameUseCaseImpl implements FavoriteGameUseCase {
                 .orElseThrow(GameNotFoundException::new);
         playerLibraryItem.setFavourite(newStatus);
         playerLibraryUpdatePort.updatePlayerLibrary(playerLibrary);
+        System.out.println("Game updated successfully");
     }
 }
