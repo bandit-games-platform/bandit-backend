@@ -9,5 +9,5 @@ properties:
         - external: true
         - targetPort: 15672
         - exposedPort: 15672
-  managedEnvironmentId: "/subscriptions/9eab1979-9e75-4614-b5b7-41f9f53cac08/resourceGroups/rg_bandit_games_prod/providers/Microsoft.App/managedEnvironments/prod-containers-env"
+  managedEnvironmentId: "/subscriptions/9eab1979-9e75-4614-b5b7-41f9f53cac08/resourceGroups/rg_bandit_games_prod/providers/Microsoft.App/managedEnvironments/env-prod-containers"
 

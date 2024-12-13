@@ -23,19 +23,10 @@ VNET_EXISTS=$(az network vnet list --resource-group $RESOURCE_GROUP --query "[?n
 
 if [ -z "$VNET_EXISTS" ]; then
     # vnet
-    az network vnet create \
-      --name $VNET_NAME \
-      --resource-group $RESOURCE_GROUP \
-      --location northeurope \
-      --address-prefix 10.0.0.0/16
+    az network vnet create --name $VNET_NAME --resource-group $RESOURCE_GROUP --location northeurope --address-prefix 10.0.0.0/16
 
     # contexts subnet
-    az network vnet subnet create \
-      --name $SUBNET_NAME \
-      --resource-group $RESOURCE_GROUP \
-      --vnet-name $VNET_NAME \
-      --address-prefix 10.0.1.0/24
-
+    az network vnet subnet create --name $SUBNET_NAME --resource-group $RESOURCE_GROUP --vnet-name $VNET_NAME --address-prefix 10.0.1.0/24
     az network vnet subnet update \
       --resource-group $RESOURCE_GROUP \
       --vnet-name $VNET_NAME \
@@ -43,19 +34,14 @@ if [ -z "$VNET_EXISTS" ]; then
       --delegations Microsoft.App/environments
 
     # rabbitmq subnet
-    az network vnet subnet create \
-      --name $SUBNET_SUBNET_RABBITMQ_NAME \
-      --resource-group $RESOURCE_GROUP \
-      --vnet-name $VNET_NAME \
-      --address-prefix 10.0.2.0/24
-
+    az network vnet subnet create --name $SUBNET_SUBNET_RABBITMQ_NAME --resource-group $RESOURCE_GROUP --vnet-name $VNET_NAME --address-prefix 10.0.2.0/24
     az network vnet subnet update \
       --resource-group $RESOURCE_GROUP \
       --vnet-name $VNET_NAME \
       --name $SUBNET_SUBNET_RABBITMQ_NAME \
       --delegations Microsoft.DBforPostgreSQL/flexibleServers
 
-    echo "VNet $VNET_NAME created."
+    echo "Vnet $VNET_NAME created."
     echo "Subnet $SUBNET_NAME created."
     echo "Subnet $SUBNET_RABBITMQ_NAME created."
 else
@@ -69,11 +55,7 @@ ENV_EXISTS=$(az containerapp env list --resource-group $RESOURCE_GROUP --query "
 if [ -z "$ENV_EXISTS" ]; then
     INFRASTRUCTURE_SUBNET=$(az network vnet subnet show --resource-group ${RESOURCE_GROUP} --vnet-name $VNET_NAME --name ${SUBNET_NAME} --query "id" -o tsv | tr -d '[:space:]')
 
-    az containerapp env create \
-      --name $ENV_NAME \
-      --resource-group $RESOURCE_GROUP \
-      --location northeurope \
-      --infrastructure-subnet-resource-id "$INFRASTRUCTURE_SUBNET"
+    az containerapp env create --name $ENV_NAME --resource-group $RESOURCE_GROUP --location northeurope --infrastructure-subnet-resource-id "$INFRASTRUCTURE_SUBNET"
 
     echo "Container Apps environment $ENV_NAME created."
 else
