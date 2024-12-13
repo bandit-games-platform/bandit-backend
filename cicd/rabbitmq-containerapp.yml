@@ -2,13 +2,13 @@ properties:
   configuration:
     ingress:
       external: true
-      targetPort: 5672
+      targetPort: 15671
       transport: auto
       allowInsecure: false
       additionalPortMappings:
-        - exposedPort: 15671
+        - exposedPort: 5672
           external: true
-          targetPort: 15671
+          targetPort: 5672
   template:
     containers:
       - image: rabbitmq:3.13.7-management-alpine
