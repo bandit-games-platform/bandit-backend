@@ -6,9 +6,9 @@ properties:
       transport: auto
       allowInsecure: false
       additionalPortMappings:
-        - exposedPort: 15672
+        - exposedPort: 15671
           external: true
-          targetPort: 15672
+          targetPort: 15671
   template:
     containers:
       - image: rabbitmq:3.13.7-management-alpine

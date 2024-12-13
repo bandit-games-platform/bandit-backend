@@ -15,8 +15,6 @@ SUBNET_RABBITMQ_NAME="prodRabbitSubnet"
 CONTAINER_NAME="rabbitmq-prod-container"
 RESOURCE_GROUP="rg_bandit_games_prod"
 ENV_NAME="env-prod-containers"
-#IMAGE="$REGISTRY_USERNAME".azurecr.io/rabbitmq:3.13.7-management-alpine
-IMAGE=rabbitmq:3.13.7-management-alpine
 
 
 echo "Checking resource group list"
@@ -74,9 +72,17 @@ fi
 # RabbitMQ Containerapp
 echo "Deploying RabbitMQ containerapp..."
 
-az containerapp create \
-  --name $CONTAINER_NAME \
-  --resource-group $RESOURCE_GROUP \
-  --env-vars RABBITMQ_DEFAULT_USER="$RABBITMQ_USER" RABBITMQ_DEFAULT_PASS="$RABBITMQ_PASSWORD" \
-  --yaml ./cicd/rabbitmq-containerapp.yml
+RABBITMQ_EXISTS=$(az containerapp list --resource-group $RESOURCE_GROUP --query "[?name=='$CONTAINER_NAME'].name" -o tsv)
+
+if [ -z "$RABBITMQ_EXISTS" ]; then
+  az containerapp create \
+    --name $CONTAINER_NAME \
+    --resource-group $RESOURCE_GROUP \
+    --env-vars RABBITMQ_DEFAULT_USER="$RABBITMQ_USER" RABBITMQ_DEFAULT_PASS="$RABBITMQ_PASSWORD" \
+    --yaml ./cicd/rabbitmq-containerapp.yml
+
+  echo "Creating $CONTAINER_NAME containerapp."
+else
+  echo "Containerapp $CONTAINER_NAME already exists."
+fi
 
