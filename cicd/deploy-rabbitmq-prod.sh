@@ -15,7 +15,8 @@ SUBNET_RABBITMQ_NAME="prodRabbitSubnet"
 CONTAINER_NAME="rabbitmq-prod-container"
 RESOURCE_GROUP="rg_bandit_games_prod"
 ENV_NAME="env-prod-containers"
-IMAGE="$REGISTRY_USERNAME".azurecr.io/rabbitmq:3.13.7-management-alpine
+#IMAGE="$REGISTRY_USERNAME".azurecr.io/rabbitmq:3.13.7-management-alpine
+IMAGE=rabbitmq:3.13.7-management-alpine
 
 
 echo "Checking resource group list"
