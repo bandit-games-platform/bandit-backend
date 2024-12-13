@@ -36,6 +36,7 @@ stages:
 # test
 
 .test-job-template: &test_job_template
+  needs: []
   script:
     - echo "Running $CONTEXT_NAME tests"
     - chmod +x gradlew
@@ -273,6 +274,7 @@ deploy_rabbitmq_prod:
   image: mcr.microsoft.com/azure-cli
   before_script:
     - az login --service-principal -u $PROD_AZURE_APP_ID -p $PROD_AZURE_PASSWORD --tenant $PROD_AZURE_TENANT
+    - az account set --subscription 9eab1979-9e75-4614-b5b7-41f9f53cac08
     - echo "logging is as sp"
     - az extension add --name containerapp --upgrade
   script:
