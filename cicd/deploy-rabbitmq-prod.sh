@@ -67,7 +67,7 @@ if [ -z "$RABBITMQ_EXISTS" ]; then
   az containerapp create \
     --name $CONTAINER_NAME \
     --resource-group $RESOURCE_GROUP \
-    --image acrbanditgamesdev.azurecr.io/rabbitmq:3.13.7-management-alpine
+    --image acrbanditgamesdev.azurecr.io/rabbitmq:3.13.7-management-alpine \
     --yaml ./cicd/rabbitmq-containerapp.yml
 
   az containerapp update \
