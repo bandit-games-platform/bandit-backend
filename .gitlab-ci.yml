@@ -273,6 +273,9 @@ deploy_rabbitmq_prod:
   stage: deploy
   needs: []
   image: mcr.microsoft.com/azure-cli
+  variables:
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
   services:
     - docker:27.3-dind
   before_script:
