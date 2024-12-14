@@ -33,7 +33,7 @@ public class GameInviteRestController {
 
     @GetMapping
     @PreAuthorize("hasAuthority('player')")
-    private ResponseEntity<List<GetGameInviteDto>> getPendingInvites(@AuthenticationPrincipal Jwt token) {
+    public ResponseEntity<List<GetGameInviteDto>> getPendingInvites(@AuthenticationPrincipal Jwt token) {
         PlayerId invitedPlayer = new PlayerId(UUID.fromString(token.getSubject()));
         List<GameInvite> invitesForPlayer = pendingGameInvitesQuery.getAllPendingGameInvitesForPlayer(invitedPlayer);
 
