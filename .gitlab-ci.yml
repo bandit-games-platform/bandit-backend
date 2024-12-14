@@ -272,15 +272,14 @@ deploy_statistics_dev:
 deploy_rabbitmq_prod:
   stage: deploy
   needs: []
-  image: docker:27.3-cli
+  image: mcr.microsoft.com/azure-cli
   variables:
     DOCKER_HOST: "tcp://docker:2375"
     DOCKER_TLS_CERTDIR: ""
   services:
     - docker:27.3-dind
   before_script:
-    - apk add --no-cache bash
-    - bash -c "$(curl -sL https://aka.ms/InstallAzureCLIDeb)"
+    - tdnf install -y docker
     - az login --service-principal -u $PROD_AZURE_APP_ID -p $PROD_AZURE_PASSWORD --tenant $PROD_AZURE_TENANT
     - az account set --subscription $SUBS_ID_PROD
     - docker login acrbanditgamesdev.azurecr.io --username $PROD_AZURE_APP_ID --password $PROD_AZURE_PASSWORD
