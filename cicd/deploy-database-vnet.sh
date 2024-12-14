@@ -40,7 +40,7 @@ if [ -z "$VNET_EXISTS" ]; then
 
     echo "VNet $VNET_NAME created."
 else
-    echo "VNet $VNET_NAME already exists."
+    echo "VNet $VNET_NAME already exists, moving on."
 fi
 
 
@@ -52,7 +52,7 @@ if [ -z "$ENV_EXISTS" ]; then
     az containerapp env create --name $ENV_NAME --resource-group $RG_NAME --location northeurope --infrastructure-subnet-resource-id "$INFRASTRUCTURE_SUBNET"
     echo "Container Apps environment $ENV_NAME created."
 else
-    echo "Container Apps environment $ENV_NAME already exists."
+    echo "Container Apps environment $ENV_NAME already exists, moving on."
 fi
 
 
@@ -113,5 +113,5 @@ if [ -z "$DB_EXISTS" ]; then
 
     echo "PostgreSQL server $DB_SERVER_NAME created."
 else
-    echo "PostgreSQL server $DB_SERVER_NAME already exists."
+    echo "PostgreSQL server $DB_SERVER_NAME already exists, moving on."
 fi
