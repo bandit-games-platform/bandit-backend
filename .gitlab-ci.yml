@@ -99,7 +99,7 @@ build_statistics:
     DOCKER_TLS_CERTDIR: ""
     CONTEXT_NAME: statistics
   services:
-    - docker:dind
+    - docker:27-dind
 #
 #build_storefront:
 #  <<: *build-job-template
