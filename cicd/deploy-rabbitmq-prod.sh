@@ -67,6 +67,8 @@ az account set --subscription bd84cc11-34fb-41f0-8b89-479f82401844
 docker login acrbanditgamesdev.azurecr.io --username $PROD_AZURE_APP_ID --password $PROD_AZURE_PASSWORD
 echo "logging into acr"
 
+az account set --subscription $SUBS_ID_PROD
+
 
 if [ -z "$RABBITMQ_EXISTS" ]; then
   az containerapp create \
