@@ -276,7 +276,7 @@ deploy_rabbitmq_prod:
   before_script:
     - az login --service-principal -u $PROD_AZURE_APP_ID -p $PROD_AZURE_PASSWORD --tenant $PROD_AZURE_TENANT
     - az account set --subscription $SUBS_ID_PROD
-    - az acr login --name $REGISTRY_USERNAME --expose-token
+    - az acr login --name $REGISTRY_USERNAME --password $REGISTRY_PASSWORD
     - echo "logging is as sp and into acr"
     - az extension add --name containerapp --upgrade
   script:
