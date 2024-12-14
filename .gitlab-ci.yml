@@ -272,12 +272,7 @@ deploy_statistics_dev:
 deploy_rabbitmq_prod:
   stage: deploy
   needs: []
-  image: docker:alpine
-  variables:
-    DOCKER_HOST: "tcp://docker:2375"
-    DOCKER_TLS_CERTDIR: ""
-  services:
-    - docker:27.3-dind
+  image: docker:27.3.1-dind-alpine3.20
   before_script:
     - apk add --no-cache \
     - curl \
