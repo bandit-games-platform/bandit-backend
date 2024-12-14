@@ -287,7 +287,7 @@ deploy_rabbitmq_prod:
     - az login --service-principal -u $PROD_AZURE_APP_ID -p $PROD_AZURE_PASSWORD --tenant $PROD_AZURE_TENANT
     - az account set --subscription $SUBS_ID_PROD
 
-    # Docker login to acrwith sp
+    # Docker login to acr with sp
     - docker login acrbanditgamesdev.azurecr.io --username $PROD_AZURE_APP_ID --password $PROD_AZURE_PASSWORD
     - echo "logging is as sp and into acr"
 
