@@ -23,7 +23,7 @@ public class ExportStatisticsRestController {
         this.exportStatisticsCSVForGameUseCase = exportStatisticsCSVForGameUseCase;
     }
 
-    @GetMapping("/statistics/games/{gameId}/completed-sessions")
+    @GetMapping("/statistics/games/{gameId}/sessions")
     @PreAuthorize("hasAuthority('admin')")
     public ResponseEntity<byte[]> exportCompletedSessionsForGame(
             @NotNull @PathVariable UUID gameId) {
@@ -40,7 +40,7 @@ public class ExportStatisticsRestController {
         return new ResponseEntity<>(csvContent.getBytes(StandardCharsets.UTF_8), headers, HttpStatus.OK);
     }
 
-    @GetMapping("/statistics/games/{gameId}/achievement-progress")
+    @GetMapping("/statistics/games/{gameId}/achievements")
     @PreAuthorize("hasAuthority('admin')")
     public ResponseEntity<byte[]> exportAchievementProgressForGame(
             @NotNull @PathVariable UUID gameId) {
