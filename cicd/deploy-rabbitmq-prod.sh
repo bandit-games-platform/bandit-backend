@@ -83,6 +83,7 @@ if [ -z "$RABBITMQ_EXISTS" ]; then
   az containerapp update \
     --name $CONTAINER_NAME \
     --resource-group $RESOURCE_GROUP \
+    --subscription bd84cc11-34fb-41f0-8b89-479f82401844 \
     --set-env-vars RABBITMQ_DEFAULT_USER="$RABBITMQ_USER" RABBITMQ_DEFAULT_PASS="$RABBITMQ_PASSWORD"
 
   echo "Creating $CONTAINER_NAME containerapp."
