@@ -279,6 +279,7 @@ deploy_rabbitmq_prod:
   services:
     - docker:27.3-dind
   before_script:
+    - apt-get update && apt-get install -y docker.io
     - az login --service-principal -u $PROD_AZURE_APP_ID -p $PROD_AZURE_PASSWORD --tenant $PROD_AZURE_TENANT
     - az account set --subscription $SUBS_ID_PROD
     - docker login acrbanditgamesdev.azurecr.io --username $PROD_AZURE_APP_ID --password $PROD_AZURE_PASSWORD
