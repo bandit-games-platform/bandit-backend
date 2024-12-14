@@ -272,19 +272,29 @@ deploy_statistics_dev:
 deploy_rabbitmq_prod:
   stage: deploy
   needs: []
-  image: mcr.microsoft.com/azure-cli
+  image: docker:alpine
   variables:
     DOCKER_HOST: "tcp://docker:2375"
     DOCKER_TLS_CERTDIR: ""
   services:
     - docker:27.3-dind
   before_script:
-    - echo "Waiting for Docker to be ready..."
-    - while ! docker info > /dev/null 2>&1; do echo "Waiting for Docker..."; sleep 1; done
+    - apk add --no-cache \
+    - curl \
+    - bash \
+    - ca-certificates
+
+    # Install Azure CLI
+    - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
+
+    # Azure login using sp
     - az login --service-principal -u $PROD_AZURE_APP_ID -p $PROD_AZURE_PASSWORD --tenant $PROD_AZURE_TENANT
     - az account set --subscription $SUBS_ID_PROD
+
+    # Docker login to acrwith sp
     - docker login acrbanditgamesdev.azurecr.io --username $PROD_AZURE_APP_ID --password $PROD_AZURE_PASSWORD
     - echo "logging is as sp and into acr"
+
     - az extension add --name containerapp --upgrade
   script:
     - chmod +x cicd/deploy-rabbitmq-prod.sh
