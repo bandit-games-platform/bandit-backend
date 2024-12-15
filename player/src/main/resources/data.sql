@@ -10,6 +10,12 @@ VALUES ('94dad160-f5c8-4817-8f2d-611e1436ffcd'),
 INSERT INTO player.library_items (player_id, game_id, favourite, hidden)
 VALUES ('94dad160-f5c8-4817-8f2d-611e1436ffcd', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c001', false, false),
        ('94dad160-f5c8-4817-8f2d-611e1436ffcd', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c002', false, false),
+       ('94dad160-f5c8-4817-8f2d-611e1436ffcd', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c003', true, false),
+       ('94dad160-f5c8-4817-8f2d-611e1436ffcd', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c004', false, false),
+       ('94dad160-f5c8-4817-8f2d-611e1436ffcd', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c005', true, false),
+       ('94dad160-f5c8-4817-8f2d-611e1436ffcd', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c006', false, false),
+       ('94dad160-f5c8-4817-8f2d-611e1436ffcd', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c008', false, false),
+
        ('8449ba7c-194c-4e51-b060-cd88cc498836', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c001', true, false),
        ('8449ba7c-194c-4e51-b060-cd88cc498836', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c002', false, false),
        ('8449ba7c-194c-4e51-b060-cd88cc498836', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c003', true, false),
@@ -48,9 +54,18 @@ VALUES
     ('45603958-1204-4960-86ab-8cb8bf7be683', '8449ba7c-194c-4e51-b060-cd88cc498836', '74053627-749b-4076-ba15-888444c09878'),
     ('11b6cd2c-25a5-460d-8b62-51c43de57744', 'c7ca1ac8-f9cf-43de-a82c-fb85f84348f2', '8449ba7c-194c-4e51-b060-cd88cc498836'),
     ('3cda5cb3-07e5-4973-9994-465b61c8a2f9', '8449ba7c-194c-4e51-b060-cd88cc498836', '81c15287-4975-4def-815f-67c82718fd70'),
-    ('03fd91f3-217e-40ee-8dd2-2df90c66951b', '10dae503-0132-439b-86e9-b649a058cbe8', '8449ba7c-194c-4e51-b060-cd88cc498836');
+    ('03fd91f3-217e-40ee-8dd2-2df90c66951b', '10dae503-0132-439b-86e9-b649a058cbe8', '8449ba7c-194c-4e51-b060-cd88cc498836'),
+
+    ('bac812ea-8422-4dea-84db-ee09f62170fb', '94dad160-f5c8-4817-8f2d-611e1436ffcd', '86da4cad-2dc1-4a43-981f-d900e8ad9dc7'),
+    ('45603958-1204-4960-86ab-8cb8bf7be684', '94dad160-f5c8-4817-8f2d-611e1436ffcd', '74053627-749b-4076-ba15-888444c09878'),
+    ('11b6cd2c-25a5-460d-8b62-51c43de57745', 'c7ca1ac8-f9cf-43de-a82c-fb85f84348f2', '94dad160-f5c8-4817-8f2d-611e1436ffcd'),
+    ('3cda5cb3-07e5-4973-9994-465b61c8a2f8', '94dad160-f5c8-4817-8f2d-611e1436ffcd', '81c15287-4975-4def-815f-67c82718fd70'),
+    ('03fd91f3-217e-40ee-8dd2-2df90c66951c', '10dae503-0132-439b-86e9-b649a058cbe8', '94dad160-f5c8-4817-8f2d-611e1436ffcd');
 
 INSERT INTO player.friend_invite_status (time_of_invite, id, invited_id, inviter_id, status)
 VALUES
     ('2024-12-02 10:30:00', 'fba3f186-8351-4cac-83d4-c1a58ae6cf81', '8449ba7c-194c-4e51-b060-cd88cc498836', 'b1a2e3f4-5678-1234-5678-90abcdef1234', 'PENDING'),
-    ('2024-12-02 09:30:00', 'fba3f186-8351-4cac-83d4-c1a58ae6cf82', '8449ba7c-194c-4e51-b060-cd88cc498836', '8913596b-1968-4e06-9e62-7f4f89d33dde', 'PENDING');
+    ('2024-12-02 09:30:00', 'fba3f186-8351-4cac-83d4-c1a58ae6cf82', '8449ba7c-194c-4e51-b060-cd88cc498836', '8913596b-1968-4e06-9e62-7f4f89d33dde', 'PENDING'),
+
+    ('2024-12-02 10:30:00', 'fba3f186-8351-4cac-83d4-c1a58ae6cf83', '94dad160-f5c8-4817-8f2d-611e1436ffcd', 'b1a2e3f4-5678-1234-5678-90abcdef1234', 'PENDING'),
+    ('2024-12-02 09:30:00', 'fba3f186-8351-4cac-83d4-c1a58ae6cf84', '94dad160-f5c8-4817-8f2d-611e1436ffcd', '8913596b-1968-4e06-9e62-7f4f89d33dde', 'PENDING');
