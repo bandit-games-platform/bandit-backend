@@ -59,16 +59,6 @@ fi
 
 
 # RabbitMQ Containerapp
-
-#echo "Checking Docker daemon..."
-#if ! sudo systemctl is-active --quiet docker; then
-#    echo "Docker daemon is not running. Starting Docker..."
-#    sudo systemctl start docker
-#    sudo systemctl enable docker
-#else
-#    echo "Docker daemon is already running."
-#fi
-
 echo "Deploying RabbitMQ containerapp..."
 RABBITMQ_EXISTS=$(az containerapp list --resource-group $RESOURCE_GROUP --query "[?name=='$CONTAINER_NAME'].name" -o tsv)
 
