@@ -1,4 +1,4 @@
-#### Get access token with player user
+#### Get access token with admin user
 
 POST http://localhost:8180/realms/bandit-realm/protocol/openid-connect/token HTTP/1.1
 Content-Type: application/x-www-form-urlencoded
