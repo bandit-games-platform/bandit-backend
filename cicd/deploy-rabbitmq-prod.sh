@@ -77,7 +77,7 @@ if [ -z "$RABBITMQ_EXISTS" ]; then
     --name $CONTAINER_NAME \
     --resource-group $RESOURCE_GROUP \
     --environment $ENV_NAME \
-    --image acrbanditgamesdev.azurecr.io/rabbitmq:3.13.7-management-alpine \
+    --image rabbitmq:3.13.7-management-alpine \
     --target-port 15672 \
     --ingress external \
     --env-vars RABBITMQ_DEFAULT_USER=myuser RABBITMQ_DEFAULT_PASS=mypassword
