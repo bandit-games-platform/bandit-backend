@@ -273,12 +273,17 @@ deploy_rabbitmq_prod:
   stage: deploy
   needs: []
   image: ubuntu:20.04
+  variables:
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
+  services:
+    - docker:27.3-dind
   before_script:
     - apt-get update && apt-get install -y curl ca-certificates sudo
 
-    # Install Docker dependencies
-    - curl -fsSL https://get.docker.com -o get-docker.sh
-    - sudo sh get-docker.sh
+#    # Install Docker dependencies
+#    - curl -fsSL https://get.docker.com -o get-docker.sh
+#    - sudo sh get-docker.sh
 
     # Install Azure CLI
     - curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
