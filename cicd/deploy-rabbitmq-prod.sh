@@ -83,10 +83,10 @@ if [ -z "$RABBITMQ_EXISTS" ]; then
     --env-vars RABBITMQ_DEFAULT_USER=myuser RABBITMQ_DEFAULT_PASS=mypassword
 #    --yaml ./cicd/rabbitmq-containerapp.yml
 
-  az containerapp update \
-    --name $CONTAINER_NAME \
-    --resource-group $RESOURCE_GROUP \
-    --set-env-vars RABBITMQ_DEFAULT_USER="$RABBITMQ_USER" RABBITMQ_DEFAULT_PASS="$RABBITMQ_PASSWORD"
+#  az containerapp update \
+#    --name $CONTAINER_NAME \
+#    --resource-group $RESOURCE_GROUP \
+#    --set-env-vars RABBITMQ_DEFAULT_USER="$RABBITMQ_USER" RABBITMQ_DEFAULT_PASS="$RABBITMQ_PASSWORD"
 
   echo "Creating $CONTAINER_NAME containerapp."
 else
