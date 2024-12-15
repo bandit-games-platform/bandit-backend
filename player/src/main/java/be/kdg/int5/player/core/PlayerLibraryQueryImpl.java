@@ -3,7 +3,7 @@ package be.kdg.int5.player.core;
 import be.kdg.int5.player.domain.PlayerId;
 import be.kdg.int5.player.domain.PlayerLibrary;
 import be.kdg.int5.player.port.in.query.PlayerLibraryQuery;
-import be.kdg.int5.player.port.out.PlayerLibraryLoadPort;
+import be.kdg.int5.player.port.out.playerLibrary.PlayerLibraryLoadPort;
 import org.springframework.stereotype.Service;
 
 @Service
