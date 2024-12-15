@@ -76,7 +76,6 @@ if [ -z "$RABBITMQ_EXISTS" ]; then
   az containerapp create \
     --name $CONTAINER_NAME \
     --resource-group $RESOURCE_GROUP \
-    --location northeurope \
     --image acrbanditgamesdev.azurecr.io/rabbitmq:3.13.7-management-alpine \
     --target-port 15672 \
     --ingress external \
