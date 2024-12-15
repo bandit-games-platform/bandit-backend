@@ -4,7 +4,7 @@ import be.kdg.int5.player.adapters.in.dto.GameInLibraryDto;
 import be.kdg.int5.player.domain.GameId;
 import be.kdg.int5.player.domain.PlayerId;
 import be.kdg.int5.player.domain.PlayerLibrary;
-import be.kdg.int5.player.port.in.FavoriteGameCommand;
+import be.kdg.int5.player.port.in.FavouriteGameCommand;
 import be.kdg.int5.player.port.in.FavoriteGameUseCase;
 import be.kdg.int5.player.port.in.query.PlayerLibraryQuery;
 import org.springframework.http.HttpStatus;
@@ -13,11 +13,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/players/library")
@@ -47,25 +45,25 @@ public class PlayerLibraryRestController {
                         playerLibraryItem.getGameId().uuid(),
                         playerLibraryItem.isFavourite(),
                         playerLibraryItem.isHidden()
-                )).collect(Collectors.toList());
+                )).toList();
         return ResponseEntity.ok(gameInLibraryDtoList);
     }
 
     @PatchMapping("{gameId}/favourites")
     @PreAuthorize("hasAuthority('player')")
-    public ResponseEntity<Void> updateGameFavoriteStatus(
+    public ResponseEntity<Void> updateGameFavouriteStatus(
             @PathVariable UUID gameId,
             @RequestBody Map<String, Boolean> requestBody,
             @AuthenticationPrincipal Jwt token
     ){
         String userId = token.getClaimAsString("sub");
         UUID playerId = UUID.fromString(userId);
-        Boolean newFavoriteStatus = requestBody.get("favourite");
-        if (newFavoriteStatus == null) {
+        Boolean newFavouriteStatus = requestBody.get("favourite");
+        if (newFavouriteStatus == null) {
             return ResponseEntity.badRequest().build();
         }
-        FavoriteGameCommand favoriteGameCommand = new FavoriteGameCommand(new PlayerId(playerId), new GameId(gameId), newFavoriteStatus);
-        favoriteGameUseCase.changeGameFavoriteStatus(favoriteGameCommand);
+        FavouriteGameCommand favouriteGameCommand = new FavouriteGameCommand(new PlayerId(playerId), new GameId(gameId), newFavouriteStatus);
+        favoriteGameUseCase.changeGameFavouriteStatus(favouriteGameCommand);
         return ResponseEntity.noContent().build();
     }
 }

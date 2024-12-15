@@ -2,7 +2,7 @@ package be.kdg.int5.player.core;
 
 import be.kdg.int5.common.exceptions.GameNotFoundException;
 import be.kdg.int5.player.domain.*;
-import be.kdg.int5.player.port.in.FavoriteGameCommand;
+import be.kdg.int5.player.port.in.FavouriteGameCommand;
 import be.kdg.int5.player.port.in.FavoriteGameUseCase;
 import be.kdg.int5.player.port.out.playerLibrary.PlayerLibraryLoadPort;
 import be.kdg.int5.player.port.out.playerLibrary.PlayerLibraryUpdatePort;
@@ -24,7 +24,7 @@ public class FavoriteGameUseCaseImpl implements FavoriteGameUseCase {
 
     @Override
     @Transactional
-    public void changeGameFavoriteStatus(FavoriteGameCommand command) {
+    public void changeGameFavouriteStatus(FavouriteGameCommand command) {
         PlayerId playerId = command.playerId();
         GameId gameId = command.gameId();
         boolean newStatus = command.newFavouriteStatus();
