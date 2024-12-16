@@ -14,7 +14,7 @@ INSERT INTO player.library_items (player_id, game_id, favourite, hidden)
 VALUES ('94dad160-f5c8-4817-8f2d-611e1436ffcd', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c001', false, false),
        ('94dad160-f5c8-4817-8f2d-611e1436ffcd', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c002', false, false),
        ('9f01b00e-e627-497c-975c-452451cc0b55', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c001', true, false),
-       ('9f01b00e-e627-497c-975c-452451cc0b55', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c002', false, false);
+       ('9f01b00e-e627-497c-975c-452451cc0b55', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c002', false, false),
        ('94dad160-f5c8-4817-8f2d-611e1436ffcd', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c003', true, false),
        ('94dad160-f5c8-4817-8f2d-611e1436ffcd', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c004', false, false),
        ('94dad160-f5c8-4817-8f2d-611e1436ffcd', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c005', true, false),
