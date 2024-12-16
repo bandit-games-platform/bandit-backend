@@ -1,6 +1,7 @@
 package be.kdg.int5.statistics.adapters.out.db.playerGameStats;
 
 import be.kdg.int5.statistics.domain.CompletedSession;
+import be.kdg.int5.statistics.domain.GameId;
 import be.kdg.int5.statistics.domain.PlayerId;
 import be.kdg.int5.statistics.domain.SessionId;
 import be.kdg.int5.statistics.port.out.CompletedSessionLoadPort;
