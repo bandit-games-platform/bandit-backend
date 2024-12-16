@@ -26,7 +26,9 @@ public class DismissInviteUseCaseImpl implements DismissInviteUseCase {
         GameInvite invite = gameInviteLoadPort.load(command.inviteId());
 
         if (invite == null) {
-            logger.error("gameplay:dismissInvite Could not dismiss invite with id '{}', invite was null.", command.inviteId());
+            logger.error("gameplay:dismissInvite Could not dismiss invite with id '{}', invite was null.",
+                    command.inviteId()
+            );
             return false;
         }
 

@@ -31,7 +31,14 @@ public class GameInviteRestController {
     private final PlayerCanInviteToLobbyQuery playerCanInviteToLobbyQuery;
     private final CreateGameInviteUseCase createGameInviteUseCase;
 
-    public GameInviteRestController(PendingGameInvitesQuery pendingGameInvitesQuery, TitleForGameIdQuery titleForGameIdQuery, AcceptInviteUseCase acceptInviteUseCase, DismissInviteUseCase dismissInviteUseCase, PlayerCanInviteToLobbyQuery playerCanInviteToLobbyQuery, CreateGameInviteUseCase createGameInviteUseCase) {
+    public GameInviteRestController(
+            PendingGameInvitesQuery pendingGameInvitesQuery,
+            TitleForGameIdQuery titleForGameIdQuery,
+            AcceptInviteUseCase acceptInviteUseCase,
+            DismissInviteUseCase dismissInviteUseCase,
+            PlayerCanInviteToLobbyQuery playerCanInviteToLobbyQuery,
+            CreateGameInviteUseCase createGameInviteUseCase
+    ) {
         this.pendingGameInvitesQuery = pendingGameInvitesQuery;
         this.titleForGameIdQuery = titleForGameIdQuery;
         this.acceptInviteUseCase = acceptInviteUseCase;
@@ -71,7 +78,7 @@ public class GameInviteRestController {
 
     @PostMapping("/invite")
     @PreAuthorize("hasAuthority('player')")
-    public ResponseEntity createNewInvite(@AuthenticationPrincipal Jwt token, @RequestBody @Valid NewGameInviteDto newGameInviteDto) {
+    public ResponseEntity<Void> createNewInvite(@AuthenticationPrincipal Jwt token, @RequestBody @Valid NewGameInviteDto newGameInviteDto) {
         PlayerId inviterId = new PlayerId(UUID.fromString(token.getSubject()));
 
         boolean result = createGameInviteUseCase.createInvite(new CreateGameInviteCommand(
@@ -87,7 +94,7 @@ public class GameInviteRestController {
 
     @PostMapping("/invite/{inviteId}/dismiss")
     @PreAuthorize("hasAuthority('player')")
-    public ResponseEntity dismissInvite(@AuthenticationPrincipal Jwt token, @PathVariable UUID inviteId) {
+    public ResponseEntity<Void> dismissInvite(@AuthenticationPrincipal Jwt token, @PathVariable UUID inviteId) {
         PlayerId requestingPlayer = new PlayerId(UUID.fromString(token.getSubject()));
         GameInviteId gameInviteId = new GameInviteId(inviteId);
 

@@ -6,10 +6,14 @@ import be.kdg.int5.gameplay.port.in.CreateGameInviteCommand;
 import be.kdg.int5.gameplay.port.in.CreateGameInviteUseCase;
 import be.kdg.int5.gameplay.port.out.GameInviteSavePort;
 import be.kdg.int5.gameplay.port.out.LobbyLoadPort;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CreateGameInviteUseCaseImpl implements CreateGameInviteUseCase {
+    private final Logger logger = LoggerFactory.getLogger(CreateGameInviteUseCaseImpl.class);
+
     private final GameInviteSavePort gameInviteSavePort;
     private final LobbyLoadPort lobbyLoadPort;
 
@@ -21,13 +25,21 @@ public class CreateGameInviteUseCaseImpl implements CreateGameInviteUseCase {
     @Override
     public boolean createInvite(CreateGameInviteCommand command) {
         Lobby lobby = lobbyLoadPort.load(command.lobbyId());
-        if (lobby == null) return false;
+        if (lobby == null) {
+            logger.warn("gameplay:createInvite Failed to create invite for '{}', lobby was null.", command.lobbyId());
+            return false;
+        }
 
         gameInviteSavePort.save(new GameInvite(
                 command.inviterId(),
                 command.invitedId(),
                 lobby
         ));
+        logger.info("gameplay:createInvite {} invited {} to lobby {}",
+                command.invitedId(),
+                command.invitedId(),
+                command.lobbyId()
+        );
         return true;
     }
 }
