@@ -2,13 +2,15 @@ package be.kdg.int5.gameplay.adapters.out.db.gameInvite;
 
 import be.kdg.int5.gameplay.adapters.out.db.lobby.LobbyJpaEntity;
 import be.kdg.int5.gameplay.domain.*;
+import be.kdg.int5.gameplay.port.out.GameInviteDeletePort;
 import be.kdg.int5.gameplay.port.out.GameInviteLoadPort;
+import be.kdg.int5.gameplay.port.out.GameInviteSavePort;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public class GameInviteJpaAdapter implements GameInviteLoadPort {
+public class GameInviteJpaAdapter implements GameInviteLoadPort, GameInviteSavePort, GameInviteDeletePort {
     private final GameInviteJpaRepository repository;
 
     public GameInviteJpaAdapter(GameInviteJpaRepository repository) {
@@ -47,5 +49,36 @@ public class GameInviteJpaAdapter implements GameInviteLoadPort {
                 jpa.getCurrentPlayerCount(),
                 jpa.isClosed()
         );
+    }
+
+    @Override
+    public void save(GameInvite gameInvite) {
+        repository.save(mapGameInviteDomainToEntity(gameInvite));
+    }
+
+    private GameInviteJpaEntity mapGameInviteDomainToEntity(GameInvite domain) {
+        return new GameInviteJpaEntity(
+                domain.getId().uuid(),
+                domain.getInviter().uuid(),
+                domain.getInvited().uuid(),
+                domain.isAccepted(),
+                mapLobbyDomainToEntity(domain.getLobby())
+        );
+    }
+
+    private LobbyJpaEntity mapLobbyDomainToEntity(Lobby domain) {
+        return new LobbyJpaEntity(
+                domain.getId().uuid(),
+                domain.getGameId().uuid(),
+                domain.getOwnerId().uuid(),
+                domain.getMaxPlayers(),
+                domain.getCurrentPlayerCount(),
+                domain.isClosed()
+        );
+    }
+
+    @Override
+    public void deleteById(GameInviteId id) {
+        repository.deleteById(id.uuid());
     }
 }
