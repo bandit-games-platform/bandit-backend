@@ -26,7 +26,8 @@ public class GameplayRabbitListener {
 
         gameDeveloperProjectionUseCase.project(new GameDeveloperProjection(
                 new GameId(event.gameId()),
-                new DeveloperId(event.developerId())
+                new DeveloperId(event.developerId()),
+                event.title()
         ));
     }
 }

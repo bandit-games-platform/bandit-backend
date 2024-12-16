@@ -1,4 +1,4 @@
-package be.kdg.int5.gameplay.adapters.out.db;
+package be.kdg.int5.gameplay.adapters.out.db.gameDeveloperProjection;
 
 import be.kdg.int5.gameplay.domain.DeveloperId;
 import be.kdg.int5.gameplay.domain.GameDeveloperProjection;
@@ -23,7 +23,8 @@ public class GameDeveloperProjectionJpaAdapter implements GameDeveloperProjectio
     private GameDeveloperProjectionJpaEntity mapDomainToEntity(GameDeveloperProjection gameDeveloperProjection) {
         return new GameDeveloperProjectionJpaEntity(
                 gameDeveloperProjection.gameId().uuid(),
-                gameDeveloperProjection.developerId().uuid()
+                gameDeveloperProjection.developerId().uuid(),
+                gameDeveloperProjection.gameTitle()
         );
     }
 
@@ -35,7 +36,8 @@ public class GameDeveloperProjectionJpaAdapter implements GameDeveloperProjectio
     private GameDeveloperProjection mapEntityToDomain(GameDeveloperProjectionJpaEntity jpa) {
         return new GameDeveloperProjection(
                 new GameId(jpa.getGameId()),
-                new DeveloperId(jpa.getDeveloperId())
+                new DeveloperId(jpa.getDeveloperId()),
+                jpa.getGameTitle()
         );
     }
 }

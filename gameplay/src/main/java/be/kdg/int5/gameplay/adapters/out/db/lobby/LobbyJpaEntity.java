@@ -1,8 +1,7 @@
-package be.kdg.int5.gameplay.adapters.out.db;
+package be.kdg.int5.gameplay.adapters.out.db.lobby;
 
 import jakarta.persistence.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -16,21 +15,16 @@ public class LobbyJpaEntity {
     private int currentPlayerCount;
     private boolean closed;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "lobby_id")
-    private List<GameInviteJpaEntity> gameInvites;
-
     public LobbyJpaEntity() {
     }
 
-    public LobbyJpaEntity(UUID id, UUID gameId, UUID ownerId, int maxPlayers, int currentPlayerCount, boolean closed, List<GameInviteJpaEntity> gameInvites) {
+    public LobbyJpaEntity(UUID id, UUID gameId, UUID ownerId, int maxPlayers, int currentPlayerCount, boolean closed) {
         this.id = id;
         this.gameId = gameId;
         this.ownerId = ownerId;
         this.maxPlayers = maxPlayers;
         this.currentPlayerCount = currentPlayerCount;
         this.closed = closed;
-        this.gameInvites = gameInvites;
     }
 
     public UUID getId() {
@@ -55,9 +49,5 @@ public class LobbyJpaEntity {
 
     public boolean isClosed() {
         return closed;
-    }
-
-    public List<GameInviteJpaEntity> getGameInvites() {
-        return gameInvites;
     }
 }

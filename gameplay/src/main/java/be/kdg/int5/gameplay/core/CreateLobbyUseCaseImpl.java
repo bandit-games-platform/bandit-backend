@@ -26,7 +26,7 @@ public class CreateLobbyUseCaseImpl implements CreateLobbyUseCase {
     public LobbyId create(CreateLobbyCommand command) {
         LobbyId newLobbyId = new LobbyId(UUID.randomUUID());
 
-        if (lobbyLoadPort.loadWithoutInvites(newLobbyId) != null) {
+        if (lobbyLoadPort.load(newLobbyId) != null) {
             return null;
         }
 
