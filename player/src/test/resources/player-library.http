@@ -1,0 +1,23 @@
+#### Get access token with player user
+
+POST http://localhost:8180/realms/bandit-realm/protocol/openid-connect/token HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+
+client_id=bandit-backend&client_secret=**********&username=john@gmail.com&password=johnnyboy&grant_type=password&scope=openid
+
+> {%client.global.set("logged-in-user", response.body.access_token);%}
+
+### Get player Library
+GET http://localhost:8090/api/players/library
+Accept: application/json
+Authorization: Bearer {{logged-in-user}}
+
+
+### Change game favorite status for a authenticated player
+PATCH http://localhost:8090/api/players/library/d77e1d1f-6b46-4c89-9290-3b9cf8a7c002/favourites
+Content-Type: application/json
+Authorization: Bearer {{logged-in-user}}
+
+{
+    "favourite": true
+}
