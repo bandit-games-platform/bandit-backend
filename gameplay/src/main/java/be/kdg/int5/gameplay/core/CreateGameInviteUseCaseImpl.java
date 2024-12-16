@@ -30,6 +30,16 @@ public class CreateGameInviteUseCaseImpl implements CreateGameInviteUseCase {
             return false;
         }
 
+        if (!lobby.getOwnerId().equals(command.inviterId())) {
+            logger.warn("gameplay:createInvite Player {} tried to invite {} to lobby {}, but lobby is owned by {}",
+                    command.inviterId(),
+                    command.invitedId(),
+                    command.lobbyId(),
+                    lobby.getOwnerId()
+            );
+            return false;
+        }
+
         gameInviteSavePort.save(new GameInvite(
                 command.inviterId(),
                 command.invitedId(),
