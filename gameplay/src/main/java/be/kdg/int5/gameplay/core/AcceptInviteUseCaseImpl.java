@@ -6,6 +6,7 @@ import be.kdg.int5.gameplay.port.in.AcceptInviteCommand;
 import be.kdg.int5.gameplay.port.in.AcceptInviteUseCase;
 import be.kdg.int5.gameplay.port.out.GameInviteLoadPort;
 import be.kdg.int5.gameplay.port.out.GameInviteSavePort;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ public class AcceptInviteUseCaseImpl implements AcceptInviteUseCase {
     }
 
     @Override
+    @Transactional
     public LobbyJoinInfo acceptInviteAndGetJoinInfo(AcceptInviteCommand command) throws NoSuchInviteException, LobbyClosedException {
         GameInvite invite = gameInviteLoadPort.load(command.inviteId());
 
