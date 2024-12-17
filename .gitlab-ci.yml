@@ -625,12 +625,6 @@ deploy_chatbot_prod:
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
     - chmod +x cicd/deploy-context-container.sh
     - cicd/deploy-context-container.sh "$serialized_map"
-  environment:
-    name: chatbot-prod
-    deployment_tier: testing
-    action: start
-    auto_stop_in: 1 hours
-    on_stop: destroy_chatbot_prod
   variables:
     DDL_PROD: "update"
   rules:
@@ -664,12 +658,6 @@ deploy_gameplay_prod:
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
     - chmod +x cicd/deploy-context-container.sh
     - cicd/deploy-context-container.sh "$serialized_map"
-  environment:
-    name: gameplay-prod
-    deployment_tier: testing
-    action: start
-    auto_stop_in: 1 hours
-    on_stop: destroy_gameplay_prod
   variables:
     DDL_PROD: "update"
   rules:
@@ -704,12 +692,6 @@ deploy_game_registry_prod:
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
     - chmod +x cicd/deploy-context-container.sh
     - cicd/deploy-context-container.sh "$serialized_map"
-  environment:
-    name: game-registry-prod
-    deployment_tier: testing
-    action: start
-    auto_stop_in: 1 hours
-    on_stop: destroy_game_registry_prod
   variables:
     DDL_PROD: "update"
   rules:
@@ -743,12 +725,6 @@ deploy_player_prod:
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
     - chmod +x cicd/deploy-context-container.sh
     - cicd/deploy-context-container.sh "$serialized_map"
-  environment:
-    name: player-prod
-    deployment_tier: testing
-    action: start
-    auto_stop_in: 1 hours
-    on_stop: destroy_player_prod
   variables:
     DDL_PROD: "update"
   rules:
@@ -782,12 +758,6 @@ deploy_statistics_prod:
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
     - chmod +x cicd/deploy-context-container.sh
     - cicd/deploy-context-container.sh "$serialized_map"
-  environment:
-    name: statistics-prod
-    deployment_tier: testing
-    action: start
-    auto_stop_in: 1 hours
-    on_stop: destroy_statistics_prod
   variables:
     DDL_PROD: "update"
   rules:
@@ -822,12 +792,6 @@ deploy_storefront_prod:
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
     - chmod +x cicd/deploy-context-container.sh
     - cicd/deploy-context-container.sh "$serialized_map"
-  environment:
-    name: storefront-prod
-    deployment_tier: testing
-    action: start
-    auto_stop_in: 1 hours
-    on_stop: destroy_storefront_prod
   variables:
     DDL_PROD: "update"
   rules:
