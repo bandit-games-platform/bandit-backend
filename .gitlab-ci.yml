@@ -309,7 +309,7 @@ semgrep-sast:
 # ---------------------- DEPLOY --------------------------------- #
 
 # ----------------- DEV ----------------- #
-# ---------- DATABASE, VNET and CONTAINER REGISTRY -------- #
+# ---------- DATABASE, VNET and CONTAINER APP ENVIRONMENT -------- #
 deploy_postgres_and_vnet_dev:
   image: mcr.microsoft.com/azure-cli
   stage: deploy
@@ -344,7 +344,7 @@ deploy_chatbot_dev:
   stage: deploy
   when: on_success
   needs:
-    - deploy_postgres_dev
+    - deploy_postgres_and_vnet_dev
     - build_chatbot
   before_script:
     - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
@@ -381,7 +381,7 @@ deploy_gameplay_dev:
   stage: deploy
   when: on_success
   needs:
-    - deploy_postgres_dev
+    - deploy_postgres_and_vnet_dev
     - build_gameplay
   before_script:
     - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
@@ -418,7 +418,7 @@ deploy_game_registry_dev:
   stage: deploy
   when: on_success
   needs:
-    - deploy_postgres_dev
+    - deploy_postgres_and_vnet_dev
     - build_game_registry
   before_script:
     - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
@@ -456,7 +456,7 @@ deploy_player_dev:
   stage: deploy
   when: on_success
   needs:
-    - deploy_postgres_dev
+    - deploy_postgres_and_vnet_dev
     - build_player
   before_script:
     - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
@@ -493,7 +493,7 @@ deploy_statistics_dev:
   stage: deploy
   when: on_success
   needs:
-    - deploy_postgres_dev
+    - deploy_postgres_and_vnet_dev
     - build_statistics
   before_script:
     - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
@@ -530,7 +530,7 @@ deploy_storefront_dev:
   stage: deploy
   when: on_success
   needs:
-    - deploy_postgres_dev
+    - deploy_postgres_and_vnet_dev
     - build_storefront
   before_script:
     - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
