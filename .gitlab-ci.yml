@@ -274,27 +274,8 @@ deploy_rabbitmq_prod:
   needs: []
   image: mcr.microsoft.com/azure-cli
   before_script:
-#    - apt-get update && apt-get install -y curl ca-certificates sudo
-
-#    # Install Docker dependencies
-#    - curl -fsSL https://get.docker.com -o get-docker.sh
-#    - sudo sh get-docker.sh
-#
-#    # Install Azure CLI
-#    - curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
-#
-#    # Start Docker daemon
-#    - sudo dockerd &
-#    - sleep 10
-
-    # Azure login using sp
     - az login --service-principal -u $PROD_AZURE_APP_ID -p $PROD_AZURE_PASSWORD --tenant $PROD_AZURE_TENANT
     - az account set --subscription $SUBS_ID_PROD
-
-#    # Docker login to acr with sp
-#    - docker login acrbanditgamesprod.azurecr.io --username $PROD_AZURE_APP_ID --password $PROD_AZURE_PASSWORD
-#    - echo "logging is as sp and into acr"
-
     - az extension add --name containerapp --upgrade
   script:
     - chmod +x cicd/deploy-rabbitmq-prod.sh

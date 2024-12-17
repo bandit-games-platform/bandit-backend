@@ -62,44 +62,22 @@ fi
 echo "Deploying RabbitMQ containerapp..."
 RABBITMQ_EXISTS=$(az containerapp list --resource-group $RESOURCE_GROUP --query "[?name=='$CONTAINER_NAME'].name" -o tsv)
 
-#az account set --subscription $DEV_ID_PROD
-#docker login acrbanditgamesdev.azurecr.io --username $PROD_AZURE_APP_ID --password $PROD_AZURE_PASSWORD
-#echo "Logging into acr"
-
-#docker pull acrbanditgamesdev.azurecr.io/rabbitmq:3.13.7-management-alpine
-#echo "Pulling the image"
-
-#az account set --subscription $SUBS_ID_PROD
-#
-#docker pull acrbanditgamesprod.azurecr.io/rabbitmq:3.13.7-management-alpine
-#echo "Pulling the image"
-
 echo "Creating the container"
 if [ -z "$RABBITMQ_EXISTS" ]; then
-#  az containerapp create \
-#    --name $CONTAINER_NAME \
-#    --resource-group $RESOURCE_GROUP \
-#    --environment $ENV_NAME \
-#    --image acrbanditgamesprod.azurecr.io/rabbitmq:3.13.7-management-alpine
 
   az containerapp up \
     --name $CONTAINER_NAME \
     --resource-group $RESOURCE_GROUP \
     --environment $ENV_NAME \
-    --image "acrbanditgamesprod.azurecr.io/rabbitmq:3.13.7-management-alpine" \
+    --image "$REGISTRY_USERNAME".azurecr.io/rabbitmq:3.13.7-management-alpine \
     --target-port 15672 \
     --ingress external \
-    --env-vars RABBITMQ_DEFAULT_USER=myuser RABBITMQ_DEFAULT_PASS=mypassword RABBITMQ_DEFAULT_VHOST="$RABBITMQ_VHOST"
+    --env-vars RABBITMQ_DEFAULT_USER="$RABBITMQ_USER" RABBITMQ_DEFAULT_PASS="$RABBITMQ_PASSWORD" RABBITMQ_DEFAULT_VHOST="$RABBITMQ_VHOST"
 
   az containerapp update \
     --name $CONTAINER_NAME \
     --resource-group $RESOURCE_GROUP \
     --yaml ./cicd/rabbitmq-containerapp.yml
-
-#  az containerapp update \
-#      --name $CONTAINER_NAME \
-#      --resource-group $RESOURCE_GROUP \
-#      --set-env-vars RABBITMQ_DEFAULT_USER="$RABBITMQ_USER" RABBITMQ_DEFAULT_PASS="$RABBITMQ_PASSWORD" RABBITMQ_DEFAULT_VHOST="$RABBITMQ_VHOST"
 
   echo "Creating $CONTAINER_NAME containerapp."
 else
