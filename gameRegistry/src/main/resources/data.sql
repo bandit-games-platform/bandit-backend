@@ -1,27 +1,23 @@
 
 -- Insert developers
 INSERT INTO game_registry.developer (id, studio_name) VALUES
-('d7df9644-7803-4b70-8997-0f246665cb01', 'Integration Studio'),
-('3c0b923c-c267-498e-88a4-eee3a629fea4', 'BanditGames'),
-('ca768afe-cb28-4aad-9822-7c54cd7e34ba', 'deandev@kdg.be');
+('2c1784ca-edf0-4882-994d-23473e30f776', 'Integration Studio'),
+('14e7d940-2b54-4cbe-93f9-9ec9f6be75ea', 'BanditGames'),
+('f4e0eea7-7824-4d06-86e5-e553d2573a3b', 'deandev@kdg.be');
 
 -- give them a revoked and an active api key
 INSERT INTO game_registry.dev_api_key(developer_id, api_key, revoked) VALUES
-('3c0b923c-c267-498e-88a4-eee3a629fea4', 'band1TAAA', true),
-('3c0b923c-c267-498e-88a4-eee3a629fea4', 'band1TBBB', false),
-('d7df9644-7803-4b70-8997-0f246665cb01', 'band1TCCC', false),
-('ca768afe-cb28-4aad-9822-7c54cd7e34ba', 'band1T-button', false);
+('14e7d940-2b54-4cbe-93f9-9ec9f6be75ea', 'band1TAAA', true),
+('14e7d940-2b54-4cbe-93f9-9ec9f6be75ea', 'band1TBBB', false),
+('2c1784ca-edf0-4882-994d-23473e30f776', 'band1TCCC', false),
+('f4e0eea7-7824-4d06-86e5-e553d2573a3b', 'band1T-button', false);
 
 -- Seeding data for `game` table
 INSERT INTO game_registry.game (id, title, description, current_price, developer_id, current_host, icon_url, background_url) VALUES
-('d77e1d1f-6b46-4c89-9290-3b9cf8a7c001', 'Battleship', 'A strategic naval combat game', 10.99, 'd7df9644-7803-4b70-8997-0f246665cb01', 'http://localhost:8301/battleship','https://play-lh.googleusercontent.com/WJp4hWdcmYu6hf-p-zd7tfv22P32f9G7HyFTY4mrnFoTS32Fa8-aDacjPFwwoY--DyE','https://wallpapers.com/images/hd/battleship-pictures-bb1dl2t2ofu085ee.jpg'),
-('d77e1d1f-6b46-4c89-9290-3b9cf8a7c002', 'Chess', 'A classic strategy game of kings and queens', 5.99, 'd7df9644-7803-4b70-8997-0f246665cb01', 'https://example.com', 'https://media.istockphoto.com/id/985550242/vector/business-strategy-with-chess-figures-on-a-chess-board.jpg?s=612x612&w=0&k=20&c=jYIITWu11EM_UblQy9PFjYEo4NrQvUm-OTHDqs1vtaA=','https://png.pngtree.com/background/20230525/original/pngtree-chess-playing-on-the-chess-board-with-other-pieces-in-view-picture-image_2725931.jpg'),
-('d77e1d1f-6b46-4c89-9290-3b9cf8a7c003', 'Snakes and Ladders', 'A game of ups and downs', 50.00, 'd7df9644-7803-4b70-8997-0f246665cb01', 'http://localhost:8094/sal', 'https://images.dwncdn.net/images/t_app-icon-l/p/bd8338f9-339d-4026-aa6c-ef432c608103/2947135626/18516_4-78350587-logo','https://c8.alamy.com/comp/AMGKMX/snakes-and-ladders-board-game-with-counter-sliding-down-snake-AMGKMX.jpg'),
-('d77e1d1f-6b46-4c89-9290-3b9cf8a7c004', 'Checkers', 'Jump to capture and clear the board', 4.00, 'd7df9644-7803-4b70-8997-0f246665cb01', 'http://localhost:8095/al', 'https://cdn-icons-png.flaticon.com/512/1707/1707234.png','https://img.freepik.com/premium-photo/checkers-game-checkerboard-wooden-background_220873-6795.jpg'),
-('d77e1d1f-6b46-4c89-9290-3b9cf8a7c005', 'Tic-Tac-Toe', 'Simple three-in-a-row game', 5.00, 'd7df9644-7803-4b70-8997-0f246665cb01', 'http://localhost:8096/bal', 'https://cdn-icons-png.flaticon.com/512/806/806131.png','https://img.freepik.com/premium-vector/tic-tac-toe-game-linear-outline-icon-colour-neon-style-brick-wall-background-light-icon_549897-1770.jpg?semt=ais_hybrid'),
-('d77e1d1f-6b46-4c89-9290-3b9cf8a7c006', 'Lost Cities', 'Build card expeditions for maximum points', 6.00, 'd7df9644-7803-4b70-8997-0f246665cb01', 'http://localhost:8097/cal', 'https://m.media-amazon.com/images/S/aplus-media/vc/304326f4-3781-47a1-bb18-7aeb77ea8be7._CR0,0,300,300_PT0_SX300__.jpg','https://b1803394.smushcdn.com/1803394/wp-content/uploads/2017/05/lost-cities-review-header-990x557.jpg?lossy=1&strip=1&webp=1'),
-('d77e1d1f-6b46-4c89-9290-3b9cf8a7c007', 'Santorini', 'Build towers and outmaneuver your opponent', 7.00, 'd7df9644-7803-4b70-8997-0f246665cb01', 'http://localhost:8098/dal', 'https://play-lh.googleusercontent.com/wJfGzmEfSH3JjfY_lHRYEBEkxw4oVUS7gOgdzxCYLL0XuUDuExVUliKdT46H_scv0Wc=w240-h480-rw','https://c4.wallpaperflare.com/wallpaper/468/139/739/board-games-santorini-wallpaper-preview.jpg'),
-('d77e1d1f-6b46-4c89-9290-3b9cf8a7c008', 'Patchwork', 'Create a quilt in this tile-laying game', 8.00, 'd7df9644-7803-4b70-8997-0f246665cb01', 'http://localhost:8099/fal', 'https://m.media-amazon.com/images/I/61MF-0Duh+L._SL300_.jpg','https://store-images.s-microsoft.com/image/apps.33573.13510798886911914.a34f97b7-4e2e-4c05-a9b4-dd95e8c0eb22.cbfc1ce8-b404-480f-a0ad-5b4556cc54e3?mode=scale&q=90&h=400&w=800&background=%23000000');
+('d77e1d1f-6b46-4c89-9290-3b9cf8a7c001', 'Battleship', 'A strategic naval combat game', 10.99, '2c1784ca-edf0-4882-994d-23473e30f776', 'http://localhost:8301/battleship','https://play-lh.googleusercontent.com/WJp4hWdcmYu6hf-p-zd7tfv22P32f9G7HyFTY4mrnFoTS32Fa8-aDacjPFwwoY--DyE','https://wallpapers.com/images/hd/battleship-pictures-bb1dl2t2ofu085ee.jpg'),
+('d77e1d1f-6b46-4c89-9290-3b9cf8a7c002', 'Chess', 'A classic strategy game of kings and queens', 5.99, '2c1784ca-edf0-4882-994d-23473e30f776', 'https://example.com', 'https://media.istockphoto.com/id/985550242/vector/business-strategy-with-chess-figures-on-a-chess-board.jpg?s=612x612&w=0&k=20&c=jYIITWu11EM_UblQy9PFjYEo4NrQvUm-OTHDqs1vtaA=','https://png.pngtree.com/background/20230525/original/pngtree-chess-playing-on-the-chess-board-with-other-pieces-in-view-picture-image_2725931.jpg'),
+('d77e1d1f-6b46-4c89-9290-3b9cf8a7c003', 'Snakes and Ladders', 'A game of ups and downs', 50.00, '2c1784ca-edf0-4882-994d-23473e30f776', 'http://localhost:8094/sal', 'https://images.dwncdn.net/images/t_app-icon-l/p/bd8338f9-339d-4026-aa6c-ef432c608103/2947135626/18516_4-78350587-logo','https://c8.alamy.com/comp/AMGKMX/snakes-and-ladders-board-game-with-counter-sliding-down-snake-AMGKMX.jpg'),
+('d77e1d1f-6b46-4c89-9290-3b9cf8a7c004', 'Checkers', 'Jump to capture and clear the board', 4.00, '2c1784ca-edf0-4882-994d-23473e30f776', 'http://localhost:8095/al', 'https://cdn-icons-png.flaticon.com/512/1707/1707234.png','https://img.freepik.com/premium-photo/checkers-game-checkerboard-wooden-background_220873-6795.jpg');
 
 INSERT INTO game_registry.game_screenshots (game_id, url) VALUES
 -- Chess

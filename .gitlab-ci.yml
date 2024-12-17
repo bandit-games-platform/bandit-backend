@@ -563,7 +563,36 @@ deploy_storefront_dev:
     - if: $CI_COMMIT_BRANCH == 'ci-cd'
 
 # ----------------- PROD ---------------- #
+# ---------- DATABASE, VNET and CONTAINER APP ENVIRONMENT -------- #
+deploy_postgres_and_vnet_prod:
+  image: mcr.microsoft.com/azure-cli
+  stage: deploy
+  when: on_success
+  before_script:
+    - tdnf install -y postgresql
+    - psql --version
+    - az login --service-principal -u $PROD_AZURE_APP_ID -p $PROD_AZURE_PASSWORD --tenant $PROD_AZURE_TENANT
+  script:
+    - declare -A value_map=(
+      ["VNET_NAME"]="banditProdVnet"
+      ["SUBNET_NAME"]="prodSubnet"
+      ["SUBNET_DB_NAME"]="prodDbSubnet"
+      ["DB_SERVER_NAME"]="banditprodpostgres"
+      ["ENV_NAME"]="env-prod-containers"
+      ["RG_NAME"]="rg_bandit_games_prod"
+      ["PG_ADMIN_USER"]=$DEV_PG_ADMIN_USR
+      ["PG_ADMIN_PASSWORD"]=$DEV_PG_ADMIN_PWD
+      )
+    - serialized_map=""
+    - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
+    - chmod +x cicd/deploy-database-vnet.sh
+    - cicd/deploy-database-vnet.sh "$serialized_map"
+  # This will only run when you commit to a merge request or to the ci-cd branch
+  rules:
+    - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
+# -------- MICROSERVICES --------- #
 #deploy_statistics_prod:
 #  stage: deploy
 #  when: manual

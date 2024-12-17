@@ -34,14 +34,6 @@ for key in "${!provided_values[@]}"; do
     fi
 done
 
-echo "VNET_NAME=$VNET_NAME
-SUBNET_NAME=$SUBNET_NAME
-SUBNET_DB_NAME=$SUBNET_DB_NAME
-DB_SERVER_NAME=$DB_SERVER_NAME
-ENV_NAME=$ENV_NAME
-RG_NAME=$RG_NAME
-PG_ADMIN_USER=$PG_ADMIN_USER"
-
 # Check and create VNet if it doesn't exist
 VNET_EXISTS=$(az network vnet list --resource-group $RG_NAME --query "[?name=='$VNET_NAME'].name" -o tsv)
 if [ -z "$VNET_EXISTS" ]; then
