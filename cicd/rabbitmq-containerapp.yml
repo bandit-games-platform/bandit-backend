@@ -12,7 +12,6 @@ properties:
   template:
     containers:
       - name: rabbitmq-prod-container
-        image: acrbanditgamesprod.azurecr.io/rabbitmq:3.13.7-management-alpine
         resources:
           cpu: 0.5
           memory: 1Gi
