@@ -272,9 +272,9 @@ deploy_statistics_dev:
 deploy_rabbitmq_prod:
   stage: deploy
   needs: []
-  image: ubuntu:20.04
+  image: mcr.microsoft.com/azure-cli
   before_script:
-    - apt-get update && apt-get install -y curl ca-certificates sudo
+#    - apt-get update && apt-get install -y curl ca-certificates sudo
 
 #    # Install Docker dependencies
 #    - curl -fsSL https://get.docker.com -o get-docker.sh
