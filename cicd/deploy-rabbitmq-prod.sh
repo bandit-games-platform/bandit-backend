@@ -79,8 +79,8 @@ if [ -z "$RABBITMQ_EXISTS" ]; then
   az containerapp create \
     --name $CONTAINER_NAME \
     --resource-group $RESOURCE_GROUP \
-    --image acrbanditgamesprod.azurecr.io/rabbitmq:3.13.7-management-alpine \
-    --set-env-vars RABBITMQ_DEFAULT_USER="$RABBITMQ_USER" RABBITMQ_DEFAULT_PASS="$RABBITMQ_PASSWORD" RABBITMQ_DEFAULT_VHOST="$RABBITMQ_VHOST"
+    --image acrbanditgamesprod.azurecr.io/rabbitmq:3.13.7-management-alpine
+
 
 
 #  az containerapp up \
@@ -96,6 +96,11 @@ if [ -z "$RABBITMQ_EXISTS" ]; then
     --name $CONTAINER_NAME \
     --resource-group $RESOURCE_GROUP \
     --yaml ./cicd/rabbitmq-containerapp.yml
+
+  az containerapp update \
+      --name $CONTAINER_NAME \
+      --resource-group $RESOURCE_GROUP \
+      --set-env-vars RABBITMQ_DEFAULT_USER="$RABBITMQ_USER" RABBITMQ_DEFAULT_PASS="$RABBITMQ_PASSWORD" RABBITMQ_DEFAULT_VHOST="$RABBITMQ_VHOST"
 
   echo "Creating $CONTAINER_NAME containerapp."
 else
