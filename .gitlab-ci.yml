@@ -359,6 +359,7 @@ deploy_chatbot_dev:
       ["ENVIRONMENT"]="env-dev-containers"
       ["IMAGE_NAME"]="chatbot-context"
       ["PORT"]=8091
+      ["REG_USERNAME"]=$REGISTRY_USERNAME
       )
     - serialized_map=""
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
@@ -396,6 +397,7 @@ deploy_gameplay_dev:
       ["ENVIRONMENT"]="env-dev-containers"
       ["IMAGE_NAME"]="gameplay-context"
       ["PORT"]=8093
+      ["REG_USERNAME"]=$REGISTRY_USERNAME
       )
     - serialized_map=""
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
@@ -433,6 +435,7 @@ deploy_game_registry_dev:
       ["ENVIRONMENT"]="env-dev-containers"
       ["IMAGE_NAME"]="game-registry-context"
       ["PORT"]=8092
+      ["REG_USERNAME"]=$REGISTRY_USERNAME
       ["KEYCLOAK_CLIENT_SECRET"]=$KEYCLOAK_BACKEND_SECRET
       )
     - serialized_map=""
@@ -471,6 +474,7 @@ deploy_player_dev:
       ["ENVIRONMENT"]="env-dev-containers"
       ["IMAGE_NAME"]="player-context"
       ["PORT"]=8094
+      ["REG_USERNAME"]=$REGISTRY_USERNAME
       )
     - serialized_map=""
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
@@ -508,6 +512,7 @@ deploy_statistics_dev:
           ["ENVIRONMENT"]="env-dev-containers"
           ["IMAGE_NAME"]="statistics-context"
           ["PORT"]=8095
+          ["REG_USERNAME"]=$REGISTRY_USERNAME
       )
     - serialized_map=""
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
@@ -545,6 +550,7 @@ deploy_storefront_dev:
       ["ENVIRONMENT"]="env-dev-containers"
       ["IMAGE_NAME"]="storefront-context"
       ["PORT"]=8096
+      ["REG_USERNAME"]=$REGISTRY_USERNAME
       ["STRIPE_API_KEY"]=$STRIPE_TEST_API_KEY
       )
     - serialized_map=""
@@ -593,17 +599,240 @@ deploy_postgres_and_vnet_prod:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
 # -------- MICROSERVICES --------- #
-#deploy_statistics_prod:
-#  stage: deploy
-#  when: manual
-#  needs:
-#    - build_statistics
-#  script:
-#    -
-#  # This will only be available if you perform a tag, or you commit to main
-#  rules:
-#    - if: $CI_COMMIT_TAG
-#    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+deploy_chatbot_prod:
+  image: mcr.microsoft.com/azure-cli
+  stage: deploy
+  when: manual
+  needs:
+    - deploy_postgres_and_vnet_prod
+    - build_chatbot
+  before_script:
+    - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
+    - az extension add --name containerapp --upgrade
+  script:
+    - declare -A value_map=(
+      ["PG_USER"]=$DEV_PG_USER
+      ["PG_PASSWORD"]=$DEV_PG_PWD
+      ["PG_DB_NAME"]="banditprodpostgres"
+      ["RESOURCE_GROUP"]="rg_bandit_games_prod"
+      ["CONTAINER_NAME"]="chatbot-prod-container"
+      ["ENVIRONMENT"]="env-prod-containers"
+      ["IMAGE_NAME"]="chatbot-context"
+      ["PORT"]=8091
+      ["REG_USERNAME"]=$PROD_REGISTRY_USERNAME
+      )
+    - serialized_map=""
+    - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
+    - chmod +x cicd/deploy-context-container.sh
+    - cicd/deploy-context-container.sh "$serialized_map"
+  environment:
+    name: chatbot-prod
+    deployment_tier: testing
+    action: start
+    auto_stop_in: 1 hours
+    on_stop: destroy_chatbot_prod
+  variables:
+    DDL_PROD: "update"
+  rules:
+    - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+
+deploy_gameplay_prod:
+  image: mcr.microsoft.com/azure-cli
+  stage: deploy
+  when: manual
+  needs:
+    - deploy_postgres_and_vnet_prod
+    - build_gameplay
+  before_script:
+    - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
+    - az extension add --name containerapp --upgrade
+  script:
+    - declare -A value_map=(
+      ["PG_USER"]=$DEV_PG_USER
+      ["PG_PASSWORD"]=$DEV_PG_PWD
+      ["PG_DB_NAME"]="banditprodpostgres"
+      ["RESOURCE_GROUP"]="rg_bandit_games_prod"
+      ["CONTAINER_NAME"]="gameplay-prod-container"
+      ["ENVIRONMENT"]="env-prod-containers"
+      ["IMAGE_NAME"]="gameplay-context"
+      ["PORT"]=8093
+      ["REG_USERNAME"]=$PROD_REGISTRY_USERNAME
+      )
+    - serialized_map=""
+    - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
+    - chmod +x cicd/deploy-context-container.sh
+    - cicd/deploy-context-container.sh "$serialized_map"
+  environment:
+    name: gameplay-prod
+    deployment_tier: testing
+    action: start
+    auto_stop_in: 1 hours
+    on_stop: destroy_gameplay_prod
+  variables:
+    DDL_PROD: "update"
+  rules:
+    - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+
+deploy_game_registry_prod:
+  image: mcr.microsoft.com/azure-cli
+  stage: deploy
+  when: manual
+  needs:
+    - deploy_postgres_and_vnet_prod
+    - build_game_registry
+  before_script:
+    - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
+    - az extension add --name containerapp --upgrade
+  script:
+    - declare -A value_map=(
+      ["PG_USER"]=$DEV_PG_USER
+      ["PG_PASSWORD"]=$DEV_PG_PWD
+      ["PG_DB_NAME"]="banditprodpostgres"
+      ["RESOURCE_GROUP"]="rg_bandit_games_prod"
+      ["CONTAINER_NAME"]="game-registry-prod-container"
+      ["ENVIRONMENT"]="env-prod-containers"
+      ["IMAGE_NAME"]="game-registry-context"
+      ["PORT"]=8092
+      ["REG_USERNAME"]=$PROD_REGISTRY_USERNAME
+      ["KEYCLOAK_CLIENT_SECRET"]=$KEYCLOAK_BACKEND_SECRET
+      )
+    - serialized_map=""
+    - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
+    - chmod +x cicd/deploy-context-container.sh
+    - cicd/deploy-context-container.sh "$serialized_map"
+  environment:
+    name: game-registry-prod
+    deployment_tier: testing
+    action: start
+    auto_stop_in: 1 hours
+    on_stop: destroy_game_registry_prod
+  variables:
+    DDL_PROD: "update"
+  rules:
+    - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+
+deploy_player_prod:
+  image: mcr.microsoft.com/azure-cli
+  stage: deploy
+  when: manual
+  needs:
+    - deploy_postgres_and_vnet_prod
+    - build_player
+  before_script:
+    - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
+    - az extension add --name containerapp --upgrade
+  script:
+    - declare -A value_map=(
+      ["PG_USER"]=$DEV_PG_USER
+      ["PG_PASSWORD"]=$DEV_PG_PWD
+      ["PG_DB_NAME"]="banditprodpostgres"
+      ["RESOURCE_GROUP"]="rg_bandit_games_prod"
+      ["CONTAINER_NAME"]="player-prod-container"
+      ["ENVIRONMENT"]="env-prod-containers"
+      ["IMAGE_NAME"]="player-context"
+      ["PORT"]=8094
+      ["REG_USERNAME"]=$PROD_REGISTRY_USERNAME
+      )
+    - serialized_map=""
+    - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
+    - chmod +x cicd/deploy-context-container.sh
+    - cicd/deploy-context-container.sh "$serialized_map"
+  environment:
+    name: player-prod
+    deployment_tier: testing
+    action: start
+    auto_stop_in: 1 hours
+    on_stop: destroy_player_prod
+  variables:
+    DDL_PROD: "update"
+  rules:
+    - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+
+deploy_statistics_prod:
+  image: mcr.microsoft.com/azure-cli
+  stage: deploy
+  when: manual
+  needs:
+    - deploy_postgres_and_vnet_prod
+    - build_statistics
+  before_script:
+    - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
+    - az extension add --name containerapp --upgrade
+  script:
+    - declare -A value_map=(
+      ["PG_USER"]=$DEV_PG_USER
+      ["PG_PASSWORD"]=$DEV_PG_PWD
+      ["PG_DB_NAME"]="banditprodpostgres"
+      ["RESOURCE_GROUP"]="rg_bandit_games_prod"
+      ["CONTAINER_NAME"]="statistics-prod-container"
+      ["ENVIRONMENT"]="env-prod-containers"
+      ["IMAGE_NAME"]="statistics-context"
+      ["PORT"]=8095
+      ["REG_USERNAME"]=$PROD_REGISTRY_USERNAME
+      )
+    - serialized_map=""
+    - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
+    - chmod +x cicd/deploy-context-container.sh
+    - cicd/deploy-context-container.sh "$serialized_map"
+  environment:
+    name: statistics-prod
+    deployment_tier: testing
+    action: start
+    auto_stop_in: 1 hours
+    on_stop: destroy_statistics_prod
+  variables:
+    DDL_PROD: "update"
+  rules:
+    - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+
+deploy_storefront_prod:
+  image: mcr.microsoft.com/azure-cli
+  stage: deploy
+  when: manual
+  needs:
+    - deploy_postgres_and_vnet_prod
+    - build_storefront
+  before_script:
+    - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
+    - az extension add --name containerapp --upgrade
+  script:
+    - declare -A value_map=(
+      ["PG_USER"]=$DEV_PG_USER
+      ["PG_PASSWORD"]=$DEV_PG_PWD
+      ["PG_DB_NAME"]="banditprodpostgres"
+      ["RESOURCE_GROUP"]="rg_bandit_games_prod"
+      ["CONTAINER_NAME"]="storefront-prod-container"
+      ["ENVIRONMENT"]="env-prod-containers"
+      ["IMAGE_NAME"]="storefront-context"
+      ["PORT"]=8096
+      ["REG_USERNAME"]=$PROD_REGISTRY_USERNAME
+      ["STRIPE_API_KEY"]=$STRIPE_TEST_API_KEY
+      )
+    - serialized_map=""
+    - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
+    - chmod +x cicd/deploy-context-container.sh
+    - cicd/deploy-context-container.sh "$serialized_map"
+  environment:
+    name: storefront-prod
+    deployment_tier: testing
+    action: start
+    auto_stop_in: 1 hours
+    on_stop: destroy_storefront_prod
+  variables:
+    DDL_PROD: "update"
+  rules:
+    - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
 
 # ---------------------- DESTROY -------------------------------- #

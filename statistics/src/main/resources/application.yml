@@ -12,7 +12,7 @@ spring:
   jpa:
     open-in-view: false
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: ${DDL_PROD:create-drop}
       show-sql: true
     defer-datasource-initialization: true
 

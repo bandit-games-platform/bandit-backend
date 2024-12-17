@@ -14,6 +14,7 @@ PG_PASSWORD="null"
 PG_DB_NAME="null"
 ENVIRONMENT="null"
 IMAGE_NAME="null"
+REG_USERNAME="null"
 PORT=8080
 STRIPE_API_KEY=
 KEYCLOAK_CLIENT_SECRET=
@@ -47,7 +48,7 @@ fi
 echo "Bringing up container app"
 az containerapp up --name $CONTAINER_NAME --resource-group $RESOURCE_GROUP \
   --location northeurope --environment $ENVIRONMENT \
-  --image "$REGISTRY_USERNAME".azurecr.io/$IMAGE_NAME:"${CI_COMMIT_SHORT_SHA::-1}" \
+  --image "$REG_USERNAME".azurecr.io/$IMAGE_NAME:"${CI_COMMIT_SHORT_SHA::-1}" \
   --target-port $PORT --ingress external
 
 SECRET_ARGS=()
