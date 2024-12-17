@@ -65,11 +65,14 @@ RABBITMQ_EXISTS=$(az containerapp list --resource-group $RESOURCE_GROUP --query 
 #az account set --subscription $DEV_ID_PROD
 #docker login acrbanditgamesdev.azurecr.io --username $PROD_AZURE_APP_ID --password $PROD_AZURE_PASSWORD
 #echo "Logging into acr"
-#
+
 #docker pull acrbanditgamesdev.azurecr.io/rabbitmq:3.13.7-management-alpine
 #echo "Pulling the image"
-#
+
 #az account set --subscription $SUBS_ID_PROD
+#
+#docker pull acrbanditgamesprod.azurecr.io/rabbitmq:3.13.7-management-alpine
+#echo "Pulling the image"
 
 echo "Creating the container"
 if [ -z "$RABBITMQ_EXISTS" ]; then
@@ -78,11 +81,11 @@ if [ -z "$RABBITMQ_EXISTS" ]; then
 #    --resource-group $RESOURCE_GROUP \
 #    --yaml ./cicd/rabbitmq-containerapp.yml
 
-  az containerapp create \
+  az containerapp up \
     --name $CONTAINER_NAME \
     --resource-group $RESOURCE_GROUP \
     --environment $ENV_NAME \
-    --image acrbanditgamesprod.azurecr.io/rabbitmq:3.13.7-management-alpine \
+    --image "acrbanditgamesprod.azurecr.io/rabbitmq:3.13.7-management-alpine" \
     --target-port 15672 \
     --ingress external \
     --env-vars RABBITMQ_DEFAULT_USER=myuser RABBITMQ_DEFAULT_PASS=mypassword RABBITMQ_DEFAULT_VHOST="$RABBITMQ_VHOST"
