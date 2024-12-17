@@ -1,24 +1,27 @@
 package be.kdg.int5.statistics.adapters.in;
 
 import be.kdg.int5.statistics.adapters.in.dto.AchievementProgressDto;
+import be.kdg.int5.statistics.adapters.in.dto.CompletedSessionDto;
 import be.kdg.int5.statistics.adapters.in.dto.GameProgressDto;
-import be.kdg.int5.statistics.domain.GameEndState;
-import be.kdg.int5.statistics.domain.PlayerGameStats;
-import be.kdg.int5.statistics.domain.PlayerId;
-import be.kdg.int5.statistics.port.in.query.PlayerAchievementProgressForPlayedGamesCommand;
-import be.kdg.int5.statistics.port.in.query.PlayerAchievementProgressForPlayedGamesQuery;
-import be.kdg.int5.statistics.port.in.query.PlayerTotalPlayTimeCommand;
-import be.kdg.int5.statistics.port.in.query.PlayerTotalPlayTimeQuery;
+import be.kdg.int5.statistics.adapters.in.dto.PlayerGameStatsDto;
+import be.kdg.int5.statistics.domain.*;
+import be.kdg.int5.statistics.port.in.ExportStatisticsCSVForGameCommand;
+import be.kdg.int5.statistics.port.in.ExportStatisticsCSVForGameUseCase;
+import be.kdg.int5.statistics.port.in.query.*;
+import jakarta.validation.constraints.NotNull;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;

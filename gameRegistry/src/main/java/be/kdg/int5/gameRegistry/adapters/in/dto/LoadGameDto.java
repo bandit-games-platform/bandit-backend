@@ -123,6 +123,25 @@ public class LoadGameDto {
         );
     }
 
+    public LoadGameDto(
+            UUID id,
+            String title,
+            String icon) {
+        this(
+                id,
+                title,
+                null,
+                null,
+                icon,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+    }
+
     public UUID getId() {
         return id;
     }
