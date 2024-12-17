@@ -29,8 +29,8 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8180/realms/bandit-realm
-          jwk-set-uri: http://localhost:8180/realms/bandit-realm/protocol/openid-connect/certs
+          issuer-uri: https://keycloak.victoriousocean-73fa80ad.northeurope.azurecontainerapps.io/realms/bandit-realm
+          jwk-set-uri: https://keycloak.victoriousocean-73fa80ad.northeurope.azurecontainerapps.io/realms/bandit-realm/protocol/openid-connect/certs
 
 python:
   url: http://localhost:8000
