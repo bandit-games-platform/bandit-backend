@@ -9,14 +9,5 @@ properties:
         - exposedPort: 5672
           external: true
           targetPort: 5672
-  template:
-    containers:
-      - name: rabbitmq-prod-container
-        resources:
-          cpu: 0.5
-          memory: 1Gi
-    scale:
-      maxReplicas: 1
-      minReplicas: 0
   managedEnvironmentId: "/subscriptions/9eab1979-9e75-4614-b5b7-41f9f53cac08/resourceGroups/rg_bandit_games_prod/providers/Microsoft.App/managedEnvironments/env-prod-containers"
 
