@@ -79,6 +79,7 @@ if [ -z "$RABBITMQ_EXISTS" ]; then
   az containerapp create \
     --name $CONTAINER_NAME \
     --resource-group $RESOURCE_GROUP \
+    --environment $ENV_NAME \
     --image acrbanditgamesprod.azurecr.io/rabbitmq:3.13.7-management-alpine
 
 
