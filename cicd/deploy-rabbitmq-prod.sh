@@ -81,7 +81,7 @@ if [ -z "$RABBITMQ_EXISTS" ]; then
   az containerapp update \
     --name $CONTAINER_NAME \
     --resource-group $RESOURCE_GROUP \
-    --set-env-vars RABBITMQ_DEFAULT_USER="$RABBITMQ_USER" RABBITMQ_DEFAULT_PASS="$RABBITMQ_PASSWORD"
+    --set-env-vars RABBITMQ_DEFAULT_USER="$RABBITMQ_USER" RABBITMQ_DEFAULT_PASS="$RABBITMQ_PASSWORD" RABBITMQ_DEFAULT_VHOST="$RABBITMQ_VHOST"
 
   echo "Creating $CONTAINER_NAME containerapp."
 else
