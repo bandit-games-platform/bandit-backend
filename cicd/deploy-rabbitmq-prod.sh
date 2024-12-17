@@ -72,7 +72,8 @@ if [ -z "$RABBITMQ_EXISTS" ]; then
     --image "$PROD_REGISTRY_USERNAME".azurecr.io/rabbitmq:3.13.7-management-alpine \
     --target-port 15672 \
     --ingress external \
-    --env-vars RABBITMQ_DEFAULT_USER="$RABBITMQ_USER" RABBITMQ_DEFAULT_PASS="$RABBITMQ_PASSWORD" RABBITMQ_DEFAULT_VHOST="$RABBITMQ_VHOST"
+    --env-vars RABBITMQ_DEFAULT_USER="myuser" RABBITMQ_DEFAULT_PASS="mypassword" RABBITMQ_DEFAULT_VHOST="v_host"
+#    --env-vars RABBITMQ_DEFAULT_USER="$RABBITMQ_USER" RABBITMQ_DEFAULT_PASS="$RABBITMQ_PASSWORD" RABBITMQ_DEFAULT_VHOST="$RABBITMQ_VHOST"
 
   az containerapp update \
     --name $CONTAINER_NAME \
