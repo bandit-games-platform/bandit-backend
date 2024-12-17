@@ -16,4 +16,8 @@ public class Variables {
 
     public static final UUID ACHIEVEMENT_ONE_ID = UUID.fromString("123e4567-e89b-12d3-a456-426614174001");
     public static final UUID ACHIEVEMENT_TWO_ID = UUID.fromString("123e4567-e89b-12d3-a456-426614174002");
+
+    public static final UUID ADMIN_ID = UUID.fromString("44ad93d0-35c2-490a-b5a3-397684023abc");
+    public static final UUID NOT_AN_ADMIN_ID = UUID.fromString("12ad93d0-35c2-490a-b5a3-397684023abc");
+    public static final String CSV_CONTENT = "csv_content";
 }

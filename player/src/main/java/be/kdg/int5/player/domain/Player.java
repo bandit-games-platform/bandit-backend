@@ -1,9 +1,13 @@
 package be.kdg.int5.player.domain;
 
 import be.kdg.int5.common.domain.ImageResource;
+import be.kdg.int5.common.domain.ResourceURL;
+import be.kdg.int5.common.exceptions.AlreadyFriendsException;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.*;
+
 import static java.util.Objects.requireNonNull;
 
 public class Player {
@@ -14,9 +18,10 @@ public class Player {
     private Country location;
     private LocalDate birthdate;
     private ImageResource avatar;
-    private List<Player> friendsList;
+    public static final String DEFAULT_AVATAR_URL = "https://shorturl.at/f38Dr";
 
-    public Player(final PlayerId id, final LocalDateTime joinDate, final String displayName) {
+
+    public Player(final PlayerId id, final LocalDateTime joinDate, final String displayName, ImageResource avatar) {
         requireNonNull(id);
         requireNonNull(joinDate);
         requireNonNull(displayName);
@@ -24,6 +29,34 @@ public class Player {
         this.id = id;
         this.joinDate = joinDate;
         this.displayName = displayName;
+        this.avatar = avatar != null ? avatar : new ImageResource(new ResourceURL(DEFAULT_AVATAR_URL));
+    }
+
+    public Player(final PlayerId id) {
+        this(id, "Default Display Name");
+    }
+
+    public Player(final PlayerId id, final String displayName) {
+        this(id, displayName, null);
+    }
+
+    public Player(final PlayerId id, final LocalDateTime joinDate, final String displayName) {
+        this(id, joinDate, displayName, null);
+    }
+
+    public Player(final PlayerId id, final String displayName, ImageResource avatar) {
+        this(id, LocalDateTime.now(), displayName, avatar);
+    }
+
+
+    public FriendInvite sendFriendInvite(final PlayerId invited){
+        requireNonNull(invited);
+        return new FriendInvite(new FriendInviteId(UUID.randomUUID()), this.id, invited, LocalDateTime.now());
+    }
+
+    public FriendRelation addFriend(final Player player){
+        requireNonNull(player);
+        return new FriendRelation(this, player);
     }
 
     public PlayerId getId() {
@@ -72,13 +105,5 @@ public class Player {
 
     public void setAvatar(ImageResource avatar) {
         this.avatar = avatar;
-    }
-
-    public List<Player> getFriendsList() {
-        return friendsList;
-    }
-
-    public void setFriendsList(List<Player> friendsList) {
-        this.friendsList = friendsList;
     }
 }
