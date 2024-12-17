@@ -21,7 +21,7 @@ stages:
 
 # build
 
-.build-job-template: &build-job-template
+.build-job-template-dev: &build-job-template-dev
   script:
     - echo "Building $CONTEXT_NAME project"
     - chmod +x gradlew
@@ -30,8 +30,18 @@ stages:
     - cd ..
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_COMMIT_BRANCH == 'ci-cd'
+
+.build-job-template-prod: &build-job-template-prod
+  script:
+    - echo "Building $CONTEXT_NAME project"
+    - chmod +x gradlew
+    - cd ./$CONTEXT_NAME
+    - ../gradlew clean bootBuildImageProd --stacktrace
+    - cd ..
+  rules:
     - if: $CI_COMMIT_TAG
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH || $CI_COMMIT_BRANCH == 'ci-cd' || $CI_COMMIT_BRANCH == 'prod'
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
 # test
 
@@ -51,48 +61,50 @@ stages:
 
 # ----------------------- BUILD ----------------------- #
 
-#build_chatbot:
-#  <<: *build-job-template
-#  stage: build
-#  variables:
-#    DOCKER_HOST: "tcp://docker:2375"
-#    DOCKER_TLS_CERTDIR: ""
-#    CONTEXT_NAME: chatbot
-#  services:
-#    - docker:dind
-#
-#build_gameplay:
-#  <<: *build-job-template
-#  stage: build
-#  variables:
-#    DOCKER_HOST: "tcp://docker:2375"
-#    DOCKER_TLS_CERTDIR: ""
-#    CONTEXT_NAME: gameplay
-#  services:
-#    - docker:dind
-#
-#build_game_registry:
-#  <<: *build-job-template
-#  stage: build
-#  variables:
-#    DOCKER_HOST: "tcp://docker:2375"
-#    DOCKER_TLS_CERTDIR: ""
-#    CONTEXT_NAME: gameRegistry
-#  services:
-#    - docker:dind
-#
-#build_player:
-#  <<: *build-job-template
-#  stage: build
-#  variables:
-#    DOCKER_HOST: "tcp://docker:2375"
-#    DOCKER_TLS_CERTDIR: ""
-#    CONTEXT_NAME: player
-#  services:
-#    - docker:dind
-#
-build_statistics:
-  <<: *build-job-template
+# DEV
+
+build_chatbot_dev:
+  <<: *build-job-template-dev
+  stage: build
+  variables:
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
+    CONTEXT_NAME: chatbot
+  services:
+    - docker:dind
+
+build_gameplay_dev:
+  <<: *build-job-template-dev
+  stage: build
+  variables:
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
+    CONTEXT_NAME: gameplay
+  services:
+    - docker:dind
+
+build_game_registry_dev:
+  <<: *build-job-template-dev
+  stage: build
+  variables:
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
+    CONTEXT_NAME: gameRegistry
+  services:
+    - docker:dind
+
+build_player_dev:
+  <<: *build-job-template-dev
+  stage: build
+  variables:
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
+    CONTEXT_NAME: player
+  services:
+    - docker:dind
+
+build_statistics_dev:
+  <<: *build-job-template-dev
   stage: build
   variables:
     DOCKER_HOST: "tcp://docker:2375"
@@ -100,66 +112,129 @@ build_statistics:
     CONTEXT_NAME: statistics
   services:
     - docker:27.3-dind
-#
-#build_storefront:
-#  <<: *build-job-template
-#  stage: build
-#  variables:
-#    DOCKER_HOST: "tcp://docker:2375"
-#    DOCKER_TLS_CERTDIR: ""
-#    CONTEXT_NAME: storefront
-#  services:
-#    - docker:dind
+
+build_storefront_dev:
+  <<: *build-job-template-dev
+  stage: build
+  variables:
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
+    CONTEXT_NAME: storefront
+  services:
+    - docker:dind
+
+# PROD
+
+build_chatbot_prod:
+  <<: *build-job-template-prod
+  stage: build
+  variables:
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
+    CONTEXT_NAME: chatbot
+  services:
+    - docker:dind
+
+build_gameplay_prod:
+  <<: *build-job-template-prod
+  stage: build
+  variables:
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
+    CONTEXT_NAME: gameplay
+  services:
+    - docker:dind
+
+build_game_registry_prod:
+  <<: *build-job-template-prod
+  stage: build
+  variables:
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
+    CONTEXT_NAME: gameRegistry
+  services_prod:
+    - docker:dind
+
+build_player_prod:
+  <<: *build-job-template-prod
+  stage: build
+  variables:
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
+    CONTEXT_NAME: player
+  services:
+    - docker:dind
+
+build_statistics_prod:
+  <<: *build-job-template-prod
+  stage: build
+  variables:
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
+    CONTEXT_NAME: statistics
+  services:
+    - docker:27.3-dind
+
+build_storefront_prod:
+  <<: *build-job-template-prod
+  stage: build
+  variables:
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
+    CONTEXT_NAME: storefront
+  services:
+    - docker:dind
+
 
 # ----------------------- TEST ----------------------- #
 
-#test_chatbot:
-#  <<: *test_job_template
-#  stage: test
-#  variables:
-#    DOCKER_HOST: "tcp://docker:2375"
-#    DOCKER_TLS_CERTDIR: ""
-#    CONTEXT_NAME: chatbot
-#  services:
-#    - docker:dind
-#  before_script:
-#    - apk add --no-cache docker
-#
-#test_gameplay:
-#  <<: *test_job_template
-#  stage: test
-#  variables:
-#    DOCKER_HOST: "tcp://docker:2375"
-#    DOCKER_TLS_CERTDIR: ""
-#    CONTEXT_NAME: gameplay
-#  services:
-#    - docker:dind
-#  before_script:
-#    - apk add --no-cache docker
-#
-#test_game_registry:
-#  <<: *test_job_template
-#  variables:
-#    DOCKER_HOST: "tcp://docker:2375"
-#    DOCKER_TLS_CERTDIR: ""
-#    CONTEXT_NAME: gameRegistry
-#  services:
-#    - docker:dind
-#  before_script:
-#    - apk add --no-cache docker
-#
-#test_player:
-#  <<: *test_job_template
-#  stage: test
-#  variables:
-#    DOCKER_HOST: "tcp://docker:2375"
-#    DOCKER_TLS_CERTDIR: ""
-#    CONTEXT_NAME: player
-#  services:
-#    - docker:dind
-#  before_script:
-#    - apk add --no-cache docker
-#
+test_chatbot:
+  <<: *test_job_template
+  stage: test
+  variables:
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
+    CONTEXT_NAME: chatbot
+  services:
+    - docker:dind
+  before_script:
+    - apk add --no-cache docker
+
+test_gameplay:
+  <<: *test_job_template
+  stage: test
+  variables:
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
+    CONTEXT_NAME: gameplay
+  services:
+    - docker:dind
+  before_script:
+    - apk add --no-cache docker
+
+test_game_registry:
+  <<: *test_job_template
+  variables:
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
+    CONTEXT_NAME: gameRegistry
+  services:
+    - docker:dind
+  before_script:
+    - apk add --no-cache docker
+
+test_player:
+  <<: *test_job_template
+  stage: test
+  variables:
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
+    CONTEXT_NAME: player
+  services:
+    - docker:dind
+  before_script:
+    - apk add --no-cache docker
+
 test_statistics:
   <<: *test_job_template
   stage: test
@@ -171,18 +246,18 @@ test_statistics:
     - docker:27.3-dind
   before_script:
     - apk add --no-cache docker
-#
-#test_storefront:
-#  <<: *test_job_template
-#  stage: test
-#  variables:
-#    DOCKER_HOST: "tcp://docker:2375"
-#    DOCKER_TLS_CERTDIR: ""
-#    CONTEXT_NAME: storefront
-#  services:
-#    - docker:dind
-#  before_script:
-#    - apk add --no-cache docker
+
+test_storefront:
+  <<: *test_job_template
+  stage: test
+  variables:
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
+    CONTEXT_NAME: storefront
+  services:
+    - docker:dind
+  before_script:
+    - apk add --no-cache docker
 
 # ----------------------- SAST ----------------------- #
 
@@ -227,7 +302,7 @@ deploy_postgres_dev:
   # This will only run when you commit to a merge request or to the ci-cd branch
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-    - if: $CI_COMMIT_BRANCH == 'ci-cd' || $CI_COMMIT_BRANCH == 'prod'
+    - if: $CI_COMMIT_BRANCH == 'ci-cd'
 
 
 deploy_statistics_dev:
@@ -253,7 +328,23 @@ deploy_statistics_dev:
   # This will only run when you commit to a merge request or to the ci-cd branch
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-    - if: $CI_COMMIT_BRANCH == 'ci-cd' || $CI_COMMIT_BRANCH == 'prod'
+    - if: $CI_COMMIT_BRANCH == 'ci-cd'
+
+
+deploy_rabbitmq_dev:
+  stage: deploy
+  needs: []
+  image: mcr.microsoft.com/azure-cli
+  before_script:
+    - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
+    - az account set --subscription $SUBS_ID_DEV
+    - az extension add --name containerapp --upgrade
+  script:
+    - chmod +x cicd/deploy-rabbitmq.sh
+    - cicd/deploy-rabbitmq-prod.sh
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_COMMIT_BRANCH == 'ci-cd'
 
 # ----------------- PROD ---------------- #
 
@@ -278,10 +369,11 @@ deploy_rabbitmq_prod:
     - az account set --subscription $SUBS_ID_PROD
     - az extension add --name containerapp --upgrade
   script:
-    - chmod +x cicd/deploy-rabbitmq-prod.sh
+    - chmod +x cicd/deploy-rabbitmq.sh
     - cicd/deploy-rabbitmq-prod.sh
   rules:
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
     - if: $CI_COMMIT_BRANCH == 'prod'
 
 
