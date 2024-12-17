@@ -23,4 +23,12 @@ public interface PlayerGameStatsJpaRepository extends JpaRepository<PlayerGameSt
     WHERE stats.id.playerId = :playerId
     """)
     List<PlayerGameStatsJpaEntity> findAllByPlayerId(UUID playerId);
+
+    @Query("""
+    SELECT stats FROM PlayerGameStatsJpaEntity stats
+    LEFT JOIN FETCH stats.completedSessions
+    LEFT JOIN FETCH stats.achievementProgressJpaEntities
+    WHERE stats.id.gameId = :gameId
+    """)
+    List<PlayerGameStatsJpaEntity> findAllByGameId(UUID gameId);
 }

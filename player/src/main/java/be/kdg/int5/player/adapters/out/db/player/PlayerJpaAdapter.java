@@ -32,6 +32,13 @@ public class PlayerJpaAdapter implements PlayerCreatePort, PlayerLoadPort, Playe
     }
 
     @Override
+    public Player loadPlayerByIdWithoutJoinDate(UUID playerId) {
+        PlayerJpaEntity playerJpaEntity = playerJpaRepository.findById(playerId).orElse(null);
+        if (playerJpaEntity == null) return null;
+        return new Player(new PlayerId(playerJpaEntity.getId()), playerJpaEntity.getDisplayName());
+    }
+
+    @Override
     @Transactional
     public void updatePlayerDisplayName(Player player) {
         PlayerJpaEntity playerJpaEntity = playerJpaRepository.findById(player.getId().uuid()).orElse(null);
