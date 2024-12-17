@@ -73,15 +73,24 @@ RABBITMQ_EXISTS=$(az containerapp list --resource-group $RESOURCE_GROUP --query 
 
 echo "Creating the container"
 if [ -z "$RABBITMQ_EXISTS" ]; then
+#  az containerapp create \
+#    --name $CONTAINER_NAME \
+#    --resource-group $RESOURCE_GROUP \
+#    --yaml ./cicd/rabbitmq-containerapp.yml
+
   az containerapp create \
     --name $CONTAINER_NAME \
     --resource-group $RESOURCE_GROUP \
-    --yaml ./cicd/rabbitmq-containerapp.yml
+    --environment $ENV_NAME \
+    --image acrbanditgamesprod.azurecr.io/rabbitmq:3.13.7-management-alpine \
+    --target-port 15672 \
+    --ingress external \
+    --env-vars RABBITMQ_DEFAULT_USER=myuser RABBITMQ_DEFAULT_PASS=mypassword RABBITMQ_DEFAULT_VHOST="$RABBITMQ_VHOST"
 
-  az containerapp update \
-    --name $CONTAINER_NAME \
-    --resource-group $RESOURCE_GROUP \
-    --set-env-vars RABBITMQ_DEFAULT_USER="$RABBITMQ_USER" RABBITMQ_DEFAULT_PASS="$RABBITMQ_PASSWORD" RABBITMQ_DEFAULT_VHOST="$RABBITMQ_VHOST"
+#  az containerapp update \
+#    --name $CONTAINER_NAME \
+#    --resource-group $RESOURCE_GROUP \
+#    --set-env-vars RABBITMQ_DEFAULT_USER="$RABBITMQ_USER" RABBITMQ_DEFAULT_PASS="$RABBITMQ_PASSWORD" RABBITMQ_DEFAULT_VHOST="$RABBITMQ_VHOST"
 
   echo "Creating $CONTAINER_NAME containerapp."
 else
