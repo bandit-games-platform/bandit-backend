@@ -69,7 +69,7 @@ if [ -z "$RABBITMQ_EXISTS" ]; then
     --name $CONTAINER_NAME \
     --resource-group $RESOURCE_GROUP \
     --environment $ENV_NAME \
-    --image "$REGISTRY_USERNAME".azurecr.io/rabbitmq:3.13.7-management-alpine \
+    --image "$PROD_REGISTRY_USERNAME".azurecr.io/rabbitmq:3.13.7-management-alpine \
     --target-port 15672 \
     --ingress external \
     --env-vars RABBITMQ_DEFAULT_USER="$RABBITMQ_USER" RABBITMQ_DEFAULT_PASS="$RABBITMQ_PASSWORD" RABBITMQ_DEFAULT_VHOST="$RABBITMQ_VHOST"
