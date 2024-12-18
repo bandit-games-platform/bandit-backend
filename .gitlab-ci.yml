@@ -152,7 +152,7 @@ build_game_registry_prod:
     DOCKER_HOST: "tcp://docker:2375"
     DOCKER_TLS_CERTDIR: ""
     CONTEXT_NAME: gameRegistry
-  services_prod:
+  services:
     - docker:dind
 
 build_player_prod:
