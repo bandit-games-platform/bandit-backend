@@ -19,7 +19,7 @@ spring:
     username: ${DATASOURCE_USER:user}
     password: ${DATASOURCE_PASS:password}
   rabbitmq:
-    host: localhost
+    host: ${RABBIT_URL:localhost}
     port: 5672
     username: ${RABBITMQ_USER:myuser}
     password: ${RABBITMQ_PASSWORD:mypassword}
