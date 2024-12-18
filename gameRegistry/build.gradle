@@ -53,6 +53,7 @@ bootBuildImage {
             password = System.getenv("REGISTRY_PASSWORD")
         }
     }
+    archiveFile = tasks.bootJar.archiveFile
 }
 
 bootBuildImage.dependsOn generateGitProperties
@@ -69,6 +70,7 @@ tasks.register('bootBuildImageProd', BootBuildImage) {
             password = System.getenv("PROD_REGISTRY_PASSWORD")
         }
     }
+    archiveFile = tasks.bootJar.archiveFile
 }
 
 bootBuildImageProd.dependsOn generateGitProperties
