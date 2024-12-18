@@ -350,7 +350,7 @@ deploy_chatbot_dev:
   when: on_success
   needs:
     - deploy_postgres_and_vnet_dev
-    - build_chatbot
+    - build_chatbot_dev
   before_script:
     - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
     - az extension add --name containerapp --upgrade
@@ -389,7 +389,7 @@ deploy_gameplay_dev:
   when: on_success
   needs:
     - deploy_postgres_and_vnet_dev
-    - build_gameplay
+    - build_gameplay_dev
   before_script:
     - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
     - az extension add --name containerapp --upgrade
@@ -427,7 +427,7 @@ deploy_game_registry_dev:
   when: on_success
   needs:
     - deploy_postgres_and_vnet_dev
-    - build_game_registry
+    - build_game_registry_dev
   before_script:
     - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
     - az extension add --name containerapp --upgrade
@@ -466,7 +466,7 @@ deploy_player_dev:
   when: on_success
   needs:
     - deploy_postgres_and_vnet_dev
-    - build_player
+    - build_player_dev
   before_script:
     - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
     - az extension add --name containerapp --upgrade
@@ -504,7 +504,7 @@ deploy_statistics_dev:
   when: on_success
   needs:
     - deploy_postgres_and_vnet_dev
-    - build_statistics
+    - build_statistics_dev
   before_script:
     - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
     - az extension add --name containerapp --upgrade
@@ -543,7 +543,7 @@ deploy_storefront_dev:
   when: on_success
   needs:
     - deploy_postgres_and_vnet_dev
-    - build_storefront
+    - build_storefront_dev
   before_script:
     - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
     - az extension add --name containerapp --upgrade
@@ -638,7 +638,7 @@ deploy_chatbot_prod:
   when: manual
   needs:
     - deploy_postgres_and_vnet_prod
-    - build_chatbot
+    - build_chatbot_prod
   before_script:
     - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
     - az extension add --name containerapp --upgrade
@@ -671,7 +671,7 @@ deploy_gameplay_prod:
   when: manual
   needs:
     - deploy_postgres_and_vnet_prod
-    - build_gameplay
+    - build_gameplay_prod
   before_script:
     - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
     - az extension add --name containerapp --upgrade
@@ -703,7 +703,7 @@ deploy_game_registry_prod:
   when: manual
   needs:
     - deploy_postgres_and_vnet_prod
-    - build_game_registry
+    - build_game_registry_prod
   before_script:
     - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
     - az extension add --name containerapp --upgrade
@@ -736,7 +736,7 @@ deploy_player_prod:
   when: manual
   needs:
     - deploy_postgres_and_vnet_prod
-    - build_player
+    - build_player_prod
   before_script:
     - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
     - az extension add --name containerapp --upgrade
@@ -768,7 +768,7 @@ deploy_statistics_prod:
   when: manual
   needs:
     - deploy_postgres_and_vnet_prod
-    - build_statistics
+    - build_statistics_prod
   before_script:
     - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
     - az extension add --name containerapp --upgrade
@@ -801,7 +801,7 @@ deploy_storefront_prod:
   when: manual
   needs:
     - deploy_postgres_and_vnet_prod
-    - build_storefront
+    - build_storefront_prod
   before_script:
     - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
     - az extension add --name containerapp --upgrade
