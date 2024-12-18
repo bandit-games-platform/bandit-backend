@@ -1,6 +1,9 @@
+import org.springframework.boot.gradle.tasks.bundling.BootBuildImage
+
 plugins {
     id 'module-config'
     id "com.gorylenko.gradle-git-properties" version "2.4.1"
+    id "org.springframework.boot"
 }
 
 dependencies {
@@ -59,6 +62,25 @@ bootBuildImage {
             password = System.getenv("REGISTRY_PASSWORD")
         }
     }
+    archiveFile = tasks.bootJar.archiveFile
 }
 
 bootBuildImage.dependsOn generateGitProperties
+
+
+tasks.register('bootBuildImageProd', BootBuildImage) {
+    builder = "paketobuildpacks/builder-jammy-base:latest"
+    imageName = "acrbanditgamesprod.azurecr.io/storefront-context"
+    tags = ["acrbanditgamesprod.azurecr.io/storefront-context:${-> project.ext.gitProps['git.commit.id.abbrev']}"]
+    publish = true
+    docker {
+        publishRegistry {
+            username =  System.getenv("PROD_REGISTRY_USERNAME")
+            password = System.getenv("PROD_REGISTRY_PASSWORD")
+        }
+    }
+    archiveFile = tasks.bootJar.archiveFile
+}
+
+bootBuildImageProd.dependsOn generateGitProperties
+
