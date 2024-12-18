@@ -7,6 +7,6 @@ properties:
       allowInsecure: true
       additionalPortMappings:
         - exposedPort: 5672
-          external: true
+          external: false
           targetPort: 5672
 

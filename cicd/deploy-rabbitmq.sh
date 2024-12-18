@@ -54,8 +54,12 @@ if [ -z "$RABBITMQ_EXISTS" ]; then
     --min-replicas 0 \
     --max-replicas 1 \
     --cpu 0.5 \
-    --memory 1Gi \
-    --yaml ./cicd/rabbitmq-containerapp.yml
+    --memory 1Gi
+
+  az containerapp update \
+      --name $CONTAINER_NAME \
+      --resource-group $RESOURCE_GROUP \
+      --yaml ./cicd/rabbitmq-containerapp.yml
 
   echo "Creating $CONTAINER_NAME containerapp."
 else
