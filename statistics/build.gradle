@@ -33,14 +33,14 @@ dependencies {
     testImplementation 'org.testcontainers:junit-jupiter:1.20.2'
     testImplementation 'org.testcontainers:postgresql:1.20.3'
 
+    //Export csv
+    implementation 'com.opencsv:opencsv:5.8'
+
     //Spring cloud AZURE
     implementation 'com.azure.spring:spring-cloud-azure-starter-actuator:4.3.0'
     implementation 'com.azure.spring:spring-cloud-azure-starter-keyvault:4.3.0'
     implementation 'com.azure.spring:spring-cloud-azure-starter:4.3.0'
     implementation 'com.azure.spring:spring-cloud-azure-dependencies:5.7.0'
-
-    //Export csv
-    implementation 'com.opencsv:opencsv:5.8'
 }
 
 

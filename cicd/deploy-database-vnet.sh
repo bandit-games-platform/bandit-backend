@@ -3,22 +3,36 @@
 #---------------------------------------------------------------
 #- Name:	    deploy-database-vnet.sh
 #- Author:	  Roman Gordon
-#- Function:	Deploys a vnet if not exists and postgres database if not exists for our development environment
+#- Function:	Deploys a vnet if not exists, creates the container app environment and postgres database if not exists
 #- Usage:	    ./deploy-database-vnet.sh
 #---------------------------------------------------------------
 
 # Variables
-VNET_NAME="banditDevVnet"
-SUBNET_NAME="devSubnet"
-SUBNET_DB_NAME="devDbSubnet"
-DB_SERVER_NAME="banditdevpostgres"
-ENV_NAME="env-dev-containers"
-RG_NAME="rg_bandit_games_dev"
+VNET_NAME="null"
+SUBNET_NAME="null"
+SUBNET_DB_NAME="null"
+DB_SERVER_NAME="null"
+ENV_NAME="null"
+RG_NAME="null"
 
-PG_ADMIN_USER=$DEV_PG_ADMIN_USR
-PG_ADMIN_PASSWORD=$DEV_PG_ADMIN_PWD
+PG_ADMIN_USER="null"
+PG_ADMIN_PASSWORD="null"
 PG_NON_ADMIN_USER=$DEV_PG_USER
 PG_NON_ADMIN_PASSWORD=$DEV_PG_PWD
+
+declare -A provided_values
+for pair in $1; do
+    IFS='=' read -r key value <<< "$pair"
+    provided_values["$key"]="$value"
+done
+
+for key in "${!provided_values[@]}"; do
+    if declare -p "$key" &>/dev/null; then
+        declare "$key=${provided_values[$key]}"
+    else
+        echo "Warning: Variable $key is not defined."
+    fi
+done
 
 # Check and create VNet if it doesn't exist
 VNET_EXISTS=$(az network vnet list --resource-group $RG_NAME --query "[?name=='$VNET_NAME'].name" -o tsv)
@@ -40,7 +54,7 @@ if [ -z "$VNET_EXISTS" ]; then
 
     echo "VNet $VNET_NAME created."
 else
-    echo "VNet $VNET_NAME already exists."
+    echo "VNet $VNET_NAME already exists, moving on."
 fi
 
 
@@ -52,7 +66,7 @@ if [ -z "$ENV_EXISTS" ]; then
     az containerapp env create --name $ENV_NAME --resource-group $RG_NAME --location northeurope --infrastructure-subnet-resource-id "$INFRASTRUCTURE_SUBNET"
     echo "Container Apps environment $ENV_NAME created."
 else
-    echo "Container Apps environment $ENV_NAME already exists."
+    echo "Container Apps environment $ENV_NAME already exists, moving on."
 fi
 
 
@@ -90,7 +104,7 @@ if [ -z "$DB_EXISTS" ]; then
 
     echo "Database is now ready"
 
-# TODO: Since this does not work currently, schema and permissions have to be granted manually
+# TODO: Since this does not work in the current version of azure, schema and permissions have to be granted manually
 
 #    az containerapp create \
 #        --name init-container \
@@ -112,6 +126,8 @@ if [ -z "$DB_EXISTS" ]; then
 #    az containerapp delete --name init-container --resource-group $RG_NAME --yes
 
     echo "PostgreSQL server $DB_SERVER_NAME created."
+    echo "WARNING: You will have to complete the initialization of the database manually!"
+    echo "  See: https://docs.google.com/document/d/1IbtubPYPNUIkIFZi3LDxaL2bxK6UrxXJCm9nBcznmaU/edit?tab=t.0#heading=h.ssl3r5y3wqsx"
 else
-    echo "PostgreSQL server $DB_SERVER_NAME already exists."
+    echo "PostgreSQL server $DB_SERVER_NAME already exists, moving on."
 fi

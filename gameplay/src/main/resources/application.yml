@@ -11,7 +11,7 @@ spring:
   jpa:
     open-in-view: false
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: ${DDL_PROD:create-drop}
       show-sql: true
     defer-datasource-initialization: true
   datasource:
@@ -27,7 +27,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8180/realms/bandit-realm
-          jwk-set-uri: http://localhost:8180/realms/bandit-realm/protocol/openid-connect/certs
+          issuer-uri: https://keycloak.victoriousocean-73fa80ad.northeurope.azurecontainerapps.io/realms/bandit-realm
+          jwk-set-uri: https://keycloak.victoriousocean-73fa80ad.northeurope.azurecontainerapps.io/realms/bandit-realm/protocol/openid-connect/certs
   config:
     additional-location: ${SPRING_CONFIG_ADDITIONAL_LOCATION}
