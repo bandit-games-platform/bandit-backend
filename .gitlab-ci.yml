@@ -291,7 +291,7 @@ deploy_postgres_dev:
   when: on_success
   needs:
     # In here add all other build stages when setup
-    - build_statistics
+    - build_statistics_dev
   before_script:
     - tdnf install -y postgresql
     - psql --version
@@ -311,7 +311,7 @@ deploy_statistics_dev:
   when: on_success
   needs:
     - deploy_postgres_dev
-    - build_statistics
+    - build_statistics_dev
   before_script:
     - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
     - az extension add --name containerapp --upgrade
