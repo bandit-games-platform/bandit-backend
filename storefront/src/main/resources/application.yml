@@ -34,9 +34,9 @@ spring:
 
 contexts:
   gameRegistry:
-    baseUrl: http://localhost:8092/game-registry
+    baseUrl: ${GAME_REGISTRY_URL:http://localhost:8092/game-registry}
   frontend:
-    baseUrl: http://localhost:5173
+    baseUrl: ${FRONTEND_URL:http://localhost:5173}
 
 stripe:
   apiKey: ${STRIPE_API_KEY}

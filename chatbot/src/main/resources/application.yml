@@ -33,4 +33,4 @@ spring:
           jwk-set-uri: https://keycloak.victoriousocean-73fa80ad.northeurope.azurecontainerapps.io/realms/bandit-realm/protocol/openid-connect/certs
 
 python:
-  url: http://localhost:8000
+  url: ${PYTHON_URL:http://localhost:8000}

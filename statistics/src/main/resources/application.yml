@@ -40,4 +40,4 @@ spring:
 
 contexts:
   gameRegistry:
-    baseUrl: http://localhost:8092/game-registry
+    baseUrl: ${GAME_REGISTRY_URL:http://localhost:8092/game-registry}

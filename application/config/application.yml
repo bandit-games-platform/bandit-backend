@@ -45,13 +45,13 @@ spring:
 
 contexts:
   gameRegistry:
-    baseUrl: http://localhost:8090/api
+    baseUrl: ${GAME_REGISTRY_URL:http://localhost:8090/api}
   frontend:
-    baseUrl: http://localhost:5173
+    baseUrl: ${FRONTEND_URL:http://localhost:5173}
 
 stripe:
   apiKey: ${STRIPE_API_KEY}
 
 python:
-  url: http://localhost:8000
+  url: ${PYTHON_URL:http://localhost:8000}
 

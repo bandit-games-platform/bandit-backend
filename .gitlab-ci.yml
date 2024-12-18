@@ -360,6 +360,7 @@ deploy_chatbot_dev:
       ["IMAGE_NAME"]="chatbot-context"
       ["PORT"]=8091
       ["REG_USERNAME"]=$REGISTRY_USERNAME
+      ["PYTHON_URL"]=$DEV_PYTHON_URL
       )
     - serialized_map=""
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
@@ -504,15 +505,16 @@ deploy_statistics_dev:
     - az extension add --name containerapp --upgrade
   script:
     - declare -A value_map=(
-          ["PG_USER"]=$DEV_PG_USER 
-          ["PG_PASSWORD"]=$DEV_PG_PWD 
-          ["PG_DB_NAME"]="banditdevpostgres" 
-          ["RESOURCE_GROUP"]="rg_bandit_games_dev" 
-          ["CONTAINER_NAME"]="statistics-dev-container" 
-          ["ENVIRONMENT"]="env-dev-containers"
-          ["IMAGE_NAME"]="statistics-context"
-          ["PORT"]=8095
-          ["REG_USERNAME"]=$REGISTRY_USERNAME
+      ["PG_USER"]=$DEV_PG_USER 
+      ["PG_PASSWORD"]=$DEV_PG_PWD 
+      ["PG_DB_NAME"]="banditdevpostgres" 
+      ["RESOURCE_GROUP"]="rg_bandit_games_dev" 
+      ["CONTAINER_NAME"]="statistics-dev-container" 
+      ["ENVIRONMENT"]="env-dev-containers"
+      ["IMAGE_NAME"]="statistics-context"
+      ["PORT"]=8095
+      ["REG_USERNAME"]=$REGISTRY_USERNAME
+      ["GAME_REGISTRY_URL"]=$DEV_GAME_REGISTRY_URL
       )
     - serialized_map=""
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
@@ -551,6 +553,8 @@ deploy_storefront_dev:
       ["IMAGE_NAME"]="storefront-context"
       ["PORT"]=8096
       ["REG_USERNAME"]=$REGISTRY_USERNAME
+      ["GAME_REGISTRY_URL"]=$DEV_GAME_REGISTRY_URL
+      ["FRONTEND_URL"]=$DEV_FRONTEND_URL
       ["STRIPE_API_KEY"]=$STRIPE_TEST_API_KEY
       )
     - serialized_map=""
@@ -619,14 +623,14 @@ deploy_chatbot_prod:
       ["ENVIRONMENT"]="env-prod-containers"
       ["IMAGE_NAME"]="chatbot-context"
       ["PORT"]=8091
+      ["DDL_PROD"]="update"
       ["REG_USERNAME"]=$PROD_REGISTRY_USERNAME
+      ["PYTHON_URL"]=$PROD_PYTHON_URL
       )
     - serialized_map=""
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
     - chmod +x cicd/deploy-context-container.sh
     - cicd/deploy-context-container.sh "$serialized_map"
-  variables:
-    DDL_PROD: "update"
   rules:
     - if: $CI_COMMIT_TAG
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
@@ -653,13 +657,12 @@ deploy_gameplay_prod:
       ["IMAGE_NAME"]="gameplay-context"
       ["PORT"]=8093
       ["REG_USERNAME"]=$PROD_REGISTRY_USERNAME
+      ["DDL_PROD"]="update"
       )
     - serialized_map=""
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
     - chmod +x cicd/deploy-context-container.sh
     - cicd/deploy-context-container.sh "$serialized_map"
-  variables:
-    DDL_PROD: "update"
   rules:
     - if: $CI_COMMIT_TAG
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
@@ -686,14 +689,13 @@ deploy_game_registry_prod:
       ["IMAGE_NAME"]="game-registry-context"
       ["PORT"]=8092
       ["REG_USERNAME"]=$PROD_REGISTRY_USERNAME
+      ["DDL_PROD"]="update"
       ["KEYCLOAK_CLIENT_SECRET"]=$KEYCLOAK_BACKEND_SECRET
       )
     - serialized_map=""
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
     - chmod +x cicd/deploy-context-container.sh
     - cicd/deploy-context-container.sh "$serialized_map"
-  variables:
-    DDL_PROD: "update"
   rules:
     - if: $CI_COMMIT_TAG
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
@@ -720,13 +722,12 @@ deploy_player_prod:
       ["IMAGE_NAME"]="player-context"
       ["PORT"]=8094
       ["REG_USERNAME"]=$PROD_REGISTRY_USERNAME
+      ["DDL_PROD"]="update"
       )
     - serialized_map=""
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
     - chmod +x cicd/deploy-context-container.sh
     - cicd/deploy-context-container.sh "$serialized_map"
-  variables:
-    DDL_PROD: "update"
   rules:
     - if: $CI_COMMIT_TAG
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
@@ -753,13 +754,13 @@ deploy_statistics_prod:
       ["IMAGE_NAME"]="statistics-context"
       ["PORT"]=8095
       ["REG_USERNAME"]=$PROD_REGISTRY_USERNAME
+      ["DDL_PROD"]="update"
+      ["GAME_REGISTRY_URL"]=$PROD_GAME_REGISTRY_URL
       )
     - serialized_map=""
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
     - chmod +x cicd/deploy-context-container.sh
     - cicd/deploy-context-container.sh "$serialized_map"
-  variables:
-    DDL_PROD: "update"
   rules:
     - if: $CI_COMMIT_TAG
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
@@ -786,14 +787,15 @@ deploy_storefront_prod:
       ["IMAGE_NAME"]="storefront-context"
       ["PORT"]=8096
       ["REG_USERNAME"]=$PROD_REGISTRY_USERNAME
+      ["DDL_PROD"]="update"
+      ["GAME_REGISTRY_URL"]=$PROD_GAME_REGISTRY_URL
+      ["FRONTEND_URL"]=$PROD_FRONTEND_URL
       ["STRIPE_API_KEY"]=$STRIPE_TEST_API_KEY
       )
     - serialized_map=""
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
     - chmod +x cicd/deploy-context-container.sh
     - cicd/deploy-context-container.sh "$serialized_map"
-  variables:
-    DDL_PROD: "update"
   rules:
     - if: $CI_COMMIT_TAG
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH

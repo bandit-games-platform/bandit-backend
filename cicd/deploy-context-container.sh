@@ -18,6 +18,10 @@ REG_USERNAME="null"
 PORT=8080
 STRIPE_API_KEY=
 KEYCLOAK_CLIENT_SECRET=
+DDL_PROD=
+PYTHON_URL=
+GAME_REGISTRY_URL=
+FRONTEND_URL=
 EXTRA_ENV_VARS=
 
 declare -A provided_values
@@ -76,6 +80,18 @@ if [ -n "$KEYCLOAK_CLIENT_SECRET" ]; then
 fi
 if [ -n "$STRIPE_API_KEY" ]; then
   ENV_VAR_ARGS+=("STRIPE_API_KEY=secretref:stripe-api-key")
+fi
+if [ -n "$DDL_PROD" ]; then
+  ENV_VAR_ARGS+=("DDL_PROD=$DDL_PROD")
+fi
+if [ -n "$PYTHON_URL" ]; then
+  ENV_VAR_ARGS+=("PYTHON_URL=$PYTHON_URL")
+fi
+if [ -n "$GAME_REGISTRY_URL" ]; then
+  ENV_VAR_ARGS+=("GAME_REGISTRY_URL=$GAME_REGISTRY_URL")
+fi
+if [ -n "$FRONTEND_URL" ]; then
+  ENV_VAR_ARGS+=("FRONTEND_URL=$FRONTEND_URL")
 fi
 if [ -n "$EXTRA_ENV_VARS" ]; then
   for VAR in $EXTRA_ENV_VARS; do
