@@ -8,54 +8,29 @@
 #------------------------------------------------------------------------------------------------
 
 
-VNET_NAME="banditProdVnet"
-SUBNET_NAME="prodSubnet"
 
-CONTAINER_NAME="rabbitmq-prod-container"
-RESOURCE_GROUP="rg_bandit_games_prod"
-ENV_NAME="env-prod-containers"
-
-
-echo "Checking resource group list"
-az group list
+# Variables
+ENV_NAME="null"
+RESOURCE_GROUP="null"
+ACR_NAME="null"
+MANAGED_ENVIRONMENT="null"
+CONTAINER_NAME="null"
 
 
-# Vnet and Subnets
-VNET_EXISTS=$(az network vnet list --resource-group $RESOURCE_GROUP --query "[?name=='$VNET_NAME'].name" -o tsv)
+# Map
+declare -A provided_values
+for pair in $1; do
+    IFS='=' read -r key value <<< "$pair"
+    provided_values["$key"]="$value"
+done
 
-if [ -z "$VNET_EXISTS" ]; then
-    # vnet
-    echo $VNET_NAME
-    az network vnet create --name "$VNET_NAME" --resource-group $RESOURCE_GROUP --location northeurope --address-prefix 10.0.0.0/16
-
-    # contexts subnet
-    echo $SUBNET_NAME
-    az network vnet subnet create --name $SUBNET_NAME --resource-group $RESOURCE_GROUP --vnet-name $VNET_NAME --address-prefix 10.0.1.0/24
-    az network vnet subnet update \
-      --resource-group $RESOURCE_GROUP \
-      --vnet-name $VNET_NAME \
-      --name $SUBNET_NAME \
-      --delegations Microsoft.App/environments
-
-    echo "Vnet $VNET_NAME created."
-    echo "Subnet $SUBNET_NAME created."
-else
-    echo "VNet $VNET_NAME already exists."
-fi
-
-
-# Containerapp Environment
-ENV_EXISTS=$(az containerapp env list --resource-group $RESOURCE_GROUP --query "[?name=='$ENV_NAME'].name" -o tsv)
-
-if [ -z "$ENV_EXISTS" ]; then
-    INFRASTRUCTURE_SUBNET=$(az network vnet subnet show --resource-group ${RESOURCE_GROUP} --vnet-name $VNET_NAME --name ${SUBNET_NAME} --query "id" -o tsv | tr -d '[:space:]')
-
-    az containerapp env create --name $ENV_NAME --resource-group $RESOURCE_GROUP --location northeurope --infrastructure-subnet-resource-id "$INFRASTRUCTURE_SUBNET"
-
-    echo "Container Apps environment $ENV_NAME created."
-else
-    echo "Container Apps environment $ENV_NAME already exists."
-fi
+for key in "${!provided_values[@]}"; do
+    if declare -p "$key" &>/dev/null; then
+        declare "$key=${provided_values[$key]}"
+    else
+        echo "Warning: Variable $key is not defined."
+    fi
+done
 
 
 # RabbitMQ Containerapp
@@ -69,7 +44,7 @@ if [ -z "$RABBITMQ_EXISTS" ]; then
     --name $CONTAINER_NAME \
     --resource-group $RESOURCE_GROUP \
     --environment $ENV_NAME \
-    --image "$PROD_REGISTRY_USERNAME".azurecr.io/rabbitmq:3.13.7-management-alpine \
+    --image "$ACR_NAME".azurecr.io/rabbitmq:3.13.7-management-alpine \
     --target-port 15672 \
     --ingress external \
     --env-vars RABBITMQ_DEFAULT_USER="$RABBITMQ_USER" RABBITMQ_DEFAULT_PASS="$RABBITMQ_PASSWORD" RABBITMQ_DEFAULT_VHOST="$RABBITMQ_VHOST"
@@ -77,6 +52,10 @@ if [ -z "$RABBITMQ_EXISTS" ]; then
   az containerapp update \
     --name $CONTAINER_NAME \
     --resource-group $RESOURCE_GROUP \
+    --min-replicas 0 \
+    --max-replicas 1 \
+    --cpu 0.5 \
+    --memory 1Gi \
     --yaml ./cicd/rabbitmq-containerapp.yml
 
   echo "Creating $CONTAINER_NAME containerapp."
