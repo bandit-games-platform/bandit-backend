@@ -13,7 +13,6 @@
 ENV_NAME="null"
 RESOURCE_GROUP="null"
 ACR_NAME="null"
-MANAGED_ENVIRONMENT="null"
 CONTAINER_NAME="null"
 
 

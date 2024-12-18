@@ -344,11 +344,10 @@ deploy_rabbitmq_dev:
       ["ENV_NAME"]="env-dev-containers"
       ["RESOURCE_GROUP"]="rg_bandit_games_dev"
       ["ACR_NAME"]=$REGISTRY_USERNAME
-      ["MANAGED_ENVIRONMENT"]=$MANAGED_ENVIRONMENT_DEV
       ["CONTAINER_NAME"]="rabbitmq-dev-container"
       )
-      - serialized_map=""
-      - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
+    - serialized_map=""
+    - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
     - chmod +x cicd/deploy-rabbitmq.sh
     - cicd/deploy-rabbitmq-prod.sh "$serialized_map"
   environment:
@@ -377,11 +376,10 @@ deploy_rabbitmq_prod:
       ["ENV_NAME"]="env-prod-containers"
       ["RESOURCE_GROUP"]="rg_bandit_games_prod"
       ["ACR_NAME"]=$PROD_REGISTRY_USERNAME
-      ["MANAGED_ENVIRONMENT"]=$MANAGED_ENVIRONMENT_PROD
       ["CONTAINER_NAME"]="rabbitmq-prod-container"
       )
-      - serialized_map=""
-      - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
+    - serialized_map=""
+    - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
     - chmod +x cicd/deploy-rabbitmq.sh
     - cicd/deploy-rabbitmq-prod.sh "$serialized_map"
   rules:
