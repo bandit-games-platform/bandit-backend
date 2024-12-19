@@ -606,6 +606,7 @@ deploy_postgres_and_vnet_prod:
     - tdnf install -y postgresql
     - psql --version
     - az login --service-principal -u $PROD_AZURE_APP_ID -p $PROD_AZURE_PASSWORD --tenant $PROD_AZURE_TENANT
+    - az account set --subscription $SUBS_ID_PROD
   script:
     - declare -A value_map=(
       ["VNET_NAME"]="banditProdVnet"
@@ -662,6 +663,7 @@ deploy_chatbot_prod:
   before_script:
     - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
     - az extension add --name containerapp --upgrade
+    - az account set --subscription $SUBS_ID_PROD
   script:
     - declare -A value_map=(
       ["PG_USER"]=$DEV_PG_USER
@@ -697,6 +699,7 @@ deploy_gameplay_prod:
   before_script:
     - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
     - az extension add --name containerapp --upgrade
+    - az account set --subscription $SUBS_ID_PROD
   script:
     - declare -A value_map=(
       ["PG_USER"]=$DEV_PG_USER
@@ -731,6 +734,7 @@ deploy_game_registry_prod:
   before_script:
     - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
     - az extension add --name containerapp --upgrade
+    - az account set --subscription $SUBS_ID_PROD
   script:
     - declare -A value_map=(
       ["PG_USER"]=$DEV_PG_USER
@@ -766,6 +770,7 @@ deploy_player_prod:
   before_script:
     - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
     - az extension add --name containerapp --upgrade
+    - az account set --subscription $SUBS_ID_PROD
   script:
     - declare -A value_map=(
       ["PG_USER"]=$DEV_PG_USER
@@ -800,6 +805,7 @@ deploy_statistics_prod:
   before_script:
     - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
     - az extension add --name containerapp --upgrade
+    - az account set --subscription $SUBS_ID_PROD
   script:
     - declare -A value_map=(
       ["PG_USER"]=$DEV_PG_USER
@@ -835,6 +841,7 @@ deploy_storefront_prod:
   before_script:
     - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
     - az extension add --name containerapp --upgrade
+    - az account set --subscription $SUBS_ID_PROD
   script:
     - declare -A value_map=(
       ["PG_USER"]=$DEV_PG_USER
