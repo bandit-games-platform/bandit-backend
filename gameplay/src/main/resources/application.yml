@@ -23,6 +23,7 @@ spring:
     port: 5672
     username: ${RABBITMQ_USER:myuser}
     password: ${RABBITMQ_PASSWORD:mypassword}
+    virtual-host: ${RABBITMQ_VHOST:%2F}
   security:
     oauth2:
       resourceserver:
