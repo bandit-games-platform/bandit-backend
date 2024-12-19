@@ -354,6 +354,7 @@ deploy_chatbot_dev:
   before_script:
     - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
     - az extension add --name containerapp --upgrade
+    - sleep 20
   script:
     - declare -A value_map=(
       ["PG_USER"]=$DEV_PG_USER
@@ -447,7 +448,7 @@ deploy_game_registry_dev:
       ["PORT"]=8092
       ["REG_USERNAME"]=$REGISTRY_USERNAME
       ["RABBIT_URL"]=$DEV_RABBIT_URL
-      ["KEYCLOAK_CLIENT_SECRET"]=$KEYCLOAK_BACKEND_SECRET
+      ["KEYCLOAK_CLIENT_SECRET"]=$KEYCLOAK_GAME_REGISTRY_SECRET
       ["SCALE_DOWN"]=false
       )
     - serialized_map=""
