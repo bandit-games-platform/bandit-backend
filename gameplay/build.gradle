@@ -47,7 +47,7 @@ tasks.register('printGitProperties') {
 
 bootBuildImage {
     builder = "paketobuildpacks/builder-jammy-base:latest"
-    imageName = "acrbanditgamesdev.azurecr.io/game-play-context"
+    imageName = "acrbanditgamesdev.azurecr.io/gameplay-context"
     tags = ["acrbanditgamesdev.azurecr.io/gameplay-context:${-> project.ext.gitProps['git.commit.id.abbrev']}"]
     publish = true
     docker {
@@ -64,8 +64,8 @@ bootBuildImage.dependsOn generateGitProperties
 
 tasks.register('bootBuildImageProd', BootBuildImage) {
     builder = "paketobuildpacks/builder-jammy-base:latest"
-    imageName = "acrbanditgamesprod.azurecr.io/game-play-context"
-    tags = ["acrbanditgamesprod.azurecr.io/game-play-context:${-> project.ext.gitProps['git.commit.id.abbrev']}"]
+    imageName = "acrbanditgamesprod.azurecr.io/gameplay-context"
+    tags = ["acrbanditgamesprod.azurecr.io/gameplay-context:${-> project.ext.gitProps['git.commit.id.abbrev']}"]
     publish = true
     docker {
         publishRegistry {
