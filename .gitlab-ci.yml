@@ -367,6 +367,7 @@ deploy_chatbot_dev:
       ["REG_USERNAME"]=$REGISTRY_USERNAME
       ["RABBIT_URL"]=$DEV_RABBIT_URL
       ["PYTHON_URL"]=$DEV_PYTHON_URL
+      ["SCALE_DOWN"]=false
       )
     - serialized_map=""
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
@@ -406,6 +407,7 @@ deploy_gameplay_dev:
       ["PORT"]=8093
       ["REG_USERNAME"]=$REGISTRY_USERNAME
       ["RABBIT_URL"]=$DEV_RABBIT_URL
+      ["SCALE_DOWN"]=false
       )
     - serialized_map=""
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
@@ -446,6 +448,7 @@ deploy_game_registry_dev:
       ["REG_USERNAME"]=$REGISTRY_USERNAME
       ["RABBIT_URL"]=$DEV_RABBIT_URL
       ["KEYCLOAK_CLIENT_SECRET"]=$KEYCLOAK_BACKEND_SECRET
+      ["SCALE_DOWN"]=false
       )
     - serialized_map=""
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
@@ -485,6 +488,7 @@ deploy_player_dev:
       ["PORT"]=8094
       ["REG_USERNAME"]=$REGISTRY_USERNAME
       ["RABBIT_URL"]=$DEV_RABBIT_URL
+      ["SCALE_DOWN"]=false
       )
     - serialized_map=""
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
@@ -525,6 +529,7 @@ deploy_statistics_dev:
       ["REG_USERNAME"]=$REGISTRY_USERNAME
       ["RABBIT_URL"]=$DEV_RABBIT_URL
       ["GAME_REGISTRY_URL"]=$DEV_GAME_REGISTRY_URL
+      ["SCALE_DOWN"]=false
       )
     - serialized_map=""
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
@@ -567,6 +572,7 @@ deploy_storefront_dev:
       ["GAME_REGISTRY_URL"]=$DEV_GAME_REGISTRY_URL
       ["FRONTEND_URL"]=$DEV_FRONTEND_URL
       ["STRIPE_API_KEY"]=$STRIPE_TEST_API_KEY
+      ["SCALE_DOWN"]=false
       )
     - serialized_map=""
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done

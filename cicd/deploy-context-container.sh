@@ -7,6 +7,7 @@
 #- Usage:	    ./deploy-context-container.sh
 #---------------------------------------------------------------
 
+SCALE_DOWN=true
 CONTAINER_NAME="null"
 RESOURCE_GROUP="null"
 PG_USER="null"
@@ -105,9 +106,18 @@ fi
 
 echo "$ENV_VAR_STRING"
 
-az containerapp update --name $CONTAINER_NAME --resource-group $RESOURCE_GROUP \
-  --cpu 1 --memory 2Gi \
-  --min-replicas 0 --max-replicas 1 \
-  --set-env-vars "${ENV_VAR_ARGS[@]}"
+if [ "$SCALE_DOWN" = false ]; then
+  az containerapp update --name $CONTAINER_NAME --resource-group $RESOURCE_GROUP \
+    --cpu 1 --memory 2Gi \
+    --min-replicas 1 --max-replicas 1 \
+    --set-env-vars "${ENV_VAR_ARGS[@]}"
+
+else
+  az containerapp update --name $CONTAINER_NAME --resource-group $RESOURCE_GROUP \
+      --cpu 1 --memory 2Gi \
+      --min-replicas 0 --max-replicas 1 \
+      --set-env-vars "${ENV_VAR_ARGS[@]}"
+
+fi
 
 unset ENV_VAR_STRING
