@@ -24,6 +24,12 @@ public class CompletedSessionJpaAdapter implements CompletedSessionLoadPort {
         return allSessions.stream().map(this::completedSessionJpaToDomain).collect(Collectors.toList());
     }
 
+    @Override
+    public List<CompletedSession> loadAllCompletedSessionsForGameAndPlayer(GameId gameId, PlayerId playerId) {
+        List<CompletedSessionJpaEntity> allSessions = completedSessionJpaRepository.findAllByGameIdAndPlayerId(gameId.uuid(),playerId.uuid());
+        return allSessions.stream().map(this::completedSessionJpaToDomain).collect(Collectors.toList());
+    }
+
     private CompletedSession completedSessionJpaToDomain(final CompletedSessionJpaEntity completedSessionJpaEntity){
         return new CompletedSession(
                 new SessionId(completedSessionJpaEntity.getSessionId()),
