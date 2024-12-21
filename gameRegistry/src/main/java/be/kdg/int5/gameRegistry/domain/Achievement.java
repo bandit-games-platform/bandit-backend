@@ -68,6 +68,6 @@ public class Achievement {
 
 
     public static AchievementId generateUniqueIdFromGameIdAndUniqueNumber(GameId gameId, int uniqueNumber) {
-        return new AchievementId(UUID.nameUUIDFromBytes((gameId.toString()+":"+uniqueNumber).getBytes(StandardCharsets.UTF_8)));
+        return new AchievementId(UUID.nameUUIDFromBytes((gameId.uuid().toString()+":"+uniqueNumber).getBytes(StandardCharsets.UTF_8)));
     }
 }
