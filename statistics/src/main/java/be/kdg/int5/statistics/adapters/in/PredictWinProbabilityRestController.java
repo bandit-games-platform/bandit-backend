@@ -1,27 +1,21 @@
 package be.kdg.int5.statistics.adapters.in;
 
 import be.kdg.int5.common.exceptions.PythonServiceException;
-import be.kdg.int5.statistics.adapters.in.dto.NewAchievementProgressDto;
-import be.kdg.int5.statistics.adapters.in.dto.NewCompletedSessionDto;
+import be.kdg.int5.statistics.adapters.in.dto.WinPredictionDto;
 import be.kdg.int5.statistics.adapters.in.dto.WinProbabilityRequestDto;
-import be.kdg.int5.statistics.domain.AchievementId;
-import be.kdg.int5.statistics.domain.GameEndState;
 import be.kdg.int5.statistics.domain.GameId;
 import be.kdg.int5.statistics.domain.PlayerId;
 import be.kdg.int5.statistics.port.in.*;
-import be.kdg.int5.statistics.utils.predictiveModel.PredictWinProbabilityDto;
-import jakarta.validation.Valid;
+import be.kdg.int5.statistics.adapters.out.python.dto.WinProbabilityModelFeaturesDto;
+import be.kdg.int5.statistics.utils.predictiveModel.WinPrediction;
 import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.UUID;
 
@@ -36,7 +30,7 @@ public class PredictWinProbabilityRestController {
 
     @PostMapping("/statistics/games/{gameId}/win-probability/predict")
     @PreAuthorize("hasAuthority('admin')")
-    public ResponseEntity<List<PredictWinProbabilityDto>> predictWinProbability(
+    public ResponseEntity<WinPredictionDto> predictWinProbability(
             @NotNull @PathVariable("gameId") UUID gameId,
             @NotNull @RequestBody WinProbabilityRequestDto dto
             ) {
@@ -48,9 +42,16 @@ public class PredictWinProbabilityRestController {
                     new PlayerId(dto.getPlayerTwoId())
             );
 
-            List<PredictWinProbabilityDto> predictWinProbabilityDto = predictWinProbabilityUseCase.predictWinProbability(command);
+            WinPrediction response = predictWinProbabilityUseCase.predictWinProbability(command);
 
-            return ResponseEntity.ok(predictWinProbabilityDto);
+            WinPredictionDto winPredictionDto = new WinPredictionDto(
+                    response.getPlayerOneId(),
+                    response.getProbabilityPlayerOne(),
+                    response.getPlayerTwoId(),
+                    response.getProbabilityPlayerTwo()
+            );
+
+            return ResponseEntity.ok(winPredictionDto);
         } catch (PythonServiceException e) {
 
             logger.error("Python service is unavailable at the moment. Please try again later.");

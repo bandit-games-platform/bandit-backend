@@ -1,10 +1,10 @@
-package be.kdg.int5.statistics.utils.predictiveModel;
+package be.kdg.int5.statistics.adapters.out.python.dto;
 
 import jakarta.validation.constraints.NotNull;
 
 import java.util.UUID;
 
-public class PredictWinProbabilityDto {
+public class WinProbabilityModelFeaturesDto {
     @NotNull
     private UUID playerId;
     @NotNull
@@ -25,10 +25,10 @@ public class PredictWinProbabilityDto {
     private float clicks;
 
 
-    public PredictWinProbabilityDto() {
+    public WinProbabilityModelFeaturesDto() {
     }
 
-    public PredictWinProbabilityDto(UUID playerId, float avg_turns_taken, float avg_session_duration, float avg_score, float avg_opponent_score, float avg_seconds_per_turn, float win_rate, float avg_starting_first, float clicks) {
+    public WinProbabilityModelFeaturesDto(UUID playerId, float avg_turns_taken, float avg_session_duration, float avg_score, float avg_opponent_score, float avg_seconds_per_turn, float win_rate, float avg_starting_first, float clicks) {
         this.playerId = playerId;
         this.avg_turns_taken = avg_turns_taken;
         this.avg_session_duration = avg_session_duration;

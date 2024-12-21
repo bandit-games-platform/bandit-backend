@@ -4,8 +4,10 @@ import be.kdg.int5.statistics.domain.CompletedSession;
 import be.kdg.int5.statistics.port.in.PredictWinProbabilityCommand;
 import be.kdg.int5.statistics.port.in.PredictWinProbabilityUseCase;
 import be.kdg.int5.statistics.port.out.CompletedSessionLoadPort;
-import be.kdg.int5.statistics.utils.predictiveModel.PredictWinProbabilityDto;
-import be.kdg.int5.statistics.utils.predictiveModel.WinProbabilityInputFeaturesConverterUtil;
+import be.kdg.int5.statistics.adapters.out.python.dto.WinProbabilityModelFeaturesDto;
+import be.kdg.int5.statistics.port.out.PredictWinProbabilityPort;
+import be.kdg.int5.statistics.utils.predictiveModel.WinPrediction;
+import be.kdg.int5.statistics.utils.predictiveModel.WinProbabilityModelFeaturesConverterUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -17,15 +19,17 @@ public class PredictWinProbabilityUseCaseImpl implements PredictWinProbabilityUs
     private static final Logger logger = LoggerFactory.getLogger(PredictWinProbabilityUseCaseImpl.class);
 
     private final CompletedSessionLoadPort completedSessionLoadPort;
-    private final WinProbabilityInputFeaturesConverterUtil winProbabilityInputFeaturesConverterUtil;
+    private final WinProbabilityModelFeaturesConverterUtil winProbabilityModelFeaturesConverterUtil;
+    private final PredictWinProbabilityPort predictWinProbabilityPort;
 
-    public PredictWinProbabilityUseCaseImpl(CompletedSessionLoadPort completedSessionLoadPort, WinProbabilityInputFeaturesConverterUtil winProbabilityInputFeaturesConverterUtil) {
+    public PredictWinProbabilityUseCaseImpl(CompletedSessionLoadPort completedSessionLoadPort, WinProbabilityModelFeaturesConverterUtil winProbabilityModelFeaturesConverterUtil, PredictWinProbabilityPort predictWinProbabilityPort) {
         this.completedSessionLoadPort = completedSessionLoadPort;
-        this.winProbabilityInputFeaturesConverterUtil = winProbabilityInputFeaturesConverterUtil;
+        this.winProbabilityModelFeaturesConverterUtil = winProbabilityModelFeaturesConverterUtil;
+        this.predictWinProbabilityPort = predictWinProbabilityPort;
     }
 
     @Override
-    public List<PredictWinProbabilityDto> predictWinProbability(PredictWinProbabilityCommand command) {
+    public WinPrediction predictWinProbability(PredictWinProbabilityCommand command) {
         List<CompletedSession> player1Sessions = null;
         List<CompletedSession> player2Sessions = null;
 
@@ -43,10 +47,12 @@ public class PredictWinProbabilityUseCaseImpl implements PredictWinProbabilityUs
         }
         logger.info("Predicting win probability for {} players: {} VS {}", command.gameId(), command.player1(), command.player2());
 
-        return winProbabilityInputFeaturesConverterUtil.convertToInputFeatures(
+        List<WinProbabilityModelFeaturesDto> featuresDto = winProbabilityModelFeaturesConverterUtil.convertToInputFeatures(
                 command.player1().uuid(),
                 player1Sessions,
                 command.player2().uuid(),
                 player2Sessions);
+
+        return predictWinProbabilityPort.getPredictions(featuresDto);
     }
 }

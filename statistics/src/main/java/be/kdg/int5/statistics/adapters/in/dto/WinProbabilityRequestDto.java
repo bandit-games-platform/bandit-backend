@@ -6,8 +6,6 @@ import java.util.UUID;
 
 public class WinProbabilityRequestDto {
     @NotNull
-    private  UUID gameId;
-    @NotNull
     private  UUID playerOneId;
     @NotNull
     private  UUID playerTwoId;
@@ -15,18 +13,9 @@ public class WinProbabilityRequestDto {
     public WinProbabilityRequestDto() {
     }
 
-    public WinProbabilityRequestDto(UUID gameId, UUID playerOneId, UUID playerTwoId) {
-        this.gameId = gameId;
+    public WinProbabilityRequestDto(UUID playerOneId, UUID playerTwoId) {
         this.playerOneId = playerOneId;
         this.playerTwoId = playerTwoId;
-    }
-
-    public UUID getGameId() {
-        return gameId;
-    }
-
-    public void setGameId(UUID gameId) {
-        this.gameId = gameId;
     }
 
     public UUID getPlayerOneId() {

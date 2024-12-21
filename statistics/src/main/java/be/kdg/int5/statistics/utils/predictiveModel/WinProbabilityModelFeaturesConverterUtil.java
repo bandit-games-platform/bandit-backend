@@ -1,5 +1,6 @@
 package be.kdg.int5.statistics.utils.predictiveModel;
 
+import be.kdg.int5.statistics.adapters.out.python.dto.WinProbabilityModelFeaturesDto;
 import be.kdg.int5.statistics.domain.CompletedSession;
 import be.kdg.int5.statistics.domain.GameEndState;
 import org.slf4j.Logger;
@@ -11,21 +12,21 @@ import java.util.UUID;
 import java.time.Duration;
 
 @Component
-public class WinProbabilityInputFeaturesConverterUtil {
-    private static final Logger logger = LoggerFactory.getLogger(WinProbabilityInputFeaturesConverterUtil.class);
+public class WinProbabilityModelFeaturesConverterUtil {
+    private static final Logger logger = LoggerFactory.getLogger(WinProbabilityModelFeaturesConverterUtil.class);
 
-    public List<PredictWinProbabilityDto> convertToInputFeatures(
+    public List<WinProbabilityModelFeaturesDto> convertToInputFeatures(
             UUID playerOne,
             List<CompletedSession> playerOneSessions,
             UUID playerTwo,
             List<CompletedSession> playerTwoSessions) {
 
-        PredictWinProbabilityDto playerOneFeatures = calculateAggregatedFeatures(
+        WinProbabilityModelFeaturesDto playerOneFeatures = calculateAggregatedFeatures(
                 playerOne,
                 playerOneSessions
         );
 
-        PredictWinProbabilityDto playerTwoFeatures = calculateAggregatedFeatures(
+        WinProbabilityModelFeaturesDto playerTwoFeatures = calculateAggregatedFeatures(
                 playerTwo,
                 playerTwoSessions
         );
@@ -33,7 +34,7 @@ public class WinProbabilityInputFeaturesConverterUtil {
         return List.of(playerOneFeatures, playerTwoFeatures);
     }
 
-    private PredictWinProbabilityDto calculateAggregatedFeatures(UUID playerId, List<CompletedSession> sessions) {
+    private WinProbabilityModelFeaturesDto calculateAggregatedFeatures(UUID playerId, List<CompletedSession> sessions) {
         logger.info("Win probability: Starting calculation of aggregated features for player: {}", playerId);
 
         float avgTurnsTaken = 0;
@@ -106,7 +107,7 @@ public class WinProbabilityInputFeaturesConverterUtil {
         avgClicks = sessions.isEmpty() ? 0 : (float) totalClicks / sessions.size();
         logger.info("Total clicks: {}, Average clicks: {}", totalSessionDuration, avgClicks);
 
-        PredictWinProbabilityDto result = new PredictWinProbabilityDto(
+        WinProbabilityModelFeaturesDto result = new WinProbabilityModelFeaturesDto(
                 playerId,
                 avgTurnsTaken,
                 avgSessionDuration,
