@@ -6,7 +6,6 @@ import be.kdg.int5.statistics.adapters.in.dto.WinProbabilityRequestDto;
 import be.kdg.int5.statistics.domain.GameId;
 import be.kdg.int5.statistics.domain.PlayerId;
 import be.kdg.int5.statistics.port.in.*;
-import be.kdg.int5.statistics.adapters.out.python.dto.WinProbabilityModelFeaturesDto;
 import be.kdg.int5.statistics.utils.predictiveModel.WinPrediction;
 import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
@@ -16,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
