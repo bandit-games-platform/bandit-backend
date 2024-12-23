@@ -36,16 +36,19 @@ VALUES
     ('51874c74-aeec-4c97-b52d-e3e767477f9d', '2024-11-11 09:00:34', '2024-11-11 16:00:00', 'WIN', 100, 150, null, null, null, null, true, '94dad160-f5c8-4817-8f2d-611e1436ffcd', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c001'),
     ('e8aa06e0-4dc3-4aa1-bf57-91df33f31ed7', '2024-11-11 05:34:00', '2024-11-11 08:16:24', 'WIN', 48, 42, null, null, null, null, false, '94dad160-f5c8-4817-8f2d-611e1436ffcd', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c001'),
     ('878cd7a1-a275-4652-afa1-90817c748d33', '2024-11-24 19:00:00', '2024-11-24 21:24:27', 'WIN', 40, 66, null, null, null, 'White', true, '94dad160-f5c8-4817-8f2d-611e1436ffcd', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c002'),
-    ('a10c8502-7a19-419d-8234-b2af83e3bfc1', '2024-11-23 14:30:00', '2024-11-23 16:45:00', 'LOSS', 15, 10, null, null, null, null, false, 'd7f9b8e3-3c4f-4b9f-8d7e-e1c0f4a7b901', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c001'),
+    ('a10c8502-7a19-419d-8234-b2af83e3bfc1', '2024-11-23 14:30:00', '2024-11-23 16:45:00', 'LOSS', 150, 100, null, null, null, null, false, 'd7f9b8e3-3c4f-4b9f-8d7e-e1c0f4a7b901', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c001'),
     ('a9ec8502-7a19-419d-8234-b2af83e3bfc1', '2024-11-22 09:00:00', '2024-11-22 11:05:00', 'DRAW', 22, 18, null, null, null, null, true, 'd7f9b8e3-3c4f-4b9f-8d7e-e1c0f4a7b901', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c001'),
-    ('a8ec8502-7a19-419d-8234-b2af83e3bfc1', '2024-11-20 16:15:00', '2024-11-20 18:00:00', 'WIN', 25, 20, null, null, null, null, false, 'd7f9b8e3-3c4f-4b9f-8d7e-e1c0f4a7b901', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c001'),
-    ('a7ec8502-7a19-419d-8234-b2af83e3bfc1', '2024-11-18 12:00:00', '2024-11-18 13:45:00', 'LOSS', 17, 12, null, null, null, null, true, 'd7f9b8e3-3c4f-4b9f-8d7e-e1c0f4a7b901', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c001'),
+    ('a8ec8502-7a19-419d-8234-b2af83e3bfc1', '2024-11-20 16:15:00', '2024-11-20 18:00:00', 'WIN', 25, 200, null, null, null, null, false, 'd7f9b8e3-3c4f-4b9f-8d7e-e1c0f4a7b901', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c001'),
+    ('a7ec8502-7a19-419d-8234-b2af83e3bfc1', '2024-11-18 12:00:00', '2024-11-18 13:45:00', 'LOSS', 170, 12, null, null, null, null, true, 'd7f9b8e3-3c4f-4b9f-8d7e-e1c0f4a7b901', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c001'),
     ('a6ec8502-7a19-419d-8234-b2af83e3bfc1', '2024-11-17 10:00:00', '2024-11-17 12:00:00', 'DRAW', 20, 15, null, null, null, null, false, 'd7f9b8e3-3c4f-4b9f-8d7e-e1c0f4a7b901', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c001'),
-    ('a5ec8502-7a19-419d-8234-b2af83e3bfc1', '2024-11-15 18:00:00', '2024-11-15 20:30:00', 'WIN', 30, 25, null, null, null, null, true, 'd7f9b8e3-3c4f-4b9f-8d7e-e1c0f4a7b901', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c001'),
-    ('a4ec8502-7a19-419d-8234-b2af83e3bfc1', '2024-11-14 14:00:00', '2024-11-14 16:15:00', 'LOSS', 18, 14, null, null, null, null, false, 'd7f9b8e3-3c4f-4b9f-8d7e-e1c0f4a7b901', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c001'),
-    ('a3ec8502-7a19-419d-8234-b2af83e3bfc1', '2024-11-12 08:30:00', '2024-11-12 11:00:00', 'DRAW', 19, 16, null, null, null, null, true, 'd7f9b8e3-3c4f-4b9f-8d7e-e1c0f4a7b901', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c001'),
-    ('a2ec8502-7a19-419d-8234-b2af83e3bfc1', '2024-11-10 13:45:00', '2024-11-10 16:00:00', 'WIN', 21, 19, null, null, null, null, false, 'd7f9b8e3-3c4f-4b9f-8d7e-e1c0f4a7b901', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c001'),
-    ('a1ec8502-7a19-419d-8234-b2af83e3bfc1', '2024-11-08 10:00:00', '2024-11-08 12:30:00', 'LOSS', 23, 20, null, null, null, null, true, 'd7f9b8e3-3c4f-4b9f-8d7e-e1c0f4a7b901', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c001');
+    ('a5ec8502-7a19-419d-8234-b2af83e3bfc1', '2024-11-15 18:00:00', '2024-11-15 20:30:00', 'WIN', 300, 250, null, null, null, null, true, 'd7f9b8e3-3c4f-4b9f-8d7e-e1c0f4a7b901', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c001'),
+    ('a4ec8502-7a19-419d-8234-b2af83e3bfc1', '2024-11-14 14:00:00', '2024-11-14 16:15:00', 'LOSS', 180, 14, null, null, null, null, false, 'd7f9b8e3-3c4f-4b9f-8d7e-e1c0f4a7b901', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c001'),
+    ('a3ec8502-7a19-419d-8234-b2af83e3bfc1', '2024-11-12 08:30:00', '2024-11-12 11:00:00', 'DRAW', 19, 160, null, null, null, null, true, 'd7f9b8e3-3c4f-4b9f-8d7e-e1c0f4a7b901', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c001'),
+    ('a2ec8502-7a19-419d-8234-b2af83e3bfc1', '2024-11-10 13:45:00', '2024-11-10 16:00:00', 'WIN', 210, 190, null, null, null, null, false, 'd7f9b8e3-3c4f-4b9f-8d7e-e1c0f4a7b901', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c001'),
+    ('a1ec8502-7a19-419d-8234-b2af83e3bfc1', '2024-11-08 10:00:00', '2024-11-08 12:30:00', 'LOSS', 23, 20, null, null, null, null, true, 'd7f9b8e3-3c4f-4b9f-8d7e-e1c0f4a7b901', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c001'),
+    ('a3ab8502-7a19-419d-8234-b2af83e3bfc1', '2024-11-12 08:30:00', '2024-11-12 11:00:00', 'DRAW', 19, 160, null, null, null, null, true, 'd7f9b8e3-3c4f-4b9f-8d7e-e1c0f4a7b901', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c001'),
+    ('a2ab8502-7a19-419d-8234-b2af83e3bfc1', '2024-11-10 13:45:00', '2024-11-10 16:00:00', 'WIN', 210, 190, null, null, null, null, false, 'd7f9b8e3-3c4f-4b9f-8d7e-e1c0f4a7b901', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c001'),
+    ('a1ab8502-7a19-419d-8234-b2af83e3bfc1', '2024-11-08 10:00:00', '2024-11-08 12:30:00', 'LOSS', 23, 20, null, null, null, null, true, 'd7f9b8e3-3c4f-4b9f-8d7e-e1c0f4a7b901', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c001');
 
 
 INSERT INTO statistics.completed_game_sessions (

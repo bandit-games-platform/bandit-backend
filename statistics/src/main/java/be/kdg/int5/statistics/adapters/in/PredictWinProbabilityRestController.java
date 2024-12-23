@@ -30,9 +30,7 @@ public class PredictWinProbabilityRestController {
     @PreAuthorize("hasAuthority('admin')")
     public ResponseEntity<WinPredictionDto> predictWinProbability(
             @NotNull @PathVariable("gameId") UUID gameId,
-            @NotNull @RequestBody WinProbabilityRequestDto dto
-            ) {
-
+            @NotNull @RequestBody WinProbabilityRequestDto dto) {
         try {
             PredictWinProbabilityCommand command = new PredictWinProbabilityCommand(
                     new GameId(gameId),
@@ -48,10 +46,8 @@ public class PredictWinProbabilityRestController {
                     response.getPlayerTwoId(),
                     response.getProbabilityPlayerTwo()
             );
-
             return ResponseEntity.ok(winPredictionDto);
         } catch (PythonServiceException e) {
-
             logger.error("Python service is unavailable at the moment. Please try again later.");
             return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).build();
         }

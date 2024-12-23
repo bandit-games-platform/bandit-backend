@@ -7,7 +7,7 @@ client_id=bandit-backend&client_secret=**********&username=deanadmin@kdg.be&pass
 
 > {%client.global.set("logged-in-admin", response.body.access_token);%}
 
-### export completedSessions for a game to CSV
+### Get win prediction for 2 players on a certain game
 
 POST http://localhost:8095/statistics/statistics/games/d77e1d1f-6b46-4c89-9290-3b9cf8a7c001/win-probability/predict
 Content-Type: application/json

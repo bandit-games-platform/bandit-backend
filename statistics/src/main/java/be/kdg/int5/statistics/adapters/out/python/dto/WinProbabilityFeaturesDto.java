@@ -2,7 +2,7 @@ package be.kdg.int5.statistics.adapters.out.python.dto;
 
 import java.util.UUID;
 
-public class WinPredictionModeInputFeaturesDto {
+public class WinProbabilityFeaturesDto {
     private UUID playerOneId;
     private UUID playerTwoId;
     private float diff_session_count;
@@ -15,7 +15,7 @@ public class WinPredictionModeInputFeaturesDto {
     private float diff_avg_clicks;
     private float diff_avg_starting_first;
 
-    public WinPredictionModeInputFeaturesDto( UUID playerOneId, UUID playerTwoId,float diff_session_count, float diff_win_rate, float diff_avg_score, float diff_avg_turns_taken, float diff_avg_session_duration, float diff_avg_seconds_per_turn, float diff_avg_clicks, float diff_avg_opponent_score, float diff_avg_starting_first) {
+    public WinProbabilityFeaturesDto(UUID playerOneId, UUID playerTwoId, float diff_session_count, float diff_win_rate, float diff_avg_score, float diff_avg_turns_taken, float diff_avg_session_duration, float diff_avg_seconds_per_turn, float diff_avg_clicks, float diff_avg_opponent_score, float diff_avg_starting_first) {
         this.playerOneId = playerOneId;
         this.playerTwoId = playerTwoId;
         this.diff_session_count = diff_session_count;

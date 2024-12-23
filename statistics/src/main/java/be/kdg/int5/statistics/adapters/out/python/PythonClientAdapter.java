@@ -1,9 +1,8 @@
 package be.kdg.int5.statistics.adapters.out.python;
 
 import be.kdg.int5.common.exceptions.PythonServiceException;
-import be.kdg.int5.statistics.adapters.out.python.dto.WinPredictionModeInputFeaturesDto;
+import be.kdg.int5.statistics.adapters.out.python.dto.WinProbabilityFeaturesDto;
 import be.kdg.int5.statistics.port.out.PredictWinProbabilityPort;
-import be.kdg.int5.statistics.utils.predictiveModel.AggregatedPlayerSessionsData;
 import be.kdg.int5.statistics.utils.predictiveModel.WinPrediction;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -14,8 +13,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.List;
 
 @Repository
 public class PythonClientAdapter implements PredictWinProbabilityPort {
@@ -31,13 +28,13 @@ public class PythonClientAdapter implements PredictWinProbabilityPort {
     }
 
     @Override
-    public WinPrediction getPredictions(WinPredictionModeInputFeaturesDto featuresDto) {
+    public WinPrediction getPredictions(WinProbabilityFeaturesDto featuresDto) {
         ObjectMapper objectMapper = new ObjectMapper();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        HttpEntity<WinPredictionModeInputFeaturesDto> entity = new HttpEntity<>(featuresDto, headers);
+        HttpEntity<WinProbabilityFeaturesDto> entity = new HttpEntity<>(featuresDto, headers);
 
         try {
             String response = restTemplate.postForObject(pythonUrl, entity, String.class);

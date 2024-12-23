@@ -30,9 +30,6 @@ public class WinPrediction {
         return probabilityPlayerOne;
     }
 
-    public void setProbabilityPlayerOne(float probabilityPlayerOne) {
-        this.probabilityPlayerOne = probabilityPlayerOne;
-    }
 
     public UUID getPlayerTwoId() {
         return playerTwoId;
