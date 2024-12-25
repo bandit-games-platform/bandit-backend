@@ -2,6 +2,8 @@ package be.kdg.int5.gameplay.adapters.out.db.gameInvite;
 
 import be.kdg.int5.gameplay.adapters.out.db.lobby.LobbyJpaEntity;
 import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.UUID;
 
@@ -15,6 +17,7 @@ public class GameInviteJpaEntity {
     private boolean accepted;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private LobbyJpaEntity lobby;
 
     public GameInviteJpaEntity() {

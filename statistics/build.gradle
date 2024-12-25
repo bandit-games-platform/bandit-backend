@@ -1,8 +1,10 @@
+import org.springframework.boot.gradle.tasks.bundling.BootBuildImage
+
 plugins {
     id 'module-config'
+    id "com.gorylenko.gradle-git-properties" version "2.4.1"
+    id "org.springframework.boot"
 }
-
-
 
 dependencies {
     implementation project(':common')
@@ -33,4 +35,59 @@ dependencies {
 
     //Export csv
     implementation 'com.opencsv:opencsv:5.8'
+
+    //Spring cloud AZURE
+    implementation 'com.azure.spring:spring-cloud-azure-starter-actuator:4.3.0'
+    implementation 'com.azure.spring:spring-cloud-azure-starter-keyvault:4.3.0'
+    implementation 'com.azure.spring:spring-cloud-azure-starter:4.3.0'
+    implementation 'com.azure.spring:spring-cloud-azure-dependencies:5.7.0'
 }
+
+
+gitProperties {
+    extProperty = 'gitProps'
+}
+generateGitProperties.outputs.upToDateWhen { false }
+
+tasks.register('printGitProperties') {
+    dependsOn 'generateGitProperties'
+    doLast {
+        println "git.commit.id.abbrev=" + project.ext.gitProps['git.commit.id.abbrev']
+    }
+}
+
+
+bootBuildImage {
+    builder = "paketobuildpacks/builder-jammy-base:latest"
+    imageName = "acrbanditgamesdev.azurecr.io/statistics-context"
+    tags = ["acrbanditgamesdev.azurecr.io/statistics-context:${-> project.ext.gitProps['git.commit.id.abbrev']}"]
+    publish = true
+    docker {
+        publishRegistry {
+            username =  System.getenv("REGISTRY_USERNAME")
+            password = System.getenv("REGISTRY_PASSWORD")
+        }
+    }
+    archiveFile = tasks.bootJar.archiveFile
+}
+
+bootBuildImage.dependsOn generateGitProperties
+
+
+tasks.register('bootBuildImageProd', BootBuildImage) {
+    builder = "paketobuildpacks/builder-jammy-base:latest"
+    imageName = "acrbanditgamesprod.azurecr.io/statistics-context"
+    tags = ["acrbanditgamesprod.azurecr.io/statistics-context:${-> project.ext.gitProps['git.commit.id.abbrev']}"]
+    publish = true
+    docker {
+        publishRegistry {
+            username =  System.getenv("PROD_REGISTRY_USERNAME")
+            password = System.getenv("PROD_REGISTRY_PASSWORD")
+        }
+    }
+    archiveFile = tasks.bootJar.archiveFile
+}
+
+bootBuildImageProd.dependsOn generateGitProperties
+
+
