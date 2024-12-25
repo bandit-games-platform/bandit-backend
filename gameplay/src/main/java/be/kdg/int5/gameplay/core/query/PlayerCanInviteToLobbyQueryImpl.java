@@ -1,5 +1,6 @@
 package be.kdg.int5.gameplay.core.query;
 
+import be.kdg.int5.gameplay.domain.GameId;
 import be.kdg.int5.gameplay.domain.Lobby;
 import be.kdg.int5.gameplay.domain.LobbyId;
 import be.kdg.int5.gameplay.domain.PlayerId;
@@ -16,11 +17,11 @@ public class PlayerCanInviteToLobbyQueryImpl implements PlayerCanInviteToLobbyQu
     }
 
     @Override
-    public boolean canPlayerCurrentlyInviteOthersToLobby(PlayerId requestingPlayer, LobbyId lobbyId) {
-        Lobby lobby = lobbyLoadPort.load(lobbyId);
+    public LobbyId canPlayerCurrentlyInviteOthersToLobby(PlayerId requestingOwner, GameId gameId) {
+        Lobby lobby = lobbyLoadPort.loadByOwnerIdAndGameId(requestingOwner, gameId);
 
-        if (lobby == null || !lobby.getOwnerId().uuid().equals(requestingPlayer.uuid())) return false;
+        if (lobby == null || lobby.isClosed()) return null;
 
-        return !lobby.isClosed();
+        return lobby.getId();
     }
 }
