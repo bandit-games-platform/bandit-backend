@@ -4,18 +4,18 @@ import java.util.UUID;
 
 public class WinPrediction {
     private  UUID playerOneId;
-    private float probabilityPlayerOne;
+    private float winProbabilityPlayerOne;
     private  UUID playerTwoId;
-    private float probabilityPlayerTwo;
+    private float winProbabilityPlayerTwo;
 
     public WinPrediction() {
     }
 
-    public WinPrediction(UUID playerOneId, float probabilityPlayerOne, UUID playerTwoId, float probabilityPlayerTwo) {
+    public WinPrediction(UUID playerOneId, float winProbabilityPlayerOne, UUID playerTwoId, float winProbabilityPlayerTwo) {
         this.playerOneId = playerOneId;
-        this.probabilityPlayerOne = probabilityPlayerOne;
+        this.winProbabilityPlayerOne = winProbabilityPlayerOne;
         this.playerTwoId = playerTwoId;
-        this.probabilityPlayerTwo = probabilityPlayerTwo;
+        this.winProbabilityPlayerTwo = winProbabilityPlayerTwo;
     }
 
     public UUID getPlayerOneId() {
@@ -26,8 +26,8 @@ public class WinPrediction {
         this.playerOneId = playerOneId;
     }
 
-    public float getProbabilityPlayerOne() {
-        return probabilityPlayerOne;
+    public float getWinProbabilityPlayerOne() {
+        return winProbabilityPlayerOne;
     }
 
 
@@ -39,11 +39,11 @@ public class WinPrediction {
         this.playerTwoId = playerTwoId;
     }
 
-    public float getProbabilityPlayerTwo() {
-        return probabilityPlayerTwo;
+    public float getWinProbabilityPlayerTwo() {
+        return winProbabilityPlayerTwo;
     }
 
-    public void setProbabilityPlayerTwo(float probabilityPlayerTwo) {
-        this.probabilityPlayerTwo = probabilityPlayerTwo;
+    public void setWinProbabilityPlayerTwo(float winProbabilityPlayerTwo) {
+        this.winProbabilityPlayerTwo = winProbabilityPlayerTwo;
     }
 }

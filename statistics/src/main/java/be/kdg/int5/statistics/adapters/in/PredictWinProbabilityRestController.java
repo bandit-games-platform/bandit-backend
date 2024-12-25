@@ -42,9 +42,9 @@ public class PredictWinProbabilityRestController {
 
             WinPredictionDto winPredictionDto = new WinPredictionDto(
                     response.getPlayerOneId(),
-                    response.getProbabilityPlayerOne(),
+                    response.getWinProbabilityPlayerOne(),
                     response.getPlayerTwoId(),
-                    response.getProbabilityPlayerTwo()
+                    response.getWinProbabilityPlayerTwo()
             );
             return ResponseEntity.ok(winPredictionDto);
         } catch (PythonServiceException e) {

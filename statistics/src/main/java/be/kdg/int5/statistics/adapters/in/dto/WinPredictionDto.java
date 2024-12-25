@@ -4,18 +4,18 @@ import java.util.UUID;
 
 public class WinPredictionDto {
     private  UUID playerOneId;
-    private float probabilityPlayerOne;
+    private float winProbabilityPlayerOne;
     private  UUID playerTwoId;
-    private float probabilityPlayerTwo;
+    private float winProbabilityPlayerTwo;
 
     public WinPredictionDto() {
     }
 
-    public WinPredictionDto(UUID playerOneId, float probabilityPlayerOne, UUID playerTwoId, float probabilityPlayerTwo) {
+    public WinPredictionDto(UUID playerOneId, float winProbabilityPlayerOne, UUID playerTwoId, float winProbabilityPlayerTwo) {
         this.playerOneId = playerOneId;
-        this.probabilityPlayerOne = probabilityPlayerOne;
+        this.winProbabilityPlayerOne = winProbabilityPlayerOne;
         this.playerTwoId = playerTwoId;
-        this.probabilityPlayerTwo = probabilityPlayerTwo;
+        this.winProbabilityPlayerTwo = winProbabilityPlayerTwo;
     }
 
     public UUID getPlayerOneId() {
@@ -26,12 +26,12 @@ public class WinPredictionDto {
         this.playerOneId = playerOneId;
     }
 
-    public float getProbabilityPlayerOne() {
-        return probabilityPlayerOne;
+    public float getWinProbabilityPlayerOne() {
+        return winProbabilityPlayerOne;
     }
 
-    public void setProbabilityPlayerOne(float probabilityPlayerOne) {
-        this.probabilityPlayerOne = probabilityPlayerOne;
+    public void setWinProbabilityPlayerOne(float winProbabilityPlayerOne) {
+        this.winProbabilityPlayerOne = winProbabilityPlayerOne;
     }
 
     public UUID getPlayerTwoId() {
@@ -42,11 +42,11 @@ public class WinPredictionDto {
         this.playerTwoId = playerTwoId;
     }
 
-    public float getProbabilityPlayerTwo() {
-        return probabilityPlayerTwo;
+    public float getWinProbabilityPlayerTwo() {
+        return winProbabilityPlayerTwo;
     }
 
-    public void setProbabilityPlayerTwo(float probabilityPlayerTwo) {
-        this.probabilityPlayerTwo = probabilityPlayerTwo;
+    public void setWinProbabilityPlayerTwo(float winProbabilityPlayerTwo) {
+        this.winProbabilityPlayerTwo = winProbabilityPlayerTwo;
     }
 }
