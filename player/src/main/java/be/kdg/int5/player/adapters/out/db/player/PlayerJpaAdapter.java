@@ -1,5 +1,7 @@
 package be.kdg.int5.player.adapters.out.db.player;
 
+import be.kdg.int5.common.domain.ImageResource;
+import be.kdg.int5.common.domain.ResourceURL;
 import be.kdg.int5.player.domain.Player;
 import be.kdg.int5.player.domain.PlayerId;
 import be.kdg.int5.player.port.out.PlayerCreatePort;
@@ -8,6 +10,7 @@ import be.kdg.int5.player.port.out.PlayerUpdatePort;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.UUID;
 
 @Repository
@@ -39,11 +42,27 @@ public class PlayerJpaAdapter implements PlayerCreatePort, PlayerLoadPort, Playe
     }
 
     @Override
+    public List<Player> loadAllPlayers() {
+        List<PlayerJpaEntity> playersJpa = playerJpaRepository.findAll();
+        return playersJpa.stream()
+                .map(this::toPlayer)
+                .toList();
+    }
+
+    @Override
     @Transactional
     public void updatePlayerDisplayName(Player player) {
         PlayerJpaEntity playerJpaEntity = playerJpaRepository.findById(player.getId().uuid()).orElse(null);
         if (playerJpaEntity == null) return;
         playerJpaEntity.setDisplayName(player.getDisplayName());
         playerJpaRepository.save(playerJpaEntity);
+    }
+
+    public Player toPlayer(PlayerJpaEntity playerJpaEntity) {
+        return new Player(
+                new PlayerId(playerJpaEntity.getId()),
+                playerJpaEntity.getDisplayName(),
+                new ImageResource(new ResourceURL(playerJpaEntity.getAvatar().getUrl()))
+               );
     }
 }

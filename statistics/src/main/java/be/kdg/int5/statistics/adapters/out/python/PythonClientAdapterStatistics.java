@@ -15,15 +15,15 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
 
 @Repository
-public class PythonClientAdapter implements PredictWinProbabilityPort {
+public class PythonClientAdapterStatistics implements PredictWinProbabilityPort {
     @Value("${python.url:http://localhost:8000/predict/win-probability}")
     private String pythonUrl;
 
-    private final static Logger logger = LoggerFactory.getLogger(PythonClientAdapter.class);
+    private final static Logger logger = LoggerFactory.getLogger(PythonClientAdapterStatistics.class);
 
     private final RestTemplate restTemplate;
 
-    public PythonClientAdapter(RestTemplate restTemplate) {
+    public PythonClientAdapterStatistics(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 

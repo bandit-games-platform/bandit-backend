@@ -1,6 +1,7 @@
 package be.kdg.int5.player.adapters.in;
 
 import be.kdg.int5.player.adapters.in.dto.Action;
+import be.kdg.int5.player.adapters.in.dto.LoadAllPlayersDto;
 import be.kdg.int5.player.domain.FriendInviteBio;
 import be.kdg.int5.player.adapters.in.dto.PlayerFriendBioDto;
 import be.kdg.int5.player.adapters.in.dto.PlayerSearchBioDto;
@@ -28,19 +29,35 @@ public class PlayerFriendsController {
     private final SendFriendInviteUseCase sendFriendInviteUseCase;
     private final PendingFriendInvitesQuery pendingFriendInvitesQuery;
     private final ProcessPendingFriendInvite processPendingFriendInvite;
+    private final GetAllPlayersQuery getAllPlayersQuery;
 
     public PlayerFriendsController(
             SearchForNewFriendsUseCase searchForNewFriendsUseCase,
             FriendsListQuery friendsListQuery,
             SendFriendInviteUseCase sendFriendInviteUseCase,
             PendingFriendInvitesQuery pendingFriendInvitesQuery,
-            ProcessPendingFriendInvite processPendingFriendInvite
+            ProcessPendingFriendInvite processPendingFriendInvite, GetAllPlayersQuery getAllPlayersQuery
     ){
         this.searchForNewFriendsUseCase = searchForNewFriendsUseCase;
         this.friendsListQuery = friendsListQuery;
         this.sendFriendInviteUseCase = sendFriendInviteUseCase;
         this.pendingFriendInvitesQuery = pendingFriendInvitesQuery;
         this.processPendingFriendInvite = processPendingFriendInvite;
+        this.getAllPlayersQuery = getAllPlayersQuery;
+    }
+
+    //todo delete /all
+    @GetMapping("/all")
+    @PreAuthorize("hasAuthority('admin')")
+    ResponseEntity<List<LoadAllPlayersDto>> getAllPlayers(){
+
+        List<Player> playersList = getAllPlayersQuery.getAllPlayers();
+
+        if (playersList.isEmpty()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        List<LoadAllPlayersDto> newPlayersList = playersList.stream()
+                .map(this::mapToAllPlayersDto)
+                .toList();
+        return new ResponseEntity<>(newPlayersList, HttpStatus.OK);
     }
 
     @GetMapping()
@@ -136,5 +153,9 @@ public class PlayerFriendsController {
 
     private PlayerSearchBioDto mapToSearchDto(Player player){
         return new PlayerSearchBioDto(player.getId().uuid().toString(), player.getDisplayName(), player.getAvatar().url().url(), false);
+    }
+
+    private LoadAllPlayersDto mapToAllPlayersDto(Player player){
+        return new LoadAllPlayersDto(player.getId().uuid().toString(), player.getDisplayName(), player.getAvatar().url().url());
     }
 }
