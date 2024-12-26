@@ -25,4 +25,14 @@ public interface ConversationJpaRepository extends JpaRepository<ConversationJpa
             AND g.startTime = :startTime
             """)
     ConversationJpaEntity findByUserIdAndStartTimeWithQuestions(UUID userId, LocalDateTime startTime);
+
+    @Query("""
+    SELECT p FROM PlatformConversationJpaEntity p
+    JOIN FETCH p.questions q
+    JOIN FETCH q.answer a
+    WHERE p.userId = :userId
+    ORDER BY p.startTime DESC
+    LIMIT 1
+    """)
+    PlatformConversationJpaEntity findPlatformConversationByUserIdAndLatestStartTime(UUID userId);
 }

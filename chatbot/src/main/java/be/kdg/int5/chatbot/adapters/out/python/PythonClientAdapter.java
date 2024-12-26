@@ -17,6 +17,11 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.List;
 
 @Repository
@@ -25,6 +30,7 @@ public class PythonClientAdapter implements AnswerAskPort {
     private String pythonUrl;
     private static final String INITIAL_QUESTION = "/initial-question";
     private static final String FOLLOW_UP_QUESTION = "/follow-up-question";
+    private static final String PLATFORM_QUESTION = "/platform";
 
     private final static Logger logger = LoggerFactory.getLogger(PythonClientAdapter.class);
 
@@ -81,6 +87,37 @@ public class PythonClientAdapter implements AnswerAskPort {
             return new Answer(extractedResponse);
 
         } catch (Exception e) {
+            throw new PythonServiceException("An error occurred while calling the Python service.", e);
+        }
+    }
+
+    @Override
+    public Answer getAnswerForPlatformQuestion(String currentPage, List<Question> previousQuestionWindowList, Question question) {
+        try (HttpClient client = HttpClient.newHttpClient()){
+            String json = """
+            {
+                "question": "%s",
+                "currentPage": "%s",
+                "previousQuestionsList": "%s"
+            }
+            """.formatted(
+                    question, currentPage, previousQuestionWindowList.toString()
+            );
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .method("POST", HttpRequest.BodyPublishers.ofString(json))
+                    .setHeader("Accept", "application/json")
+                    .setHeader("Content-Type", "application/json")
+                    .uri(URI.create(pythonUrl + PLATFORM_QUESTION))
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() == 200) {
+                return new Answer(response.body());
+            } else {
+                throw new IOException("Could not find page name within python");
+            }
+        } catch (InterruptedException | IOException e) {
             throw new PythonServiceException("An error occurred while calling the Python service.", e);
         }
     }
