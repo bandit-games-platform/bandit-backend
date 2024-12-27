@@ -29,35 +29,19 @@ public class PlayerFriendsController {
     private final SendFriendInviteUseCase sendFriendInviteUseCase;
     private final PendingFriendInvitesQuery pendingFriendInvitesQuery;
     private final ProcessPendingFriendInvite processPendingFriendInvite;
-    private final GetAllPlayersQuery getAllPlayersQuery;
 
     public PlayerFriendsController(
             SearchForNewFriendsUseCase searchForNewFriendsUseCase,
             FriendsListQuery friendsListQuery,
             SendFriendInviteUseCase sendFriendInviteUseCase,
             PendingFriendInvitesQuery pendingFriendInvitesQuery,
-            ProcessPendingFriendInvite processPendingFriendInvite, GetAllPlayersQuery getAllPlayersQuery
+            ProcessPendingFriendInvite processPendingFriendInvite
     ){
         this.searchForNewFriendsUseCase = searchForNewFriendsUseCase;
         this.friendsListQuery = friendsListQuery;
         this.sendFriendInviteUseCase = sendFriendInviteUseCase;
         this.pendingFriendInvitesQuery = pendingFriendInvitesQuery;
         this.processPendingFriendInvite = processPendingFriendInvite;
-        this.getAllPlayersQuery = getAllPlayersQuery;
-    }
-
-    //todo delete /all
-    @GetMapping("/all")
-    @PreAuthorize("hasAuthority('admin')")
-    ResponseEntity<List<LoadAllPlayersDto>> getAllPlayers(){
-
-        List<Player> playersList = getAllPlayersQuery.getAllPlayers();
-
-        if (playersList.isEmpty()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        List<LoadAllPlayersDto> newPlayersList = playersList.stream()
-                .map(this::mapToAllPlayersDto)
-                .toList();
-        return new ResponseEntity<>(newPlayersList, HttpStatus.OK);
     }
 
     @GetMapping()

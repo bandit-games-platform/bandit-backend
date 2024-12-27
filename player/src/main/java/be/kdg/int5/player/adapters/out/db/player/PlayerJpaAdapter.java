@@ -42,14 +42,6 @@ public class PlayerJpaAdapter implements PlayerCreatePort, PlayerLoadPort, Playe
     }
 
     @Override
-    public List<Player> loadAllPlayers() {
-        List<PlayerJpaEntity> playersJpa = playerJpaRepository.findAll();
-        return playersJpa.stream()
-                .map(this::toPlayer)
-                .toList();
-    }
-
-    @Override
     @Transactional
     public void updatePlayerDisplayName(Player player) {
         PlayerJpaEntity playerJpaEntity = playerJpaRepository.findById(player.getId().uuid()).orElse(null);

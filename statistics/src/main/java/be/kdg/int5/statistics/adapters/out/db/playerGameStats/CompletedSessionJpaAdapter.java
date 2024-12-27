@@ -8,6 +8,7 @@ import be.kdg.int5.statistics.port.out.CompletedSessionLoadPort;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Repository

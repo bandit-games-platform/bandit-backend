@@ -1,14 +1,5 @@
-### GET request to example server
-POST http://localhost:8094/player/registration/8975f11f-4d5f-3040-be6e-ab379c721e5a
-Accept: application/json
-Content-Type: application/json
+#### Get access token with admin user
 
-{
-    "userId": "e58c4fcb-b870-421c-866c-e864cea2614e",
-    "username": "roman.gordon@student.kdg.be"
-}
-
-### admin token
 POST https://keycloak.victoriousocean-73fa80ad.northeurope.azurecontainerapps.io/realms/bandit-realm/protocol/openid-connect/token  HTTP/1.1
 Content-Type: application/x-www-form-urlencoded
 
@@ -16,7 +7,11 @@ client_id=bandit-backend&client_secret=t8IJhjO6lwIiE3g8RCogRmEa5DQylBXT&username
 
 > {%client.global.set("logged-in-admin", response.body.access_token);%}
 
-### GET request for all players as admin
-GET http://localhost:8090/api/players/all
+
+### Get player Statistics for a game
+
+GET http://localhost:8095/statistics/player-game-statistics/games/d77e1d1f-6b46-4c89-9290-3b9cf8a7c001/completed-sessions/players
 Accept: application/json
 Authorization: Bearer {{logged-in-admin}}
+
+
