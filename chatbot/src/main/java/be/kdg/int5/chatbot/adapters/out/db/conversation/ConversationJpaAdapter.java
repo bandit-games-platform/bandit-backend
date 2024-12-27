@@ -30,6 +30,13 @@ public class ConversationJpaAdapter implements ConversationLoadPort, Conversatio
     }
 
     @Override
+    public PlatformConversation loadPlatformConversation(UserId userId) {
+        PlatformConversationJpaEntity platformConversationJpaEntity = conversationJpaRepository.findPlatformConversationByUserIdAndLatestStartTime(userId.uuid());
+        if (platformConversationJpaEntity == null) return null;
+        return toPlatformConversation(platformConversationJpaEntity);
+    }
+
+    @Override
     public void saveConversation(Conversation conversation) {
         ConversationJpaEntity conversationJpa = conversationJpaRepository.findByUserIdAndStartTimeWithQuestions(conversation.getUserId().uuid(), conversation.getStartTime());
 
@@ -64,7 +71,13 @@ public class ConversationJpaAdapter implements ConversationLoadPort, Conversatio
             }
         }
 
-        conversationJpaRepository.save(conversationJpa);
+        if (conversation instanceof PlatformConversation) {
+            PlatformConversationJpaEntity platformConversationJpaEntity = (PlatformConversationJpaEntity) conversationJpa;
+            platformConversationJpaEntity.setCurrentPage(((PlatformConversation) conversation).getCurrentPage());
+            conversationJpaRepository.save(platformConversationJpaEntity);
+        } else {
+            conversationJpaRepository.save(conversationJpa);
+        }
     }
 
     private GameConversation toGameConversation(GameConversationJpaEntity gameConversationJpa) {
@@ -88,6 +101,27 @@ public class ConversationJpaAdapter implements ConversationLoadPort, Conversatio
         return gameConversation;
     }
 
+    private PlatformConversation toPlatformConversation(PlatformConversationJpaEntity platformConversationJpa) {
+        PlatformConversation platformConversation = new PlatformConversation(
+                new UserId(platformConversationJpa.getUserId()),
+                platformConversationJpa.getStartTime(),
+                platformConversationJpa.getLastMessageTime(),
+                platformConversationJpa.getCurrentPage()
+        );
+
+        final List<Question> questionList = platformConversationJpa.getQuestions().stream()
+                .map(q -> {
+                    final Question question = new Question(q.getText(), q.getSubmittedAt(), q.getInitial());
+                    final Answer answer = new Answer(q.getAnswer().getText());
+                    question.setAnswer(answer);
+                    return question;
+                })
+                .collect(Collectors.toList());
+
+        platformConversation.setQuestions(questionList);
+        return platformConversation;
+    }
+
     private ConversationJpaEntity toConservationJpa(Conversation conversation) {
         if (conversation instanceof GameConversation) {
             return new GameConversationJpaEntity(
@@ -95,9 +129,7 @@ public class ConversationJpaAdapter implements ConversationLoadPort, Conversatio
                     conversation.getStartTime(),
                     conversation.getLastMessageTime(),
                     ((GameConversation) conversation).getGameId().uuid());
-        }
-
-        if (conversation instanceof PlatformConversation) {
+        }else if (conversation instanceof PlatformConversation) {
             return new PlatformConversationJpaEntity(
                     conversation.getUserId().uuid(),
                     conversation.getStartTime(),

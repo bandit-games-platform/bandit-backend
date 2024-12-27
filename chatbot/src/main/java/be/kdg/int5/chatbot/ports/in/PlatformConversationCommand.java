@@ -4,6 +4,7 @@ import java.util.UUID;
 
 public record PlatformConversationCommand(
     String page,
-    UUID userId
+    UUID userId,
+    String question
 ) {
 }

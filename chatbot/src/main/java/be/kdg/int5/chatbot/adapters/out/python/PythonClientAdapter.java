@@ -94,18 +94,38 @@ public class PythonClientAdapter implements AnswerAskPort {
     @Override
     public Answer getAnswerForPlatformQuestion(String currentPage, List<Question> previousQuestionWindowList, Question question) {
         try (HttpClient client = HttpClient.newHttpClient()){
-            String json = """
-            {
-                "question": "%s",
-                "currentPage": "%s",
-                "previousQuestionsList": "%s"
+            StringBuilder json = new StringBuilder("""
+                    {
+                        "question": "%s",
+                        "currentPage": "%s",
+                        "previousQuestionsList":
+                    """.formatted(
+                    question.getText(), currentPage
+            ));
+
+            if (previousQuestionWindowList.isEmpty()) {
+                json.append(" []");
+            } else {
+                json.append(" [");
+
+                for (int i = 0; i < previousQuestionWindowList.size(); i++) {
+                    Question previousQuestion = previousQuestionWindowList.get(i);
+                    json.append("""
+                                {"question": "%s", "answer": "%s"}
+                            """.formatted(previousQuestion.getText(), previousQuestion.getAnswer().text()));
+
+                    if (i < previousQuestionWindowList.size() - 1) {
+                        json.append(",");
+                    }
+                }
+
+                json.append("]}");
             }
-            """.formatted(
-                    question, currentPage, previousQuestionWindowList.toString()
-            );
+
+            logger.info("Sending json: {}", json);
 
             HttpRequest request = HttpRequest.newBuilder()
-                    .method("POST", HttpRequest.BodyPublishers.ofString(json))
+                    .POST(HttpRequest.BodyPublishers.ofString(json.toString()))
                     .setHeader("Accept", "application/json")
                     .setHeader("Content-Type", "application/json")
                     .uri(URI.create(pythonUrl + PLATFORM_QUESTION))
@@ -115,7 +135,7 @@ public class PythonClientAdapter implements AnswerAskPort {
             if (response.statusCode() == 200) {
                 return new Answer(response.body());
             } else {
-                throw new IOException("Could not find page name within python");
+                throw new PythonServiceException("Could not find page name within python.");
             }
         } catch (InterruptedException | IOException e) {
             throw new PythonServiceException("An error occurred while calling the Python service.", e);
