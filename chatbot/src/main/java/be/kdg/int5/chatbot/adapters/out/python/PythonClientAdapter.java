@@ -93,51 +93,23 @@ public class PythonClientAdapter implements AnswerAskPort {
 
     @Override
     public Answer getAnswerForPlatformQuestion(String currentPage, List<Question> previousQuestionWindowList, Question question) {
-        try (HttpClient client = HttpClient.newHttpClient()){
-            StringBuilder json = new StringBuilder("""
-                    {
-                        "question": "%s",
-                        "currentPage": "%s",
-                        "previousQuestionsList":
-                    """.formatted(
-                    question.getText(), currentPage
-            ));
+        logger.info("chatbot: Asking platform question: {}", question.getText());
 
-            if (previousQuestionWindowList.isEmpty()) {
-                json.append(" []");
-            } else {
-                json.append(" [");
+        final List<QuestionAnswerDto> questionAnswerDtoList = toQuestionAnswerDtoList(previousQuestionWindowList);
+        final PlatformQuestionDto platformQuestionDto = new PlatformQuestionDto(question.getText(), currentPage, questionAnswerDtoList);
 
-                for (int i = 0; i < previousQuestionWindowList.size(); i++) {
-                    Question previousQuestion = previousQuestionWindowList.get(i);
-                    json.append("""
-                                {"question": "%s", "answer": "%s"}
-                            """.formatted(previousQuestion.getText(), previousQuestion.getAnswer().text()));
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
 
-                    if (i < previousQuestionWindowList.size() - 1) {
-                        json.append(",");
-                    }
-                }
+        HttpEntity<PlatformQuestionDto> entity = new HttpEntity<>(platformQuestionDto, headers);
 
-                json.append("]}");
-            }
+        try {
+            String response = restTemplate.postForObject(pythonUrl + PLATFORM_QUESTION, entity, String.class);
+            logger.info("chatbot: Answer: {}", response);
 
-            logger.info("Sending json: {}", json);
-
-            HttpRequest request = HttpRequest.newBuilder()
-                    .POST(HttpRequest.BodyPublishers.ofString(json.toString()))
-                    .setHeader("Accept", "application/json")
-                    .setHeader("Content-Type", "application/json")
-                    .uri(URI.create(pythonUrl + PLATFORM_QUESTION))
-                    .build();
-
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            if (response.statusCode() == 200) {
-                return new Answer(response.body());
-            } else {
-                throw new PythonServiceException("Could not find page name within python.");
-            }
-        } catch (InterruptedException | IOException e) {
+            String extractedResponse = parseResponse(response);
+            return new Answer(extractedResponse);
+        } catch (Exception e) {
             throw new PythonServiceException("An error occurred while calling the Python service.", e);
         }
     }

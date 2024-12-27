@@ -2,7 +2,7 @@
 POST https://keycloak.victoriousocean-73fa80ad.northeurope.azurecontainerapps.io/realms/bandit-realm/protocol/openid-connect/token HTTP/1.1
 Content-Type: application/x-www-form-urlencoded
 
-client_id=bandit-backend&client_secret=t8IJhjO6lwIiE3g8RCogRmEa5DQylBXT&username=roman@email.com&password=roman&grant_type=password&scope=openid
+client_id=bandit-backend&client_secret={{bandit_backend_secret}}&username=roman@email.com&password=roman&grant_type=password&scope=openid
 
 > {%client.global.set("player", response.body.access_token);%}
 
@@ -25,5 +25,15 @@ Content-Type: application/json
 Authorization: Bearer {{player}}
 
 {
-    "questionText": "What can I do here? Answer in 50 words or less"
+    "questionText": "What can I do here? Answer in 20 words or less"
 }
+
+### Get latest question in conversation
+GET http://localhost:8091/chatbot/chatbot/platform?lastOnly=true
+Accept: application/json
+Authorization: Bearer {{player}}
+
+### Get all questions in conversation
+GET http://localhost:8091/chatbot/chatbot/platform?lastOnly=false
+Accept: application/json
+Authorization: Bearer {{player}}
