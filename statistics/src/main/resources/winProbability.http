@@ -6,7 +6,6 @@ client_id=bandit-backend&client_secret=t8IJhjO6lwIiE3g8RCogRmEa5DQylBXT&username
 
 > {%client.global.set("logged-in-admin", response.body.access_token);%}
 
-
 ### Get List of games
 GET http://localhost:8092/game-registry/games
 Accept: application/json
