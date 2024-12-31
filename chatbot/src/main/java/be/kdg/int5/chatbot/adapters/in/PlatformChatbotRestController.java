@@ -73,20 +73,32 @@ public class PlatformChatbotRestController {
 
         if (lastOnly) {
             Question lastQuestion = platformConversation.getLatestQuestion();
+            String answerText = null;
+            if (lastQuestion.getAnswer() != null) {
+                answerText = lastQuestion.getAnswer().text();
+            }
+
             LoadQuestionDto loadedQuestion = new LoadQuestionDto(
                     lastQuestion.getText(),
                     lastQuestion.getSubmittedAt(),
-                    new AnswerDto(lastQuestion.getAnswer().text())
+                    new AnswerDto(answerText)
             );
             return ResponseEntity.ok(List.of(loadedQuestion));
         } else {
             List<LoadQuestionDto> loadedQuestions = platformConversation.getQuestions().stream()
                     .map(
-                            loadedQuestion -> new LoadQuestionDto(
-                                    loadedQuestion.getText(),
-                                    loadedQuestion.getSubmittedAt(),
-                                    new AnswerDto(loadedQuestion.getAnswer().text())
-                            )
+                            loadedQuestion -> {
+                                String answerText = null;
+                                if (loadedQuestion.getAnswer() != null) {
+                                    answerText = loadedQuestion.getAnswer().text();
+                                }
+
+                                return new LoadQuestionDto(
+                                        loadedQuestion.getText(),
+                                        loadedQuestion.getSubmittedAt(),
+                                        new AnswerDto(answerText)
+                                );
+                            }
                     ).collect(Collectors.toList());
             return ResponseEntity.ok(loadedQuestions);
         }

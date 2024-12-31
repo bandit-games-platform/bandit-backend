@@ -8,6 +8,7 @@ import be.kdg.int5.chatbot.ports.out.ConversationSavePort;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -52,7 +53,7 @@ public class ConversationJpaAdapter implements ConversationLoadPort, Conversatio
 
         // Add new questions or update existing ones based on questionTime
         for (Question question : conversation.getQuestions()) {
-            LocalDateTime questionTime = question.getSubmittedAt();
+            LocalDateTime questionTime = question.getSubmittedAt().withNano(0);
             QuestionJpaEntity questionJpa = existingQuestionsMap.get(questionTime);
 
             if (questionJpa == null) {
@@ -62,19 +63,25 @@ public class ConversationJpaAdapter implements ConversationLoadPort, Conversatio
                 questionJpa.setSubmittedAt(questionTime);
                 questionJpa.setInitial(question.isInitial());
 
-                AnswerJpaEntity answerJpa = new AnswerJpaEntity();
-                answerJpa.setText(question.getAnswer().text());
-                questionJpa.setAnswer(answerJpa);
+                if (question.getAnswer() != null) {
+                    AnswerJpaEntity answerJpa = new AnswerJpaEntity();
+                    answerJpa.setText(question.getAnswer().text());
+                    questionJpa.setAnswer(answerJpa);
+                }
 
                 questionJpa.setConversation(conversationJpa);
                 conversationJpa.getQuestions().add(questionJpa);
+            } else if (questionJpa.getAnswer() == null) {
+                AnswerJpaEntity answerJpa = new AnswerJpaEntity();
+                answerJpa.setText(question.getAnswer().text());
+                questionJpa.setAnswer(answerJpa);
             }
         }
 
         if (conversation instanceof PlatformConversation) {
             PlatformConversationJpaEntity platformConversationJpaEntity = (PlatformConversationJpaEntity) conversationJpa;
             platformConversationJpaEntity.setCurrentPage(((PlatformConversation) conversation).getCurrentPage());
-            conversationJpaRepository.save(platformConversationJpaEntity);
+            conversationJpaRepository.saveAndFlush(platformConversationJpaEntity);
         } else {
             conversationJpaRepository.save(conversationJpa);
         }
@@ -112,8 +119,10 @@ public class ConversationJpaAdapter implements ConversationLoadPort, Conversatio
         final List<Question> questionList = platformConversationJpa.getQuestions().stream()
                 .map(q -> {
                     final Question question = new Question(q.getText(), q.getSubmittedAt(), q.getInitial());
-                    final Answer answer = new Answer(q.getAnswer().getText());
-                    question.setAnswer(answer);
+                    if (q.getAnswer() != null) {
+                        final Answer answer = new Answer(q.getAnswer().getText());
+                        question.setAnswer(answer);
+                    }
                     return question;
                 })
                 .collect(Collectors.toList());

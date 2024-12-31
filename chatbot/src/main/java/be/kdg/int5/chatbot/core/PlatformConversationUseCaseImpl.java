@@ -33,7 +33,6 @@ public class PlatformConversationUseCaseImpl implements PlatformConversationUseC
     }
 
     @Override
-    @Transactional
     public PlatformConversation updateConversation(PlatformConversationCommand command) {
         PlatformConversation platformConversation = conversationLoadPort.loadPlatformConversation(new UserId(command.userId()));
 
@@ -51,6 +50,9 @@ public class PlatformConversationUseCaseImpl implements PlatformConversationUseC
                 platformConversation.setCurrentPage(command.page());
                 Question newQuestion = platformConversation.addFollowUpQuestion(command.question());
                 List<Question> previousQuestionWindowList = platformConversation.getPreviousQuestionsInWindow();
+
+                platformConversation.update(newQuestion);
+                conversationSavePort.saveConversation(platformConversation);
 
                 Answer answer = answerAskPort.getAnswerForPlatformQuestion(
                         platformConversation.getCurrentPage(),
