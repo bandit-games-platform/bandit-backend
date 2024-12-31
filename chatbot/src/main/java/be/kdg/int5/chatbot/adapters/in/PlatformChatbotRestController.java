@@ -21,6 +21,8 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -69,7 +71,10 @@ public class PlatformChatbotRestController {
         UUID userId = UUID.fromString(token.getClaimAsString("sub"));
         PlatformConversation platformConversation = platformConversationQuery.getLatestForPlayer(userId);
 
-        if (platformConversation == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (platformConversation == null) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        if (ChronoUnit.HOURS.between(platformConversation.getLastMessageTime(), LocalDateTime.now()) > 6) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
 
         if (lastOnly) {
             Question lastQuestion = platformConversation.getLatestQuestion();
