@@ -7,6 +7,7 @@ import be.kdg.int5.storefront.port.out.ProductLoadPort;
 import be.kdg.int5.storefront.port.out.ProductUpdatePort;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.UUID;
 
 @Repository
@@ -39,6 +40,15 @@ public class ProductJpaAdapter implements ProductCreatePort, ProductLoadPort, Pr
     }
 
     @Override
+    public List<ProductProjection> loadAllProducts() {
+        List<ProductProjectionJpaEntity> productListJpa = productProjectionJpaRepository.findAll();
+        return productListJpa
+                .stream()
+                .map(this::toProductProjection)
+                .toList();
+    }
+
+    @Override
     public void updatedProductProjection(ProductProjection productProjection) {
         ProductProjectionJpaEntity productProjectionJpaEntity = productProjectionJpaRepository.findById(
                 productProjection.getProductId().uuid()
@@ -50,5 +60,13 @@ public class ProductJpaAdapter implements ProductCreatePort, ProductLoadPort, Pr
         productProjectionJpaEntity.setTitle(productProjection.getTitle());
         productProjectionJpaEntity.setPrice(productProjection.getPrice());
         productProjectionJpaRepository.save(productProjectionJpaEntity);
+    }
+
+    private ProductProjection toProductProjection(ProductProjectionJpaEntity productJpa) {
+        return new ProductProjection(
+                new ProductId(productJpa.getId()),
+                productJpa.getTitle(),
+                productJpa.getPrice()
+        );
     }
 }
