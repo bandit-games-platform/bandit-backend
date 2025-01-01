@@ -33,6 +33,8 @@ public class ProductRestController {
         return new ProductDto(
                 product.getProductId().uuid(),
                 product.getTitle(),
-                product.getPrice());
+                product.getDescription(),
+                product.getPrice(),
+                product.getBackgroundUrl());
     }
 }

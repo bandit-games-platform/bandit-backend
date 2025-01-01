@@ -23,7 +23,10 @@ public class ProductJpaAdapter implements ProductCreatePort, ProductLoadPort, Pr
         ProductProjectionJpaEntity productProjectionJpaEntity = new ProductProjectionJpaEntity(
                 productProjection.getProductId().uuid(),
                 productProjection.getTitle(),
-                productProjection.getPrice()
+                productProjection.getDeveloperId(),
+                productProjection.getDescription(),
+                productProjection.getPrice(),
+                productProjection.getBackgroundUrl()
         );
         productProjectionJpaRepository.save(productProjectionJpaEntity);
     }
@@ -35,6 +38,7 @@ public class ProductJpaAdapter implements ProductCreatePort, ProductLoadPort, Pr
         return new ProductProjection(
                 new ProductId(productProjectionJpaEntity.getId()),
                 productProjectionJpaEntity.getTitle(),
+                productProjectionJpaEntity.getDeveloperId(),
                 productProjectionJpaEntity.getPrice()
         );
     }
@@ -58,7 +62,9 @@ public class ProductJpaAdapter implements ProductCreatePort, ProductLoadPort, Pr
             return;
         }
         productProjectionJpaEntity.setTitle(productProjection.getTitle());
+        productProjectionJpaEntity.setDescription(productProjection.getDescription());
         productProjectionJpaEntity.setPrice(productProjection.getPrice());
+        productProjectionJpaEntity.setBackgroundUrl(productProjection.getBackgroundUrl());
         productProjectionJpaRepository.save(productProjectionJpaEntity);
     }
 
@@ -66,7 +72,10 @@ public class ProductJpaAdapter implements ProductCreatePort, ProductLoadPort, Pr
         return new ProductProjection(
                 new ProductId(productJpa.getId()),
                 productJpa.getTitle(),
-                productJpa.getPrice()
+                productJpa.getDeveloperId(),
+                productJpa.getDescription(),
+                productJpa.getPrice(),
+                productJpa.getBackgroundUrl()
         );
     }
 }

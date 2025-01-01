@@ -29,7 +29,10 @@ public class GameRegisteredListener {
                 new CreateOrUpdateProductProjectionCommand(
                         gameRegisteredEvent.gameId(),
                         gameRegisteredEvent.title(),
-                        gameRegisteredEvent.currentPrice()
+                        gameRegisteredEvent.developerId(),
+                        gameRegisteredEvent.description(),
+                        gameRegisteredEvent.currentPrice(),
+                        gameRegisteredEvent.background_url()
                 )
         );
     }
