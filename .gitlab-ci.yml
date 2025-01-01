@@ -309,7 +309,7 @@ deploy_postgres_and_vnet_dev:
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
     - chmod +x cicd/deploy-database-vnet.sh
     - cicd/deploy-database-vnet.sh "$serialized_map"
-  # This will only run when you commit to a merge request or to the ci-cd branch
+  # This will only run when you commit to a merge request or to the ci-cd branch.
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
     - if: $CI_COMMIT_BRANCH == 'ci-cd'
