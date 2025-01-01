@@ -54,7 +54,7 @@ public class PlatformChatbotControllerIntegrationTest extends AbstractDatabaseTe
     @BeforeEach
     void setUp() {
         userId = TestIds.USER_ID.uuid();
-        specificTime = LocalDateTime.of(2025, 1, 1, 11, 11, 11);
+        specificTime = LocalDateTime.now().minusHours(3);
     }
 
     @Test
