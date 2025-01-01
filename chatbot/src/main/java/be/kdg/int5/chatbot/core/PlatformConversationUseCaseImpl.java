@@ -41,29 +41,30 @@ public class PlatformConversationUseCaseImpl implements PlatformConversationUseC
             Question startQuestion = platformConversation.start();
             platformConversation.update(startQuestion);
             conversationSavePort.saveConversation(platformConversation);
+            return platformConversation;
+        }
+
+        if (ChronoUnit.HOURS.between(platformConversation.getLastMessageTime(), LocalDateTime.now()) > 6) {
+            platformConversation = new PlatformConversation(new UserId(command.userId()), command.page());
+            platformConversation.start();
+            conversationSavePort.saveConversation(platformConversation);
         } else {
-            if (ChronoUnit.HOURS.between(platformConversation.getLastMessageTime(), LocalDateTime.now()) > 6) {
-                platformConversation = new PlatformConversation(new UserId(command.userId()), command.page());
-                platformConversation.start();
-                conversationSavePort.saveConversation(platformConversation);
-            } else {
-                platformConversation.setCurrentPage(command.page());
-                Question newQuestion = platformConversation.addFollowUpQuestion(command.question());
-                List<Question> previousQuestionWindowList = platformConversation.getPreviousQuestionsInWindow();
+            platformConversation.setCurrentPage(command.page());
+            Question newQuestion = platformConversation.addFollowUpQuestion(command.question());
+            List<Question> previousQuestionWindowList = platformConversation.getPreviousQuestionsInWindow();
 
-                platformConversation.update(newQuestion);
-                conversationSavePort.saveConversation(platformConversation);
+            platformConversation.update(newQuestion);
+            conversationSavePort.saveConversation(platformConversation);
 
-                Answer answer = answerAskPort.getAnswerForPlatformQuestion(
-                        platformConversation.getCurrentPage(),
-                        previousQuestionWindowList,
-                        newQuestion
-                );
+            Answer answer = answerAskPort.getAnswerForPlatformQuestion(
+                    platformConversation.getCurrentPage(),
+                    previousQuestionWindowList,
+                    newQuestion
+            );
 
-                newQuestion.update(answer);
-                platformConversation.update(newQuestion);
-                conversationSavePort.saveConversation(platformConversation);
-            }
+            newQuestion.update(answer);
+            platformConversation.update(newQuestion);
+            conversationSavePort.saveConversation(platformConversation);
         }
 
         return platformConversation;
