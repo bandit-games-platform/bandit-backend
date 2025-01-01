@@ -33,6 +33,11 @@ public class PlatformConversation extends Conversation {
     public Question start() {
         LocalDateTime submittedAt = LocalDateTime.now();
         this.setLastMessageTime(submittedAt);
-        return new Question(PLATFORM_DESCRIPTION, submittedAt, true);
+        return new Question(
+                "Welcome to the chatroom!",
+                submittedAt,
+                true,
+                new Answer("Hello and welcome to the platform, I am here to help you navigate around!")
+        );
     }
 }

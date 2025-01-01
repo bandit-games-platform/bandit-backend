@@ -17,6 +17,11 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.List;
 
 @Repository
@@ -25,6 +30,7 @@ public class PythonClientAdapter implements AnswerAskPort {
     private String pythonUrl;
     private static final String INITIAL_QUESTION = "/initial-question";
     private static final String FOLLOW_UP_QUESTION = "/follow-up-question";
+    private static final String PLATFORM_QUESTION = "/platform";
 
     private final static Logger logger = LoggerFactory.getLogger(PythonClientAdapter.class);
 
@@ -80,6 +86,29 @@ public class PythonClientAdapter implements AnswerAskPort {
             String extractedResponse = parseResponse(response);
             return new Answer(extractedResponse);
 
+        } catch (Exception e) {
+            throw new PythonServiceException("An error occurred while calling the Python service.", e);
+        }
+    }
+
+    @Override
+    public Answer getAnswerForPlatformQuestion(String currentPage, List<Question> previousQuestionWindowList, Question question) {
+        logger.info("chatbot: Asking platform question: {}", question.getText());
+
+        final List<QuestionAnswerDto> questionAnswerDtoList = toQuestionAnswerDtoList(previousQuestionWindowList);
+        final PlatformQuestionDto platformQuestionDto = new PlatformQuestionDto(question.getText(), currentPage, questionAnswerDtoList);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<PlatformQuestionDto> entity = new HttpEntity<>(platformQuestionDto, headers);
+
+        try {
+            String response = restTemplate.postForObject(pythonUrl + PLATFORM_QUESTION, entity, String.class);
+            logger.info("chatbot: Answer: {}", response);
+
+            String extractedResponse = parseResponse(response);
+            return new Answer(extractedResponse);
         } catch (Exception e) {
             throw new PythonServiceException("An error occurred while calling the Python service.", e);
         }

@@ -10,4 +10,6 @@ public interface AnswerAskPort {
     Answer getAnswerForInitialQuestion(GameDetails gameDetails, Question question);
 
     Answer getAnswerForFollowUpQuestion(GameDetails gameDetails, List<Question> previousQuestionWindowList, Question question);
+
+    Answer getAnswerForPlatformQuestion(String currentPage, List<Question> previousQuestionWindowList, Question question);
 }

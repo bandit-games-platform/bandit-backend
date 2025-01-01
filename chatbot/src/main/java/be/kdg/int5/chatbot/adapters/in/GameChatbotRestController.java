@@ -22,13 +22,13 @@ import java.util.UUID;
 
 
 @RestController
-public class ChatbotRestController {
+public class GameChatbotRestController {
     private final StartGameConversationUseCase startGameConversationUseCase;
     private final FollowUpGameConversationUseCase followUpGameConversationUseCase;
 
-    private final static Logger logger = LoggerFactory.getLogger(ChatbotRestController.class);
+    private final static Logger logger = LoggerFactory.getLogger(GameChatbotRestController.class);
 
-    public ChatbotRestController(StartGameConversationUseCase startGameConversationUseCase, FollowUpGameConversationUseCase followUpGameConversationUseCase) {
+    public GameChatbotRestController(StartGameConversationUseCase startGameConversationUseCase, FollowUpGameConversationUseCase followUpGameConversationUseCase) {
         this.startGameConversationUseCase = startGameConversationUseCase;
         this.followUpGameConversationUseCase = followUpGameConversationUseCase;
     }
