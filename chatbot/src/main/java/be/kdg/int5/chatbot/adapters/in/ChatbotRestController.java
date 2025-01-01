@@ -45,7 +45,7 @@ public class ChatbotRestController {
             final StartGameConversationCommand startGameConversationCommand = new StartGameConversationCommand(userUUID, gameUUID);
             final Answer answer = startGameConversationUseCase.startGameConversation(startGameConversationCommand);
 
-//            logger.info("Answer in the Controller - Initial: {}", answer.toString());
+            logger.info("Answer in the Controller - Initial: {}", answer.toString());
 
             final AnswerDto answerDto = new AnswerDto(answer.text());
             return ResponseEntity.ok(answerDto);
