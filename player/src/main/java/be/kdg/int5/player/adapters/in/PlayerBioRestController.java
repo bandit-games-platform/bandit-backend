@@ -36,7 +36,7 @@ public class PlayerBioRestController {
         LoadPlayerBioDto dto = new LoadPlayerBioDto(
                 player.getId().uuid().toString(),
                 player.getDisplayName(),
-                player.getAvatar().toString()
+                player.getAvatar().url().url()
         );
 
         return ResponseEntity.ok(dto);

@@ -31,7 +31,11 @@ public class PlayerJpaAdapter implements PlayerCreatePort, PlayerLoadPort, Playe
     public Player loadPlayerById(UUID playerId) {
         PlayerJpaEntity playerJpaEntity = playerJpaRepository.findById(playerId).orElse(null);
         if (playerJpaEntity == null) return null;
-        return new Player(new PlayerId(playerJpaEntity.getId()), playerJpaEntity.getJoinDate(), playerJpaEntity.getDisplayName());
+        return new Player(
+                new PlayerId(playerJpaEntity.getId()),
+                playerJpaEntity.getDisplayName(),
+                new ImageResource(new ResourceURL(playerJpaEntity.getAvatar().getUrl()))
+        );
     }
 
     @Override

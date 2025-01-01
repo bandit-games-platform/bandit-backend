@@ -26,7 +26,6 @@ public class WinProbabilityModelFeaturesConverterUtil {
         float[] playerOneFeatures = calculateFeatures(playerOneSessions);
         float[] playerTwoFeatures = calculateFeatures(playerTwoSessions);
 
-        // Calculate feature differences
         float diffSessionCount = playerOneFeatures[0] - playerTwoFeatures[0];
         float diffWinRate = playerOneFeatures[1] - playerTwoFeatures[1];
         float diffAvgScore = playerOneFeatures[2] - playerTwoFeatures[2];
@@ -39,7 +38,6 @@ public class WinProbabilityModelFeaturesConverterUtil {
 
         logger.info("Feature differences calculated for players {} and {}", playerOne, playerTwo);
 
-        // Return the DTO
         return new WinProbabilityFeaturesDto(
                 playerOne,
                 playerTwo,

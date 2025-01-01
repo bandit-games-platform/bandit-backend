@@ -16,7 +16,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Repository
 public class PythonClientAdapterStatistics implements PredictWinProbabilityPort {
-    @Value("${python.url:http://localhost:8000/predict/win-probability}")
+    @Value("${python.url:http://localhost:8000}")
     private String pythonUrl;
 
     private final static Logger logger = LoggerFactory.getLogger(PythonClientAdapterStatistics.class);
@@ -36,8 +36,10 @@ public class PythonClientAdapterStatistics implements PredictWinProbabilityPort 
 
         HttpEntity<WinProbabilityFeaturesDto> entity = new HttpEntity<>(featuresDto, headers);
 
+        String url = pythonUrl + "/predict/win-probability";
+
         try {
-            String response = restTemplate.postForObject(pythonUrl, entity, String.class);
+            String response = restTemplate.postForObject(url, entity, String.class);
             logger.debug("Response Out Adapter - Win Probability: {}", response);
 
             return objectMapper.readValue(response, WinPrediction.class);

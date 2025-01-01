@@ -50,7 +50,11 @@ VALUES
     ('a1ec8502-7a19-419d-8234-b2af83e3bfc1', '2024-11-08 10:00:00', '2024-11-08 12:30:00', 'LOSS', 23, 20, null, null, null, null, true, 'd7f9b8e3-3c4f-4b9f-8d7e-e1c0f4a7b901', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c001'),
     ('a3ab8502-7a19-419d-8234-b2af83e3bfc1', '2024-11-12 08:30:00', '2024-11-12 11:00:00', 'DRAW', 19, 160, null, null, null, null, true, 'd7f9b8e3-3c4f-4b9f-8d7e-e1c0f4a7b901', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c001'),
     ('a2ab8502-7a19-419d-8234-b2af83e3bfc1', '2024-11-10 13:45:00', '2024-11-10 16:00:00', 'WIN', 210, 190, null, null, null, null, false, 'd7f9b8e3-3c4f-4b9f-8d7e-e1c0f4a7b901', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c001'),
-    ('a1ab8502-7a19-419d-8234-b2af83e3bfc1', '2024-11-08 10:00:00', '2024-11-08 12:30:00', 'LOSS', 23, 20, null, null, null, null, true, 'd7f9b8e3-3c4f-4b9f-8d7e-e1c0f4a7b901', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c001');
+    ('a1ab8502-7a19-419d-8234-b2af83e3bfc1', '2024-11-08 10:00:00', '2024-11-08 12:30:00', 'LOSS', 23, 20, null, null, null, null, true, 'd7f9b8e3-3c4f-4b9f-8d7e-e1c0f4a7b901', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c001'),
+    ('b1ec8502-7a19-419d-8234-b2af83e3bfc1', '2024-11-08 10:00:00', '2024-11-08 12:30:00', 'LOSS', 23, 20, null, null, null, null, true, '8449ba7c-194c-4e51-b060-cd88cc498836', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c001'),
+    ('b3ab8502-7a19-419d-8234-b2af83e3bfc1', '2024-11-12 08:30:00', '2024-11-12 11:00:00', 'LOSS', 19, 160, null, null, null, null, true, '8449ba7c-194c-4e51-b060-cd88cc498836', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c001'),
+    ('b2ab8502-7a19-419d-8234-b2af83e3bfc1', '2024-11-10 13:45:00', '2024-11-10 16:00:00', 'WIN', 210, 190, null, null, null, null, false, '8449ba7c-194c-4e51-b060-cd88cc498836', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c001'),
+    ('b1ab8502-7a19-419d-8234-b2af83e3bfc1', '2024-11-08 10:00:00', '2024-11-08 12:30:00', 'LOSS', 23, 20, null, null, null, null, true, '8449ba7c-194c-4e51-b060-cd88cc498836', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c001');
 
 
 INSERT INTO statistics.completed_game_sessions (

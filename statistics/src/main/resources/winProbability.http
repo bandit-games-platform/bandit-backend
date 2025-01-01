@@ -35,3 +35,13 @@ Authorization: Bearer {{logged-in-admin}}
     "playerOneId":  "94dad160-f5c8-4817-8f2d-611e1436ffcd",
     "playerTwoId": "d7f9b8e3-3c4f-4b9f-8d7e-e1c0f4a7b901"
 }
+
+### Get win prediction for 2 players on a certain game
+POST http://localhost:8090/api/statistics/games/d77e1d1f-6b46-4c89-9290-3b9cf8a7c001/win-probability/predict
+Content-Type: application/json
+Authorization: Bearer {{logged-in-admin}}
+
+{
+  "playerOneId":  "94dad160-f5c8-4817-8f2d-611e1436ffcd",
+  "playerTwoId": "d7f9b8e3-3c4f-4b9f-8d7e-e1c0f4a7b901"
+}
