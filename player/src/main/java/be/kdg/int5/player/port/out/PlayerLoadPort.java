@@ -7,5 +7,6 @@ import java.util.UUID;
 
 public interface PlayerLoadPort {
     Player loadPlayerById(UUID playerId);
+    Player loadPlayerBioById(UUID playerId);
     Player loadPlayerByIdWithoutJoinDate(UUID playerId);
 }

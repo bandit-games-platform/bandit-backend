@@ -23,6 +23,6 @@ public class PlayerBioQueryImpl implements PlayerBioQuery {
     @Override
     @Transactional(readOnly = true)
     public Player getPlayerBio(GetPlayerBioCommand command) {
-        return playerLoadPort.loadPlayerById(command.playerId().uuid());
+        return playerLoadPort.loadPlayerBioById(command.playerId().uuid());
     }
 }
