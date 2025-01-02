@@ -26,8 +26,7 @@ import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@ActiveProfiles("test")
-class WinProbabilityUseCaseImplIntegrationTest {
+class WinProbabilityUseCaseImplIntegrationTest extends AbstractDatabaseTest {
 
     @Autowired
     private PredictWinProbabilityPort pythonClientAdapter;
