@@ -72,6 +72,7 @@ public class RecommendationUseCaseImpl implements RecommendationUseCase {
         System.out.println("All orders:");
         allCompleteOrders.forEach(System.out::println);
 
+        // count order nº per productId
         Map<ProductId, Double> productOrderCountMap = new HashMap<>();
 
         for (Order order : allCompleteOrders) {
@@ -81,27 +82,31 @@ public class RecommendationUseCaseImpl implements RecommendationUseCase {
         System.out.println("Map:");
         System.out.println(productOrderCountMap);
 
-        List<ProductId> mostPopularProductsIds = new ArrayList<>();
+        // sort the map descending
+        Map<ProductId, Double> sortedProductMap = productOrderCountMap.entrySet().stream()
+                .sorted((p1, p2) -> Double.compare(p2.getValue(), p1.getValue()))
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (oldValue, newValue) -> oldValue, LinkedHashMap::new));
 
-        double totalCount = allCompleteOrders.size();
-        double threshold = 0.5;
-        double thresholdCount = totalCount * threshold;
+        System.out.println("Sorted Map:");
+        System.out.println(sortedProductMap);
 
-        for (ProductId key : productOrderCountMap.keySet()) {
-            if (productOrderCountMap.get(key) > thresholdCount) {
-                mostPopularProductsIds.add(key);
-            }
-        }
-
-        List<ProductProjection> mostPopularProducts = mostPopularProductsIds.stream()
-                .map(p -> productLoadPort.loadProductById(p.uuid()))
+        // take top N most popular products
+        int topN = 4;
+        List<ProductId> mostPopularProductsIds = sortedProductMap.keySet().stream()
+                .limit(topN)
                 .toList();
 
-        if (mostPopularProducts.isEmpty() || mostPopularProducts.size() < 4) {
+        System.out.println("Top 3:");
+        System.out.println(mostPopularProductsIds);
 
-        }
+        // load top N products
+        List<ProductProjection> mostPopularProducts = mostPopularProductsIds.stream()
+                .map(p -> productLoadPort.loadProductByIdAllFields(p.uuid()))
+                .toList();
 
-//        List<ProductProjection> allProducts = productLoadPort.loadProductById();
         return mostPopularProducts;
     }
 }

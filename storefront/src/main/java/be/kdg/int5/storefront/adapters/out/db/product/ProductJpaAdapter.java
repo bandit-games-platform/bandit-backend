@@ -44,11 +44,18 @@ public class ProductJpaAdapter implements ProductCreatePort, ProductLoadPort, Pr
     }
 
     @Override
+    public ProductProjection loadProductByIdAllFields(UUID productId) {
+        ProductProjectionJpaEntity productProjectionJpaEntity = productProjectionJpaRepository.findById(productId).orElse(null);
+        if (productProjectionJpaEntity == null) return null;
+        return toProductProjectionAllFields(productProjectionJpaEntity);
+    }
+
+    @Override
     public List<ProductProjection> loadAllProducts() {
         List<ProductProjectionJpaEntity> productListJpa = productProjectionJpaRepository.findAll();
         return productListJpa
                 .stream()
-                .map(this::toProductProjection)
+                .map(this::toProductProjectionAllFields)
                 .toList();
     }
 
@@ -68,7 +75,7 @@ public class ProductJpaAdapter implements ProductCreatePort, ProductLoadPort, Pr
         productProjectionJpaRepository.save(productProjectionJpaEntity);
     }
 
-    private ProductProjection toProductProjection(ProductProjectionJpaEntity productJpa) {
+    private ProductProjection toProductProjectionAllFields(ProductProjectionJpaEntity productJpa) {
         return new ProductProjection(
                 new ProductId(productJpa.getId()),
                 productJpa.getTitle(),

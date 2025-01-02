@@ -7,5 +7,6 @@ import java.util.UUID;
 
 public interface ProductLoadPort {
     ProductProjection loadProductById(UUID productId);
+    ProductProjection loadProductByIdAllFields(UUID productId);
     List<ProductProjection> loadAllProducts();
 }

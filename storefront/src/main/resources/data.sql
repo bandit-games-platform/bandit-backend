@@ -9,7 +9,9 @@ VALUES ('d0eac6e4-1c21-4666-aab4-1350d9bcf000', 'cd281b11-e41e-4f12-93c8-1e9a8bf
        ('c5bef817-d013-4471-a739-067f4fded175', '272c3f85-79db-4b6f-a20e-5d1c12e0e5b3', 'some_invalid_session6', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c002', '2024-12-23 14:30', 'COMPLETED', '2024-12-23 14:32'),
        ('e2a20bcc-ecfd-4141-ace1-109e08ae2bc3', 'd7d4c8ca-5c72-4728-9925-8e313ded5edc', 'some_invalid_session7', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c002', '2024-12-22 14:30', 'COMPLETED', '2024-12-22 14:32'),
        ('c77ecfce-9623-4dee-a571-2a0d543e3d48', '272c3f85-79db-4b6f-a20e-5d1c12e0e5b3', 'some_invalid_session8', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c002', '2024-12-21 14:30', 'COMPLETED', '2024-12-21 14:32'),
-       ('313ef954-0298-4056-a24a-b1281bb61285', 'cd281b11-e41e-4f12-93c8-1e9a8bf7403c', 'some_invalid_session9', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c003', '2024-12-20 14:30', 'COMPLETED', '2024-12-20 14:32');
+       ('313ef954-0298-4056-a24a-b1281bb61285', 'cd281b11-e41e-4f12-93c8-1e9a8bf7403c', 'some_invalid_session9', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c003', '2024-12-20 14:30', 'COMPLETED', '2024-12-20 14:32'),
+       ('9178da36-0001-41cb-ab97-b47ef946ed79', '6ca3863d-d8db-4588-b799-704fdb267814', 'some_invalid_session10', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c004', '2024-12-30 14:30', 'COMPLETED', '2024-12-30 14:32'),
+       ('55aa7fce-5078-470e-a52a-416ecd00c86d', 'cd281b11-e41e-4f12-93c8-1e9a8bf7403c', 'some_invalid_session11', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c004', '2024-12-30 14:30', 'COMPLETED', '2024-12-30 14:32');
 
 INSERT INTO storefront.product (id, title, developer_id, description, price, background_url)
 VALUES ('d77e1d1f-6b46-4c89-9290-3b9cf8a7c001', 'Battleship', '2c1784ca-edf0-4882-994d-23473e30f776', 'A strategic naval combat game', 10.99, 'https://wallpapers.com/images/hd/battleship-pictures-bb1dl2t2ofu085ee.jpg'),
