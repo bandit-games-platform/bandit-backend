@@ -1,6 +1,14 @@
 plugins {
     id 'module-config'
     id 'spring-conventions'
+    id "org.sonarqube" version "5.0.0.4638"
+}
+
+sonar {
+    properties {
+        property "sonar.projectKey", "kdg-ti_integration-5_2024-2025_team5_bandit-backend_AZQpILkIZyiWy1HzUDWI"
+        property "sonar.qualitygate.wait", true
+    }
 }
 
 dependencies {
