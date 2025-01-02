@@ -6,6 +6,8 @@ import be.kdg.int5.storefront.adapters.out.python.dto.ProductDto;
 import be.kdg.int5.storefront.adapters.out.python.dto.RecommendationRequestDto;
 import be.kdg.int5.storefront.domain.ProductProjection;
 import be.kdg.int5.storefront.port.out.ProductRecommendationPort;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,7 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.List;
+import java.util.*;
 
 @Repository
 public class PythonSystemAdapter implements ProductRecommendationPort {
@@ -33,7 +35,7 @@ public class PythonSystemAdapter implements ProductRecommendationPort {
     }
 
     @Override
-    public String getRecommendationsForCustomer(List<ProductProjection> allProductsList, List<ProductProjection> ownedProductsList) {
+    public List<ProductProjection> getRecommendationsForCustomer(List<ProductProjection> allProductsList, List<ProductProjection> ownedProductsList) {
         final List<ProductDto> productDtos = productDtoList(allProductsList);
         final List<ProductDto> ownedDtos = productDtoList(ownedProductsList);
         final RecommendationRequestDto recommendationRequestDto = new RecommendationRequestDto(productDtos, ownedDtos);
@@ -44,7 +46,16 @@ public class PythonSystemAdapter implements ProductRecommendationPort {
         HttpEntity<RecommendationRequestDto> entity = new HttpEntity<>(recommendationRequestDto, headers);
 
         try {
-            return restTemplate.postForObject(pythonUrl + RECOMMEND_PRODUCTS, entity, String.class);
+            String response = restTemplate.postForObject(pythonUrl + RECOMMEND_PRODUCTS, entity, String.class);
+            Set<String> recommendationIds = parseResponse(response);
+
+            // complicated stream in order to preserve the order of the recommendationsIds
+            return recommendationIds.stream()
+                    .map(id -> allProductsList.stream()
+                            .filter(p -> p.getProductId().uuid().toString().equals(id))
+                            .findFirst().orElse(null))
+                    .filter(Objects::nonNull)
+                    .toList();
 
         } catch (Exception e) {
             throw new PythonServiceException("An error occurred while calling the Python Recommender Service.", e);
@@ -59,5 +70,29 @@ public class PythonSystemAdapter implements ProductRecommendationPort {
                         p.getDeveloperId(),
                         p.getDescription()))
                 .toList();
+    }
+
+    private Set<String> parseResponse(String response) {
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        try {
+            JsonNode jsonNode = objectMapper.readTree(response);
+
+            if (jsonNode.has("response")) {
+                JsonNode responseArray = jsonNode.get("response");
+
+                Set<String> recommendedIds = new LinkedHashSet<>();
+                for (JsonNode node : responseArray) {
+                    recommendedIds.add(node.asText());
+                }
+
+                return recommendedIds;
+            } else {
+                throw new IllegalArgumentException("Response JSON does not contain 'response' field");
+            }
+        } catch (Exception e) {
+            logger.error("Error while parsing the Python service response", e);
+            throw new PythonServiceException("Failed to parse Python service response.", e);
+        }
     }
 }

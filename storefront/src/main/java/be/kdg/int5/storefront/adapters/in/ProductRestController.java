@@ -36,6 +36,8 @@ public class ProductRestController {
         final RecommendationCommand command = new RecommendationCommand(customerId);
         List<ProductProjection> productList = recommendationUseCase.recommendProducts(command);
 
+        productList.forEach(p -> System.out.println(p.getProductId()));
+
         List<ProductDto> productDtoList = productList.stream().map(this::toProductDto).toList();
 
         return ResponseEntity.ok(productDtoList);

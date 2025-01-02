@@ -54,11 +54,6 @@ public class RecommendationUseCaseImpl implements RecommendationUseCase {
                 .filter(p -> ownedProductIds.contains(p.getProductId()))
                 .toList();
 
-        logger.info(ownedProducts.toString());
-
-        String response = productRecommendationPort.getRecommendationsForCustomer(allProductsList, ownedProducts);
-        System.out.println(response);
-
-        return allProductsList;
+        return productRecommendationPort.getRecommendationsForCustomer(allProductsList, ownedProducts);
     }
 }
