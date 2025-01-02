@@ -1,5 +1,6 @@
 package be.kdg.int5.storefront.core;
 
+import be.kdg.int5.common.exceptions.PythonServiceException;
 import be.kdg.int5.storefront.domain.Order;
 import be.kdg.int5.storefront.domain.ProductId;
 import be.kdg.int5.storefront.domain.ProductProjection;
@@ -13,8 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,23 +37,71 @@ public class RecommendationUseCaseImpl implements RecommendationUseCase {
     @Override
     @Transactional(readOnly = true)
     public List<ProductProjection> recommendProducts(RecommendationCommand command) {
-        final List<ProductProjection> allProductsList = productLoadPort.loadAllProducts();
+        final List<ProductProjection> allProducts = productLoadPort.loadAllProducts();
         final List<Order> completedOrders = orderLoadPort.loadCompletedOrdersByCustomer(command.customerId());
 
         if (completedOrders.isEmpty()) {
-            return allProductsList;
+            logger.info("No completed orders for customer {} - returning all products.", command.customerId());
+            return allProducts;
         }
 
         final Set<ProductId> ownedProductIds = completedOrders.stream()
                 .map(Order::getProductId)
                 .collect(Collectors.toSet());
 
-        logger.info(ownedProductIds.toString());
-
-        final List<ProductProjection> ownedProducts = allProductsList.stream()
+        final List<ProductProjection> ownedProducts = allProducts.stream()
                 .filter(p -> ownedProductIds.contains(p.getProductId()))
                 .toList();
 
-        return productRecommendationPort.getRecommendationsForCustomer(allProductsList, ownedProducts);
+        List<ProductProjection> recommendations = allProducts;
+        try {
+             recommendations = productRecommendationPort.getRecommendationsForCustomer(allProducts, ownedProducts);
+        } catch (PythonServiceException e) {
+            logger.error("Failed to obtain recommendations from Python Service for CustomerId {}: {}", command.customerId(), e.getMessage());
+        }
+
+        return recommendations;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ProductProjection> getTrendingProducts() {
+        // load all completed orders
+        List<Order> allCompleteOrders = orderLoadPort.loadCompleteOrders();
+
+        System.out.println("All orders:");
+        allCompleteOrders.forEach(System.out::println);
+
+        Map<ProductId, Double> productOrderCountMap = new HashMap<>();
+
+        for (Order order : allCompleteOrders) {
+            productOrderCountMap.merge(order.getProductId(), 1.0, Double::sum);
+        }
+
+        System.out.println("Map:");
+        System.out.println(productOrderCountMap);
+
+        List<ProductId> mostPopularProductsIds = new ArrayList<>();
+
+        double totalCount = allCompleteOrders.size();
+        double threshold = 0.5;
+        double thresholdCount = totalCount * threshold;
+
+        for (ProductId key : productOrderCountMap.keySet()) {
+            if (productOrderCountMap.get(key) > thresholdCount) {
+                mostPopularProductsIds.add(key);
+            }
+        }
+
+        List<ProductProjection> mostPopularProducts = mostPopularProductsIds.stream()
+                .map(p -> productLoadPort.loadProductById(p.uuid()))
+                .toList();
+
+        if (mostPopularProducts.isEmpty() || mostPopularProducts.size() < 4) {
+
+        }
+
+//        List<ProductProjection> allProducts = productLoadPort.loadProductById();
+        return mostPopularProducts;
     }
 }

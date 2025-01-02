@@ -5,9 +5,6 @@ import be.kdg.int5.storefront.domain.CustomerId;
 import be.kdg.int5.storefront.domain.ProductProjection;
 import be.kdg.int5.storefront.port.in.RecommendationCommand;
 import be.kdg.int5.storefront.port.in.RecommendationUseCase;
-import be.kdg.int5.storefront.port.in.query.ProductListQuery;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -28,19 +25,33 @@ public class ProductRestController {
         this.recommendationUseCase = recommendationUseCase;
     }
 
-    @GetMapping
+    @GetMapping("/recommend")
     @PreAuthorize("hasAuthority('player')")
     public ResponseEntity<List<ProductDto>> getRecommendedProducts(@AuthenticationPrincipal Jwt token) {
         final CustomerId customerId = new CustomerId(UUID.fromString(token.getClaimAsString("sub")));
 
         final RecommendationCommand command = new RecommendationCommand(customerId);
-        List<ProductProjection> productList = recommendationUseCase.recommendProducts(command);
+        final List<ProductProjection> productList = recommendationUseCase.recommendProducts(command);
 
-        productList.forEach(p -> System.out.println(p.getProductId()));
+//        productList.forEach(p -> System.out.println(p.getProductId()));
 
-        List<ProductDto> productDtoList = productList.stream().map(this::toProductDto).toList();
+        final List<ProductDto> productDtoList = productList.stream().map(this::toProductDto).toList();
 
         return ResponseEntity.ok(productDtoList);
+    }
+
+    @GetMapping("/trending")
+    @PreAuthorize("hasAuthority('player')")
+    public ResponseEntity<List<ProductDto>> getTrendingProducts() {
+        final List<ProductProjection> productList = recommendationUseCase.getTrendingProducts();
+
+//        productList.forEach(p -> System.out.println(p.getProductId()));
+
+        System.out.println("In controller!");
+
+        final List<ProductDto> trendingProductDtos = productList.stream().map(this::toProductDto).toList();
+
+        return ResponseEntity.ok(trendingProductDtos);
     }
 
     private ProductDto toProductDto(ProductProjection product) {

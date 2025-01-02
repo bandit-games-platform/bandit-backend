@@ -31,6 +31,12 @@ public interface OrderJpaRepository extends JpaRepository<OrderJpaEntity, UUID> 
 
     @Query("""
     SELECT orderEntity FROM OrderJpaEntity orderEntity
+    WHERE orderEntity.orderStatus = 'COMPLETED'
+    """)
+    List<OrderJpaEntity> findAllCompleteOrders();
+
+    @Query("""
+    SELECT orderEntity FROM OrderJpaEntity orderEntity
     WHERE orderEntity.customerId = :customerId
     AND orderEntity.orderStatus = 'COMPLETED'
     """)

@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface RecommendationUseCase {
     List<ProductProjection> recommendProducts(RecommendationCommand command);
+
+    List<ProductProjection> getTrendingProducts();
 }

@@ -83,4 +83,14 @@ public class Order {
         this.orderStatus = OrderStatus.COMPLETED;
         this.orderCompletedAt = LocalDateTime.now();
     }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", productId=" + productId +
+                ", customerId=" + customerId +
+                ", orderStatus=" + orderStatus +
+                '}';
+    }
 }

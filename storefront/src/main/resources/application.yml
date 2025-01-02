@@ -41,3 +41,6 @@ contexts:
 
 stripe:
   apiKey: ${STRIPE_API_KEY}
+
+python:
+  url: ${PYTHON_URL:http://localhost:8000}

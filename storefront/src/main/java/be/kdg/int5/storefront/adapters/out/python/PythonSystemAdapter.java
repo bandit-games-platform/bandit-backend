@@ -1,7 +1,6 @@
 package be.kdg.int5.storefront.adapters.out.python;
 
 import be.kdg.int5.common.exceptions.PythonServiceException;
-import be.kdg.int5.storefront.adapters.in.ProductRestController;
 import be.kdg.int5.storefront.adapters.out.python.dto.ProductDto;
 import be.kdg.int5.storefront.adapters.out.python.dto.RecommendationRequestDto;
 import be.kdg.int5.storefront.domain.ProductProjection;
@@ -23,7 +22,6 @@ import java.util.*;
 public class PythonSystemAdapter implements ProductRecommendationPort {
     @Value("${python.url:http://localhost:8000}")
     private String pythonUrl;
-
     private static final String RECOMMEND_PRODUCTS = "/recommend";
 
     private final RestTemplate restTemplate;
@@ -36,9 +34,9 @@ public class PythonSystemAdapter implements ProductRecommendationPort {
 
     @Override
     public List<ProductProjection> getRecommendationsForCustomer(List<ProductProjection> allProductsList, List<ProductProjection> ownedProductsList) {
-        final List<ProductDto> productDtos = productDtoList(allProductsList);
-        final List<ProductDto> ownedDtos = productDtoList(ownedProductsList);
-        final RecommendationRequestDto recommendationRequestDto = new RecommendationRequestDto(productDtos, ownedDtos);
+        final List<ProductDto> allProductDtos = toProductDtoList(allProductsList);
+        final List<ProductDto> ownedDtos = toProductDtoList(ownedProductsList);
+        final RecommendationRequestDto recommendationRequestDto = new RecommendationRequestDto(allProductDtos, ownedDtos);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -62,8 +60,8 @@ public class PythonSystemAdapter implements ProductRecommendationPort {
         }
     }
 
-    private List<ProductDto> productDtoList(List<ProductProjection> allProductsList) {
-        return allProductsList.stream()
+    private List<ProductDto> toProductDtoList(List<ProductProjection> productList) {
+        return productList.stream()
                 .map(p -> new ProductDto(
                         p.getProductId().uuid(),
                         p.getTitle(),
