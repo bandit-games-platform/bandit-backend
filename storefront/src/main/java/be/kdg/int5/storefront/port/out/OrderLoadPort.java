@@ -12,4 +12,5 @@ public interface OrderLoadPort {
     Order loadCompletedOrderByProductAndCustomer(ProductId productId, CustomerId customerId);
     Order loadOrderByStripeIdAndProductAndCustomer(String sessionId, ProductId productId, CustomerId customerId);
     List<Order> loadPendingOrders();
+    List<Order> loadCompletedOrdersByCustomer(CustomerId customerId);
 }

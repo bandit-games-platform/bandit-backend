@@ -26,24 +26,22 @@ public class PythonSystemAdapter implements ProductRecommendationPort {
 
     private final RestTemplate restTemplate;
 
-    private final static Logger logger = LoggerFactory.getLogger(ProductRestController.class);
+    private final static Logger logger = LoggerFactory.getLogger(PythonSystemAdapter.class);
 
     public PythonSystemAdapter(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
     @Override
-//    public String getRecommendationsForCustomer(List<ProductProjection> allProductsList, List<ProductProjection> ownedList) {
-    public String getRecommendationsForCustomer(List<ProductProjection> allProductsList) {
+    public String getRecommendationsForCustomer(List<ProductProjection> allProductsList, List<ProductProjection> ownedProductsList) {
         final List<ProductDto> productDtos = productDtoList(allProductsList);
-        final RecommendationRequestDto recommendationRequestDto = new RecommendationRequestDto(productDtos);
+        final List<ProductDto> ownedDtos = productDtoList(ownedProductsList);
+        final RecommendationRequestDto recommendationRequestDto = new RecommendationRequestDto(productDtos, ownedDtos);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         HttpEntity<RecommendationRequestDto> entity = new HttpEntity<>(recommendationRequestDto, headers);
-
-        logger.info(entity.toString());
 
         try {
             return restTemplate.postForObject(pythonUrl + RECOMMEND_PRODUCTS, entity, String.class);
