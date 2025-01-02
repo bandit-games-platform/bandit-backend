@@ -536,6 +536,7 @@ deploy_statistics_dev:
       ["RABBIT_URL"]=$DEV_RABBIT_URL
       ["GAME_REGISTRY_URL"]=$DEV_GAME_REGISTRY_URL
       ["SCALE_DOWN"]=false
+      ["PYTHON_URL"]=$DEV_PYTHON_URL
       )
     - serialized_map=""
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
@@ -819,6 +820,7 @@ deploy_statistics_prod:
       ["RABBIT_URL"]=$PROD_RABBIT_URL
       ["DDL_PROD"]="update"
       ["GAME_REGISTRY_URL"]=$PROD_GAME_REGISTRY_URL
+      ["PYTHON_URL"]=$PROD_PYTHON_URL
       )
     - serialized_map=""
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
