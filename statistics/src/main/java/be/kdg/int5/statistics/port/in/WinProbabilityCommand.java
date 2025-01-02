@@ -5,8 +5,8 @@ import be.kdg.int5.statistics.domain.PlayerId;
 
 import static java.util.Objects.requireNonNull;
 
-public record PredictWinProbabilityCommand(GameId gameId, PlayerId player1, PlayerId player2) {
-    public PredictWinProbabilityCommand {
+public record WinProbabilityCommand(GameId gameId, PlayerId player1, PlayerId player2) {
+    public WinProbabilityCommand {
         requireNonNull(gameId);
         requireNonNull(player1);
         requireNonNull(player2);

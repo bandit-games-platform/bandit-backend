@@ -18,12 +18,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-public class PredictWinProbabilityRestController {
-    private static final Logger logger = LoggerFactory.getLogger(PredictWinProbabilityRestController.class);
-    private final PredictWinProbabilityUseCase predictWinProbabilityUseCase;
+public class WinProbabilityRestController {
+    private static final Logger logger = LoggerFactory.getLogger(WinProbabilityRestController.class);
+    private final WinProbabilityUseCase winProbabilityUseCase;
 
-    public PredictWinProbabilityRestController(PredictWinProbabilityUseCase predictWinProbabilityUseCase) {
-        this.predictWinProbabilityUseCase = predictWinProbabilityUseCase;
+    public WinProbabilityRestController(WinProbabilityUseCase winProbabilityUseCase) {
+        this.winProbabilityUseCase = winProbabilityUseCase;
     }
 
     @PostMapping("/statistics/games/{gameId}/win-probability/predict")
@@ -32,13 +32,13 @@ public class PredictWinProbabilityRestController {
             @NotNull @PathVariable("gameId") UUID gameId,
             @NotNull @RequestBody WinProbabilityRequestDto dto) {
         try {
-            PredictWinProbabilityCommand command = new PredictWinProbabilityCommand(
+            WinProbabilityCommand command = new WinProbabilityCommand(
                     new GameId(gameId),
                     new PlayerId(dto.getPlayerOneId()),
                     new PlayerId(dto.getPlayerTwoId())
             );
 
-            WinPrediction response = predictWinProbabilityUseCase.predictWinProbability(command);
+            WinPrediction response = winProbabilityUseCase.predictWinProbability(command);
 
             WinPredictionDto winPredictionDto = new WinPredictionDto(
                     response.getPlayerOneId(),

@@ -16,10 +16,10 @@ import org.springframework.web.client.RestTemplate;
 
 @Repository
 public class PythonClientAdapterStatistics implements PredictWinProbabilityPort {
+    private final static Logger logger = LoggerFactory.getLogger(PythonClientAdapterStatistics.class);
+
     @Value("${python.url:http://localhost:8000}")
     private String pythonUrl;
-
-    private final static Logger logger = LoggerFactory.getLogger(PythonClientAdapterStatistics.class);
 
     private final RestTemplate restTemplate;
 
@@ -30,17 +30,15 @@ public class PythonClientAdapterStatistics implements PredictWinProbabilityPort 
     @Override
     public WinPrediction getPredictions(WinProbabilityFeaturesDto featuresDto) {
         ObjectMapper objectMapper = new ObjectMapper();
-
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-
         HttpEntity<WinProbabilityFeaturesDto> entity = new HttpEntity<>(featuresDto, headers);
 
         String url = pythonUrl + "/predict/win-probability";
 
         try {
             String response = restTemplate.postForObject(url, entity, String.class);
-            logger.debug("Response Out Adapter - Win Probability: {}", response);
+            logger.info("Response Out Adapter - Win Probability: {}", response);
 
             return objectMapper.readValue(response, WinPrediction.class);
         } catch (Exception e) {

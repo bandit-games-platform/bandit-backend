@@ -3,8 +3,8 @@ package be.kdg.int5.statistics;
 import be.kdg.int5.statistics.adapters.in.dto.WinProbabilityRequestDto;
 import be.kdg.int5.statistics.domain.GameId;
 import be.kdg.int5.statistics.domain.PlayerId;
-import be.kdg.int5.statistics.port.in.PredictWinProbabilityCommand;
-import be.kdg.int5.statistics.port.in.PredictWinProbabilityUseCase;
+import be.kdg.int5.statistics.port.in.WinProbabilityCommand;
+import be.kdg.int5.statistics.port.in.WinProbabilityUseCase;
 import be.kdg.int5.statistics.utils.predictiveModel.WinPrediction;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,7 +24,6 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -33,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class WinPredictionControllerIntegrationTest extends AbstractDatabaseTest {
 
     @MockBean
-    private PredictWinProbabilityUseCase predictWinProbabilityUseCase;
+    private WinProbabilityUseCase winProbabilityUseCase;
 
     @Autowired
     private MockMvc mockMvc;
@@ -49,7 +48,7 @@ class WinPredictionControllerIntegrationTest extends AbstractDatabaseTest {
     private float winProbabilityPlayerOne;
     private float winProbabilityPlayerTwo;
     private WinPrediction winPrediction;
-    private PredictWinProbabilityCommand command;
+    private WinProbabilityCommand command;
     private WinProbabilityRequestDto requestDto;
 
     @BeforeEach
@@ -61,7 +60,7 @@ class WinPredictionControllerIntegrationTest extends AbstractDatabaseTest {
         winProbabilityPlayerOne = Variables.WIN_PROBABILITY_PLAYER_ONE;
         winProbabilityPlayerTwo = Variables.WIN_PROBABILITY_PLAYER_TWO;
 
-        command = new PredictWinProbabilityCommand(
+        command = new WinProbabilityCommand(
                 new GameId(gameId),
                 new PlayerId(playerOneId),
                 new PlayerId(playerTwoId)
@@ -85,7 +84,7 @@ class WinPredictionControllerIntegrationTest extends AbstractDatabaseTest {
     void whenAdminPredictsWinProbabilityShouldSucceed() throws Exception {
 
         // Arrange
-        when(predictWinProbabilityUseCase.predictWinProbability(command))
+        when(winProbabilityUseCase.predictWinProbability(command))
                 .thenReturn(winPrediction);
 
         // Act
@@ -103,8 +102,8 @@ class WinPredictionControllerIntegrationTest extends AbstractDatabaseTest {
                 .andExpect(jsonPath("$.playerTwoId").value(playerTwoId.toString()))
                 .andExpect(jsonPath("$.winProbabilityPlayerTwo").value(winProbabilityPlayerTwo));
 
-        ArgumentCaptor<PredictWinProbabilityCommand> captor = ArgumentCaptor.forClass(PredictWinProbabilityCommand.class);
-        verify(predictWinProbabilityUseCase).predictWinProbability(captor.capture());
+        ArgumentCaptor<WinProbabilityCommand> captor = ArgumentCaptor.forClass(WinProbabilityCommand.class);
+        verify(winProbabilityUseCase).predictWinProbability(captor.capture());
         assertEquals(command, captor.getValue());
     }
 
@@ -112,7 +111,7 @@ class WinPredictionControllerIntegrationTest extends AbstractDatabaseTest {
     void whenNotAdminPredictsWinProbabilityShouldFail() throws Exception {
 
         // Arrange
-        when(predictWinProbabilityUseCase.predictWinProbability(command))
+        when(winProbabilityUseCase.predictWinProbability(command))
                 .thenReturn(winPrediction);
 
         // Act
@@ -125,6 +124,6 @@ class WinPredictionControllerIntegrationTest extends AbstractDatabaseTest {
 
         // Assert
         result.andExpect(status().isForbidden());
-        verify(predictWinProbabilityUseCase, times(0)).predictWinProbability(command);
+        verify(winProbabilityUseCase, times(0)).predictWinProbability(command);
     }
 }
