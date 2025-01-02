@@ -95,4 +95,10 @@ public abstract class Conversation {
                 .findAny()
                 .orElseThrow();
     }
+
+    public Question getLatestQuestion() {
+        return questions.stream()
+                .max(Comparator.comparing(Question::getSubmittedAt))
+                .orElse(null);
+    }
 }

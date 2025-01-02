@@ -18,11 +18,23 @@ public interface ConversationJpaRepository extends JpaRepository<ConversationJpa
     GameConversationJpaEntity findByUserIdAndGameIdWithQuestions(UUID userId, UUID gameId);
 
     @Query("""
-            SELECT g FROM GameConversationJpaEntity g
+            SELECT g FROM ConversationJpaEntity g
             JOIN FETCH g.questions q
-            JOIN FETCH q.answer a
+            LEFT JOIN FETCH q.answer a
             WHERE g.userId = :userId
             AND g.startTime = :startTime
             """)
     ConversationJpaEntity findByUserIdAndStartTimeWithQuestions(UUID userId, LocalDateTime startTime);
+
+    @Query("""
+    SELECT DISTINCT p FROM PlatformConversationJpaEntity p
+    JOIN FETCH p.questions q
+    LEFT JOIN FETCH q.answer a
+    WHERE p.startTime = (
+         SELECT MAX(pc.startTime) FROM PlatformConversationJpaEntity pc
+         WHERE pc.userId = :userId
+     )
+     AND p.userId = :userId
+    """)
+    PlatformConversationJpaEntity findPlatformConversationByUserIdAndLatestStartTime(UUID userId);
 }
