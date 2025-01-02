@@ -33,7 +33,7 @@ public class ProductRestController {
         final RecommendationCommand command = new RecommendationCommand(customerId);
         final List<ProductProjection> productList = recommendationUseCase.recommendProducts(command);
 
-//        productList.forEach(p -> System.out.println(p.getProductId()));
+        productList.forEach(p -> System.out.println(p.getProductId()));
 
         final List<ProductDto> productDtoList = productList.stream().map(this::toProductDto).toList();
 
@@ -44,10 +44,6 @@ public class ProductRestController {
     @PreAuthorize("hasAuthority('player')")
     public ResponseEntity<List<ProductDto>> getTrendingProducts() {
         final List<ProductProjection> productList = recommendationUseCase.getTrendingProducts();
-
-//        productList.forEach(p -> System.out.println(p.getProductId()));
-
-        System.out.println("In controller!");
 
         final List<ProductDto> trendingProductDtos = productList.stream().map(this::toProductDto).toList();
 

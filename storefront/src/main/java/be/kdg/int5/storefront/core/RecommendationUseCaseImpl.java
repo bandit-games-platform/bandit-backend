@@ -53,11 +53,17 @@ public class RecommendationUseCaseImpl implements RecommendationUseCase {
                 .filter(p -> ownedProductIds.contains(p.getProductId()))
                 .toList();
 
-        List<ProductProjection> recommendations = allProducts;
+        List<ProductProjection> recommendations = new ArrayList<>();
+
         try {
              recommendations = productRecommendationPort.getRecommendationsForCustomer(allProducts, ownedProducts);
         } catch (PythonServiceException e) {
-            logger.error("Failed to obtain recommendations from Python Service for CustomerId {}: {}", command.customerId(), e.getMessage());
+            logger.error("\nFailed to obtain recommendations from Python Service for CustomerId {}: {}", command.customerId().uuid(), e.getMessage());
+        }
+
+        if (recommendations.isEmpty()) {
+            logger.info("\nRecommendations not available for CustomerId: {} - returning all products", command.customerId().uuid());
+            return allProducts;
         }
 
         return recommendations;
@@ -69,18 +75,12 @@ public class RecommendationUseCaseImpl implements RecommendationUseCase {
         // load all completed orders
         List<Order> allCompleteOrders = orderLoadPort.loadCompleteOrders();
 
-        System.out.println("All orders:");
-        allCompleteOrders.forEach(System.out::println);
-
         // count order nº per productId
         Map<ProductId, Double> productOrderCountMap = new HashMap<>();
 
         for (Order order : allCompleteOrders) {
             productOrderCountMap.merge(order.getProductId(), 1.0, Double::sum);
         }
-
-        System.out.println("Map:");
-        System.out.println(productOrderCountMap);
 
         // sort the map descending
         Map<ProductId, Double> sortedProductMap = productOrderCountMap.entrySet().stream()
