@@ -15,9 +15,10 @@ stages:
   - test
   - deploy
   - destroy
-  - sonarqube
 
 sonarqube-check:
+  needs: []
+  stage: test
   image: gradle:jre11-slim
   variables:
     SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
@@ -29,7 +30,7 @@ sonarqube-check:
   script: gradle sonar
   allow_failure: true
   only:
-    - main
+    - "*"
 
 # -- reusable configurations --
 
