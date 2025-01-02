@@ -54,10 +54,10 @@ public class WinProbabilityUseCaseImpl implements WinProbabilityUseCase {
     }
 
     private void validateSessions(List<CompletedSession> player1Sessions, List<CompletedSession> player2Sessions) {
-        if (player1Sessions.isEmpty()) {
+        if (player1Sessions == null) {
             throw new IllegalStateException("Player 1 has no completed sessions for the selected game.");
         }
-        if (player2Sessions.isEmpty()) {
+        if (player2Sessions == null) {
             throw new IllegalStateException("Player 2 has no completed sessions for the selected game.");
         }
     }

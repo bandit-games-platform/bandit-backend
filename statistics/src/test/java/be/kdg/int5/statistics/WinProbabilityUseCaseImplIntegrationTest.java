@@ -106,7 +106,7 @@ class WinProbabilityUseCaseImplIntegrationTest {
         when(completedSessionLoadPort.loadAllCompletedSessionsForGameAndPlayer(
                 new GameId(gameId),
                 new PlayerId(playerOneId)))
-                .thenReturn(Collections.emptyList());
+                .thenReturn(null);
         when(completedSessionLoadPort.loadAllCompletedSessionsForGameAndPlayer(
                 new GameId(gameId),
                 new PlayerId(playerTwoId)))
@@ -141,7 +141,7 @@ class WinProbabilityUseCaseImplIntegrationTest {
         when(completedSessionLoadPort.loadAllCompletedSessionsForGameAndPlayer(
                 new GameId(gameId),
                 new PlayerId(playerTwoId)))
-                .thenReturn(Collections.emptyList());
+                .thenReturn(null);
 
         // Act & Assert
         IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {
