@@ -293,7 +293,7 @@ sonarqube-check:
     key: "${CI_JOB_NAME}"
     paths:
       - .sonar/cache
-  script: gradle sonar
+  script: gradle -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_TOKEN sonar
   allow_failure: true
 
 # ----------------------- DEPLOY ----------------------- #
