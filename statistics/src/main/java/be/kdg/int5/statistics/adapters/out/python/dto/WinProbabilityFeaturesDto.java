@@ -15,7 +15,19 @@ public class WinProbabilityFeaturesDto {
     private float diff_avg_clicks;
     private float diff_avg_starting_first;
 
-    public WinProbabilityFeaturesDto(UUID playerOneId, UUID playerTwoId, float diff_session_count, float diff_win_rate, float diff_avg_score, float diff_avg_turns_taken, float diff_avg_session_duration, float diff_avg_seconds_per_turn, float diff_avg_clicks, float diff_avg_opponent_score, float diff_avg_starting_first) {
+    public WinProbabilityFeaturesDto(
+            UUID playerOneId,
+            UUID playerTwoId,
+            float diff_session_count,
+            float diff_win_rate,
+            float diff_avg_score,
+            float diff_avg_turns_taken,
+            float diff_avg_session_duration,
+            float diff_avg_seconds_per_turn,
+            float diff_avg_clicks,
+            float diff_avg_opponent_score,
+            float diff_avg_starting_first
+    ) {
         this.playerOneId = playerOneId;
         this.playerTwoId = playerTwoId;
         this.diff_session_count = diff_session_count;

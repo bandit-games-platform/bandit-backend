@@ -28,13 +28,12 @@ public class PlayerFriendsController {
     private final PendingFriendInvitesQuery pendingFriendInvitesQuery;
     private final ProcessPendingFriendInvite processPendingFriendInvite;
 
-
     public PlayerFriendsController(
             SearchForNewFriendsUseCase searchForNewFriendsUseCase,
             FriendsListQuery friendsListQuery,
             SendFriendInviteUseCase sendFriendInviteUseCase,
             PendingFriendInvitesQuery pendingFriendInvitesQuery,
-            ProcessPendingFriendInvite processPendingFriendInvite, PlayerBioQuery playerBioQuery
+            ProcessPendingFriendInvite processPendingFriendInvite
     ){
         this.searchForNewFriendsUseCase = searchForNewFriendsUseCase;
         this.friendsListQuery = friendsListQuery;
@@ -136,9 +135,5 @@ public class PlayerFriendsController {
 
     private PlayerSearchBioDto mapToSearchDto(Player player){
         return new PlayerSearchBioDto(player.getId().uuid().toString(), player.getDisplayName(), player.getAvatar().url().url(), false);
-    }
-
-    private LoadAllPlayersDto mapToAllPlayersDto(Player player){
-        return new LoadAllPlayersDto(player.getId().uuid().toString(), player.getDisplayName(), player.getAvatar().url().url());
     }
 }
