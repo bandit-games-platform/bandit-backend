@@ -1,0 +1,39 @@
+#### Get access token with player user
+POST https://keycloak.victoriousocean-73fa80ad.northeurope.azurecontainerapps.io/realms/bandit-realm/protocol/openid-connect/token HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+
+client_id=bandit-backend&client_secret={{bandit_backend_secret}}&username=roman@email.com&password=roman&grant_type=password&scope=openid
+
+> {%client.global.set("player", response.body.access_token);%}
+
+
+### Post to create conversation
+POST http://localhost:8091/chatbot/chatbot/platform/home
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{player}}
+
+{
+    "questionText": "Initial question"
+}
+
+
+### Post to ask second conversation question
+POST http://localhost:8091/chatbot/chatbot/platform/home
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{player}}
+
+{
+    "questionText": "What can I do here? Answer in 20 words or less"
+}
+
+### Get latest question in conversation
+GET http://localhost:8091/chatbot/chatbot/platform?lastOnly=true
+Accept: application/json
+Authorization: Bearer {{player}}
+
+### Get all questions in conversation
+GET http://localhost:8091/chatbot/chatbot/platform?lastOnly=false
+Accept: application/json
+Authorization: Bearer {{player}}
