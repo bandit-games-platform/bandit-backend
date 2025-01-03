@@ -310,8 +310,7 @@ sonarqube-check:
   script:
     - /usr/bin/entrypoint.sh sonar-scanner -Dsonar.projectKey="$CI_PROJECT_NAME"    # sonar.projectKey defines the name of the project in SonarQube.
     # In this example it uses the same name of the project in GitLab.
-  tags:                                                                             # NOTE: this is NOT a git tag name.
-    - sonarqube
+
 
 #sonarqube-check:
 #  needs: []
