@@ -102,7 +102,7 @@ public class RecommendationUseCaseImpl implements RecommendationUseCase {
         System.out.println("Top 3:");
         System.out.println(mostPopularProductsIds);
 
-        // load top N products
+        // load top N most popular products
         List<ProductProjection> mostPopularProducts = mostPopularProductsIds.stream()
                 .map(p -> productLoadPort.loadProductByIdAllFields(p.uuid()))
                 .toList();

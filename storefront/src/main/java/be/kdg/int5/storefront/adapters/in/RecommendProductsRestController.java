@@ -18,10 +18,10 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/products")
-public class ProductRestController {
+public class RecommendProductsRestController {
     private final RecommendationUseCase recommendationUseCase;
 
-    public ProductRestController(RecommendationUseCase recommendationUseCase) {
+    public RecommendProductsRestController(RecommendationUseCase recommendationUseCase) {
         this.recommendationUseCase = recommendationUseCase;
     }
 
