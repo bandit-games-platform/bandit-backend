@@ -66,6 +66,8 @@ public class RecommendationUseCaseImpl implements RecommendationUseCase {
             return allProducts;
         }
 
+        recommendations.forEach(p -> logger.info("Recommendation: {} - {}", p.getProductId().uuid(), p.getTitle()));
+
         return recommendations;
     }
 
