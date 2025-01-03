@@ -312,7 +312,7 @@ sonarqube-check:
     # In this example it uses the same name of the project in GitLab.
   tags:                                                                             # NOTE: this is NOT a git tag name.
     - sonarqube
-    -
+
 #sonarqube-check:
 #  needs: []
 #  stage: test
