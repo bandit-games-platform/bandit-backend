@@ -297,6 +297,8 @@ semgrep-sast:
 #  allow_failure: true
 
 sonarqube-check:
+  needs: []
+  stage: test
   image: gradle:8.2.0-jdk17-jammy
   variables:
     SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
