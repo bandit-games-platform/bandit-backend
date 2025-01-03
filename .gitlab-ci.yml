@@ -381,7 +381,7 @@ deploy_chatbot_dev:
     action: start
     auto_stop_in: 1 hours
     on_stop: destroy_chatbot_dev
-  # This will only run when you commit to a merge request or to the ci-cd branch
+  # This will only run when you commit to a merge request or to the ci-cd branch.
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
     - if: $CI_COMMIT_BRANCH == 'ci-cd'
