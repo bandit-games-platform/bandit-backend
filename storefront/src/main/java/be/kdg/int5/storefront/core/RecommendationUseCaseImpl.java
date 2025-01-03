@@ -41,7 +41,7 @@ public class RecommendationUseCaseImpl implements RecommendationUseCase {
         final List<Order> completedOrders = orderLoadPort.loadCompletedOrdersByCustomer(command.customerId());
 
         if (completedOrders.isEmpty()) {
-            logger.info("No completed orders for customer {} - returning all products.", command.customerId());
+            logger.info("No completed orders for customer {} - returning all products.", command.customerId().uuid());
             return allProducts;
         }
 
@@ -75,6 +75,10 @@ public class RecommendationUseCaseImpl implements RecommendationUseCase {
         // load all completed orders
         List<Order> allCompleteOrders = orderLoadPort.loadCompleteOrders();
 
+        if (allCompleteOrders.isEmpty()) {
+            return productLoadPort.loadAllProducts();
+        }
+
         // count order nº per productId
         Map<ProductId, Double> productOrderCountMap = new HashMap<>();
 
@@ -90,8 +94,7 @@ public class RecommendationUseCaseImpl implements RecommendationUseCase {
                         Map.Entry::getValue,
                         (oldValue, newValue) -> oldValue, LinkedHashMap::new));
 
-        System.out.println("Sorted Map:");
-        System.out.println(sortedProductMap);
+        logger.info("\nSorted Map:\n{}", sortedProductMap);
 
         // take top N most popular products
         int topN = 4;
@@ -99,8 +102,7 @@ public class RecommendationUseCaseImpl implements RecommendationUseCase {
                 .limit(topN)
                 .toList();
 
-        System.out.println("Top 3:");
-        System.out.println(mostPopularProductsIds);
+        logger.info("\nTop 4:\n{}", mostPopularProductsIds);
 
         // load top N most popular products
         List<ProductProjection> mostPopularProducts = mostPopularProductsIds.stream()

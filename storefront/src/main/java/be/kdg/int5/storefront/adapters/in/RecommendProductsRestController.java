@@ -5,6 +5,8 @@ import be.kdg.int5.storefront.domain.CustomerId;
 import be.kdg.int5.storefront.domain.ProductProjection;
 import be.kdg.int5.storefront.port.in.RecommendationCommand;
 import be.kdg.int5.storefront.port.in.RecommendationUseCase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,6 +23,8 @@ import java.util.UUID;
 public class RecommendProductsRestController {
     private final RecommendationUseCase recommendationUseCase;
 
+    private final static Logger logger = LoggerFactory.getLogger(RecommendProductsRestController.class);
+
     public RecommendProductsRestController(RecommendationUseCase recommendationUseCase) {
         this.recommendationUseCase = recommendationUseCase;
     }
@@ -32,8 +36,6 @@ public class RecommendProductsRestController {
 
         final RecommendationCommand command = new RecommendationCommand(customerId);
         final List<ProductProjection> productList = recommendationUseCase.recommendProducts(command);
-
-        productList.forEach(p -> System.out.println(p.getProductId()));
 
         final List<ProductDto> productDtoList = productList.stream().map(this::toProductDto).toList();
 
