@@ -14,10 +14,16 @@ public class GameDetailsJpaEntity {
     private UUID gameId;
     private String title;
     private String description;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "gameDetails")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "gameDetails")
     private Set<GameRuleJpaEntity> gameRules;
 
     public GameDetailsJpaEntity() {
+    }
+
+    public GameDetailsJpaEntity(UUID gameId, String title, String description) {
+        this.gameId = gameId;
+        this.title = title;
+        this.description = description;
     }
 
     public GameDetailsJpaEntity(UUID gameId, String title, String description, Set<GameRuleJpaEntity> gameRules) {
