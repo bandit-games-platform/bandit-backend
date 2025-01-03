@@ -2,6 +2,11 @@ plugins {
     id 'module-config'
     id 'spring-conventions'
     id "org.sonarqube" version "5.0.0.4638"
+    id 'groovy-gradle-plugin'
+}
+
+repositories {
+    mavenCentral()
 }
 
 sonar {
