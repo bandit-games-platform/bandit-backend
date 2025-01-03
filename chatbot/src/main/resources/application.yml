@@ -23,7 +23,7 @@ spring:
     port: 5672
     username: ${RABBITMQ_USER:myuser}
     password: ${RABBITMQ_PASSWORD:mypassword}
-    virtual-host: ${RABBITMQ_VHOST:%2F}
+    virtual-host: ${RABBITMQ_VHOST:/}
   config:
     additional-location: ${SPRING_CONFIG_ADDITIONAL_LOCATION}
   security:

@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/lobby")
+@RequestMapping("/lobby/invite")
 public class GameInviteRestController {
     private final PendingGameInvitesQuery pendingGameInvitesQuery;
     private final TitleForGameIdQuery titleForGameIdQuery;
@@ -47,16 +47,24 @@ public class GameInviteRestController {
         this.createGameInviteUseCase = createGameInviteUseCase;
     }
 
-    @GetMapping("/{lobbyId}/can-invite")
+    @GetMapping("/can-invite/{gameId}")
     @PreAuthorize("hasAuthority('player')")
-    public ResponseEntity<Boolean> canPlayerCurrentlyInviteToLobby(@AuthenticationPrincipal Jwt token, @PathVariable UUID lobbyId) {
-        PlayerId requestingPlayer = new PlayerId(UUID.fromString(token.getSubject()));
-        LobbyId forLobby = new LobbyId(lobbyId);
+    public ResponseEntity<UUID> canPlayerCurrentlyInviteToLobby(@AuthenticationPrincipal Jwt token, @PathVariable UUID gameId) {
+        PlayerId requestingPlayerThatWouldBeLobbyOwner = new PlayerId(UUID.fromString(token.getSubject()));
+        GameId forGame = new GameId(gameId);
 
-        return ResponseEntity.ok(playerCanInviteToLobbyQuery.canPlayerCurrentlyInviteOthersToLobby(requestingPlayer, forLobby));
+        LobbyId lobbyIdIfPlayerCanInvite = playerCanInviteToLobbyQuery.canPlayerCurrentlyInviteOthersToLobby(
+                requestingPlayerThatWouldBeLobbyOwner,
+                forGame
+        );
+
+        if (lobbyIdIfPlayerCanInvite == null) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        return ResponseEntity.ok(lobbyIdIfPlayerCanInvite.uuid());
     }
 
-    @GetMapping("/invite")
+    @GetMapping
     @PreAuthorize("hasAuthority('player')")
     public ResponseEntity<List<GetGameInviteDto>> getPendingInvites(@AuthenticationPrincipal Jwt token) {
         PlayerId invitedPlayer = new PlayerId(UUID.fromString(token.getSubject()));
@@ -76,7 +84,7 @@ public class GameInviteRestController {
         return ResponseEntity.ok(inviteDtos);
     }
 
-    @PostMapping("/invite")
+    @PostMapping
     @PreAuthorize("hasAuthority('player')")
     public ResponseEntity<Void> createNewInvite(@AuthenticationPrincipal Jwt token, @RequestBody @Valid NewGameInviteDto newGameInviteDto) {
         PlayerId inviterId = new PlayerId(UUID.fromString(token.getSubject()));
@@ -92,7 +100,7 @@ public class GameInviteRestController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @PostMapping("/invite/{inviteId}/dismiss")
+    @PostMapping("/{inviteId}/dismiss")
     @PreAuthorize("hasAuthority('player')")
     public ResponseEntity<Void> dismissInvite(@AuthenticationPrincipal Jwt token, @PathVariable UUID inviteId) {
         PlayerId requestingPlayer = new PlayerId(UUID.fromString(token.getSubject()));
@@ -104,7 +112,7 @@ public class GameInviteRestController {
         return new ResponseEntity<>(HttpStatus.CONFLICT);
     }
 
-    @PostMapping("/invite/{inviteId}/accept")
+    @PostMapping("/{inviteId}/accept")
     @PreAuthorize("hasAuthority('player')")
     public ResponseEntity<LobbyJoinInfoDto> acceptInviteAndGetJoinInfo(@AuthenticationPrincipal Jwt token, @PathVariable UUID inviteId) {
         PlayerId requestingPlayer = new PlayerId(UUID.fromString(token.getSubject()));
