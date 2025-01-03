@@ -80,7 +80,6 @@ public class OrderJpaAdapter implements OrderLoadPort, OrderUpdatePort, OrderCre
     @Override
     public List<Order> loadCompletedOrdersByCustomer(CustomerId customerId) {
         List<OrderJpaEntity> ordersJpa = orderJpaRepository.findAllCompletedOrdersByCustomerId(customerId.uuid());
-
         if (ordersJpa == null) return null;
         return ordersJpa.stream().map(this::orderJpaToDomain).toList();
     }
