@@ -56,6 +56,8 @@ public class StartGameConversationUseCaseImpl implements StartGameConversationUs
             return gameConversation;
         }
 
+        return gameConversation;
+
 
 
 //        if (existingGameConversation != null) {
