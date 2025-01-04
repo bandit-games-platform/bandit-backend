@@ -1,7 +1,7 @@
 package be.kdg.int5.chatbot.ports.in;
 
-import be.kdg.int5.chatbot.domain.Answer;
+import be.kdg.int5.chatbot.domain.GameConversation;
 
 public interface StartGameConversationUseCase {
-    Answer startGameConversation(StartGameConversationCommand command);
+    GameConversation startGameConversation(StartGameConversationCommand command);
 }

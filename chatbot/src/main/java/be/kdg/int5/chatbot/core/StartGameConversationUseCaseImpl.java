@@ -35,31 +35,50 @@ public class StartGameConversationUseCaseImpl implements StartGameConversationUs
 
     @Override
     @Transactional
-    public Answer startGameConversation(StartGameConversationCommand command) {
-
+    public GameConversation startGameConversation(StartGameConversationCommand command) {
         final GameDetails gameDetails = gameDetailsLoadPort.loadGameDetailsByGameId(command.gameId());
 
-        final GameConversation existingGameConversation = conversationLoadPort.loadGameConversation(command.userId(), command.gameId());
+        GameConversation gameConversation = conversationLoadPort.loadGameConversation(command.userId(), command.gameId());
 
-        if (existingGameConversation != null) {
-            Question initialQuestion = existingGameConversation.getInitialQuestion();
+        if (gameConversation == null) {
+            gameConversation = new GameConversation(command.userId(), command.gameId());
+            Question initialQuestion = gameConversation.start();
 
-            if (initialQuestion == null) {
-                throw new ConversationWithoutInitialQuestionException("Conversation exists but has no initial question.");
-            }
-            return initialQuestion.getAnswer();
+            // pre-load answer
+//            Answer answer = gameDetails.getSummary();
+
+            // update question & conversation
+//            initialQuestion.update(answer); // answer
+            gameConversation.update(initialQuestion);
+
+            // save conversation
+            conversationSavePort.saveConversation(gameConversation);
+            return gameConversation;
         }
 
-        final GameConversation gameConversation = new GameConversation(command.userId(), command.gameId());
 
-        final Question initialQuestion = gameConversation.start();
-        final Answer answer = answerAskPort.getAnswerForInitialQuestion(gameDetails, initialQuestion);
 
-        initialQuestion.update(answer);
-        gameConversation.update(initialQuestion);
+//        if (existingGameConversation != null) {
+//            Question initialQuestion = existingGameConversation.getInitialQuestion();
+//
+//            if (initialQuestion == null) {
+//                throw new ConversationWithoutInitialQuestionException("Conversation exists but has no initial question.");
+//            }
+//            return initialQuestion.getAnswer();
+//        }
 
-        conversationSavePort.saveConversation(gameConversation);
-
-        return answer;
+//        final GameConversation gameConversation = new GameConversation(command.userId(), command.gameId());
+//
+//        final Question followUpQuestion = gameConversation.start();
+//        existingGameConversation.update(followUpQuestion);
+//
+//        final Answer answer = answerAskPort.getAnswerForInitialQuestion(gameDetails, followUpQuestion);
+//
+//        followUpQuestion.update(answer);
+//        gameConversation.update(followUpQuestion);
+//
+//        conversationSavePort.saveConversation(gameConversation);
+//
+//        return answer;
     }
 }
