@@ -7,7 +7,7 @@ server:
 spring:
   sql:
     init:
-      mode: always
+      mode: ${DB_INIT_MODE:always}
 
   jpa:
     open-in-view: false

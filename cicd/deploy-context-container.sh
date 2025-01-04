@@ -20,6 +20,7 @@ PORT=8080
 STRIPE_API_KEY=
 KEYCLOAK_CLIENT_SECRET=
 DDL_PROD=
+DB_INIT_MODE=
 RABBIT_URL=
 PYTHON_URL=
 GAME_REGISTRY_URL=
@@ -87,7 +88,12 @@ if [ -n "$STRIPE_API_KEY" ]; then
   ENV_VAR_ARGS+=("STRIPE_API_KEY=secretref:stripe-api-key")
 fi
 if [ -n "$DDL_PROD" ]; then
+  echo "Using DDL mode: $DDL_PROD"
   ENV_VAR_ARGS+=("DDL_PROD=$DDL_PROD")
+fi
+if [ -n "$DB_INIT_MODE" ]; then
+  echo "Using DB init mode: $DB_INIT_MODE"
+  ENV_VAR_ARGS+=("DB_INIT_MODE=$DB_INIT_MODE")
 fi
 if [ -n "$RABBIT_URL" ]; then
   ENV_VAR_ARGS+=("RABBIT_URL=$RABBIT_URL")
