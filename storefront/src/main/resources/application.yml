@@ -7,11 +7,11 @@ server:
 spring:
   sql:
     init:
-      mode: always
+      mode: ${DB_INIT_MODE:always}
   jpa:
     open-in-view: false
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: ${DDL_PROD:create-drop}
       show-sql: true
     defer-datasource-initialization: true
   datasource:
@@ -19,24 +19,25 @@ spring:
     username: ${DATASOURCE_USER:user}
     password: ${DATASOURCE_PASS:password}
   rabbitmq:
-    host: localhost
+    host: ${RABBIT_URL:localhost}
     port: 5672
-    username: myuser
-    password: mypassword
+    username: ${RABBITMQ_USER:myuser}
+    password: ${RABBITMQ_PASSWORD:mypassword}
+    virtual-host: ${RABBITMQ_VHOST:/}
   config:
     additional-location: ${SPRING_CONFIG_ADDITIONAL_LOCATION}
   security:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8180/realms/bandit-realm
-          jwk-set-uri: http://localhost:8180/realms/bandit-realm/protocol/openid-connect/certs
+          issuer-uri: https://keycloak.victoriousocean-73fa80ad.northeurope.azurecontainerapps.io/realms/bandit-realm
+          jwk-set-uri: https://keycloak.victoriousocean-73fa80ad.northeurope.azurecontainerapps.io/realms/bandit-realm/protocol/openid-connect/certs
 
 contexts:
   gameRegistry:
-    baseUrl: http://localhost:8092/game-registry
+    baseUrl: ${GAME_REGISTRY_URL:http://localhost:8092/game-registry}
   frontend:
-    baseUrl: http://localhost:5173
+    baseUrl: ${FRONTEND_URL:http://localhost:5173}
 
 stripe:
   apiKey: ${STRIPE_API_KEY}

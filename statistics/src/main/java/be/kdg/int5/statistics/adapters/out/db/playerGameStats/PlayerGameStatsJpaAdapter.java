@@ -32,7 +32,7 @@ public class PlayerGameStatsJpaAdapter implements PlayerGameStatisticsLoadPort, 
                 .findById(playerGameStatsJpaId)
                 .orElseThrow(PlayerGameStatsNotFound::new);
 
-        return this.playerGameStatsJpaToDomain(playerGameStatsJpaEntity);
+        return this.playerGameStatisticsJpaToDomain(playerGameStatsJpaEntity);
     }
 
     @Override
