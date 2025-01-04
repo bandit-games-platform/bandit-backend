@@ -43,11 +43,11 @@ public class GameChatbotRestController {
 
         try {
             final StartGameConversationCommand startGameConversationCommand = new StartGameConversationCommand(userUUID, gameUUID);
-            final GameConversation answer = startGameConversationUseCase.startGameConversation(startGameConversationCommand);
+            final GameConversation conversation = startGameConversationUseCase.startGameConversation(startGameConversationCommand);
 
-            logger.info("Answer in the Controller - Initial: {}", answer.toString());
+            logger.info("Answer in the Controller - Initial: {}", conversation.toString());
 
-            final AnswerDto answerDto = new AnswerDto(answer.getInitialQuestion().getText());
+            final AnswerDto answerDto = new AnswerDto(conversation.getInitialQuestion().getAnswer().text());
             return ResponseEntity.ok(answerDto);
         } catch (PythonServiceException e) {
             final String errorMessage = "Python service is unavailable at the moment. Please try again later.";

@@ -145,18 +145,27 @@ class ChatbotControllerIntegrationTest extends AbstractDatabaseTest {
     }
 
     @Test
-    void shouldReturnServiceUnavailableWhenPythonServiceFails() throws Exception {
+    void shouldReturnServiceUnavailableWhenPythonServiceFailsForFollowUpQuestion() throws Exception {
 
         // Arrange
-        InitialQuestionDto initialQuestionDto = new InitialQuestionDto(gameId.toString());
+//        InitialQuestionDto initialQuestionDto = new InitialQuestionDto(gameId.toString());
 
-        when(pythonClientAdapter.getAnswerForInitialQuestion(any(), any()))
+        final LocalDateTime submittedAt = LocalDateTime.now();
+        final GameConversationJpaEntity existingConversation = getGameConversationJpaEntity(submittedAt);
+
+        when(conversationJpaRepository.findByUserIdAndGameIdWithQuestions(userId, gameId))
+                .thenReturn(existingConversation);
+
+        QuestionDto questionDto = new QuestionDto("Tell me more about the game.");
+        FollowUpQuestionDto followUpQuestionDto = new FollowUpQuestionDto(String.valueOf(gameId), questionDto);
+
+        when(pythonClientAdapter.getAnswerForFollowUpQuestion(any(), any(), any()))
                 .thenThrow(new PythonServiceException("An error occurred while calling the Python service."));
 
         // Act
-        final ResultActions result = mockMvc.perform(post("/initial-question")
+        final ResultActions result = mockMvc.perform(post("/follow-up-question")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(initialQuestionDto))
+                .content(objectMapper.writeValueAsString(followUpQuestionDto))
                 .with(jwt()
                         .jwt(jwt -> jwt.claim("sub", String.valueOf(userId)))
                         .authorities(new SimpleGrantedAuthority("player"))));
