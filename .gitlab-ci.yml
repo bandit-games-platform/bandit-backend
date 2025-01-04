@@ -293,7 +293,6 @@ sonarqube-check:
     SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
     GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project
     SONAR_HOST_URL: "http://sonarqube:9000"  # URL for SonarQube (use alias from services section)
-    SONAR_TOKEN: "your-sonar-token"  # Use a valid SonarQube token
   cache:
     key: "${CI_JOB_NAME}"
     paths:
