@@ -8,6 +8,7 @@ import be.kdg.int5.chatbot.ports.out.ConversationSavePort;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -30,6 +31,13 @@ public class ConversationJpaAdapter implements ConversationLoadPort, Conversatio
     }
 
     @Override
+    public PlatformConversation loadPlatformConversation(UserId userId) {
+        PlatformConversationJpaEntity platformConversationJpaEntity = conversationJpaRepository.findPlatformConversationByUserIdAndLatestStartTime(userId.uuid());
+        if (platformConversationJpaEntity == null) return null;
+        return toPlatformConversation(platformConversationJpaEntity);
+    }
+
+    @Override
     public void saveConversation(Conversation conversation) {
         ConversationJpaEntity conversationJpa = conversationJpaRepository.findByUserIdAndStartTimeWithQuestions(conversation.getUserId().uuid(), conversation.getStartTime());
 
@@ -45,7 +53,7 @@ public class ConversationJpaAdapter implements ConversationLoadPort, Conversatio
 
         // Add new questions or update existing ones based on questionTime
         for (Question question : conversation.getQuestions()) {
-            LocalDateTime questionTime = question.getSubmittedAt();
+            LocalDateTime questionTime = question.getSubmittedAt().withNano(0);
             QuestionJpaEntity questionJpa = existingQuestionsMap.get(questionTime);
 
             if (questionJpa == null) {
@@ -55,16 +63,28 @@ public class ConversationJpaAdapter implements ConversationLoadPort, Conversatio
                 questionJpa.setSubmittedAt(questionTime);
                 questionJpa.setInitial(question.isInitial());
 
-                AnswerJpaEntity answerJpa = new AnswerJpaEntity();
-                answerJpa.setText(question.getAnswer().text());
-                questionJpa.setAnswer(answerJpa);
+                if (question.getAnswer() != null) {
+                    AnswerJpaEntity answerJpa = new AnswerJpaEntity();
+                    answerJpa.setText(question.getAnswer().text());
+                    questionJpa.setAnswer(answerJpa);
+                }
 
                 questionJpa.setConversation(conversationJpa);
                 conversationJpa.getQuestions().add(questionJpa);
+            } else if (questionJpa.getAnswer() == null) {
+                AnswerJpaEntity answerJpa = new AnswerJpaEntity();
+                answerJpa.setText(question.getAnswer().text());
+                questionJpa.setAnswer(answerJpa);
             }
         }
 
-        conversationJpaRepository.save(conversationJpa);
+        if (conversation instanceof PlatformConversation) {
+            PlatformConversationJpaEntity platformConversationJpaEntity = (PlatformConversationJpaEntity) conversationJpa;
+            platformConversationJpaEntity.setCurrentPage(((PlatformConversation) conversation).getCurrentPage());
+            conversationJpaRepository.saveAndFlush(platformConversationJpaEntity);
+        } else {
+            conversationJpaRepository.save(conversationJpa);
+        }
     }
 
     private GameConversation toGameConversation(GameConversationJpaEntity gameConversationJpa) {
@@ -88,6 +108,29 @@ public class ConversationJpaAdapter implements ConversationLoadPort, Conversatio
         return gameConversation;
     }
 
+    private PlatformConversation toPlatformConversation(PlatformConversationJpaEntity platformConversationJpa) {
+        PlatformConversation platformConversation = new PlatformConversation(
+                new UserId(platformConversationJpa.getUserId()),
+                platformConversationJpa.getStartTime(),
+                platformConversationJpa.getLastMessageTime(),
+                platformConversationJpa.getCurrentPage()
+        );
+
+        final List<Question> questionList = platformConversationJpa.getQuestions().stream()
+                .map(q -> {
+                    final Question question = new Question(q.getText(), q.getSubmittedAt(), q.getInitial());
+                    if (q.getAnswer() != null) {
+                        final Answer answer = new Answer(q.getAnswer().getText());
+                        question.setAnswer(answer);
+                    }
+                    return question;
+                })
+                .collect(Collectors.toList());
+
+        platformConversation.setQuestions(questionList);
+        return platformConversation;
+    }
+
     private ConversationJpaEntity toConservationJpa(Conversation conversation) {
         if (conversation instanceof GameConversation) {
             return new GameConversationJpaEntity(
@@ -95,9 +138,7 @@ public class ConversationJpaAdapter implements ConversationLoadPort, Conversatio
                     conversation.getStartTime(),
                     conversation.getLastMessageTime(),
                     ((GameConversation) conversation).getGameId().uuid());
-        }
-
-        if (conversation instanceof PlatformConversation) {
+        }else if (conversation instanceof PlatformConversation) {
             return new PlatformConversationJpaEntity(
                     conversation.getUserId().uuid(),
                     conversation.getStartTime(),

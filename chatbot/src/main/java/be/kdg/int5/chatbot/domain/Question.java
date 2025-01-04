@@ -43,4 +43,14 @@ public class Question {
     public void update(Answer answer) {
         setAnswer(answer);
     }
+
+    @Override
+    public String toString() {
+        return """
+                {"question": "%s", "answer": "%s"}
+                """
+        .formatted(
+             text, answer.text()
+        );
+    }
 }
