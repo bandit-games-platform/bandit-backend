@@ -28,6 +28,7 @@ stages:
     - cd ./$CONTEXT_NAME
     - ../gradlew clean bootBuildImage --stacktrace
     - cd ..
+    - sleep 20
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
     - if: $CI_COMMIT_BRANCH == 'ci-cd'
@@ -39,6 +40,7 @@ stages:
     - cd ./$CONTEXT_NAME
     - ../gradlew clean bootBuildImageProd --stacktrace
     - cd ..
+    - sleep 20
   rules:
     - if: $CI_COMMIT_TAG
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
@@ -355,7 +357,6 @@ deploy_chatbot_dev:
   before_script:
     - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
     - az extension add --name containerapp --upgrade
-    - sleep 20
   script:
     - declare -A value_map=(
       ["PG_USER"]=$DEV_PG_USER
