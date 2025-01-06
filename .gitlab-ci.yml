@@ -451,7 +451,7 @@ deploy_game_registry_dev:
       ["RESOURCE_GROUP"]="rg_bandit_games_dev"
       ["CONTAINER_NAME"]="game-registry-dev-container"
       ["ENVIRONMENT"]="env-dev-containers"
-      ["IMAGE_NAME"]="game-registry-context:fc71ca4"
+      ["IMAGE_NAME"]="game-registry-context"
       ["PORT"]=8092
       ["REG_USERNAME"]=$REGISTRY_USERNAME
       ["RABBIT_URL"]=$DEV_RABBIT_URL
