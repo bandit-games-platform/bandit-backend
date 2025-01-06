@@ -55,7 +55,7 @@ fi
 echo "Bringing up container app"
 az containerapp up --name $CONTAINER_NAME --resource-group $RESOURCE_GROUP \
   --location northeurope --environment $ENVIRONMENT \
-  --image "$REG_USERNAME".azurecr.io/$IMAGE_NAME:"${CI_COMMIT_SHORT_SHA::-1}" \
+  --image "$REG_USERNAME".azurecr.io/$IMAGE_NAME" \
   --target-port $PORT --ingress external
 
 SECRET_ARGS=()

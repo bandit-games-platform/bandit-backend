@@ -451,10 +451,10 @@ deploy_game_registry_dev:
       ["RESOURCE_GROUP"]="rg_bandit_games_dev"
       ["CONTAINER_NAME"]="game-registry-dev-container"
       ["ENVIRONMENT"]="env-dev-containers"
-      ["IMAGE_NAME"]="game-registry-context"
+      ["IMAGE_NAME"]="game-registry-context:fc71ca4"
       ["PORT"]=8092
       ["REG_USERNAME"]=$REGISTRY_USERNAME
-      ["RABBIT_URL"]="rabbitmq-dev-container.calmpebble-503514a7.northeurope.azurecontainerapps.io"
+      ["RABBIT_URL"]=$DEV_RABBIT_URL
       ["KEYCLOAK_CLIENT_SECRET"]=$KEYCLOAK_GAME_REGISTRY_SECRET
       ["SCALE_DOWN"]=false
       )
