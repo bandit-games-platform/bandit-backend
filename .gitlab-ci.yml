@@ -356,6 +356,7 @@ deploy_chatbot_dev:
     - build_chatbot_dev
     - deploy_rabbitmq_dev
     - deploy_game_registry_dev
+    - deploy_game_registry_dev
   before_script:
     - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
     - az extension add --name containerapp --upgrade
@@ -530,11 +531,11 @@ deploy_statistics_dev:
     - az extension add --name containerapp --upgrade
   script:
     - declare -A value_map=(
-      ["PG_USER"]=$DEV_PG_USER 
-      ["PG_PASSWORD"]=$DEV_PG_PWD 
-      ["PG_DB_NAME"]="banditdevpostgres" 
-      ["RESOURCE_GROUP"]="rg_bandit_games_dev" 
-      ["CONTAINER_NAME"]="statistics-dev-container" 
+      ["PG_USER"]=$DEV_PG_USER
+      ["PG_PASSWORD"]=$DEV_PG_PWD
+      ["PG_DB_NAME"]="banditdevpostgres"
+      ["RESOURCE_GROUP"]="rg_bandit_games_dev"
+      ["CONTAINER_NAME"]="statistics-dev-container"
       ["ENVIRONMENT"]="env-dev-containers"
       ["IMAGE_NAME"]="statistics-context"
       ["PORT"]=8095
@@ -542,7 +543,6 @@ deploy_statistics_dev:
       ["RABBIT_URL"]=$DEV_RABBIT_URL
       ["GAME_REGISTRY_URL"]=$DEV_GAME_REGISTRY_URL
       ["SCALE_DOWN"]=false
-      ["PYTHON_URL"]=$DEV_PYTHON_URL
       )
     - serialized_map=""
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
@@ -588,7 +588,6 @@ deploy_storefront_dev:
       ["FRONTEND_URL"]=$DEV_FRONTEND_URL
       ["STRIPE_API_KEY"]=$STRIPE_TEST_API_KEY
       ["SCALE_DOWN"]=false
-      ["PYTHON_URL"]=$DEV_PYTHON_URL
       )
     - serialized_map=""
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
@@ -833,7 +832,6 @@ deploy_statistics_prod:
       ["DDL_PROD"]=$PROD_DDL_MODE
       ["DB_INIT_MODE"]=$PROD_DB_INIT_MODE
       ["GAME_REGISTRY_URL"]=$PROD_GAME_REGISTRY_URL
-      ["PYTHON_URL"]=$PROD_PYTHON_URL
       )
     - serialized_map=""
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
@@ -873,7 +871,6 @@ deploy_storefront_prod:
       ["GAME_REGISTRY_URL"]=$PROD_GAME_REGISTRY_URL
       ["FRONTEND_URL"]=$PROD_FRONTEND_URL
       ["STRIPE_API_KEY"]=$STRIPE_TEST_API_KEY
-      ["PYTHON_URL"]=$PROD_PYTHON_URL
       )
     - serialized_map=""
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
