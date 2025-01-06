@@ -301,7 +301,7 @@ sonarqube-check:
     - gradle sonar -Dsonar.qualitygate.wait=true
   allow_failure: true
 
-
+##
 #sonarqube-check:
 #  needs: []
 #  stage: test
