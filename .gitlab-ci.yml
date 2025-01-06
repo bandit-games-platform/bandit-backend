@@ -581,6 +581,7 @@ deploy_storefront_dev:
       ["FRONTEND_URL"]=$DEV_FRONTEND_URL
       ["STRIPE_API_KEY"]=$STRIPE_TEST_API_KEY
       ["SCALE_DOWN"]=false
+      ["PYTHON_URL"]=$DEV_PYTHON_URL
       )
     - serialized_map=""
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
@@ -865,6 +866,7 @@ deploy_storefront_prod:
       ["GAME_REGISTRY_URL"]=$PROD_GAME_REGISTRY_URL
       ["FRONTEND_URL"]=$PROD_FRONTEND_URL
       ["STRIPE_API_KEY"]=$STRIPE_TEST_API_KEY
+      ["PYTHON_URL"]=$PROD_PYTHON_URL
       )
     - serialized_map=""
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
