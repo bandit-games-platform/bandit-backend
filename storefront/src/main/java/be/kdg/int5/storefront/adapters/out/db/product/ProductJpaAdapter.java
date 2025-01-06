@@ -7,6 +7,7 @@ import be.kdg.int5.storefront.port.out.ProductLoadPort;
 import be.kdg.int5.storefront.port.out.ProductUpdatePort;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.UUID;
 
 @Repository
@@ -22,7 +23,10 @@ public class ProductJpaAdapter implements ProductCreatePort, ProductLoadPort, Pr
         ProductProjectionJpaEntity productProjectionJpaEntity = new ProductProjectionJpaEntity(
                 productProjection.getProductId().uuid(),
                 productProjection.getTitle(),
-                productProjection.getPrice()
+                productProjection.getDeveloperId(),
+                productProjection.getDescription(),
+                productProjection.getPrice(),
+                productProjection.getBackgroundUrl()
         );
         productProjectionJpaRepository.save(productProjectionJpaEntity);
     }
@@ -34,8 +38,25 @@ public class ProductJpaAdapter implements ProductCreatePort, ProductLoadPort, Pr
         return new ProductProjection(
                 new ProductId(productProjectionJpaEntity.getId()),
                 productProjectionJpaEntity.getTitle(),
+                productProjectionJpaEntity.getDeveloperId(),
                 productProjectionJpaEntity.getPrice()
         );
+    }
+
+    @Override
+    public ProductProjection loadProductByIdAllFields(UUID productId) {
+        ProductProjectionJpaEntity productProjectionJpaEntity = productProjectionJpaRepository.findById(productId).orElse(null);
+        if (productProjectionJpaEntity == null) return null;
+        return toProductProjectionAllFields(productProjectionJpaEntity);
+    }
+
+    @Override
+    public List<ProductProjection> loadAllProducts() {
+        List<ProductProjectionJpaEntity> productListJpa = productProjectionJpaRepository.findAll();
+        return productListJpa
+                .stream()
+                .map(this::toProductProjectionAllFields)
+                .toList();
     }
 
     @Override
@@ -48,7 +69,20 @@ public class ProductJpaAdapter implements ProductCreatePort, ProductLoadPort, Pr
             return;
         }
         productProjectionJpaEntity.setTitle(productProjection.getTitle());
+        productProjectionJpaEntity.setDescription(productProjection.getDescription());
         productProjectionJpaEntity.setPrice(productProjection.getPrice());
+        productProjectionJpaEntity.setBackgroundUrl(productProjection.getBackgroundUrl());
         productProjectionJpaRepository.save(productProjectionJpaEntity);
+    }
+
+    private ProductProjection toProductProjectionAllFields(ProductProjectionJpaEntity productJpa) {
+        return new ProductProjection(
+                new ProductId(productJpa.getId()),
+                productJpa.getTitle(),
+                productJpa.getDeveloperId(),
+                productJpa.getDescription(),
+                productJpa.getPrice(),
+                productJpa.getBackgroundUrl()
+        );
     }
 }

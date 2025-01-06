@@ -19,8 +19,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -48,9 +46,6 @@ class ChatbotControllerIntegrationTest extends AbstractDatabaseTest {
 
     @MockBean
     private PythonClientAdapter pythonClientAdapter;
-
-    @MockBean
-    private JwtDecoder jwtDecoder;
 
     private UUID userId;
     private UUID gameId;
