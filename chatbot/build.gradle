@@ -4,6 +4,21 @@ plugins {
     id 'module-config'
     id "com.gorylenko.gradle-git-properties" version "2.4.1"
     id "org.springframework.boot"
+    id "org.sonarqube" version "3.5.0.2730"
+    id 'groovy-gradle-plugin'
+}
+
+repositories {
+    mavenCentral()
+}
+
+sonar {
+    properties {
+        property "sonar.projectKey", "kdg-ti_integration-5_2024-2025_team5_bandit-backend_AZQ71kDnY1s8yUhOuxWm"
+        property "sonar.qualitygate.wait", true
+//        property "sonar.host.url", "http://sonarqube:9000"
+        property "sonar.login", "sqp_22410e06076e2499364083f4ecc4929718cafef1"
+    }
 }
 
 dependencies {

@@ -16,6 +16,24 @@ stages:
   - deploy
   - destroy
 
+sonarqube-check:
+  needs: []
+  stage: test
+  image: gradle:jdk21-corretto
+  services:
+    - name: sonarqube:9.9.8-community  # The SonarQube service
+      alias: sonarqube                 # You can use this alias to reference SonarQube
+  variables:
+    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"   # Defines the location of the analysis task cache
+    GIT_DEPTH: "0"                                # Tells git to fetch all the branches of the project
+    SONAR_HOST_URL: "http://sonarqube:9000"       # URL for SonarQube (use alias from services section)
+  cache:
+    key: "${CI_JOB_NAME}"
+    paths:
+      - .sonar/cache
+  script:
+    - gradle sonar -Dsonar.qualitygate.wait=true
+  allow_failure: true
 
 # -- reusable configurations --
 
