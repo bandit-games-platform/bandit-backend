@@ -1,10 +1,18 @@
 
 -- Seeding data for `game_details` table
 INSERT INTO chatbot.game_details (game_id, title, description) VALUES
+('b6572f1b-cd36-3ebb-b292-6cfd0b92f8e9', 'Button Game', 'A thrilling game consisting of two players and a magic button'),
 ('d77e1d1f-6b46-4c89-9290-3b9cf8a7c001', 'Battleship', 'A strategic naval combat game'),
 ('d77e1d1f-6b46-4c89-9290-3b9cf8a7c002', 'Chess', 'A classic strategy game of kings and queens'),
 ('d77e1d1f-6b46-4c89-9290-3b9cf8a7c003', 'Snakes and Ladders', 'A game of ups and downs'),
-('b6572f1b-cd36-3ebb-b292-6cfd0b92f8e9', 'Button Game', 'A thrilling strategy game consisting of two players and not a normal button... but a magic button... (drumrolls)');
+('d77e1d1f-6b46-4c89-9290-3b9cf8a7c004', 'Checkers','Jump to capture and clear the board'),
+('d77e1d1f-6b46-4c89-9290-3b9cf8a7c005', 'Monopoly',  'Real estate trading game of buying, selling, and bankrupting'),
+('d77e1d1f-6b46-4c89-9290-3b9cf8a7c006', 'Scrabble',  'Word game creating words with letter tiles'),
+('d77e1d1f-6b46-4c89-9290-3b9cf8a7c007', 'Catan',  'Resource game building settlements and earning points'),
+('d77e1d1f-6b46-4c89-9290-3b9cf8a7c008', 'Risk',  'Strategy game conquering territories for domination'),
+('d77e1d1f-6b46-4c89-9290-3b9cf8a7c009', 'Cluedo', 'Mystery game deducing murderer, weapon, and location'),
+('d77e1d1f-6b46-4c89-9290-3b9cf8a7c010', 'Race for the Galaxy',  'Card game building space civilizations and managing resources');
+
 
 -- Seeding data for `rule` table
 INSERT INTO chatbot.game_rule (uuid, step_number, rule, game_details) VALUES

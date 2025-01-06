@@ -1,10 +1,29 @@
 INSERT INTO storefront.order (id, customer_id, stripe_session_id, product_id, order_date, order_status, order_completed_at)
 VALUES ('d0eac6e4-1c21-4666-aab4-1350d9bcf000', 'cd281b11-e41e-4f12-93c8-1e9a8bf7403c', 'cs_test_a1LbH5h7KVB9uTqjvP01TKmI7Iiuc8Mfw0PEU1HMcjNhDUhzLCanurgpqL', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c001', '2024-11-10 15:28', 'COMPLETED', '2024-11-10 15:34'),
        ('8e7d114f-2433-4d95-9c5b-31c19e6bf659', 'cd281b11-e41e-4f12-93c8-1e9a8bf7403c', 'cs_test_a1oNqoIPoBVjyQ4jckhb19cQsmCGgEBBeKwQ7nzggkt0XWIJAxMf2HFU0w', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c002', '2024-11-24 14:30', 'COMPLETED', '2024-11-24 14:39'),
-       ('595ded13-ddc6-41e6-879a-589501e02016', 'cd281b11-e41e-4f12-93c8-1e9a8bf7403c', 'some_invalid_session', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c003', '2024-11-28 14:30', 'PENDING', null);
+       ('595ded13-ddc6-41e6-879a-589501e02016', 'cd281b11-e41e-4f12-93c8-1e9a8bf7403c', 'some_invalid_session1', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c003', '2024-11-28 14:30', 'PENDING', null),
+       ('9649d041-eeb6-4f50-bf73-fd443c7282b6', 'b20f4436-e61c-46f0-a83f-45f6a9cb45f9', 'some_invalid_session2', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c001', '2024-11-24 14:30', 'COMPLETED', '2024-11-24 14:32'),
+       ('0e88c968-a8b6-4df0-9005-4dd7521754df', '272c3f85-79db-4b6f-a20e-5d1c12e0e5b3', 'some_invalid_session3', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c001', '2024-11-25 14:30', 'COMPLETED', '2024-11-25 14:32'),
+       ('3d94e850-e76e-4bf0-8753-8aad360a173b', 'd7d4c8ca-5c72-4728-9925-8e313ded5edc', 'some_invalid_session4', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c001', '2024-11-26 14:30', 'COMPLETED', '2024-11-26 14:32'),
+       ('66460247-edb2-4d96-8102-5e9c1b3d09aa', '6ca3863d-d8db-4588-b799-704fdb267814', 'some_invalid_session5', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c001', '2024-11-27 14:30', 'COMPLETED', '2024-11-27 14:32'),
+       ('c5bef817-d013-4471-a739-067f4fded175', '272c3f85-79db-4b6f-a20e-5d1c12e0e5b3', 'some_invalid_session6', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c002', '2024-12-23 14:30', 'COMPLETED', '2024-12-23 14:32'),
+       ('e2a20bcc-ecfd-4141-ace1-109e08ae2bc3', 'd7d4c8ca-5c72-4728-9925-8e313ded5edc', 'some_invalid_session7', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c002', '2024-12-22 14:30', 'COMPLETED', '2024-12-22 14:32'),
+       ('c77ecfce-9623-4dee-a571-2a0d543e3d48', '272c3f85-79db-4b6f-a20e-5d1c12e0e5b3', 'some_invalid_session8', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c002', '2024-12-21 14:30', 'COMPLETED', '2024-12-21 14:32'),
+       ('313ef954-0298-4056-a24a-b1281bb61285', 'cd281b11-e41e-4f12-93c8-1e9a8bf7403c', 'some_invalid_session9', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c003', '2024-12-20 14:30', 'COMPLETED', '2024-12-20 14:32'),
+       ('9178da36-0001-41cb-ab97-b47ef946ed79', '6ca3863d-d8db-4588-b799-704fdb267814', 'some_invalid_session10', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c004', '2024-12-30 14:30', 'COMPLETED', '2024-12-30 14:32'),
+       ('55aa7fce-5078-470e-a52a-416ecd00c86d', 'cd281b11-e41e-4f12-93c8-1e9a8bf7403c', 'some_invalid_session11', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c004', '2024-12-30 14:30', 'COMPLETED', '2024-12-30 14:32'),
+       ('05f178b9-4484-4d6c-972f-a9f132bb9f80', 'd7d4c8ca-5c72-4728-9925-8e313ded5edc', 'some_invalid_session12', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c009', '2024-1-2 10:30', 'COMPLETED', '2024-1-2 10:32'),
+       ('aed35a23-5c6a-48c7-b9a5-e23361d6f7f0', 'b20f4436-e61c-46f0-a83f-45f6a9cb45f9', 'some_invalid_session13', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c009', '2024-1-3 10:30', 'COMPLETED', '2024-1-3 10:30');
 
-INSERT INTO storefront.product (id, title, price)
-VALUES ('d77e1d1f-6b46-4c89-9290-3b9cf8a7c001', 'Battleship', 10.99),
-       ('d77e1d1f-6b46-4c89-9290-3b9cf8a7c002', 'Chess', 5.99),
-       ('d77e1d1f-6b46-4c89-9290-3b9cf8a7c003', 'Snakes and Ladders', 50.00),
-       ('d77e1d1f-6b46-4c89-9290-3b9cf8a7c004', 'Checkers', 4.00);
+INSERT INTO storefront.product (id, title, developer_id, description, price, background_url)
+VALUES ('b6572f1b-cd36-3ebb-b292-6cfd0b92f8e9', 'Button Game', '2c1784ca-edf0-4882-994d-23473e30f776','A thrilling game consisting of two players and a magic button', 15.99, 'https://t3.ftcdn.net/jpg/06/26/23/36/360_F_626233679_tesiSRP9Jinq5wS0ZgbdJ6k5adupmgKl.jpg'),
+       ('d77e1d1f-6b46-4c89-9290-3b9cf8a7c001', 'Battleship', '2c1784ca-edf0-4882-994d-23473e30f776', 'A strategic naval combat game', 10.99, 'https://wallpapers.com/images/hd/battleship-pictures-bb1dl2t2ofu085ee.jpg'),
+       ('d77e1d1f-6b46-4c89-9290-3b9cf8a7c002', 'Chess', '2c1784ca-edf0-4882-994d-23473e30f776', 'A classic strategy game of kings and queens', 5.99, 'https://png.pngtree.com/background/20230525/original/pngtree-chess-playing-on-the-chess-board-with-other-pieces-in-view-picture-image_2725931.jpg'),
+       ('d77e1d1f-6b46-4c89-9290-3b9cf8a7c003', 'Snakes and Ladders', '2c1784ca-edf0-4882-994d-23473e30f776', 'A game of ups and downs',50.00, 'https://play-lh.googleusercontent.com/6Tu71iFYKiLN_egbg2qkYh1g6iFcnvJtoZrlgC2vBZjy4iuJlGEHWZTkPCIsOUmnWQ=w648-h364-rw'),
+       ('d77e1d1f-6b46-4c89-9290-3b9cf8a7c004', 'Checkers', '2c1784ca-edf0-4882-994d-23473e30f776', 'Jump to capture and clear the board',4.00, 'https://img.freepik.com/premium-photo/checkers-game-checkerboard-wooden-background_220873-6795.jpg'),
+       ('d77e1d1f-6b46-4c89-9290-3b9cf8a7c005', 'Monopoly', '2c1784ca-edf0-4882-994d-23473e30f776', 'Real estate trading game of buying, selling, and bankrupting',12.00, 'https://t4.ftcdn.net/jpg/07/04/07/39/360_F_704073981_RycFLJVLJIhBI5mr8xUHKUeIgYdhdgUt.jpg'),
+       ('d77e1d1f-6b46-4c89-9290-3b9cf8a7c006', 'Scrabble', '2c1784ca-edf0-4882-994d-23473e30f776', 'Word game creating words with letter tiles',6.00, 'https://www.wsgamecompany.com/cdn/shop/files/21020_Scrabble_Luxury_Edition-05_4.jpg?v=1730911699'),
+       ('d77e1d1f-6b46-4c89-9290-3b9cf8a7c007', 'Catan', '2c1784ca-edf0-4882-994d-23473e30f776', 'Resource game building settlements and earning points',25.00, 'https://catancollector.com/images/catan-collection/electronic/Hintergrund_Das-Spiel_1920x1080.jpg'),
+       ('d77e1d1f-6b46-4c89-9290-3b9cf8a7c008', 'Risk', '2c1784ca-edf0-4882-994d-23473e30f776', 'Strategy game conquering territories for domination',23.00, 'https://preview.redd.it/the-world-map-according-to-the-board-game-risk-v0-mmmy3zyj9m691.png?width=640&crop=smart&auto=webp&s=df1e4a37803d04753d18e47b8a1933699095f80d'),
+       ('d77e1d1f-6b46-4c89-9290-3b9cf8a7c009', 'Cluedo', '2c1784ca-edf0-4882-994d-23473e30f776', 'Mystery game deducing murderer, weapon, and location',21.00, 'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/41526493168665.5f91637bd4c21.png'),
+       ('d77e1d1f-6b46-4c89-9290-3b9cf8a7c010', 'Race for the Galaxy', '2c1784ca-edf0-4882-994d-23473e30f776', 'Card game building space civilizations and managing resources',17.00, 'https://i0.wp.com/www.pixelatedcardboard.com/wp-content/uploads/2017/05/RFTG-Feature-1024x440.jpg?resize=961%2C413');
