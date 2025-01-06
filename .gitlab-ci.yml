@@ -301,7 +301,7 @@ sonarqube-check:
     - gradle sonarqube -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_TOKEN -Dsonar.qualitygate.wait=true
   allow_failure: true
 
-
+##
 #sonarqube-check:
 #  needs: []
 #  stage: test
