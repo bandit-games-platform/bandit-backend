@@ -3,10 +3,13 @@ package be.kdg.int5.statistics.adapters.in;
 import be.kdg.int5.statistics.adapters.in.dto.AchievementProgressDto;
 import be.kdg.int5.statistics.adapters.in.dto.CompletedSessionDto;
 import be.kdg.int5.statistics.adapters.in.dto.PlayerGameStatsDto;
+import be.kdg.int5.statistics.adapters.in.dto.PlayerIdDto;
 import be.kdg.int5.statistics.domain.GameId;
 import be.kdg.int5.statistics.domain.PlayerGameStats;
 import be.kdg.int5.statistics.domain.PlayerId;
+import be.kdg.int5.statistics.port.in.query.GetAllUniquePlayerStatsForGameCommand;
 import be.kdg.int5.statistics.port.in.query.GetPlayerGameStatsCommand;
+import be.kdg.int5.statistics.port.in.query.GetUniquePlayerStatsForGameQuery;
 import be.kdg.int5.statistics.port.in.query.PlayerGameStatsQuery;
 import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
@@ -17,15 +20,19 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 public class StatisticsRestController {
     private static final Logger LOGGER = LoggerFactory.getLogger(StatisticsRestController.class);
     private final PlayerGameStatsQuery playerGameStatsQuery;
+    private final GetUniquePlayerStatsForGameQuery getUniquePlayerStatsForGameQuery;
 
-    public StatisticsRestController(PlayerGameStatsQuery playerGameStatsQuery) {
+    public StatisticsRestController(PlayerGameStatsQuery playerGameStatsQuery, GetUniquePlayerStatsForGameQuery getUniquePlayerStatsForGameQuery) {
         this.playerGameStatsQuery = playerGameStatsQuery;
+        this.getUniquePlayerStatsForGameQuery = getUniquePlayerStatsForGameQuery;
     }
 
     @GetMapping("/player-game-statistics/{playerId}/{gameId}")
@@ -42,13 +49,32 @@ public class StatisticsRestController {
                 )
         );
 
-        if (playerGameStats != null){
+        if (playerGameStats != null) {
             PlayerGameStatsDto statsDTO = mapToDTO(playerGameStats);
             return ResponseEntity.ok(statsDTO);
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
+    @GetMapping("/player-game-statistics/games/{gameId}/completed-sessions/players")
+    @PreAuthorize("hasAuthority('admin')")
+    public ResponseEntity<Set<PlayerIdDto>> getAllPlayersWhichCompletedSessionsForGame(
+            @NotNull @PathVariable("gameId") UUID gameId
+    ) {
+
+        Set<PlayerGameStats> playerGameStats = getUniquePlayerStatsForGameQuery.getAllUniquePlayerStatsForGame(
+                new GetAllUniquePlayerStatsForGameCommand(new GameId(gameId))
+        );
+
+        if (playerGameStats != null && !playerGameStats.isEmpty()) {
+            Set<PlayerIdDto> playerIdDtos = playerGameStats.stream()
+                    .map(stats -> new PlayerIdDto(stats.getPlayerId().uuid()))
+
+                    .collect(Collectors.toSet());
+            return ResponseEntity.ok(playerIdDtos);
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
 
     private PlayerGameStatsDto mapToDTO(PlayerGameStats playerGameStats) {
         // Map CompletedSession to CompletedSessionDto

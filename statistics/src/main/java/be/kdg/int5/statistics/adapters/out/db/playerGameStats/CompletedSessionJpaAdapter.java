@@ -8,6 +8,7 @@ import be.kdg.int5.statistics.port.out.CompletedSessionLoadPort;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Repository
@@ -21,6 +22,12 @@ public class CompletedSessionJpaAdapter implements CompletedSessionLoadPort {
     @Override
     public List<CompletedSession> loadAllCompletedSessionsForPlayer(PlayerId playerId) {
         List<CompletedSessionJpaEntity> allSessions = completedSessionJpaRepository.findAllByPlayerId(playerId.uuid());
+        return allSessions.stream().map(this::completedSessionJpaToDomain).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CompletedSession> loadAllCompletedSessionsForGameAndPlayer(GameId gameId, PlayerId playerId) {
+        List<CompletedSessionJpaEntity> allSessions = completedSessionJpaRepository.findAllByGameIdAndPlayerId(gameId.uuid(),playerId.uuid());
         return allSessions.stream().map(this::completedSessionJpaToDomain).collect(Collectors.toList());
     }
 

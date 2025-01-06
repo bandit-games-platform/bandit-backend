@@ -20,4 +20,7 @@ public class Variables {
     public static final UUID ADMIN_ID = UUID.fromString("44ad93d0-35c2-490a-b5a3-397684023abc");
     public static final UUID NOT_AN_ADMIN_ID = UUID.fromString("12ad93d0-35c2-490a-b5a3-397684023abc");
     public static final String CSV_CONTENT = "csv_content";
+
+    public static final float WIN_PROBABILITY_PLAYER_ONE = 0.99999994f;
+    public static final float WIN_PROBABILITY_PLAYER_TWO = 8.728549E-8f;
 }

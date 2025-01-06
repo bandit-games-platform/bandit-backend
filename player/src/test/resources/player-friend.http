@@ -1,9 +1,8 @@
-#### Get access token with player user
-
-POST http://localhost:8180/realms/bandit-realm/protocol/openid-connect/token HTTP/1.1
+#### Get access token with admin user
+POST https://keycloak.victoriousocean-73fa80ad.northeurope.azurecontainerapps.io/realms/bandit-realm/protocol/openid-connect/token  HTTP/1.1
 Content-Type: application/x-www-form-urlencoded
 
-client_id=bandit-backend&client_secret=**********&username=john@gmail.com&password=johnnyboy&grant_type=password&scope=openid
+client_id=bandit-backend&client_secret=********&username=dean@email.com&password=dean&grant_type=password&scope=openid
 
 > {%client.global.set("logged-in-user", response.body.access_token);%}
 
