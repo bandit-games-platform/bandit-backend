@@ -16,6 +16,7 @@ sonar {
     properties {
         property "sonar.projectKey", "kdg-ti_integration-5_2024-2025_team5_bandit-backend_AZQ71kDnY1s8yUhOuxWm"
         property "sonar.qualitygate.wait", true
+//        property "sonar.login", "sqp_22410e06076e2499364083f4ecc4929718cafef1"
     }
 }
 
