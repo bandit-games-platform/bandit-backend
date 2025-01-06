@@ -454,7 +454,7 @@ deploy_game_registry_dev:
       ["IMAGE_NAME"]="game-registry-context"
       ["PORT"]=8092
       ["REG_USERNAME"]=$REGISTRY_USERNAME
-      ["RABBIT_URL"]=$DEV_RABBIT_URL
+      ["RABBIT_URL"]="rabbitmq-dev-container.calmpebble-503514a7.northeurope.azurecontainerapps.io"
       ["KEYCLOAK_CLIENT_SECRET"]=$KEYCLOAK_GAME_REGISTRY_SECRET
       ["SCALE_DOWN"]=false
       )
