@@ -335,6 +335,7 @@ deploy_rabbitmq_dev:
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
     - chmod +x cicd/deploy-rabbitmq.sh
     - cicd/deploy-rabbitmq.sh "$serialized_map"
+    - sleep 20
   environment:
     name: rabbitmq-dev
     deployment_tier: testing
