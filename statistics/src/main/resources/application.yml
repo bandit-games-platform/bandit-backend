@@ -7,7 +7,7 @@ server:
 spring:
   sql:
     init:
-      mode: always
+      mode: ${DB_INIT_MODE:always}
 
   jpa:
     open-in-view: false
@@ -42,3 +42,6 @@ spring:
 contexts:
   gameRegistry:
     baseUrl: ${GAME_REGISTRY_URL:http://localhost:8092/game-registry}
+
+python:
+  url: ${PYTHON_URL:http://localhost:8000}
