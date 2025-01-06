@@ -1,7 +1,7 @@
 plugins {
     id 'module-config'
     id 'spring-conventions'
-    id "org.sonarqube" version "5.0.0.4638"
+//    id "org.sonarqube" version "5.0.0.4638"
     id 'groovy-gradle-plugin'
 }
 
@@ -9,13 +9,13 @@ repositories {
     mavenCentral()
 }
 
-sonar {
-    properties {
-        property "sonar.projectKey", "kdg-ti_integration-5_2024-2025_team5_bandit-backend_AZQpILkIZyiWy1HzUDWI"
-        property "sonar.qualitygate.wait", true
-        property "sonar.login", "sqp_2e1fba1707e68f349b6b62264a28c63605275ace"
-    }
-}
+//sonar {
+//    properties {
+//        property "sonar.projectKey", "kdg-ti_integration-5_2024-2025_team5_bandit-backend_AZQpILkIZyiWy1HzUDWI"
+//        property "sonar.qualitygate.wait", true
+//        property "sonar.login", "sqp_2e1fba1707e68f349b6b62264a28c63605275ace"
+//    }
+//}
 
 dependencies {
     implementation project(":common")
