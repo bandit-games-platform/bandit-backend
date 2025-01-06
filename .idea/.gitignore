@@ -7,6 +7,6 @@
 /dataSources/
 /dataSources.local.xml
 
-/*.xml
-/**/*.xml
+#/*.xml
+#/**/*.xml
 !/.idea/runConfigurations/*.xml
