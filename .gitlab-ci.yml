@@ -282,41 +282,42 @@ semgrep-sast:
       exists:
         - '**/*.java'
 
-sonarqube-check:
-  needs: []
-  stage: test
-  image: gradle:8.2.0-jdk17-jammy
-  services:
-    - name: sonarqube:9.9.8-community  # The SonarQube service
-      alias: sonarqube                 # You can use this alias to reference SonarQube
-  variables:
-    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"   # Defines the location of the analysis task cache
-    GIT_DEPTH: "0"                                # Tells git to fetch all the branches of the project
-    SONAR_HOST_URL: "http://sonarqube:9000"       # URL for SonarQube (use alias from services section)
-  cache:
-    key: "${CI_JOB_NAME}"
-    paths:
-      - .sonar/cache
-  script:
-    - gradle sonarqube -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_TOKEN -Dsonar.qualitygate.wait=true
-  allow_failure: true
-
-
-
-##
 #sonarqube-check:
 #  needs: []
 #  stage: test
 #  image: gradle:8.2.0-jdk17-jammy
+#  services:
+#    - name: sonarqube:9.9.8-community  # The SonarQube service
+#      alias: sonarqube                 # You can use this alias to reference SonarQube
 #  variables:
-#    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
-#    GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
+#    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"   # Defines the location of the analysis task cache
+#    GIT_DEPTH: "0"                                # Tells git to fetch all the branches of the project
+#    SONAR_HOST_URL: "http://sonarqube:9000"       # URL for SonarQube (use alias from services section)
 #  cache:
 #    key: "${CI_JOB_NAME}"
 #    paths:
 #      - .sonar/cache
-#  script: gradle sonarqube -Dsonar.qualitygate.wait=true
+#  script:
+#    - gradle sonarqube -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_TOKEN -Dsonar.qualitygate.wait=true
 #  allow_failure: true
+
+
+sonarqube-check:
+  needs: []
+  stage: test
+  image: gradle:jre11-slim
+  variables:
+    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
+    GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
+  cache:
+    key: "${CI_JOB_NAME}"
+    paths:
+      - .sonar/cache
+  script: gradle sonar
+  allow_failure: true
+  only:
+    - main
+
 
 # ----------------------- DEPLOY ----------------------- #
 # ----------------- DEV ----------------- #
