@@ -298,7 +298,7 @@ sonarqube-check:
     paths:
       - .sonar/cache
   script:
-    - gradle sonarqube -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=sqp_22410e06076e2499364083f4ecc4929718cafef1 -Dsonar.qualitygate.wait=true
+    - gradle sonar -Dsonar.qualitygate.wait=true
   allow_failure: true
 
 
