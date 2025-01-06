@@ -315,8 +315,8 @@ sonarqube-check:
       - .sonar/cache
   script: gradle sonar
   allow_failure: true
-  only:
-    - main
+#  only:
+#    - main
 
 
 # ----------------------- DEPLOY ----------------------- #
