@@ -38,11 +38,15 @@ public class KeycloakEventListenerProvider implements EventListenerProvider {
             UUID identifyingId = UUID.nameUUIDFromBytes((authorizationId + "-" + userId + "-" + username).getBytes());
 
             boolean connected = false;
+            String hostedUrl = "https://player-prod-container.blackwave-a5cb5824.northeurope.azurecontainerapps.io/player/registration/" + identifyingId.toString();
             String individualContextUrl = "http://host.docker.internal:8094/player/registration/" + identifyingId.toString();
             String wholeApplicationUrl = "http://host.docker.internal:8090/api/registration/" + identifyingId.toString();
 
             try {
-                connected = attemptConnection(individualContextUrl, userId, username);
+                connected = attemptConnection(hostedUrl, userId, username);
+                if (!connected) {
+                    connected = attemptConnection(individualContextUrl, userId, username);
+                }
                 if (!connected) {
                     connected = attemptConnection(wholeApplicationUrl, userId, username);
                 }
