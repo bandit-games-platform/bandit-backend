@@ -28,4 +28,17 @@ public interface OrderJpaRepository extends JpaRepository<OrderJpaEntity, UUID> 
     WHERE orderEntity.orderStatus = 'PENDING'
     """)
     List<OrderJpaEntity> findAllPendingOrders();
+
+    @Query("""
+    SELECT orderEntity FROM OrderJpaEntity orderEntity
+    WHERE orderEntity.orderStatus = 'COMPLETED'
+    """)
+    List<OrderJpaEntity> findAllCompleteOrders();
+
+    @Query("""
+    SELECT orderEntity FROM OrderJpaEntity orderEntity
+    WHERE orderEntity.customerId = :customerId
+    AND orderEntity.orderStatus = 'COMPLETED'
+    """)
+    List<OrderJpaEntity> findAllCompletedOrdersByCustomerId(UUID customerId);
 }

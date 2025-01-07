@@ -33,13 +33,18 @@ public class CreateOrUpdateProductProjectionUseCaseImpl implements CreateOrUpdat
             productCreatePort.createNewProductProjection(new ProductProjection(
                     new ProductId(command.productId()),
                     command.title(),
-                    command.price()
+                    command.developerId(),
+                    command.description(),
+                    command.price(),
+                    command.backgroundUrl()
             ));
             logger.info("storefront: New projection created for game {}",
                     command.productId());
         } else {
             productProjection.setTitle(command.title());
+            productProjection.setDescription(command.description());
             productProjection.setPrice(command.price());
+            productProjection.setBackgroundUrl(command.backgroundUrl());
             logger.info("storefront: Existing projection updated for game {}",
                     command.productId());
             productUpdatePort.updatedProductProjection(productProjection);

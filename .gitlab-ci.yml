@@ -28,6 +28,7 @@ stages:
     - cd ./$CONTEXT_NAME
     - ../gradlew clean bootBuildImage --stacktrace
     - cd ..
+    - sleep 20
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
     - if: $CI_COMMIT_BRANCH == 'ci-cd'
@@ -39,6 +40,7 @@ stages:
     - cd ./$CONTEXT_NAME
     - ../gradlew clean bootBuildImageProd --stacktrace
     - cd ..
+    - sleep 20
   rules:
     - if: $CI_COMMIT_TAG
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
@@ -309,7 +311,7 @@ deploy_postgres_and_vnet_dev:
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
     - chmod +x cicd/deploy-database-vnet.sh
     - cicd/deploy-database-vnet.sh "$serialized_map"
-  # This will only run when you commit to a merge request or to the ci-cd branch
+  # This will only run when you commit to a merge request or to the ci-cd branch.
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
     - if: $CI_COMMIT_BRANCH == 'ci-cd'
@@ -333,6 +335,7 @@ deploy_rabbitmq_dev:
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
     - chmod +x cicd/deploy-rabbitmq.sh
     - cicd/deploy-rabbitmq.sh "$serialized_map"
+    - sleep 20
   environment:
     name: rabbitmq-dev
     deployment_tier: testing
@@ -352,10 +355,10 @@ deploy_chatbot_dev:
     - deploy_postgres_and_vnet_dev
     - build_chatbot_dev
     - deploy_rabbitmq_dev
+    - deploy_game_registry_dev
   before_script:
     - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
     - az extension add --name containerapp --upgrade
-    - sleep 20
   script:
     - declare -A value_map=(
       ["PG_USER"]=$DEV_PG_USER
@@ -381,7 +384,7 @@ deploy_chatbot_dev:
     action: start
     auto_stop_in: 1 hours
     on_stop: destroy_chatbot_dev
-  # This will only run when you commit to a merge request or to the ci-cd branch.
+  # This will only run when you commit to a merge request or to the ci-cd branch
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
     - if: $CI_COMMIT_BRANCH == 'ci-cd'
@@ -395,6 +398,7 @@ deploy_gameplay_dev:
     - deploy_postgres_and_vnet_dev
     - build_gameplay_dev
     - deploy_rabbitmq_dev
+    - deploy_game_registry_dev
   before_script:
     - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
     - az extension add --name containerapp --upgrade
@@ -478,6 +482,7 @@ deploy_player_dev:
     - deploy_postgres_and_vnet_dev
     - build_player_dev
     - deploy_rabbitmq_dev
+    - deploy_game_registry_dev
   before_script:
     - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
     - az extension add --name containerapp --upgrade
@@ -519,16 +524,17 @@ deploy_statistics_dev:
     - deploy_postgres_and_vnet_dev
     - build_statistics_dev
     - deploy_rabbitmq_dev
+    - deploy_game_registry_dev
   before_script:
     - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
     - az extension add --name containerapp --upgrade
   script:
     - declare -A value_map=(
-      ["PG_USER"]=$DEV_PG_USER 
-      ["PG_PASSWORD"]=$DEV_PG_PWD 
-      ["PG_DB_NAME"]="banditdevpostgres" 
-      ["RESOURCE_GROUP"]="rg_bandit_games_dev" 
-      ["CONTAINER_NAME"]="statistics-dev-container" 
+      ["PG_USER"]=$DEV_PG_USER
+      ["PG_PASSWORD"]=$DEV_PG_PWD
+      ["PG_DB_NAME"]="banditdevpostgres"
+      ["RESOURCE_GROUP"]="rg_bandit_games_dev"
+      ["CONTAINER_NAME"]="statistics-dev-container"
       ["ENVIRONMENT"]="env-dev-containers"
       ["IMAGE_NAME"]="statistics-context"
       ["PORT"]=8095
@@ -561,6 +567,7 @@ deploy_storefront_dev:
     - deploy_postgres_and_vnet_dev
     - build_storefront_dev
     - deploy_rabbitmq_dev
+    - deploy_game_registry_dev
   before_script:
     - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
     - az extension add --name containerapp --upgrade

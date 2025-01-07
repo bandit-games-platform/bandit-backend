@@ -5,6 +5,9 @@ infrastructure/idp_mysql_data/
 infrastructure/mysql/
 infrastructure/rabbitmq/
 infrastructure/postgresql/
+infrastructure/sonarqube
+infrastructure/sonarqube_db
+infrastructure/sonarqube_db_data
 
 ### Java ###
 # Compiled class file

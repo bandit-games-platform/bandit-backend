@@ -17,11 +17,13 @@ public class GameRegistryRabbitMQTopology {
 
     @Bean
     TopicExchange gameRegistryEventExchange() {
+        System.out.println("GameRegistryRabbitMQTopology Exchange loaded!");
         return new TopicExchange(GAME_REGISTRY_EVENTS_EXCHANGE);
     }
 
     @Bean
     Queue gameRegisteredQueue() {
+        System.out.println("GameRegistryRabbitMQTopology Queue loaded!");
         return new Queue(GAME_REGISTERED_QUEUE);
     }
 

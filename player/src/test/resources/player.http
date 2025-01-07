@@ -4,8 +4,7 @@ Accept: application/json
 Content-Type: application/json
 
 {
-    "userId": "e58c4fcb-b870-421c-866c-e864cea2614e",
-    "username": "roman.gordon@student.kdg.be"
+  "userId": "e58c4fcb-b870-421c-866c-e864cea2614e",
+  "username": "roman.gordon@student.kdg.be"
 }
 
-###

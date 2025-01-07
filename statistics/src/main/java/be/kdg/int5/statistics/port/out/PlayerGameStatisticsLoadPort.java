@@ -4,10 +4,12 @@ import be.kdg.int5.statistics.domain.PlayerGameStats;
 import be.kdg.int5.statistics.domain.PlayerId;
 
 import java.util.List;
+import java.util.Set;
 
 public interface PlayerGameStatisticsLoadPort {
     PlayerGameStats loadPlayerGameStat(PlayerId playerId, GameId gameId);
     PlayerGameStats loadPlayerGameStatsWithAllRelationships(PlayerId playerId, GameId gameId);
     List<PlayerGameStats> loadAllPlayerGameStatsForPlayer(PlayerId playerId);
     List<PlayerGameStats> loadAllPlayerGameStatsForGame(GameId gameId);
+    Set<PlayerGameStats> loadAllUniquePlayerGameStatsForGame(GameId gameId);
 }
