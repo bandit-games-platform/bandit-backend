@@ -340,7 +340,7 @@ deploy_rabbitmq_dev:
     name: rabbitmq-dev
     deployment_tier: testing
     action: start
-    auto_stop_in: 1 hours
+    auto_stop_in: 3 hours
     on_stop: destroy_rabbitmq_dev
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
@@ -382,7 +382,7 @@ deploy_chatbot_dev:
     name: chatbot-dev
     deployment_tier: testing
     action: start
-    auto_stop_in: 1 hours
+    auto_stop_in: 3 hours
     on_stop: destroy_chatbot_dev
   # This will only run when you commit to a merge request or to the ci-cd branch
   rules:
@@ -424,7 +424,7 @@ deploy_gameplay_dev:
     name: gameplay-dev
     deployment_tier: testing
     action: start
-    auto_stop_in: 1 hours
+    auto_stop_in: 3 hours
     on_stop: destroy_gameplay_dev
   # This will only run when you commit to a merge request or to the ci-cd branch
   rules:
@@ -466,7 +466,7 @@ deploy_game_registry_dev:
     name: game-registry-dev
     deployment_tier: testing
     action: start
-    auto_stop_in: 1 hours
+    auto_stop_in: 3 hours
     on_stop: destroy_game_registry_dev
   # This will only run when you commit to a merge request or to the ci-cd branch
   rules:
@@ -508,7 +508,7 @@ deploy_player_dev:
     name: player-dev
     deployment_tier: testing
     action: start
-    auto_stop_in: 1 hours
+    auto_stop_in: 3 hours
     on_stop: destroy_player_dev
   # This will only run when you commit to a merge request or to the ci-cd branch
   rules:
@@ -551,7 +551,7 @@ deploy_statistics_dev:
     name: statistics-dev
     deployment_tier: testing
     action: start
-    auto_stop_in: 1 hours
+    auto_stop_in: 3 hours
     on_stop: destroy_statistics_dev
   # This will only run when you commit to a merge request or to the ci-cd branch
   rules:
@@ -596,7 +596,7 @@ deploy_storefront_dev:
     name: storefront-dev
     deployment_tier: testing
     action: start
-    auto_stop_in: 1 hours
+    auto_stop_in: 3 hours
     on_stop: destroy_storefront_dev
   # This will only run when you commit to a merge request or to the ci-cd branch
   rules:
@@ -685,6 +685,7 @@ deploy_chatbot_prod:
       ["REG_USERNAME"]=$PROD_REGISTRY_USERNAME
       ["RABBIT_URL"]=$PROD_RABBIT_URL
       ["PYTHON_URL"]=$PROD_PYTHON_URL
+      ["SCALE_DOWN"]=false
       )
     - serialized_map=""
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
@@ -721,6 +722,7 @@ deploy_gameplay_prod:
       ["RABBIT_URL"]=$PROD_RABBIT_URL
       ["DDL_PROD"]=$PROD_DDL_MODE
       ["DB_INIT_MODE"]=$PROD_DB_INIT_MODE
+      ["SCALE_DOWN"]=false
       )
     - serialized_map=""
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
@@ -758,6 +760,7 @@ deploy_game_registry_prod:
       ["DDL_PROD"]=$PROD_DDL_MODE
       ["DB_INIT_MODE"]=$PROD_DB_INIT_MODE
       ["KEYCLOAK_CLIENT_SECRET"]=$KEYCLOAK_BACKEND_SECRET
+      ["SCALE_DOWN"]=false
       )
     - serialized_map=""
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
@@ -794,6 +797,7 @@ deploy_player_prod:
       ["RABBIT_URL"]=$PROD_RABBIT_URL
       ["DDL_PROD"]=$PROD_DDL_MODE
       ["DB_INIT_MODE"]=$PROD_DB_INIT_MODE
+      ["SCALE_DOWN"]=false
       )
     - serialized_map=""
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
@@ -831,6 +835,7 @@ deploy_statistics_prod:
       ["DDL_PROD"]=$PROD_DDL_MODE
       ["DB_INIT_MODE"]=$PROD_DB_INIT_MODE
       ["GAME_REGISTRY_URL"]=$PROD_GAME_REGISTRY_URL
+      ["SCALE_DOWN"]=false
       )
     - serialized_map=""
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
@@ -870,6 +875,7 @@ deploy_storefront_prod:
       ["GAME_REGISTRY_URL"]=$PROD_GAME_REGISTRY_URL
       ["FRONTEND_URL"]=$PROD_FRONTEND_URL
       ["STRIPE_API_KEY"]=$STRIPE_TEST_API_KEY
+      ["SCALE_DOWN"]=false
       )
     - serialized_map=""
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
