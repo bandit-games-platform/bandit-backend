@@ -13,7 +13,15 @@ public class ProductProjection {
     private String backgroundUrl;
 
     public ProductProjection(ProductId productId, String title, UUID developerId, BigDecimal price) {
-        this(productId, title, developerId, null, price, null);
+        Objects.requireNonNull(productId);
+        Objects.requireNonNull(title);
+        Objects.requireNonNull(developerId);
+        Objects.requireNonNull(price);
+
+        this.productId = productId;
+        this.title = title;
+        this.developerId = developerId;
+        this.price = price;
     }
 
     public ProductProjection(
@@ -23,18 +31,12 @@ public class ProductProjection {
             String description,
             BigDecimal price,
             String backgroundUrl) {
-        Objects.requireNonNull(productId);
-        Objects.requireNonNull(title);
-        Objects.requireNonNull(developerId);
+        this(productId, title, developerId, price);
+
         Objects.requireNonNull(description);
-        Objects.requireNonNull(price);
         Objects.requireNonNull(backgroundUrl);
 
-        this.productId = productId;
-        this.title = title;
-        this.developerId = developerId;
         this.description = description;
-        this.price = price;
         this.backgroundUrl = backgroundUrl;
     }
 
