@@ -591,6 +591,7 @@ deploy_storefront_dev:
       ["GAME_REGISTRY_URL"]=$DEV_GAME_REGISTRY_URL
       ["FRONTEND_URL"]=$DEV_FRONTEND_URL
       ["STRIPE_API_KEY"]=$STRIPE_TEST_API_KEY
+      ["PYTHON_URL"]=$DEV_PYTHON_URL
       ["SCALE_DOWN"]=false
       )
     - serialized_map=""
@@ -880,6 +881,7 @@ deploy_storefront_prod:
       ["GAME_REGISTRY_URL"]=$PROD_GAME_REGISTRY_URL
       ["FRONTEND_URL"]=$PROD_FRONTEND_URL
       ["STRIPE_API_KEY"]=$STRIPE_TEST_API_KEY
+      ["PYTHON_URL"]=$PROD_PYTHON_URL
       ["SCALE_DOWN"]=false
       )
     - serialized_map=""
