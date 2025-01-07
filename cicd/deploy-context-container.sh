@@ -130,3 +130,12 @@ else
 fi
 
 unset ENV_VAR_STRING
+
+
+# enabling CORS
+az containerapp ingress cors enable \
+  --name $CONTAINER_NAME \
+  --resource-group $RESOURCE_GROUP \
+  --allowed-origins * \
+  --allowed-headers Content-Type Authorization \
+  --allow-credentials true
