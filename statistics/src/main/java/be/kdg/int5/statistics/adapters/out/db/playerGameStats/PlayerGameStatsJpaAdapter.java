@@ -64,6 +64,25 @@ public class PlayerGameStatsJpaAdapter implements PlayerGameStatisticsLoadPort, 
     }
 
     @Override
+    public Set<PlayerGameStats> loadAllUniquePlayerGameStatsForGame(GameId gameId) {
+        List<PlayerGameStatsJpaEntity> playerGameStatsJpaEntities = playerGameStatsJpaRepository.findAllByGameId(
+                gameId.uuid()
+        );
+        if (playerGameStatsJpaEntities == null) return null;
+
+        return playerGameStatsJpaEntities.stream()
+                .collect(Collectors.toMap(
+                        stat -> stat.getId().getPlayerId(),
+                        stat -> stat,
+                        (existing, replacement) -> existing
+                ))
+                .values()
+                .stream()
+                .map(this::playerGameStatisticsJpaToDomain)
+                .collect(Collectors.toSet());
+    }
+
+    @Override
     public void addNewCompletedSession(PlayerGameStats playerGameStats) {
         playerGameStatsJpaRepository.save(playerGameStatsDomainToJpa(playerGameStats));
     }

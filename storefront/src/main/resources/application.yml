@@ -7,7 +7,7 @@ server:
 spring:
   sql:
     init:
-      mode: always
+      mode: ${DB_INIT_MODE:always}
   jpa:
     open-in-view: false
     hibernate:
@@ -41,3 +41,6 @@ contexts:
 
 stripe:
   apiKey: ${STRIPE_API_KEY}
+
+python:
+  url: ${PYTHON_URL:http://localhost:8000}

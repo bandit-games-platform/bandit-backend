@@ -13,15 +13,27 @@ public class ProductProjectionJpaEntity {
     @Id
     private UUID id;
     private String title;
+    private UUID developerId;
+    private String description;
     private BigDecimal price;
+    private String backgroundUrl;
 
     public ProductProjectionJpaEntity() {
     }
 
-    public ProductProjectionJpaEntity(UUID id, String title, BigDecimal price) {
+    public ProductProjectionJpaEntity(
+            UUID id,
+            String title,
+            UUID developerId,
+            String description,
+            BigDecimal price,
+            String backgroundUrl) {
         this.id = id;
         this.title = title;
+        this.developerId = developerId;
+        this.description = description;
         this.price = price;
+        this.backgroundUrl = backgroundUrl;
     }
 
     public UUID getId() {
@@ -40,11 +52,35 @@ public class ProductProjectionJpaEntity {
         this.title = title;
     }
 
+    public UUID getDeveloperId() {
+        return developerId;
+    }
+
+    public void setDeveloperId(UUID developerId) {
+        this.developerId = developerId;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public BigDecimal getPrice() {
         return price;
     }
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public String getBackgroundUrl() {
+        return backgroundUrl;
+    }
+
+    public void setBackgroundUrl(String backgroundUrl) {
+        this.backgroundUrl = backgroundUrl;
     }
 }
