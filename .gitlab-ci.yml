@@ -371,6 +371,7 @@ deploy_chatbot_dev:
       ["PORT"]=8091
       ["REG_USERNAME"]=$REGISTRY_USERNAME
       ["RABBIT_URL"]=$DEV_RABBIT_URL
+      ["FRONTEND_URL"]=$DEV_FRONTEND_URL
       ["PYTHON_URL"]=$DEV_PYTHON_URL
       ["SCALE_DOWN"]=false
       )
@@ -414,6 +415,7 @@ deploy_gameplay_dev:
       ["PORT"]=8093
       ["REG_USERNAME"]=$REGISTRY_USERNAME
       ["RABBIT_URL"]=$DEV_RABBIT_URL
+      ["FRONTEND_URL"]=$DEV_FRONTEND_URL
       ["SCALE_DOWN"]=false
       )
     - serialized_map=""
@@ -456,6 +458,7 @@ deploy_game_registry_dev:
       ["REG_USERNAME"]=$REGISTRY_USERNAME
       ["RABBIT_URL"]=$DEV_RABBIT_URL
       ["KEYCLOAK_CLIENT_SECRET"]=$KEYCLOAK_GAME_REGISTRY_SECRET
+      ["FRONTEND_URL"]=$DEV_FRONTEND_URL
       ["SCALE_DOWN"]=false
       )
     - serialized_map=""
@@ -498,6 +501,7 @@ deploy_player_dev:
       ["PORT"]=8094
       ["REG_USERNAME"]=$REGISTRY_USERNAME
       ["RABBIT_URL"]=$DEV_RABBIT_URL
+      ["FRONTEND_URL"]=$DEV_FRONTEND_URL
       ["SCALE_DOWN"]=false
       )
     - serialized_map=""
@@ -541,6 +545,7 @@ deploy_statistics_dev:
       ["REG_USERNAME"]=$REGISTRY_USERNAME
       ["RABBIT_URL"]=$DEV_RABBIT_URL
       ["GAME_REGISTRY_URL"]=$DEV_GAME_REGISTRY_URL
+      ["FRONTEND_URL"]=$DEV_FRONTEND_URL
       ["SCALE_DOWN"]=false
       )
     - serialized_map=""
