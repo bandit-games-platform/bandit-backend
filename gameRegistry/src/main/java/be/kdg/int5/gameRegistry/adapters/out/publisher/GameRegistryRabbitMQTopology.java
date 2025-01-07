@@ -7,6 +7,7 @@ import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 
 @Configuration
 public class GameRegistryRabbitMQTopology {
@@ -16,28 +17,33 @@ public class GameRegistryRabbitMQTopology {
     public static final String GAME_REGISTERED_STOREFRONT_QUEUE = "game_registered_storefront";
 
     @Bean
+    @DependsOn("rabbitAdmin")
     TopicExchange gameRegistryEventExchange() {
         System.out.println("GameRegistryRabbitMQTopology Exchange loaded!");
         return new TopicExchange(GAME_REGISTRY_EVENTS_EXCHANGE);
     }
 
     @Bean
+    @DependsOn("rabbitAdmin")
     Queue gameRegisteredQueue() {
         System.out.println("GameRegistryRabbitMQTopology Queue loaded!");
         return new Queue(GAME_REGISTERED_QUEUE);
     }
 
     @Bean
+    @DependsOn("rabbitAdmin")
     Queue gameRegisteredGameplayQueue() {
         return new Queue(GAME_REGISTERED_GAMEPLAY_QUEUE);
     }
 
     @Bean
+    @DependsOn("rabbitAdmin")
     Queue gameRegisteredStorefrontQueue() {
         return new Queue(GAME_REGISTERED_STOREFRONT_QUEUE);
     }
 
     @Bean
+    @DependsOn("rabbitAdmin")
     Binding gameRegisteredBinding(TopicExchange gameRegistryEventExchange, Queue gameRegisteredQueue) {
         return BindingBuilder
                 .bind(gameRegisteredQueue)
@@ -47,6 +53,7 @@ public class GameRegistryRabbitMQTopology {
     }
 
     @Bean
+    @DependsOn("rabbitAdmin")
     Binding gameRegisteredGameplayBinding(TopicExchange gameRegistryEventExchange, Queue gameRegisteredGameplayQueue) {
         return BindingBuilder
                 .bind(gameRegisteredGameplayQueue)
@@ -55,6 +62,7 @@ public class GameRegistryRabbitMQTopology {
     }
 
     @Bean
+    @DependsOn("rabbitAdmin")
     Binding gameRegisteredStorefrontBinding(TopicExchange gameRegistryEventExchange, Queue gameRegisteredStorefrontQueue) {
         return BindingBuilder
                 .bind(gameRegisteredStorefrontQueue)
