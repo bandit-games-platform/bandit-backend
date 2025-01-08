@@ -1,13 +1,10 @@
 package be.kdg.int5.chatbot.adapters.in;
 
 import be.kdg.int5.chatbot.adapters.in.dto.AnswerDto;
-import be.kdg.int5.chatbot.adapters.in.dto.FollowUpQuestionDto;
-import be.kdg.int5.chatbot.adapters.in.dto.InitialQuestionDto;
+import be.kdg.int5.chatbot.adapters.in.dto.GameQuestionDto;
 import be.kdg.int5.chatbot.domain.*;
-import be.kdg.int5.chatbot.ports.in.FollowUpGameConversationCommand;
-import be.kdg.int5.chatbot.ports.in.FollowUpGameConversationUseCase;
-import be.kdg.int5.chatbot.ports.in.StartGameConversationUseCase;
-import be.kdg.int5.chatbot.ports.in.StartGameConversationCommand;
+import be.kdg.int5.chatbot.ports.in.GameConversationUseCase;
+import be.kdg.int5.chatbot.ports.in.GameConversationCommand;
 import be.kdg.int5.common.exceptions.PythonServiceException;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -23,52 +20,30 @@ import java.util.UUID;
 
 @RestController
 public class GameChatbotRestController {
-    private final StartGameConversationUseCase startGameConversationUseCase;
-    private final FollowUpGameConversationUseCase followUpGameConversationUseCase;
+    private final GameConversationUseCase gameConversationUseCase;
 
     private final static Logger logger = LoggerFactory.getLogger(GameChatbotRestController.class);
 
-    public GameChatbotRestController(StartGameConversationUseCase startGameConversationUseCase, FollowUpGameConversationUseCase followUpGameConversationUseCase) {
-        this.startGameConversationUseCase = startGameConversationUseCase;
-        this.followUpGameConversationUseCase = followUpGameConversationUseCase;
+    public GameChatbotRestController(GameConversationUseCase gameConversationUseCase) {
+        this.gameConversationUseCase = gameConversationUseCase;
     }
 
-    @PostMapping("/initial-question")
+    @PostMapping("/chatbot/game")
     @PreAuthorize("hasAuthority('player')")
-    public ResponseEntity<AnswerDto> postInitialQuestion(
-            @Valid @RequestBody InitialQuestionDto initialQuestionDto,
+    public ResponseEntity<AnswerDto> postGameQuestion(
+            @Valid @RequestBody GameQuestionDto gameQuestionDto,
             @AuthenticationPrincipal Jwt token) {
         final UserId userUUID = new UserId(UUID.fromString(token.getClaimAsString("sub")));
-        final GameId gameUUID = new GameId(UUID.fromString(initialQuestionDto.getGameId()));
+        final GameId gameUUID = new GameId(UUID.fromString(gameQuestionDto.getGameId()));
+        final String question = gameQuestionDto.getQuestion();
 
         try {
-            final StartGameConversationCommand startGameConversationCommand = new StartGameConversationCommand(userUUID, gameUUID);
-            final GameConversation conversation = startGameConversationUseCase.startGameConversation(startGameConversationCommand);
+            final GameConversationCommand gameConversationCommand = new GameConversationCommand(userUUID, gameUUID, question);
+            final GameConversation conversation = gameConversationUseCase.updateGameConversation(gameConversationCommand);
 
-            logger.info("Answer in the Controller - Initial: {}", conversation.toString());
+            Answer answer = conversation.getLatestQuestion().getAnswer();
 
-            final AnswerDto answerDto = new AnswerDto(conversation.getInitialQuestion().getAnswer().text());
-            return ResponseEntity.ok(answerDto);
-        } catch (PythonServiceException e) {
-            final String errorMessage = "Python service is unavailable at the moment. Please try again later.";
-            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(new AnswerDto(errorMessage));
-        }
-    }
-
-    @PostMapping("/follow-up-question")
-    @PreAuthorize("hasAuthority('player')")
-    public ResponseEntity<AnswerDto> postFollowUpQuestion(
-            @Valid @RequestBody FollowUpQuestionDto followUpQuestionDto,
-            @AuthenticationPrincipal Jwt token) {
-        final UserId userUUID = new UserId(UUID.fromString(token.getClaimAsString("sub")));
-        final GameId gameUUID = new GameId(UUID.fromString(followUpQuestionDto.getGameId()));
-        final String question = followUpQuestionDto.getQuestion().getText();
-
-        try {
-            final FollowUpGameConversationCommand followUpGameConversationCommand = new FollowUpGameConversationCommand(userUUID, gameUUID, question);
-            final Answer answer = followUpGameConversationUseCase.followUpGameConversation(followUpGameConversationCommand);
-
-            logger.info("Answer in the Controller - Follow-up: {}", answer.toString());
+            logger.info("Answer in the Controller");
 
             final AnswerDto answerDto = new AnswerDto(answer.text());
             return ResponseEntity.ok(answerDto);

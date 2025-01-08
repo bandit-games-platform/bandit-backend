@@ -8,7 +8,6 @@ import be.kdg.int5.chatbot.ports.out.ConversationSavePort;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -23,7 +22,7 @@ public class ConversationJpaAdapter implements ConversationLoadPort, Conversatio
 
     @Override
     public GameConversation loadGameConversation(UserId userId, GameId gameId) {
-        final GameConversationJpaEntity gameConversationJpa = conversationJpaRepository.findByUserIdAndGameIdWithQuestions(userId.uuid(), gameId.uuid());
+        final GameConversationJpaEntity gameConversationJpa = conversationJpaRepository.findGameConversationByUserIdAndGameIdWithQuestions(userId.uuid(), gameId.uuid());
         if (gameConversationJpa == null) return null;
         return toGameConversation(gameConversationJpa);
     }
@@ -81,7 +80,7 @@ public class ConversationJpaAdapter implements ConversationLoadPort, Conversatio
             platformConversationJpaEntity.setCurrentPage(((PlatformConversation) conversation).getCurrentPage());
             conversationJpaRepository.saveAndFlush(platformConversationJpaEntity);
         } else {
-            conversationJpaRepository.save(conversationJpa);
+            conversationJpaRepository.saveAndFlush(conversationJpa);
         }
     }
 

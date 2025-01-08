@@ -4,24 +4,25 @@ import be.kdg.int5.chatbot.domain.Answer;
 import be.kdg.int5.chatbot.domain.GameConversation;
 import be.kdg.int5.chatbot.domain.GameDetails;
 import be.kdg.int5.chatbot.domain.Question;
-import be.kdg.int5.chatbot.ports.in.StartGameConversationUseCase;
-import be.kdg.int5.chatbot.ports.in.StartGameConversationCommand;
+import be.kdg.int5.chatbot.ports.in.GameConversationUseCase;
+import be.kdg.int5.chatbot.ports.in.GameConversationCommand;
 import be.kdg.int5.chatbot.ports.out.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Service
-public class StartGameConversationUseCaseImpl implements StartGameConversationUseCase {
+public class GameConversationUseCaseImpl implements GameConversationUseCase {
     private final GameDetailsLoadPort gameDetailsLoadPort;
     private final GameDetailsSavePort gameDetailsSavePort;
     private final ConversationLoadPort conversationLoadPort;
     private final ConversationSavePort conversationSavePort;
     private final AnswerAskPort answerAskPort;
 
-    public StartGameConversationUseCaseImpl(
+    public GameConversationUseCaseImpl(
             GameDetailsLoadPort gameDetailsLoadPort,
             GameDetailsSavePort gameDetailsSavePort,
             ConversationLoadPort conversationLoadPort,
@@ -36,7 +37,7 @@ public class StartGameConversationUseCaseImpl implements StartGameConversationUs
 
     @Override
     @Transactional
-    public GameConversation startGameConversation(StartGameConversationCommand command) {
+    public GameConversation updateGameConversation(GameConversationCommand command) {
         final GameDetails gameDetails = gameDetailsLoadPort.loadGameDetailsByGameId(command.gameId());
 
         GameConversation gameConversation = conversationLoadPort.loadGameConversation(command.userId(), command.gameId());
@@ -65,32 +66,20 @@ public class StartGameConversationUseCaseImpl implements StartGameConversationUs
             return gameConversation;
         }
 
+        Question newQuestion = gameConversation.addFollowUpQuestion(command.question());
+        final List<Question> previousQuestionWindowList = gameConversation.getPreviousQuestionsInWindow();
+
+        gameConversation.update(newQuestion);
+        conversationSavePort.saveConversation(gameConversation);
+
+        final Answer answer = answerAskPort.getAnswerForFollowUpQuestion(gameDetails, previousQuestionWindowList, newQuestion);
+        System.out.println(answer.text());
+
+        newQuestion.update(answer);
+        gameConversation.update(newQuestion);
+        conversationSavePort.saveConversation(gameConversation);
+
         return gameConversation;
-
-
-
-//        if (existingGameConversation != null) {
-//            Question initialQuestion = existingGameConversation.getInitialQuestion();
-//
-//            if (initialQuestion == null) {
-//                throw new ConversationWithoutInitialQuestionException("Conversation exists but has no initial question.");
-//            }
-//            return initialQuestion.getAnswer();
-//        }
-
-//        final GameConversation gameConversation = new GameConversation(command.userId(), command.gameId());
-//
-//        final Question followUpQuestion = gameConversation.start();
-//        existingGameConversation.update(followUpQuestion);
-//
-//        final Answer answer = answerAskPort.getAnswerForInitialQuestion(gameDetails, followUpQuestion);
-//
-//        followUpQuestion.update(answer);
-//        gameConversation.update(followUpQuestion);
-//
-//        conversationSavePort.saveConversation(gameConversation);
-//
-//        return answer;
     }
 
     private Answer askChatbotForGameSummary(GameDetails gameDetails) {
