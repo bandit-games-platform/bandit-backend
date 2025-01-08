@@ -1,5 +1,6 @@
 package be.kdg.int5.chatbot;
 
+import be.kdg.int5.chatbot.adapters.in.dto.GameQuestionDto;
 import be.kdg.int5.chatbot.adapters.out.db.answer.AnswerJpaEntity;
 import be.kdg.int5.chatbot.adapters.out.db.conversation.ConversationJpaRepository;
 import be.kdg.int5.chatbot.adapters.out.db.conversation.GameConversationJpaEntity;
@@ -53,136 +54,107 @@ class ChatbotControllerIntegrationTest extends AbstractDatabaseTest {
         gameId = TestIds.GAME_ID.uuid();
     }
 
-//    @Test
-//    void shouldReturnAnswerWhenUserStartsAConversation() throws Exception {
-//
-//        // Arrange
-//        InitialQuestionDto initialQuestionDto = new InitialQuestionDto(String.valueOf(gameId));
-//        String expectedAnswerText = "Here are the main rules of the game...";
-//
-//        when(pythonClientAdapter.getAnswerForInitialGameQuestion(any(), any())).thenReturn(new Answer(expectedAnswerText));
-//
-//        // Act
-//        final ResultActions result = mockMvc.perform(post("/initial-question")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(objectMapper.writeValueAsString(initialQuestionDto))
-//                .with(jwt()
-//                        .jwt(jwt -> jwt.claim("sub", String.valueOf(userId)))
-//                        .authorities(new SimpleGrantedAuthority("player"))));
-//
-//        // Assert
-//        result.andExpect(status().isOk())
-//                .andExpect(jsonPath("$.text").value(expectedAnswerText));
-//
-//        verify(pythonClientAdapter).getAnswerForInitialGameQuestion(any(), any());
-//    }
-//
-//    @Test
-//    void shouldReturnAnswerWhenConversationWithInitialQuestionAlreadyExists() throws Exception {
-//        // Arrange
-//        LocalDateTime submittedAt = LocalDateTime.now();
-//        GameConversationJpaEntity existingConversation = getGameConversationJpaEntity(submittedAt);
-//
-//        when(conversationJpaRepository.findByUserIdAndGameIdWithQuestions(userId, gameId))
-//                .thenReturn(existingConversation);
-//
-//        InitialQuestionDto initialQuestionDto = new InitialQuestionDto(String.valueOf(gameId));
-//
-//        // Act
-//        final ResultActions result = mockMvc.perform(post("/initial-question")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(objectMapper.writeValueAsString(initialQuestionDto))
-//                .with(jwt()
-//                        .jwt(jwt -> jwt.claim("sub", String.valueOf(userId)))
-//                        .authorities(new SimpleGrantedAuthority("player"))));
-//
-//        // Assert
-//        result.andExpect(status().isOk())
-//                .andExpect(jsonPath("$.text").value("Initial Answer."));
-//
-//        verify(conversationJpaRepository).findByUserIdAndGameIdWithQuestions(userId, gameId);
-//        verify(pythonClientAdapter, times(0)).getAnswerForInitialGameQuestion(any(), any());
-//    }
-//
-//    @Test
-//    void shouldReturnAnswerWhenUserContinuesAConversation() throws Exception {
-//
-//        // Arrange
-//        final LocalDateTime submittedAt = LocalDateTime.now();
-//        final GameConversationJpaEntity existingConversation = getGameConversationJpaEntity(submittedAt);
-//
-//        when(conversationJpaRepository.findByUserIdAndGameIdWithQuestions(userId, gameId))
-//                .thenReturn(existingConversation);
-//
-//        QuestionDto questionDto = new QuestionDto("Tell me more about the game.");
-//        FollowUpQuestionDto followUpQuestionDto = new FollowUpQuestionDto(String.valueOf(gameId), questionDto);
-//
-//        final String expectedAnswerText = "This is additional information about the game.";
-//
-//        when(pythonClientAdapter.getAnswerForFollowUpGameQuestion(any(), any(), any())).thenReturn(new Answer(expectedAnswerText));
-//
-//        // Act
-//        final ResultActions result = mockMvc.perform(post("/follow-up-question")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(objectMapper.writeValueAsString(followUpQuestionDto))
-//                .with(jwt()
-//                        .jwt(jwt -> jwt.claim("sub", String.valueOf(userId)))
-//                        .authorities(new SimpleGrantedAuthority("player"))));
-//
-//        // Assert
-//        result.andExpect(status().isOk())
-//                .andExpect(jsonPath("$.text").value(expectedAnswerText));
-//
-//        verify(pythonClientAdapter).getAnswerForFollowUpGameQuestion(any(), any(), any());
-//    }
-//
-//    @Test
-//    void shouldReturnServiceUnavailableWhenPythonServiceFailsForFollowUpQuestion() throws Exception {
-//
-//        // Arrange
-////        InitialQuestionDto initialQuestionDto = new InitialQuestionDto(gameId.toString());
-//
-//        final LocalDateTime submittedAt = LocalDateTime.now();
-//        final GameConversationJpaEntity existingConversation = getGameConversationJpaEntity(submittedAt);
-//
-//        when(conversationJpaRepository.findByUserIdAndGameIdWithQuestions(userId, gameId))
-//                .thenReturn(existingConversation);
-//
-//        QuestionDto questionDto = new QuestionDto("Tell me more about the game.");
-//        FollowUpQuestionDto followUpQuestionDto = new FollowUpQuestionDto(String.valueOf(gameId), questionDto);
-//
-//        when(pythonClientAdapter.getAnswerForFollowUpGameQuestion(any(), any(), any()))
-//                .thenThrow(new PythonServiceException("An error occurred while calling the Python service."));
-//
-//        // Act
-//        final ResultActions result = mockMvc.perform(post("/follow-up-question")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(objectMapper.writeValueAsString(followUpQuestionDto))
-//                .with(jwt()
-//                        .jwt(jwt -> jwt.claim("sub", String.valueOf(userId)))
-//                        .authorities(new SimpleGrantedAuthority("player"))));
-//
-//        // Assert
-//        result.andExpect(status().isServiceUnavailable())
-//                .andExpect(jsonPath("$.text").value("Python service is unavailable at the moment. Please try again later."));
-//    }
-//
-//    @Test
-//    void shouldReturnForbiddenWhenUserHasNoAuthority() throws Exception {
-//
-//        // Arrange
-//        InitialQuestionDto initialQuestionDto = new InitialQuestionDto(gameId.toString());
-//
-//        // Act
-//        final ResultActions result = mockMvc.perform(post("/initial-question")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(objectMapper.writeValueAsString(initialQuestionDto))
-//                .with(jwt()
-//                        .jwt(jwt -> jwt.claim("sub", String.valueOf(userId)))));
-//
-//        // Assert
-//        result.andExpect(status().isForbidden());
-//    }
+    @Test
+    void shouldReturnAnswerWhenUserStartsAConversation() throws Exception {
+
+        // Arrange
+        GameQuestionDto initialQuestionDto = new GameQuestionDto(String.valueOf(gameId), "");
+        String expectedAnswerText = "Here are the main rules of the game...";
+
+        when(conversationJpaRepository.findGameConversationByUserIdAndGameIdWithQuestions(userId, gameId))
+                .thenReturn(null);
+        when(pythonClientAdapter.getAnswerForInitialGameQuestion(any(), any())).thenReturn(new Answer(expectedAnswerText));
+
+        // Act
+        final ResultActions result = mockMvc.perform(post("/chatbot/game")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(initialQuestionDto))
+                .with(jwt()
+                        .jwt(jwt -> jwt.claim("sub", String.valueOf(userId)))
+                        .authorities(new SimpleGrantedAuthority("player"))));
+
+        // Assert
+        result.andExpect(status().isOk())
+                .andExpect(jsonPath("$.text").value(expectedAnswerText));
+
+        verify(pythonClientAdapter).getAnswerForInitialGameQuestion(any(), any());
+    }
+
+    @Test
+    void shouldReturnAnswerWhenUserContinuesAConversation() throws Exception {
+
+        // Arrange
+        final LocalDateTime submittedAt = LocalDateTime.now();
+        final GameConversationJpaEntity existingConversation = getGameConversationJpaEntity(submittedAt);
+
+        String question = "Tell me more about the game.";
+        GameQuestionDto gameQuestionDto = new GameQuestionDto(String.valueOf(gameId), question);
+
+        final String expectedAnswerText = "This is additional information about the game.";
+
+        when(conversationJpaRepository.findGameConversationByUserIdAndGameIdWithQuestions(userId, gameId))
+                .thenReturn(existingConversation);
+        when(pythonClientAdapter.getAnswerForFollowUpGameQuestion(any(), any(), any())).thenReturn(new Answer(expectedAnswerText));
+
+        // Act
+        final ResultActions result = mockMvc.perform(post("/chatbot/game")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(gameQuestionDto))
+                .with(jwt()
+                        .jwt(jwt -> jwt.claim("sub", String.valueOf(userId)))
+                        .authorities(new SimpleGrantedAuthority("player"))));
+
+        // Assert
+        result.andExpect(status().isOk())
+                .andExpect(jsonPath("$.text").value(expectedAnswerText));
+
+        verify(pythonClientAdapter).getAnswerForFollowUpGameQuestion(any(), any(), any());
+    }
+
+    @Test
+    void shouldReturnServiceUnavailableWhenPythonServiceIsDown() throws Exception {
+
+        // Arrange
+        final LocalDateTime submittedAt = LocalDateTime.now();
+        final GameConversationJpaEntity existingConversation = getGameConversationJpaEntity(submittedAt);
+
+        String question = "Tell me more about the game.";
+        GameQuestionDto gameQuestionDto = new GameQuestionDto(String.valueOf(gameId), question);
+
+        when(conversationJpaRepository.findGameConversationByUserIdAndGameIdWithQuestions(userId, gameId))
+                .thenReturn(existingConversation);
+        when(pythonClientAdapter.getAnswerForFollowUpGameQuestion(any(), any(), any()))
+                .thenThrow(new PythonServiceException("An error occurred while calling the Python service."));
+
+        // Act
+        final ResultActions result = mockMvc.perform(post("/chatbot/game")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(gameQuestionDto))
+                .with(jwt()
+                        .jwt(jwt -> jwt.claim("sub", String.valueOf(userId)))
+                        .authorities(new SimpleGrantedAuthority("player"))));
+
+        // Assert
+        result.andExpect(status().isServiceUnavailable())
+                .andExpect(jsonPath("$.text").value("Python service is unavailable at the moment. Please try again later."));
+    }
+
+    @Test
+    void shouldReturnForbiddenWhenUserHasNoAuthority() throws Exception {
+
+        // Arrange
+        GameQuestionDto initialQuestionDto = new GameQuestionDto(gameId.toString(), "");
+
+        // Act
+        final ResultActions result = mockMvc.perform(post("/chatbot/game")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(initialQuestionDto))
+                .with(jwt()
+                        .jwt(jwt -> jwt.claim("sub", String.valueOf(userId)))));
+
+        // Assert
+        result.andExpect(status().isForbidden());
+    }
 
     private GameConversationJpaEntity getGameConversationJpaEntity(LocalDateTime submittedAt) {
         final GameConversationJpaEntity existingConversation = new GameConversationJpaEntity();
