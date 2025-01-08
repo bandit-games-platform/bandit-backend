@@ -8,8 +8,6 @@ VALUES ('272c3f85-79db-4b6f-a20e-5d1c12e0e5b3', '2024-09-10 11:30', 'Dean', 'BEL
        ('94dad160-f5c8-4817-8f2d-611e1436ffcd', '2024-12-02 02:07', 'GeekInês418', 'PORTUGAL', 'https://cdn-icons-png.flaticon.com/512/1985/1985783.png'),
        ('8449ba7c-194c-4e51-b060-cd88cc498836', '2024-12-02 02:07', 'SmithTheDebtCollector', 'NIGERIA', 'https://cdn-icons-png.flaticon.com/512/6111/6111637.png');
 
-
-
 INSERT INTO player.player_library (player_id)
 VALUES ('cd281b11-e41e-4f12-93c8-1e9a8bf7403c'),
        ('6ca3863d-d8db-4588-b799-704fdb267814'),

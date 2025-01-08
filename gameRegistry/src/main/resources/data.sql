@@ -15,7 +15,7 @@ INSERT INTO game_registry.dev_api_key(developer_id, api_key, revoked) VALUES
 -- Seeding data for `game` table
 INSERT INTO game_registry.game (id, title, description, current_price, developer_id, current_host, icon_url, background_url) VALUES
 ('b6572f1b-cd36-3ebb-b292-6cfd0b92f8e9', 'Button Game', 'A thrilling game consisting of two players and a magic button', 12.99, '2c1784ca-edf0-4882-994d-23473e30f776', 'http://localhost:8094/val', 'https://upload.wikimedia.org/wikipedia/commons/5/5a/Perspective-Button-Stop-icon.png', 'https://t3.ftcdn.net/jpg/06/26/23/36/360_F_626233679_tesiSRP9Jinq5wS0ZgbdJ6k5adupmgKl.jpg'),
-('d77e1d1f-6b46-4c89-9290-3b9cf8a7c001', 'Battleship', 'A strategic naval combat game', 10.99, '2c1784ca-edf0-4882-994d-23473e30f776', 'http://localhost:8301/battleship','https://play-lh.googleusercontent.com/WJp4hWdcmYu6hf-p-zd7tfv22P32f9G7HyFTY4mrnFoTS32Fa8-aDacjPFwwoY--DyE','https://wallpapers.com/images/hd/battleship-pictures-bb1dl2t2ofu085ee.jpg'),
+('d77e1d1f-6b46-4c89-9290-3b9cf8a7c001', 'Legacy Battleship', 'A strategic naval combat game', 10.99, '2c1784ca-edf0-4882-994d-23473e30f776', 'http://localhost:8301/battleship','https://play-lh.googleusercontent.com/WJp4hWdcmYu6hf-p-zd7tfv22P32f9G7HyFTY4mrnFoTS32Fa8-aDacjPFwwoY--DyE','https://wallpapers.com/images/hd/battleship-pictures-bb1dl2t2ofu085ee.jpg'),
 ('d77e1d1f-6b46-4c89-9290-3b9cf8a7c002', 'Chess', 'A classic strategy game of kings and queens', 5.99, '2c1784ca-edf0-4882-994d-23473e30f776', 'https://example.com', 'https://media.istockphoto.com/id/985550242/vector/business-strategy-with-chess-figures-on-a-chess-board.jpg?s=612x612&w=0&k=20&c=jYIITWu11EM_UblQy9PFjYEo4NrQvUm-OTHDqs1vtaA=','https://png.pngtree.com/background/20230525/original/pngtree-chess-playing-on-the-chess-board-with-other-pieces-in-view-picture-image_2725931.jpg'),
 ('d77e1d1f-6b46-4c89-9290-3b9cf8a7c003', 'Snakes and Ladders', 'A game of ups and downs', 50.00, '2c1784ca-edf0-4882-994d-23473e30f776', 'http://localhost:8094/sal', 'https://cdn0.iconfinder.com/data/icons/board-card-games-iconez/64/SnakesLadders-512.png','https://play-lh.googleusercontent.com/6Tu71iFYKiLN_egbg2qkYh1g6iFcnvJtoZrlgC2vBZjy4iuJlGEHWZTkPCIsOUmnWQ=w648-h364-rw'),
 ('d77e1d1f-6b46-4c89-9290-3b9cf8a7c004', 'Checkers','Jump to capture and clear the board', 4.00, '2c1784ca-edf0-4882-994d-23473e30f776', 'http://localhost:8095/al', 'https://cdn-icons-png.flaticon.com/512/1707/1707234.png','https://img.freepik.com/premium-photo/checkers-game-checkerboard-wooden-background_220873-6795.jpg'),
@@ -35,9 +35,9 @@ INSERT INTO game_registry.game_screenshots (game_id, url) VALUES
 
 -- Battleship
 ('d77e1d1f-6b46-4c89-9290-3b9cf8a7c001', 'https://img.freepik.com/premium-photo/retro-battleship-paper-game-as-battle-concept_681987-2783.jpg?w=826'),
-('d77e1d1f-6b46-4c89-9290-3b9cf8a7c001', 'https://cdn.discordapp.com/attachments/1306721570122633317/1307301634770210877/Screenshot_2024-11-16_at_12.09.46.png?ex=6739cf06&is=67387d86&hm=01283906f71c99eac55324664f1f06640880caa69e8bf69b535892d4504eb7dd&'),
+('d77e1d1f-6b46-4c89-9290-3b9cf8a7c001', 'https://wallpapercave.com/dwp1x/wp11552693.jpg'),
 ('d77e1d1f-6b46-4c89-9290-3b9cf8a7c001', 'https://bloob.io/img/meta/games/BATTLESHIP.png'),
-('d77e1d1f-6b46-4c89-9290-3b9cf8a7c001', 'https://cdn.discordapp.com/attachments/1306721570122633317/1307301893491523674/Screenshot_2024-11-16_at_12.10.53.png?ex=6739cf43&is=67387dc3&hm=51edc2787e862ef4cd3e37d92186a8d9a4255c72d97838e35d1c8fe7a23d964c&');
+('d77e1d1f-6b46-4c89-9290-3b9cf8a7c001', 'https://wallpapercave.com/dwp1x/wp11552694.jpg');
 
 
 -- Seeding data for `achievement` table
@@ -59,6 +59,10 @@ INSERT INTO game_registry.achievement (id, title, counter_total, description, ga
 
 -- Seeding data for `rule` table
 INSERT INTO game_registry.game_rules (step_number, rule, game_id) VALUES
+-- Rules for ButtonGame
+(1, 'Click button between 1 and 3 times', 'b6572f1b-cd36-3ebb-b292-6cfd0b92f8e9'),
+(2, 'Make your friend guess how many times you pressed the button, dont forget to submit', 'b6572f1b-cd36-3ebb-b292-6cfd0b92f8e9'),
+
 -- Rules for Battleship
 (1, 'Place all your ships on the grid before starting the game','d77e1d1f-6b46-4c89-9290-3b9cf8a7c001'),
 (2, 'Call out coordinates to attack enemy ships','d77e1d1f-6b46-4c89-9290-3b9cf8a7c001'),
@@ -69,4 +73,8 @@ INSERT INTO game_registry.game_rules (step_number, rule, game_id) VALUES
 
 -- Rules for Snakes and Ladders
 (1, 'Roll the dice to move your token','d77e1d1f-6b46-4c89-9290-3b9cf8a7c003'),
-(2, 'Climb ladders and slide down snakes based on the grid position','d77e1d1f-6b46-4c89-9290-3b9cf8a7c003');
+(2, 'Climb ladders and slide down snakes based on the grid position','d77e1d1f-6b46-4c89-9290-3b9cf8a7c003'),
+
+-- Rules for Checkers
+(1, 'Players take turns moving pieces diagonally forward. Kings can move backward too.', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c004'),
+(2, 'Capture opponent pieces by jumping over them.', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c004');
