@@ -2,15 +2,15 @@ package be.kdg.int5.chatbot.adapters.out.python.dto;
 
 import java.util.List;
 
-public class FollowUpQuestionDto {
+public class FollowUpGameQuestionDto {
     private String followUpPrompt;
     private GameDetailsDto gameDetailsDto;
     private List<QuestionAnswerDto> previousQuestionsList;
 
-    public FollowUpQuestionDto() {
+    public FollowUpGameQuestionDto() {
     }
 
-    public FollowUpQuestionDto(String followUpPrompt, GameDetailsDto gameDetailsDto, List<QuestionAnswerDto> previousQuestionsList) {
+    public FollowUpGameQuestionDto(String followUpPrompt, GameDetailsDto gameDetailsDto, List<QuestionAnswerDto> previousQuestionsList) {
         this.followUpPrompt = followUpPrompt;
         this.gameDetailsDto = gameDetailsDto;
         this.previousQuestionsList = previousQuestionsList;

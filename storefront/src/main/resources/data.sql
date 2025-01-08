@@ -17,7 +17,7 @@ VALUES ('d0eac6e4-1c21-4666-aab4-1350d9bcf000', 'cd281b11-e41e-4f12-93c8-1e9a8bf
 
 INSERT INTO storefront.product (id, title, developer_id, description, price, background_url)
 VALUES ('b6572f1b-cd36-3ebb-b292-6cfd0b92f8e9', 'Button Game', '2c1784ca-edf0-4882-994d-23473e30f776','A thrilling game consisting of two players and a magic button', 15.99, 'https://t3.ftcdn.net/jpg/06/26/23/36/360_F_626233679_tesiSRP9Jinq5wS0ZgbdJ6k5adupmgKl.jpg'),
-       ('d77e1d1f-6b46-4c89-9290-3b9cf8a7c001', 'Battleship', '2c1784ca-edf0-4882-994d-23473e30f776', 'A strategic naval combat game', 10.99, 'https://wallpapers.com/images/hd/battleship-pictures-bb1dl2t2ofu085ee.jpg'),
+       ('d77e1d1f-6b46-4c89-9290-3b9cf8a7c001', 'Legacy Battleship', '2c1784ca-edf0-4882-994d-23473e30f776', 'A strategic naval combat game', 10.99, 'https://wallpapers.com/images/hd/battleship-pictures-bb1dl2t2ofu085ee.jpg'),
        ('d77e1d1f-6b46-4c89-9290-3b9cf8a7c002', 'Chess', '2c1784ca-edf0-4882-994d-23473e30f776', 'A classic strategy game of kings and queens', 5.99, 'https://png.pngtree.com/background/20230525/original/pngtree-chess-playing-on-the-chess-board-with-other-pieces-in-view-picture-image_2725931.jpg'),
        ('d77e1d1f-6b46-4c89-9290-3b9cf8a7c003', 'Snakes and Ladders', '2c1784ca-edf0-4882-994d-23473e30f776', 'A game of ups and downs',50.00, 'https://play-lh.googleusercontent.com/6Tu71iFYKiLN_egbg2qkYh1g6iFcnvJtoZrlgC2vBZjy4iuJlGEHWZTkPCIsOUmnWQ=w648-h364-rw'),
        ('d77e1d1f-6b46-4c89-9290-3b9cf8a7c004', 'Checkers', '2c1784ca-edf0-4882-994d-23473e30f776', 'Jump to capture and clear the board',4.00, 'https://img.freepik.com/premium-photo/checkers-game-checkerboard-wooden-background_220873-6795.jpg'),

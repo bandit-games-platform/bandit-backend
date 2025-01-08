@@ -1,14 +1,17 @@
 package be.kdg.int5.chatbot;
 
-import be.kdg.int5.chatbot.adapters.in.dto.FollowUpQuestionDto;
-import be.kdg.int5.chatbot.adapters.in.dto.InitialQuestionDto;
-import be.kdg.int5.chatbot.adapters.in.dto.QuestionDto;
+import be.kdg.int5.chatbot.adapters.in.dto.GameQuestionDto;
 import be.kdg.int5.chatbot.adapters.out.db.answer.AnswerJpaEntity;
 import be.kdg.int5.chatbot.adapters.out.db.conversation.ConversationJpaRepository;
 import be.kdg.int5.chatbot.adapters.out.db.conversation.GameConversationJpaEntity;
+import be.kdg.int5.chatbot.adapters.out.db.gameDetails.GameDetailsJpaEntity;
+import be.kdg.int5.chatbot.adapters.out.db.gameDetails.GameDetailsJpaRepository;
 import be.kdg.int5.chatbot.adapters.out.python.PythonClientAdapter;
 import be.kdg.int5.chatbot.adapters.out.db.question.QuestionJpaEntity;
 import be.kdg.int5.chatbot.domain.Answer;
+import be.kdg.int5.chatbot.domain.GameDetails;
+import be.kdg.int5.chatbot.domain.GameId;
+import be.kdg.int5.chatbot.domain.GameRule;
 import be.kdg.int5.common.exceptions.PythonServiceException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,6 +26,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -45,6 +50,9 @@ class ChatbotControllerIntegrationTest extends AbstractDatabaseTest {
     private ConversationJpaRepository conversationJpaRepository;
 
     @MockBean
+    private GameDetailsJpaRepository gameDetailsJpaRepository;
+
+    @MockBean
     private PythonClientAdapter pythonClientAdapter;
 
     private UUID userId;
@@ -60,13 +68,17 @@ class ChatbotControllerIntegrationTest extends AbstractDatabaseTest {
     void shouldReturnAnswerWhenUserStartsAConversation() throws Exception {
 
         // Arrange
-        InitialQuestionDto initialQuestionDto = new InitialQuestionDto(String.valueOf(gameId));
+        GameDetailsJpaEntity gameDetailsJpa = new GameDetailsJpaEntity(UUID.randomUUID(), "My Game", "My Game Description", new HashSet<>(), null);
+        GameQuestionDto initialQuestionDto = new GameQuestionDto(String.valueOf(gameId), "");
         String expectedAnswerText = "Here are the main rules of the game...";
 
-        when(pythonClientAdapter.getAnswerForInitialQuestion(any(), any())).thenReturn(new Answer(expectedAnswerText));
+        when(gameDetailsJpaRepository.findByIdWithRelationships(any())).thenReturn(gameDetailsJpa);
+        when(conversationJpaRepository.findGameConversationByUserIdAndGameIdWithQuestions(userId, gameId))
+                .thenReturn(null);
+        when(pythonClientAdapter.getAnswerForInitialGameQuestion(any(), any())).thenReturn(new Answer(expectedAnswerText));
 
         // Act
-        final ResultActions result = mockMvc.perform(post("/initial-question")
+        final ResultActions result = mockMvc.perform(post("/chatbot/game")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(initialQuestionDto))
                 .with(jwt()
@@ -77,34 +89,7 @@ class ChatbotControllerIntegrationTest extends AbstractDatabaseTest {
         result.andExpect(status().isOk())
                 .andExpect(jsonPath("$.text").value(expectedAnswerText));
 
-        verify(pythonClientAdapter).getAnswerForInitialQuestion(any(), any());
-    }
-
-    @Test
-    void shouldReturnAnswerWhenConversationWithInitialQuestionAlreadyExists() throws Exception {
-        // Arrange
-        LocalDateTime submittedAt = LocalDateTime.now();
-        GameConversationJpaEntity existingConversation = getGameConversationJpaEntity(submittedAt);
-
-        when(conversationJpaRepository.findByUserIdAndGameIdWithQuestions(userId, gameId))
-                .thenReturn(existingConversation);
-
-        InitialQuestionDto initialQuestionDto = new InitialQuestionDto(String.valueOf(gameId));
-
-        // Act
-        final ResultActions result = mockMvc.perform(post("/initial-question")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(initialQuestionDto))
-                .with(jwt()
-                        .jwt(jwt -> jwt.claim("sub", String.valueOf(userId)))
-                        .authorities(new SimpleGrantedAuthority("player"))));
-
-        // Assert
-        result.andExpect(status().isOk())
-                .andExpect(jsonPath("$.text").value("Initial Answer."));
-
-        verify(conversationJpaRepository).findByUserIdAndGameIdWithQuestions(userId, gameId);
-        verify(pythonClientAdapter, times(0)).getAnswerForInitialQuestion(any(), any());
+        verify(pythonClientAdapter).getAnswerForInitialGameQuestion(any(), any());
     }
 
     @Test
@@ -114,20 +99,19 @@ class ChatbotControllerIntegrationTest extends AbstractDatabaseTest {
         final LocalDateTime submittedAt = LocalDateTime.now();
         final GameConversationJpaEntity existingConversation = getGameConversationJpaEntity(submittedAt);
 
-        when(conversationJpaRepository.findByUserIdAndGameIdWithQuestions(userId, gameId))
-                .thenReturn(existingConversation);
-
-        QuestionDto questionDto = new QuestionDto("Tell me more about the game.");
-        FollowUpQuestionDto followUpQuestionDto = new FollowUpQuestionDto(String.valueOf(gameId), questionDto);
+        String question = "Tell me more about the game.";
+        GameQuestionDto gameQuestionDto = new GameQuestionDto(String.valueOf(gameId), question);
 
         final String expectedAnswerText = "This is additional information about the game.";
 
-        when(pythonClientAdapter.getAnswerForFollowUpQuestion(any(), any(), any())).thenReturn(new Answer(expectedAnswerText));
+        when(conversationJpaRepository.findGameConversationByUserIdAndGameIdWithQuestions(userId, gameId))
+                .thenReturn(existingConversation);
+        when(pythonClientAdapter.getAnswerForFollowUpGameQuestion(any(), any(), any())).thenReturn(new Answer(expectedAnswerText));
 
         // Act
-        final ResultActions result = mockMvc.perform(post("/follow-up-question")
+        final ResultActions result = mockMvc.perform(post("/chatbot/game")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(followUpQuestionDto))
+                .content(objectMapper.writeValueAsString(gameQuestionDto))
                 .with(jwt()
                         .jwt(jwt -> jwt.claim("sub", String.valueOf(userId)))
                         .authorities(new SimpleGrantedAuthority("player"))));
@@ -136,22 +120,28 @@ class ChatbotControllerIntegrationTest extends AbstractDatabaseTest {
         result.andExpect(status().isOk())
                 .andExpect(jsonPath("$.text").value(expectedAnswerText));
 
-        verify(pythonClientAdapter).getAnswerForFollowUpQuestion(any(), any(), any());
+        verify(pythonClientAdapter).getAnswerForFollowUpGameQuestion(any(), any(), any());
     }
 
     @Test
-    void shouldReturnServiceUnavailableWhenPythonServiceFails() throws Exception {
+    void shouldReturnServiceUnavailableWhenPythonServiceIsDown() throws Exception {
 
         // Arrange
-        InitialQuestionDto initialQuestionDto = new InitialQuestionDto(gameId.toString());
+        final LocalDateTime submittedAt = LocalDateTime.now();
+        final GameConversationJpaEntity existingConversation = getGameConversationJpaEntity(submittedAt);
 
-        when(pythonClientAdapter.getAnswerForInitialQuestion(any(), any()))
+        String question = "Tell me more about the game.";
+        GameQuestionDto gameQuestionDto = new GameQuestionDto(String.valueOf(gameId), question);
+
+        when(conversationJpaRepository.findGameConversationByUserIdAndGameIdWithQuestions(userId, gameId))
+                .thenReturn(existingConversation);
+        when(pythonClientAdapter.getAnswerForFollowUpGameQuestion(any(), any(), any()))
                 .thenThrow(new PythonServiceException("An error occurred while calling the Python service."));
 
         // Act
-        final ResultActions result = mockMvc.perform(post("/initial-question")
+        final ResultActions result = mockMvc.perform(post("/chatbot/game")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(initialQuestionDto))
+                .content(objectMapper.writeValueAsString(gameQuestionDto))
                 .with(jwt()
                         .jwt(jwt -> jwt.claim("sub", String.valueOf(userId)))
                         .authorities(new SimpleGrantedAuthority("player"))));
@@ -165,10 +155,10 @@ class ChatbotControllerIntegrationTest extends AbstractDatabaseTest {
     void shouldReturnForbiddenWhenUserHasNoAuthority() throws Exception {
 
         // Arrange
-        InitialQuestionDto initialQuestionDto = new InitialQuestionDto(gameId.toString());
+        GameQuestionDto initialQuestionDto = new GameQuestionDto(gameId.toString(), "");
 
         // Act
-        final ResultActions result = mockMvc.perform(post("/initial-question")
+        final ResultActions result = mockMvc.perform(post("/chatbot/game")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(initialQuestionDto))
                 .with(jwt()
