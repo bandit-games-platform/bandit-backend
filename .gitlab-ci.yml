@@ -286,6 +286,7 @@ semgrep-sast:
         - '**/*.java'
 
 # ----------------------- DEPLOY ----------------------- #
+
 # ----------------- DEV ----------------- #
 # ---------- DATABASE, VNET and CONTAINER APP ENVIRONMENT -------- #
 deploy_postgres_and_vnet_dev:
