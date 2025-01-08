@@ -17,19 +17,14 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.List;
 
 @Repository
 public class PythonClientAdapter implements AnswerAskPort {
     @Value("${python.url:http://localhost:8000}")
     private String pythonUrl;
-    private static final String INITIAL_QUESTION = "/initial-question";
-    private static final String FOLLOW_UP_QUESTION = "/follow-up-question";
+    private static final String INITIAL_GAME_QUESTION = "/initial-game-question";
+    private static final String FOLLOW_UP_GAME_QUESTION = "/follow-up-game-question";
     private static final String PLATFORM_QUESTION = "/platform";
 
     private final static Logger logger = LoggerFactory.getLogger(PythonClientAdapter.class);
@@ -41,20 +36,20 @@ public class PythonClientAdapter implements AnswerAskPort {
     }
 
     @Override
-    public Answer getAnswerForInitialQuestion(GameDetails gameDetails, Question question) {
+    public Answer getAnswerForInitialGameQuestion(GameDetails gameDetails, Question question) {
         // create Dtos for Python
         final GameDetailsDto gameDetailsDto = toGameDetailsDto(gameDetails);
-        final InitialQuestionDto initialQuestionDto = new InitialQuestionDto(question.getText(), gameDetailsDto);
+        final InitialGameQuestionDto initialGameQuestionDto = new InitialGameQuestionDto(question.getText(), gameDetailsDto);
 
         // Set Http headers
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         // Wrap DTO in HttpEntity for the request
-        HttpEntity<InitialQuestionDto> entity = new HttpEntity<>(initialQuestionDto, headers);
+        HttpEntity<InitialGameQuestionDto> entity = new HttpEntity<>(initialGameQuestionDto, headers);
 
         try {
-            String response = restTemplate.postForObject(pythonUrl + INITIAL_QUESTION, entity, String.class);
+            String response = restTemplate.postForObject(pythonUrl + INITIAL_GAME_QUESTION, entity, String.class);
             logger.debug("Response Out Adapter - Inital: {}", response);
 
             String extractedAnswer = parseResponse(response);
@@ -66,21 +61,21 @@ public class PythonClientAdapter implements AnswerAskPort {
     }
 
     @Override
-    public Answer getAnswerForFollowUpQuestion(GameDetails gameDetails, List<Question> previousQuestionWindowList, Question question) {
+    public Answer getAnswerForFollowUpGameQuestion(GameDetails gameDetails, List<Question> previousQuestionWindowList, Question question) {
         // create Dtos for Python
         final GameDetailsDto gameDetailsDto = toGameDetailsDto(gameDetails);
         final List<QuestionAnswerDto> questionAnswerDtoList = toQuestionAnswerDtoList(previousQuestionWindowList);
-        final FollowUpQuestionDto followUpQuestionDto = new FollowUpQuestionDto(question.getText(), gameDetailsDto, questionAnswerDtoList);
+        final FollowUpGameQuestionDto followUpGameQuestionDto = new FollowUpGameQuestionDto(question.getText(), gameDetailsDto, questionAnswerDtoList);
 
         // Set Http headers
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         // Wrap DTO in HttpEntity for the request
-        HttpEntity<FollowUpQuestionDto> entity = new HttpEntity<>(followUpQuestionDto, headers);
+        HttpEntity<FollowUpGameQuestionDto> entity = new HttpEntity<>(followUpGameQuestionDto, headers);
 
         try {
-            String response = restTemplate.postForObject(pythonUrl + FOLLOW_UP_QUESTION, entity, String.class);
+            String response = restTemplate.postForObject(pythonUrl + FOLLOW_UP_GAME_QUESTION, entity, String.class);
             logger.debug("Response Out Adapter - FollowUp: {}", response);
 
             String extractedResponse = parseResponse(response);

@@ -66,7 +66,7 @@ public class CreateOrUpdateGameProjectionUseCaseImpl implements CreateOrUpdateGa
         Question chatbotGameDescription = new Question(GameConversation.INITIAL_PROMPT, LocalDateTime.now(), true);
 
         try {
-            Answer gameSummary = answerAskPort.getAnswerForInitialQuestion(gameDetails, chatbotGameDescription);
+            Answer gameSummary = answerAskPort.getAnswerForInitialGameQuestion(gameDetails, chatbotGameDescription);
             chatbotGameDescription.update(gameSummary);
             return gameSummary.text();
         } catch(PythonServiceException e) {

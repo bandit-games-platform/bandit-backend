@@ -60,7 +60,7 @@ class ChatbotControllerIntegrationTest extends AbstractDatabaseTest {
 //        InitialQuestionDto initialQuestionDto = new InitialQuestionDto(String.valueOf(gameId));
 //        String expectedAnswerText = "Here are the main rules of the game...";
 //
-//        when(pythonClientAdapter.getAnswerForInitialQuestion(any(), any())).thenReturn(new Answer(expectedAnswerText));
+//        when(pythonClientAdapter.getAnswerForInitialGameQuestion(any(), any())).thenReturn(new Answer(expectedAnswerText));
 //
 //        // Act
 //        final ResultActions result = mockMvc.perform(post("/initial-question")
@@ -74,7 +74,7 @@ class ChatbotControllerIntegrationTest extends AbstractDatabaseTest {
 //        result.andExpect(status().isOk())
 //                .andExpect(jsonPath("$.text").value(expectedAnswerText));
 //
-//        verify(pythonClientAdapter).getAnswerForInitialQuestion(any(), any());
+//        verify(pythonClientAdapter).getAnswerForInitialGameQuestion(any(), any());
 //    }
 //
 //    @Test
@@ -101,7 +101,7 @@ class ChatbotControllerIntegrationTest extends AbstractDatabaseTest {
 //                .andExpect(jsonPath("$.text").value("Initial Answer."));
 //
 //        verify(conversationJpaRepository).findByUserIdAndGameIdWithQuestions(userId, gameId);
-//        verify(pythonClientAdapter, times(0)).getAnswerForInitialQuestion(any(), any());
+//        verify(pythonClientAdapter, times(0)).getAnswerForInitialGameQuestion(any(), any());
 //    }
 //
 //    @Test
@@ -119,7 +119,7 @@ class ChatbotControllerIntegrationTest extends AbstractDatabaseTest {
 //
 //        final String expectedAnswerText = "This is additional information about the game.";
 //
-//        when(pythonClientAdapter.getAnswerForFollowUpQuestion(any(), any(), any())).thenReturn(new Answer(expectedAnswerText));
+//        when(pythonClientAdapter.getAnswerForFollowUpGameQuestion(any(), any(), any())).thenReturn(new Answer(expectedAnswerText));
 //
 //        // Act
 //        final ResultActions result = mockMvc.perform(post("/follow-up-question")
@@ -133,7 +133,7 @@ class ChatbotControllerIntegrationTest extends AbstractDatabaseTest {
 //        result.andExpect(status().isOk())
 //                .andExpect(jsonPath("$.text").value(expectedAnswerText));
 //
-//        verify(pythonClientAdapter).getAnswerForFollowUpQuestion(any(), any(), any());
+//        verify(pythonClientAdapter).getAnswerForFollowUpGameQuestion(any(), any(), any());
 //    }
 //
 //    @Test
@@ -151,7 +151,7 @@ class ChatbotControllerIntegrationTest extends AbstractDatabaseTest {
 //        QuestionDto questionDto = new QuestionDto("Tell me more about the game.");
 //        FollowUpQuestionDto followUpQuestionDto = new FollowUpQuestionDto(String.valueOf(gameId), questionDto);
 //
-//        when(pythonClientAdapter.getAnswerForFollowUpQuestion(any(), any(), any()))
+//        when(pythonClientAdapter.getAnswerForFollowUpGameQuestion(any(), any(), any()))
 //                .thenThrow(new PythonServiceException("An error occurred while calling the Python service."));
 //
 //        // Act

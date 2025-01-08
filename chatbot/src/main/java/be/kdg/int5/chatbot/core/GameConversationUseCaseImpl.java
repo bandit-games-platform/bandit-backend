@@ -72,7 +72,7 @@ public class GameConversationUseCaseImpl implements GameConversationUseCase {
         gameConversation.update(newQuestion);
         conversationSavePort.saveConversation(gameConversation);
 
-        final Answer answer = answerAskPort.getAnswerForFollowUpQuestion(gameDetails, previousQuestionWindowList, newQuestion);
+        final Answer answer = answerAskPort.getAnswerForFollowUpGameQuestion(gameDetails, previousQuestionWindowList, newQuestion);
         System.out.println(answer.text());
 
         newQuestion.update(answer);
@@ -84,6 +84,6 @@ public class GameConversationUseCaseImpl implements GameConversationUseCase {
 
     private Answer askChatbotForGameSummary(GameDetails gameDetails) {
         Question chatbotGameDescription = new Question(GameConversation.INITIAL_PROMPT, LocalDateTime.now(), true);
-        return answerAskPort.getAnswerForInitialQuestion(gameDetails, chatbotGameDescription);
+        return answerAskPort.getAnswerForInitialGameQuestion(gameDetails, chatbotGameDescription);
     }
 }
