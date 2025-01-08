@@ -348,6 +348,7 @@ deploy_rabbitmq_dev:
 
 
 # -------- MICROSERVICES --------- #
+
 deploy_chatbot_dev:
   image: mcr.microsoft.com/azure-cli
   stage: deploy
