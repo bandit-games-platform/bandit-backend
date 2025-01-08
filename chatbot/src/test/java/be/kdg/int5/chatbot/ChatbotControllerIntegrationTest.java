@@ -4,9 +4,14 @@ import be.kdg.int5.chatbot.adapters.in.dto.GameQuestionDto;
 import be.kdg.int5.chatbot.adapters.out.db.answer.AnswerJpaEntity;
 import be.kdg.int5.chatbot.adapters.out.db.conversation.ConversationJpaRepository;
 import be.kdg.int5.chatbot.adapters.out.db.conversation.GameConversationJpaEntity;
+import be.kdg.int5.chatbot.adapters.out.db.gameDetails.GameDetailsJpaEntity;
+import be.kdg.int5.chatbot.adapters.out.db.gameDetails.GameDetailsJpaRepository;
 import be.kdg.int5.chatbot.adapters.out.python.PythonClientAdapter;
 import be.kdg.int5.chatbot.adapters.out.db.question.QuestionJpaEntity;
 import be.kdg.int5.chatbot.domain.Answer;
+import be.kdg.int5.chatbot.domain.GameDetails;
+import be.kdg.int5.chatbot.domain.GameId;
+import be.kdg.int5.chatbot.domain.GameRule;
 import be.kdg.int5.common.exceptions.PythonServiceException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,6 +26,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -43,6 +50,9 @@ class ChatbotControllerIntegrationTest extends AbstractDatabaseTest {
     private ConversationJpaRepository conversationJpaRepository;
 
     @MockBean
+    private GameDetailsJpaRepository gameDetailsJpaRepository;
+
+    @MockBean
     private PythonClientAdapter pythonClientAdapter;
 
     private UUID userId;
@@ -58,9 +68,11 @@ class ChatbotControllerIntegrationTest extends AbstractDatabaseTest {
     void shouldReturnAnswerWhenUserStartsAConversation() throws Exception {
 
         // Arrange
+        GameDetailsJpaEntity gameDetailsJpa = new GameDetailsJpaEntity(UUID.randomUUID(), "My Game", "My Game Description", new HashSet<>(), null);
         GameQuestionDto initialQuestionDto = new GameQuestionDto(String.valueOf(gameId), "");
         String expectedAnswerText = "Here are the main rules of the game...";
 
+        when(gameDetailsJpaRepository.findByIdWithRelationships(any())).thenReturn(gameDetailsJpa);
         when(conversationJpaRepository.findGameConversationByUserIdAndGameIdWithQuestions(userId, gameId))
                 .thenReturn(null);
         when(pythonClientAdapter.getAnswerForInitialGameQuestion(any(), any())).thenReturn(new Answer(expectedAnswerText));
