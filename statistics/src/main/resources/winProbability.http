@@ -2,7 +2,7 @@
 POST https://keycloak.victoriousocean-73fa80ad.northeurope.azurecontainerapps.io/realms/bandit-realm/protocol/openid-connect/token  HTTP/1.1
 Content-Type: application/x-www-form-urlencoded
 
-client_id=bandit-backend&client_secret=t8IJhjO6lwIiE3g8RCogRmEa5DQylBXT&username=admin@email.com&password=admin&grant_type=password&scope=openid
+client_id=bandit-backend&client_secret=******&username=admin@email.com&password=admin&grant_type=password&scope=openid
 
 > {%client.global.set("logged-in-admin", response.body.access_token);%}
 
