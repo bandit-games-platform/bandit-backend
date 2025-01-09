@@ -7,6 +7,7 @@ import be.kdg.int5.player.port.out.PlayerUsernameLoadPort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -21,6 +22,11 @@ public class SearchForNewFriendsUseCaseImpl implements SearchForNewFriendsUseCas
     @Override
     @Transactional(readOnly = true)
     public List<Player> searchForNewFriends(SearchForNewFriendsCommand command) {
-        return playerUsernameLoadPort.loadSearchPlayersByUsernameExcludingFriends(command.username(), command.playerId());
+        List<Player> playerFriends = playerUsernameLoadPort.loadSearchPlayersByUsernameExcludingFriends(command.username(), command.playerId());
+
+        if (playerFriends == null) {
+            return new ArrayList<>();
+        }
+        return playerFriends;
     }
 }
