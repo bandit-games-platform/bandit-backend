@@ -4,8 +4,7 @@
 Roman Gordon, Boldizsár Olajos, Alli-smith Ayodeji, Inês da Costa Bastos, Dean Terneu
 
 
-Other repositories:
-- [Platform Backend](https://gitlab.com/kdg-ti/integration-5/2024-2025/team5/bandit-backend)
+### Other repositories:
 - [Platform Frontend](https://gitlab.com/kdg-ti/integration-5/2024-2025/team5/frontend)
 - [Flagship Battleship Game](https://gitlab.com/kdg-ti/integration-5/2024-2025/team5/games/battleship)
 - [Chatbot, Predictive Models and Recommender](https://gitlab.com/kdg-ti/integration-5/2024-2025/team5/data)
@@ -14,6 +13,6 @@ Other repositories:
 - [Secondary Game - Button Game](https://gitlab.com/kdg-ti/integration-5/2024-2025/team5/games/button-game)
 
 
-Documentaion:
+### Various Documentaion:
 - https://drive.google.com/drive/u/0/folders/1NvwGIZ9W2OBd8HLH_QEDfy3mQvPtBiEA
 
