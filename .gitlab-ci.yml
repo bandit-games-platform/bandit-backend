@@ -28,7 +28,7 @@ stages:
     - cd ./$CONTEXT_NAME
     - ../gradlew clean bootBuildImage --stacktrace
     - cd ..
-    - sleep 20
+    - sleep 30
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
     - if: $CI_COMMIT_BRANCH == 'ci-cd'
@@ -40,7 +40,7 @@ stages:
     - cd ./$CONTEXT_NAME
     - ../gradlew clean bootBuildImageProd --stacktrace
     - cd ..
-    - sleep 20
+    - sleep 30
   rules:
     - if: $CI_COMMIT_TAG
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
@@ -662,6 +662,7 @@ deploy_rabbitmq_prod:
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
     - chmod +x cicd/deploy-rabbitmq.sh
     - cicd/deploy-rabbitmq.sh "$serialized_map"
+    - sleep 20
   rules:
     - if: $CI_COMMIT_TAG
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH

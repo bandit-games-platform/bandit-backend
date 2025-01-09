@@ -12,13 +12,11 @@ public class StorefrontRabbitMQTopology {
 
     @Bean
     DirectExchange storefrontDirectExchange() {
-        System.out.println("StorefrontRabbitMQTopology Exchange loaded!");
         return new DirectExchange(STOREFRONT_DIRECT_EXCHANGE);
     }
 
     @Bean
     Queue orderCompletedQueue() {
-        System.out.println("StorefrontRabbitMQTopology Queue loaded!");
         return new Queue(ORDER_COMPLETED_QUEUE);
     }
 
