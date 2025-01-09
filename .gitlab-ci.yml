@@ -697,6 +697,7 @@ deploy_chatbot_prod:
       ["DB_INIT_MODE"]=$PROD_DB_INIT_MODE
       ["REG_USERNAME"]=$PROD_REGISTRY_USERNAME
       ["RABBIT_URL"]=$PROD_RABBIT_URL
+      ["FRONTEND_URL"]=$DEV_FRONTEND_URL
       ["PYTHON_URL"]=$PROD_PYTHON_URL
       ["SCALE_DOWN"]=false
       )
@@ -733,6 +734,7 @@ deploy_gameplay_prod:
       ["PORT"]=8093
       ["REG_USERNAME"]=$PROD_REGISTRY_USERNAME
       ["RABBIT_URL"]=$PROD_RABBIT_URL
+      ["FRONTEND_URL"]=$DEV_FRONTEND_URL
       ["DDL_PROD"]=$PROD_DDL_MODE
       ["DB_INIT_MODE"]=$PROD_DB_INIT_MODE
       ["SCALE_DOWN"]=false
@@ -773,6 +775,7 @@ deploy_game_registry_prod:
       ["DDL_PROD"]=$PROD_DDL_MODE
       ["DB_INIT_MODE"]=$PROD_DB_INIT_MODE
       ["KEYCLOAK_CLIENT_SECRET"]=$KEYCLOAK_GAME_REGISTRY_SECRET
+      ["FRONTEND_URL"]=$DEV_FRONTEND_URL
       ["SCALE_DOWN"]=false
       )
     - serialized_map=""
@@ -808,6 +811,7 @@ deploy_player_prod:
       ["PORT"]=8094
       ["REG_USERNAME"]=$PROD_REGISTRY_USERNAME
       ["RABBIT_URL"]=$PROD_RABBIT_URL
+      ["FRONTEND_URL"]=$DEV_FRONTEND_URL
       ["DDL_PROD"]=$PROD_DDL_MODE
       ["DB_INIT_MODE"]=$PROD_DB_INIT_MODE
       ["SCALE_DOWN"]=false
@@ -848,6 +852,7 @@ deploy_statistics_prod:
       ["DDL_PROD"]=$PROD_DDL_MODE
       ["DB_INIT_MODE"]=$PROD_DB_INIT_MODE
       ["GAME_REGISTRY_URL"]=$PROD_GAME_REGISTRY_URL
+      ["FRONTEND_URL"]=$DEV_FRONTEND_URL
       ["PYTHON_URL"]=$PROD_PYTHON_URL
       ["SCALE_DOWN"]=false
       )
