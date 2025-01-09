@@ -137,5 +137,6 @@ az containerapp ingress cors enable \
   --name $CONTAINER_NAME \
   --resource-group $RESOURCE_GROUP \
   --allowed-origins $FRONTEND_URL $PYTHON_URL \
+  --allowed-methods "*" \
   --allowed-headers Content-Type Authorization \
   --allow-credentials true
