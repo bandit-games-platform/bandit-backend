@@ -51,7 +51,7 @@ if [ -z "$RABBITMQ_EXISTS" ]; then
   az containerapp update \
     --name $CONTAINER_NAME \
     --resource-group $RESOURCE_GROUP \
-    --min-replicas 0 \
+    --min-replicas 1 \
     --max-replicas 1 \
     --cpu 0.5 \
     --memory 1Gi

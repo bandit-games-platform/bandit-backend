@@ -28,6 +28,7 @@ stages:
     - cd ./$CONTEXT_NAME
     - ../gradlew clean bootBuildImage --stacktrace
     - cd ..
+    - sleep 30
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
     - if: $CI_COMMIT_BRANCH == 'ci-cd'
@@ -39,6 +40,7 @@ stages:
     - cd ./$CONTEXT_NAME
     - ../gradlew clean bootBuildImageProd --stacktrace
     - cd ..
+    - sleep 30
   rules:
     - if: $CI_COMMIT_TAG
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
@@ -284,6 +286,7 @@ semgrep-sast:
         - '**/*.java'
 
 # ----------------------- DEPLOY ----------------------- #
+
 # ----------------- DEV ----------------- #
 # ---------- DATABASE, VNET and CONTAINER APP ENVIRONMENT -------- #
 deploy_postgres_and_vnet_dev:
@@ -309,7 +312,7 @@ deploy_postgres_and_vnet_dev:
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
     - chmod +x cicd/deploy-database-vnet.sh
     - cicd/deploy-database-vnet.sh "$serialized_map"
-  # This will only run when you commit to a merge request or to the ci-cd branch
+  # This will only run when you commit to a merge request or to the ci-cd branch.
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
     - if: $CI_COMMIT_BRANCH == 'ci-cd'
@@ -333,17 +336,20 @@ deploy_rabbitmq_dev:
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
     - chmod +x cicd/deploy-rabbitmq.sh
     - cicd/deploy-rabbitmq.sh "$serialized_map"
+    - sleep 20
   environment:
     name: rabbitmq-dev
     deployment_tier: testing
     action: start
-    auto_stop_in: 1 hours
+    auto_stop_in: 2 hours
     on_stop: destroy_rabbitmq_dev
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
     - if: $CI_COMMIT_BRANCH == 'ci-cd'
 
+
 # -------- MICROSERVICES --------- #
+
 deploy_chatbot_dev:
   image: mcr.microsoft.com/azure-cli
   stage: deploy
@@ -352,10 +358,10 @@ deploy_chatbot_dev:
     - deploy_postgres_and_vnet_dev
     - build_chatbot_dev
     - deploy_rabbitmq_dev
+    - deploy_game_registry_dev
   before_script:
     - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
     - az extension add --name containerapp --upgrade
-    - sleep 20
   script:
     - declare -A value_map=(
       ["PG_USER"]=$DEV_PG_USER
@@ -368,6 +374,7 @@ deploy_chatbot_dev:
       ["PORT"]=8091
       ["REG_USERNAME"]=$REGISTRY_USERNAME
       ["RABBIT_URL"]=$DEV_RABBIT_URL
+      ["FRONTEND_URL"]=$DEV_FRONTEND_URL
       ["PYTHON_URL"]=$DEV_PYTHON_URL
       ["SCALE_DOWN"]=false
       )
@@ -379,7 +386,7 @@ deploy_chatbot_dev:
     name: chatbot-dev
     deployment_tier: testing
     action: start
-    auto_stop_in: 1 hours
+    auto_stop_in: 2 hours
     on_stop: destroy_chatbot_dev
   # This will only run when you commit to a merge request or to the ci-cd branch
   rules:
@@ -395,6 +402,7 @@ deploy_gameplay_dev:
     - deploy_postgres_and_vnet_dev
     - build_gameplay_dev
     - deploy_rabbitmq_dev
+    - deploy_game_registry_dev
   before_script:
     - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
     - az extension add --name containerapp --upgrade
@@ -410,6 +418,7 @@ deploy_gameplay_dev:
       ["PORT"]=8093
       ["REG_USERNAME"]=$REGISTRY_USERNAME
       ["RABBIT_URL"]=$DEV_RABBIT_URL
+      ["FRONTEND_URL"]=$DEV_FRONTEND_URL
       ["SCALE_DOWN"]=false
       )
     - serialized_map=""
@@ -420,7 +429,7 @@ deploy_gameplay_dev:
     name: gameplay-dev
     deployment_tier: testing
     action: start
-    auto_stop_in: 1 hours
+    auto_stop_in: 2 hours
     on_stop: destroy_gameplay_dev
   # This will only run when you commit to a merge request or to the ci-cd branch
   rules:
@@ -452,6 +461,7 @@ deploy_game_registry_dev:
       ["REG_USERNAME"]=$REGISTRY_USERNAME
       ["RABBIT_URL"]=$DEV_RABBIT_URL
       ["KEYCLOAK_CLIENT_SECRET"]=$KEYCLOAK_GAME_REGISTRY_SECRET
+      ["FRONTEND_URL"]=$DEV_FRONTEND_URL
       ["SCALE_DOWN"]=false
       )
     - serialized_map=""
@@ -462,7 +472,7 @@ deploy_game_registry_dev:
     name: game-registry-dev
     deployment_tier: testing
     action: start
-    auto_stop_in: 1 hours
+    auto_stop_in: 2 hours
     on_stop: destroy_game_registry_dev
   # This will only run when you commit to a merge request or to the ci-cd branch
   rules:
@@ -478,6 +488,7 @@ deploy_player_dev:
     - deploy_postgres_and_vnet_dev
     - build_player_dev
     - deploy_rabbitmq_dev
+    - deploy_game_registry_dev
   before_script:
     - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
     - az extension add --name containerapp --upgrade
@@ -493,6 +504,7 @@ deploy_player_dev:
       ["PORT"]=8094
       ["REG_USERNAME"]=$REGISTRY_USERNAME
       ["RABBIT_URL"]=$DEV_RABBIT_URL
+      ["FRONTEND_URL"]=$DEV_FRONTEND_URL
       ["SCALE_DOWN"]=false
       )
     - serialized_map=""
@@ -503,7 +515,7 @@ deploy_player_dev:
     name: player-dev
     deployment_tier: testing
     action: start
-    auto_stop_in: 1 hours
+    auto_stop_in: 2 hours
     on_stop: destroy_player_dev
   # This will only run when you commit to a merge request or to the ci-cd branch
   rules:
@@ -519,24 +531,26 @@ deploy_statistics_dev:
     - deploy_postgres_and_vnet_dev
     - build_statistics_dev
     - deploy_rabbitmq_dev
+    - deploy_game_registry_dev
   before_script:
     - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
     - az extension add --name containerapp --upgrade
   script:
     - declare -A value_map=(
-      ["PG_USER"]=$DEV_PG_USER 
-      ["PG_PASSWORD"]=$DEV_PG_PWD 
-      ["PG_DB_NAME"]="banditdevpostgres" 
-      ["RESOURCE_GROUP"]="rg_bandit_games_dev" 
-      ["CONTAINER_NAME"]="statistics-dev-container" 
+      ["PG_USER"]=$DEV_PG_USER
+      ["PG_PASSWORD"]=$DEV_PG_PWD
+      ["PG_DB_NAME"]="banditdevpostgres"
+      ["RESOURCE_GROUP"]="rg_bandit_games_dev"
+      ["CONTAINER_NAME"]="statistics-dev-container"
       ["ENVIRONMENT"]="env-dev-containers"
       ["IMAGE_NAME"]="statistics-context"
       ["PORT"]=8095
       ["REG_USERNAME"]=$REGISTRY_USERNAME
       ["RABBIT_URL"]=$DEV_RABBIT_URL
       ["GAME_REGISTRY_URL"]=$DEV_GAME_REGISTRY_URL
+      ["FRONTEND_URL"]=$DEV_FRONTEND_URL
+      ["PYTHON_URL"]=$PROD_PYTHON_URL
       ["SCALE_DOWN"]=false
-      ["PYTHON_URL"]=$DEV_PYTHON_URL
       )
     - serialized_map=""
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
@@ -546,7 +560,7 @@ deploy_statistics_dev:
     name: statistics-dev
     deployment_tier: testing
     action: start
-    auto_stop_in: 1 hours
+    auto_stop_in: 2 hours
     on_stop: destroy_statistics_dev
   # This will only run when you commit to a merge request or to the ci-cd branch
   rules:
@@ -562,6 +576,7 @@ deploy_storefront_dev:
     - deploy_postgres_and_vnet_dev
     - build_storefront_dev
     - deploy_rabbitmq_dev
+    - deploy_game_registry_dev
   before_script:
     - az login --service-principal -u $DEV_AZURE_APP_ID -p $DEV_AZURE_PASSWORD --tenant $DEV_AZURE_TENANT
     - az extension add --name containerapp --upgrade
@@ -580,8 +595,8 @@ deploy_storefront_dev:
       ["GAME_REGISTRY_URL"]=$DEV_GAME_REGISTRY_URL
       ["FRONTEND_URL"]=$DEV_FRONTEND_URL
       ["STRIPE_API_KEY"]=$STRIPE_TEST_API_KEY
-      ["SCALE_DOWN"]=false
       ["PYTHON_URL"]=$DEV_PYTHON_URL
+      ["SCALE_DOWN"]=false
       )
     - serialized_map=""
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
@@ -591,12 +606,13 @@ deploy_storefront_dev:
     name: storefront-dev
     deployment_tier: testing
     action: start
-    auto_stop_in: 1 hours
+    auto_stop_in: 2 hours
     on_stop: destroy_storefront_dev
   # This will only run when you commit to a merge request or to the ci-cd branch
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
     - if: $CI_COMMIT_BRANCH == 'ci-cd'
+
 
 # ----------------- PROD ---------------- #
 # ---------- DATABASE, VNET and CONTAINER APP ENVIRONMENT -------- #
@@ -647,10 +663,12 @@ deploy_rabbitmq_prod:
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
     - chmod +x cicd/deploy-rabbitmq.sh
     - cicd/deploy-rabbitmq.sh "$serialized_map"
+    - sleep 20
   rules:
     - if: $CI_COMMIT_TAG
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
     - if: $CI_COMMIT_BRANCH == 'prod'
+
 
 # -------- MICROSERVICES --------- #
 deploy_chatbot_prod:
@@ -680,6 +698,7 @@ deploy_chatbot_prod:
       ["REG_USERNAME"]=$PROD_REGISTRY_USERNAME
       ["RABBIT_URL"]=$PROD_RABBIT_URL
       ["PYTHON_URL"]=$PROD_PYTHON_URL
+      ["SCALE_DOWN"]=false
       )
     - serialized_map=""
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
@@ -716,6 +735,7 @@ deploy_gameplay_prod:
       ["RABBIT_URL"]=$PROD_RABBIT_URL
       ["DDL_PROD"]=$PROD_DDL_MODE
       ["DB_INIT_MODE"]=$PROD_DB_INIT_MODE
+      ["SCALE_DOWN"]=false
       )
     - serialized_map=""
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
@@ -753,6 +773,7 @@ deploy_game_registry_prod:
       ["DDL_PROD"]=$PROD_DDL_MODE
       ["DB_INIT_MODE"]=$PROD_DB_INIT_MODE
       ["KEYCLOAK_CLIENT_SECRET"]=$KEYCLOAK_GAME_REGISTRY_SECRET
+      ["SCALE_DOWN"]=false
       )
     - serialized_map=""
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
@@ -789,6 +810,7 @@ deploy_player_prod:
       ["RABBIT_URL"]=$PROD_RABBIT_URL
       ["DDL_PROD"]=$PROD_DDL_MODE
       ["DB_INIT_MODE"]=$PROD_DB_INIT_MODE
+      ["SCALE_DOWN"]=false
       )
     - serialized_map=""
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
@@ -827,6 +849,7 @@ deploy_statistics_prod:
       ["DB_INIT_MODE"]=$PROD_DB_INIT_MODE
       ["GAME_REGISTRY_URL"]=$PROD_GAME_REGISTRY_URL
       ["PYTHON_URL"]=$PROD_PYTHON_URL
+      ["SCALE_DOWN"]=false
       )
     - serialized_map=""
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
@@ -867,6 +890,7 @@ deploy_storefront_prod:
       ["FRONTEND_URL"]=$PROD_FRONTEND_URL
       ["STRIPE_API_KEY"]=$STRIPE_TEST_API_KEY
       ["PYTHON_URL"]=$PROD_PYTHON_URL
+      ["SCALE_DOWN"]=false
       )
     - serialized_map=""
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done
