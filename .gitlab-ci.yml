@@ -341,7 +341,7 @@ deploy_rabbitmq_dev:
     name: rabbitmq-dev
     deployment_tier: testing
     action: start
-    auto_stop_in: 3 hours
+    auto_stop_in: 2 hours
     on_stop: destroy_rabbitmq_dev
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
@@ -386,7 +386,7 @@ deploy_chatbot_dev:
     name: chatbot-dev
     deployment_tier: testing
     action: start
-    auto_stop_in: 3 hours
+    auto_stop_in: 2 hours
     on_stop: destroy_chatbot_dev
   # This will only run when you commit to a merge request or to the ci-cd branch
   rules:
@@ -429,7 +429,7 @@ deploy_gameplay_dev:
     name: gameplay-dev
     deployment_tier: testing
     action: start
-    auto_stop_in: 3 hours
+    auto_stop_in: 2 hours
     on_stop: destroy_gameplay_dev
   # This will only run when you commit to a merge request or to the ci-cd branch
   rules:
@@ -472,7 +472,7 @@ deploy_game_registry_dev:
     name: game-registry-dev
     deployment_tier: testing
     action: start
-    auto_stop_in: 3 hours
+    auto_stop_in: 2 hours
     on_stop: destroy_game_registry_dev
   # This will only run when you commit to a merge request or to the ci-cd branch
   rules:
@@ -515,7 +515,7 @@ deploy_player_dev:
     name: player-dev
     deployment_tier: testing
     action: start
-    auto_stop_in: 3 hours
+    auto_stop_in: 2 hours
     on_stop: destroy_player_dev
   # This will only run when you commit to a merge request or to the ci-cd branch
   rules:
@@ -559,7 +559,7 @@ deploy_statistics_dev:
     name: statistics-dev
     deployment_tier: testing
     action: start
-    auto_stop_in: 3 hours
+    auto_stop_in: 2 hours
     on_stop: destroy_statistics_dev
   # This will only run when you commit to a merge request or to the ci-cd branch
   rules:
@@ -605,7 +605,7 @@ deploy_storefront_dev:
     name: storefront-dev
     deployment_tier: testing
     action: start
-    auto_stop_in: 3 hours
+    auto_stop_in: 2 hours
     on_stop: destroy_storefront_dev
   # This will only run when you commit to a merge request or to the ci-cd branch
   rules:
