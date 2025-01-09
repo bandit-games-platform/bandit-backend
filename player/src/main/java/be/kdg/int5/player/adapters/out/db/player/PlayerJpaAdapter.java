@@ -24,6 +24,7 @@ public class PlayerJpaAdapter implements PlayerCreatePort, PlayerLoadPort, Playe
     @Override
     public void createPlayer(Player player) {
         PlayerJpaEntity playerJpaEntity = new PlayerJpaEntity(player.getId().uuid(), player.getJoinDate(), player.getDisplayName());
+        playerJpaEntity.setAvatar(new ImageResourceJpaEmbed(player.getAvatar().url().url()));
         playerJpaRepository.save(playerJpaEntity);
     }
 
