@@ -6,9 +6,7 @@ VALUES ('272c3f85-79db-4b6f-a20e-5d1c12e0e5b3', '2024-09-10 11:30', 'Dean', 'BEL
        ('d7d4c8ca-5c72-4728-9925-8e313ded5edc', '2024-12-02 02:07', 'Smith', 'NIGERIA', 'https://upload.wikimedia.org/wikipedia/commons/d/dc/RP-1_.jpg'),
        ('d7f9b8e3-3c4f-4b9f-8d7e-e1c0f4a7b901', '2024-12-02 02:07', 'BoldInYourFace', 'HUNGARY', 'https://cdn-icons-png.flaticon.com/512/3393/3393852.png'),
        ('94dad160-f5c8-4817-8f2d-611e1436ffcd', '2024-12-02 02:07', 'GeekInês418', 'PORTUGAL', 'https://cdn-icons-png.flaticon.com/512/1985/1985783.png'),
-       ('8449ba7c-194c-4e51-b060-cd88cc498836', '2024-12-02 02:07', 'SmithTheDebtCollector', 'NIGERIA', 'https://cdn-icons-png.flaticon.com/512/6111/6111637.png');
-
-
+       ('8449ba7c-194c-4e51-b060-cd88cc498836', '2024-12-02 02:07', 'DebtCollector', 'NIGERIA', 'https://cdn-icons-png.flaticon.com/512/6111/6111637.png');
 
 INSERT INTO player.player_library (player_id)
 VALUES ('cd281b11-e41e-4f12-93c8-1e9a8bf7403c'),
