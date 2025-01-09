@@ -679,6 +679,7 @@ deploy_chatbot_prod:
     - deploy_postgres_and_vnet_prod
     - build_chatbot_prod
     - deploy_rabbitmq_prod
+    - deploy_game_registry_prod
   before_script:
     - az login --service-principal -u $PROD_AZURE_APP_ID -p $PROD_AZURE_PASSWORD --tenant $PROD_AZURE_TENANT
     - az extension add --name containerapp --upgrade
@@ -718,6 +719,7 @@ deploy_gameplay_prod:
     - deploy_postgres_and_vnet_prod
     - build_gameplay_prod
     - deploy_rabbitmq_prod
+    - deploy_game_registry_prod
   before_script:
     - az login --service-principal -u $PROD_AZURE_APP_ID -p $PROD_AZURE_PASSWORD --tenant $PROD_AZURE_TENANT
     - az extension add --name containerapp --upgrade
@@ -795,6 +797,7 @@ deploy_player_prod:
     - deploy_postgres_and_vnet_prod
     - build_player_prod
     - deploy_rabbitmq_prod
+    - deploy_game_registry_prod
   before_script:
     - az login --service-principal -u $PROD_AZURE_APP_ID -p $PROD_AZURE_PASSWORD --tenant $PROD_AZURE_TENANT
     - az extension add --name containerapp --upgrade
@@ -833,6 +836,7 @@ deploy_statistics_prod:
     - deploy_postgres_and_vnet_prod
     - build_statistics_prod
     - deploy_rabbitmq_prod
+    - deploy_game_registry_prod
   before_script:
     - az login --service-principal -u $PROD_AZURE_APP_ID -p $PROD_AZURE_PASSWORD --tenant $PROD_AZURE_TENANT
     - az extension add --name containerapp --upgrade
@@ -873,6 +877,7 @@ deploy_storefront_prod:
     - deploy_postgres_and_vnet_prod
     - build_storefront_prod
     - deploy_rabbitmq_prod
+    - deploy_game_registry_prod
   before_script:
     - az login --service-principal -u $PROD_AZURE_APP_ID -p $PROD_AZURE_PASSWORD --tenant $PROD_AZURE_TENANT
     - az extension add --name containerapp --upgrade
