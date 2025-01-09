@@ -3,6 +3,7 @@ package be.kdg.int5.statistics.utils;
 import be.kdg.int5.statistics.domain.PlayerGameStats;
 import org.springframework.stereotype.Component;
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class CSVGeneratorUtil {
@@ -20,25 +21,28 @@ public class CSVGeneratorUtil {
         StringBuilder csvBuilder = new StringBuilder();
         appendLine(csvBuilder, CSV_HEADER_COMPLETED_SESSIONS);
 
-        playerGameStatsList.forEach(playerGameStats -> {
-            playerGameStats.getCompletedSessions().forEach(session -> {
-                appendLine(csvBuilder, new String[]{
-                        playerGameStats.getGameId().uuid().toString(),
-                        playerGameStats.getPlayerId().uuid().toString(),
-                        session.getSessionId().uuid().toString(),
-                        session.getStartTime().toString(),
-                        session.getEndTime().toString(),
-                        session.getEndState().name(),
-                        String.valueOf(session.getTurnsTaken()),
-                        String.valueOf(session.getAvgSecondsPerTurn()),
-                        session.getPlayerScore() != null ? session.getPlayerScore().toString() : "",
-                        session.getOpponentScore() != null ? session.getOpponentScore().toString() : "",
-                        session.getClicks() != null ? session.getClicks().toString() : "",
-                        session.getCharacter() != null ? session.getCharacter() : "",
-                        String.valueOf(session.getWasFirstToGo())
+        playerGameStatsList.stream()
+                .filter(Objects::nonNull)
+                .filter(playerGameStats -> playerGameStats.getCompletedSessions() != null)
+                .forEach(playerGameStats -> {
+                    playerGameStats.getCompletedSessions().forEach(session -> {
+                        appendLine(csvBuilder, new String[]{
+                                playerGameStats.getGameId().uuid().toString(),
+                                playerGameStats.getPlayerId().uuid().toString(),
+                                session.getSessionId().uuid().toString(),
+                                session.getStartTime().toString(),
+                                session.getEndTime().toString(),
+                                session.getEndState().name(),
+                                String.valueOf(session.getTurnsTaken()),
+                                String.valueOf(session.getAvgSecondsPerTurn()),
+                                session.getPlayerScore() != null ? session.getPlayerScore().toString() : "",
+                                session.getOpponentScore() != null ? session.getOpponentScore().toString() : "",
+                                session.getClicks() != null ? session.getClicks().toString() : "",
+                                session.getCharacter() != null ? session.getCharacter() : "",
+                                String.valueOf(session.getWasFirstToGo())
+                        });
+                    });
                 });
-            });
-        });
         return csvBuilder.toString();
     }
 
@@ -46,16 +50,19 @@ public class CSVGeneratorUtil {
         StringBuilder csvBuilder = new StringBuilder();
         appendLine(csvBuilder, CSV_HEADER_ACHIEVEMENT_PROGRESS);
 
-        playerGameStatsList.forEach(playerGameStats -> {
-            playerGameStats.getAchievementProgressSet().forEach(ap -> {
-                appendLine(csvBuilder, new String[]{
-                        playerGameStats.getGameId().uuid().toString(),
-                        playerGameStats.getPlayerId().uuid().toString(),
-                        ap.getAchievementId().uuid().toString(),
-                        String.valueOf(ap.getCounterValue())
+        playerGameStatsList.stream()
+                .filter(Objects::nonNull)
+                .filter(playerGameStats -> playerGameStats.getAchievementProgressSet() != null)
+                .forEach(playerGameStats -> {
+                    playerGameStats.getAchievementProgressSet().forEach(ap -> {
+                        appendLine(csvBuilder, new String[]{
+                                playerGameStats.getGameId().uuid().toString(),
+                                playerGameStats.getPlayerId().uuid().toString(),
+                                ap.getAchievementId().uuid().toString(),
+                                String.valueOf(ap.getCounterValue())
+                        });
+                    });
                 });
-            });
-        });
         return csvBuilder.toString();
     }
 
