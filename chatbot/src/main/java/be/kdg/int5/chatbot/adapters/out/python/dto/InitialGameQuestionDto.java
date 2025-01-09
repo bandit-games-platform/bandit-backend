@@ -1,13 +1,13 @@
 package be.kdg.int5.chatbot.adapters.out.python.dto;
 
-public class InitialQuestionDto {
+public class InitialGameQuestionDto {
     private String initialPrompt;
     private GameDetailsDto gameDetailsDto;
 
-    public InitialQuestionDto() {
+    public InitialGameQuestionDto() {
     }
 
-    public InitialQuestionDto(String initialPrompt, GameDetailsDto gameDetailsDto) {
+    public InitialGameQuestionDto(String initialPrompt, GameDetailsDto gameDetailsDto) {
         this.initialPrompt = initialPrompt;
         this.gameDetailsDto = gameDetailsDto;
     }

@@ -752,7 +752,7 @@ deploy_game_registry_prod:
       ["RABBIT_URL"]=$PROD_RABBIT_URL
       ["DDL_PROD"]=$PROD_DDL_MODE
       ["DB_INIT_MODE"]=$PROD_DB_INIT_MODE
-      ["KEYCLOAK_CLIENT_SECRET"]=$KEYCLOAK_BACKEND_SECRET
+      ["KEYCLOAK_CLIENT_SECRET"]=$KEYCLOAK_GAME_REGISTRY_SECRET
       )
     - serialized_map=""
     - for key in "${!value_map[@]}"; do serialized_map+="$key=${value_map[$key]} "; done

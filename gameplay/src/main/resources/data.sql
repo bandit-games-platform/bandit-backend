@@ -1,6 +1,6 @@
 
 INSERT INTO gameplay.game_developer (developer_id, game_id, game_title)
-VALUES ('2c1784ca-edf0-4882-994d-23473e30f776','d77e1d1f-6b46-4c89-9290-3b9cf8a7c001', 'Battleship'),
+VALUES ('2c1784ca-edf0-4882-994d-23473e30f776','d77e1d1f-6b46-4c89-9290-3b9cf8a7c001', 'Legacy Battleship'),
        ('2c1784ca-edf0-4882-994d-23473e30f776','d77e1d1f-6b46-4c89-9290-3b9cf8a7c002', 'Chess');
 
 INSERT INTO gameplay.lobby (closed, current_player_count, max_players, game_id, id, owner_id)

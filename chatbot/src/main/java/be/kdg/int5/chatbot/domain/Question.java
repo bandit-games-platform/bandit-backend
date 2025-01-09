@@ -10,13 +10,13 @@ public class Question {
     private Answer answer;
 
     public Question(String text, LocalDateTime submittedAt, boolean isInitial) {
-        this.text = Objects.requireNonNull(text);
-        this.submittedAt = Objects.requireNonNull(submittedAt);
-        this.isInitial = isInitial;
+        this(text, submittedAt, isInitial, null);
     }
 
     public Question(String text, LocalDateTime submittedAt, boolean isInitial, Answer answer) {
-        this(text, submittedAt, isInitial);
+        this.text = Objects.requireNonNull(text);
+        this.submittedAt = Objects.requireNonNull(submittedAt);
+        this.isInitial = isInitial;
         this.answer = answer;
     }
 

@@ -16,6 +16,8 @@ public class GameDetailsJpaEntity {
     private String description;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "gameDetails")
     private Set<GameRuleJpaEntity> gameRules;
+    @Column(length = 10000)
+    private String summary;
 
     public GameDetailsJpaEntity() {
     }
@@ -26,11 +28,12 @@ public class GameDetailsJpaEntity {
         this.description = description;
     }
 
-    public GameDetailsJpaEntity(UUID gameId, String title, String description, Set<GameRuleJpaEntity> gameRules) {
+    public GameDetailsJpaEntity(UUID gameId, String title, String description, Set<GameRuleJpaEntity> gameRules, String summary) {
         this.gameId = gameId;
         this.title = title;
         this.description = description;
         this.gameRules = gameRules;
+        this.summary = summary;
     }
 
     public UUID getGameId() {
@@ -63,5 +66,13 @@ public class GameDetailsJpaEntity {
 
     public void setGameRules(Set<GameRuleJpaEntity> gameRules) {
         this.gameRules = gameRules;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
     }
 }
