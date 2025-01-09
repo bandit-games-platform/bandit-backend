@@ -41,5 +41,4 @@ INSERT INTO player.friend_invite_status (time_of_invite, id, invited_id, inviter
 VALUES
     ('2024-12-02 10:30:00', 'fba3f186-8351-4cac-83d4-c1a58ae6cf81', '272c3f85-79db-4b6f-a20e-5d1c12e0e5b3', 'd7d4c8ca-5c72-4728-9925-8e313ded5edc', 'PENDING'),
     ('2024-12-02 09:30:00', 'fba3f186-8351-4cac-83d4-c1a58ae6cf83', 'd7d4c8ca-5c72-4728-9925-8e313ded5edc', '6ca3863d-d8db-4588-b799-704fdb267814', 'PENDING'),
-    ('2024-12-02 09:30:00', 'fba3f186-8351-4cac-83d4-c1a58ae6cf84', 'd7d4c8ca-5c72-4728-9925-8e313ded5edc', 'cd281b11-e41e-4f12-93c8-1e9a8bf7403c', 'PENDING'),
     ('2024-12-02 09:30:00', 'fba3f186-8351-4cac-83d4-c1a58ae6cf86', 'cd281b11-e41e-4f12-93c8-1e9a8bf7403c', 'd7d4c8ca-5c72-4728-9925-8e313ded5edc', 'PENDING');
