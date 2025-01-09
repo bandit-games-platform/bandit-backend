@@ -549,6 +549,7 @@ deploy_statistics_dev:
       ["RABBIT_URL"]=$DEV_RABBIT_URL
       ["GAME_REGISTRY_URL"]=$DEV_GAME_REGISTRY_URL
       ["FRONTEND_URL"]=$DEV_FRONTEND_URL
+      ["PYTHON_URL"]=$PROD_PYTHON_URL
       ["SCALE_DOWN"]=false
       )
     - serialized_map=""
@@ -847,6 +848,7 @@ deploy_statistics_prod:
       ["DDL_PROD"]=$PROD_DDL_MODE
       ["DB_INIT_MODE"]=$PROD_DB_INIT_MODE
       ["GAME_REGISTRY_URL"]=$PROD_GAME_REGISTRY_URL
+      ["PYTHON_URL"]=$PROD_PYTHON_URL
       ["SCALE_DOWN"]=false
       )
     - serialized_map=""
