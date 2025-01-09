@@ -33,8 +33,6 @@ VALUES ('e3d12a4f-4b9f-8c0e-d05b-c3f4b7e1d001', 'a1f65dfc-2b4f-4e10-bd0f-33d1b05
        ('c63704ae-f6bc-4a26-bfd3-3ab890bcd159', '3eaf18ca-2089-354f-81b4-6d0df2622207',
         'd7d4c8ca-5c72-4728-9925-8e313ded5edc', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c002', 25);
 
-
-
 INSERT INTO statistics.completed_game_sessions (session_id, start_time, end_time, end_state, turns_taken,
                                                 avg_seconds_per_turn,
                                                 player_score, opponent_score, clicks, character, was_first_to_go,
@@ -113,7 +111,6 @@ VALUES ('e1911462-023d-494b-ac70-f61e4ec194c1', '2024-11-01 10:00:00', '2024-11-
         60, 87, null, false, '8449ba7c-194c-4e51-b060-cd88cc498836', 'b6572f1b-cd36-3ebb-b292-6cfd0b92f8e9'),
        ('e2411462-023d-494b-ac70-f61e4ec195c2', '2024-11-01 10:00:00', '2024-11-01 10:30:00', 'WIN', 23, 15.5, 100, 56,
         64, null, true, '8449ba7c-194c-4e51-b060-cd88cc498836', 'b6572f1b-cd36-3ebb-b292-6cfd0b92f8e9');
-
 
 INSERT INTO statistics.completed_game_sessions (session_id, start_time, end_time, end_state, turns_taken,
                                                 avg_seconds_per_turn,
