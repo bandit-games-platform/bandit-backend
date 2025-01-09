@@ -1,7 +1,5 @@
 package be.kdg.int5.chatbot.adapters.in.dto;
 
-import be.kdg.int5.chatbot.domain.Answer;
-
 import java.time.LocalDateTime;
 
 public class LoadQuestionDto {

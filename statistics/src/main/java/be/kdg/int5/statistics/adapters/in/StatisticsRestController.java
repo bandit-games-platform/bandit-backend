@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -68,8 +69,8 @@ public class StatisticsRestController {
 
         if (playerGameStats != null && !playerGameStats.isEmpty()) {
             Set<PlayerIdDto> playerIdDtos = playerGameStats.stream()
+                    .filter(Objects::nonNull)
                     .map(stats -> new PlayerIdDto(stats.getPlayerId().uuid()))
-
                     .collect(Collectors.toSet());
             return ResponseEntity.ok(playerIdDtos);
         }

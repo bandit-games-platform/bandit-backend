@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class PlatformConversation extends Conversation {
-    private static final String PLATFORM_DESCRIPTION = "Something or other";
+    private static final String INITIAL_PROMPT = "Welcome to the chatroom!";
     private String currentPage;
 
     public PlatformConversation(UserId userId, String currentPage) {
@@ -34,7 +34,7 @@ public class PlatformConversation extends Conversation {
         LocalDateTime submittedAt = LocalDateTime.now();
         this.setLastMessageTime(submittedAt);
         return new Question(
-                "Welcome to the chatroom!",
+                INITIAL_PROMPT,
                 submittedAt,
                 true,
                 new Answer("Hello and welcome to the platform, I am here to help you navigate around!")

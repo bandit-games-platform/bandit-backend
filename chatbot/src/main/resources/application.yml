@@ -1,8 +1,15 @@
+logging:
+  level:
+    org.springframework.amqp: DEBUG
+    org.springframework.rabbitmq: DEBUG
+    org.springframework.amqp.rabbit: DEBUG
+    org.springframework.amqp.rabbit.connection: DEBUG
+    org.springframework.amqp.rabbit.core: DEBUG
+
 server:
   port: ${PORT:8091}
   servlet:
     context-path: /chatbot
-
 
 spring:
   sql:

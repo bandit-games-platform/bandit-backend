@@ -37,7 +37,8 @@ public class GameDetailsJpaAdapter implements GameDetailsLoadPort, GameDetailsSa
                 new GameId(gameDetailsJpa.getGameId()),
                 gameDetailsJpa.getTitle(),
                 gameDetailsJpa.getDescription(),
-                gameRules
+                gameRules,
+                gameDetailsJpa.getSummary()
         );
     }
 
@@ -96,6 +97,7 @@ public class GameDetailsJpaAdapter implements GameDetailsLoadPort, GameDetailsSa
         gameDetailsJpaEntity.setGameRules(gameRuleJpaEntities);
         gameDetailsJpaEntity.setTitle(gameDetails.getTitle());
         gameDetailsJpaEntity.setDescription(gameDetails.getDescription());
+        gameDetailsJpaEntity.setSummary(gameDetails.getSummary());
 
         gameDetailsJpaRepository.save(gameDetailsJpaEntity);
     }
