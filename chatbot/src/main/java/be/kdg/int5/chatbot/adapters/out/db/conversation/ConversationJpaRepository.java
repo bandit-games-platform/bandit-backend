@@ -15,7 +15,7 @@ public interface ConversationJpaRepository extends JpaRepository<ConversationJpa
             WHERE g.userId = :userId
             AND g.gameId = :gameId
             """)
-    GameConversationJpaEntity findByUserIdAndGameIdWithQuestions(UUID userId, UUID gameId);
+    GameConversationJpaEntity findGameConversationByUserIdAndGameIdWithQuestions(UUID userId, UUID gameId);
 
     @Query("""
             SELECT g FROM ConversationJpaEntity g

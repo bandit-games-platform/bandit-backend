@@ -24,9 +24,6 @@ VALUES
     ('29242f25-1438-49a2-84ca-1cbd285fba30', '28172f39-8abc-3499-819f-edc22a116468', 'd7d4c8ca-5c72-4728-9925-8e313ded5edc', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c001', 4),
     ('c63704ae-f6bc-4a26-bfd3-3ab890bcd159', '3eaf18ca-2089-354f-81b4-6d0df2622207', 'd7d4c8ca-5c72-4728-9925-8e313ded5edc', 'd77e1d1f-6b46-4c89-9290-3b9cf8a7c002', 25);
 
-
-
-
 INSERT INTO statistics.completed_game_sessions (
     session_id, start_time, end_time, end_state, turns_taken, avg_seconds_per_turn,
     player_score, opponent_score, clicks, character, was_first_to_go, player_id, game_id

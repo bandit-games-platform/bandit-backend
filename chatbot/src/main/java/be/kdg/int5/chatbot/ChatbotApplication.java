@@ -12,8 +12,4 @@ public class ChatbotApplication {
         SpringApplication.run(ChatbotApplication.class, args);
     }
 
-    @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
-    }
 }

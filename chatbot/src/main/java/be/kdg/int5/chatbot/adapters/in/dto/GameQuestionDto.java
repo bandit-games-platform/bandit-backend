@@ -2,16 +2,16 @@ package be.kdg.int5.chatbot.adapters.in.dto;
 
 import jakarta.validation.constraints.NotNull;
 
-public class FollowUpQuestionDto {
+public class GameQuestionDto {
     @NotNull
     private String gameId;
     @NotNull
-    private QuestionDto question;
+    private String question;
 
-    public FollowUpQuestionDto() {
+    public GameQuestionDto() {
     }
 
-    public FollowUpQuestionDto(String gameId, QuestionDto question) {
+    public GameQuestionDto(String gameId, String question) {
         this.gameId = gameId;
         this.question = question;
     }
@@ -24,11 +24,11 @@ public class FollowUpQuestionDto {
         this.gameId = gameId;
     }
 
-    public QuestionDto getQuestion() {
+    public String getQuestion() {
         return question;
     }
 
-    public void setQuestion(QuestionDto question) {
+    public void setQuestion(String question) {
         this.question = question;
     }
 }
