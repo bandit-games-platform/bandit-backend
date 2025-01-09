@@ -46,6 +46,7 @@ public class PlayerFriendsJpaAdapter implements PlayerUsernameLoadPort, FriendsL
         // Filter the players to exclude any that are already friends
         return playerJpaEntities.stream()
                 .map(this::playerJpaToDomain)
+                .filter(player -> player.getId() != playerId)
                 .filter(player -> friends == null || friends.stream().noneMatch(friend -> friend.getId().equals(player.getId())))
                 .toList();
     }
