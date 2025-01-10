@@ -14,8 +14,12 @@ public interface ConversationJpaRepository extends JpaRepository<ConversationJpa
             JOIN FETCH q.answer a
             WHERE g.userId = :userId
             AND g.gameId = :gameId
+            AND g.startTime = (
+                SELECT MAX(gc.startTime) FROM GameConversationJpaEntity gc
+                WHERE gc.userId = :userId
+     )
             """)
-    GameConversationJpaEntity findGameConversationByUserIdAndGameIdWithQuestions(UUID userId, UUID gameId);
+    GameConversationJpaEntity findGameConversationByUserIdAndGameIdAndLatestStartTime(UUID userId, UUID gameId);
 
     @Query("""
             SELECT g FROM ConversationJpaEntity g
