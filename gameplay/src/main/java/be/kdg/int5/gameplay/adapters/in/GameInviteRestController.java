@@ -59,7 +59,7 @@ public class GameInviteRestController {
         );
 
         if (lobbyIdIfPlayerCanInvite == null) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return ResponseEntity.ok(null);
         }
         return ResponseEntity.ok(lobbyIdIfPlayerCanInvite.uuid());
     }
