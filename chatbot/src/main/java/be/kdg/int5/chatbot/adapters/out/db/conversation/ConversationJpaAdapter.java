@@ -22,7 +22,7 @@ public class ConversationJpaAdapter implements ConversationLoadPort, Conversatio
 
     @Override
     public GameConversation loadGameConversation(UserId userId, GameId gameId) {
-        final GameConversationJpaEntity gameConversationJpa = conversationJpaRepository.findGameConversationByUserIdAndGameIdWithQuestions(userId.uuid(), gameId.uuid());
+        final GameConversationJpaEntity gameConversationJpa = conversationJpaRepository.findGameConversationByUserIdAndGameIdAndLatestStartTime(userId.uuid(), gameId.uuid());
         if (gameConversationJpa == null) return null;
         return toGameConversation(gameConversationJpa);
     }

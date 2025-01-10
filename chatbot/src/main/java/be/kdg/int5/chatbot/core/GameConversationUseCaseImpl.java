@@ -1,9 +1,6 @@
 package be.kdg.int5.chatbot.core;
 
-import be.kdg.int5.chatbot.domain.Answer;
-import be.kdg.int5.chatbot.domain.GameConversation;
-import be.kdg.int5.chatbot.domain.GameDetails;
-import be.kdg.int5.chatbot.domain.Question;
+import be.kdg.int5.chatbot.domain.*;
 import be.kdg.int5.chatbot.ports.in.GameConversationUseCase;
 import be.kdg.int5.chatbot.ports.in.GameConversationCommand;
 import be.kdg.int5.chatbot.ports.out.*;
@@ -11,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 
@@ -62,6 +60,13 @@ public class GameConversationUseCaseImpl implements GameConversationUseCase {
             gameConversation.update(initialQuestion);
 
             // save conversation
+            conversationSavePort.saveConversation(gameConversation);
+            return gameConversation;
+        }
+
+        if (ChronoUnit.HOURS.between(gameConversation.getLastMessageTime(), LocalDateTime.now()) > 2) {
+            gameConversation = new GameConversation(command.userId(), command.gameId());
+            gameConversation.start();
             conversationSavePort.saveConversation(gameConversation);
             return gameConversation;
         }
