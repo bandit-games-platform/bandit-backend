@@ -73,7 +73,7 @@ class ChatbotControllerIntegrationTest extends AbstractDatabaseTest {
         String expectedAnswerText = "Here are the main rules of the game...";
 
         when(gameDetailsJpaRepository.findByIdWithRelationships(any())).thenReturn(gameDetailsJpa);
-        when(conversationJpaRepository.findGameConversationByUserIdAndGameIdWithQuestions(userId, gameId))
+        when(conversationJpaRepository.findGameConversationByUserIdAndGameIdAndLatestStartTime(userId, gameId))
                 .thenReturn(null);
         when(pythonClientAdapter.getAnswerForInitialGameQuestion(any(), any())).thenReturn(new Answer(expectedAnswerText));
 
@@ -104,7 +104,7 @@ class ChatbotControllerIntegrationTest extends AbstractDatabaseTest {
 
         final String expectedAnswerText = "This is additional information about the game.";
 
-        when(conversationJpaRepository.findGameConversationByUserIdAndGameIdWithQuestions(userId, gameId))
+        when(conversationJpaRepository.findGameConversationByUserIdAndGameIdAndLatestStartTime(userId, gameId))
                 .thenReturn(existingConversation);
         when(pythonClientAdapter.getAnswerForFollowUpGameQuestion(any(), any(), any())).thenReturn(new Answer(expectedAnswerText));
 
@@ -133,7 +133,7 @@ class ChatbotControllerIntegrationTest extends AbstractDatabaseTest {
         String question = "Tell me more about the game.";
         GameQuestionDto gameQuestionDto = new GameQuestionDto(String.valueOf(gameId), question);
 
-        when(conversationJpaRepository.findGameConversationByUserIdAndGameIdWithQuestions(userId, gameId))
+        when(conversationJpaRepository.findGameConversationByUserIdAndGameIdAndLatestStartTime(userId, gameId))
                 .thenReturn(existingConversation);
         when(pythonClientAdapter.getAnswerForFollowUpGameQuestion(any(), any(), any()))
                 .thenThrow(new PythonServiceException("An error occurred while calling the Python service."));
