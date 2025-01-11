@@ -41,34 +41,11 @@ public class GameConversationUseCaseImpl implements GameConversationUseCase {
         GameConversation gameConversation = conversationLoadPort.loadGameConversation(command.userId(), command.gameId());
 
         if (gameConversation == null) {
-            gameConversation = new GameConversation(command.userId(), command.gameId());
-            Question initialQuestion = gameConversation.start();
-
-            // pre-load answer
-            Answer initialAnswer;
-
-            if (!gameDetails.hasSummary()) {
-                initialAnswer = askChatbotForGameSummary(gameDetails);
-                gameDetails.setSummary(initialAnswer.text());
-                gameDetailsSavePort.updateGameDetails(gameDetails);
-            } else {
-                initialAnswer = new Answer(gameDetails.getSummary());
-            }
-
-            // update question & conversation
-            initialQuestion.update(initialAnswer); // answer
-            gameConversation.update(initialQuestion);
-
-            // save conversation
-            conversationSavePort.saveConversation(gameConversation);
-            return gameConversation;
+            return startNewGameConversation(command.userId(), command.gameId(), gameDetails);
         }
 
         if (ChronoUnit.HOURS.between(gameConversation.getLastMessageTime(), LocalDateTime.now()) > 2) {
-            gameConversation = new GameConversation(command.userId(), command.gameId());
-            gameConversation.start();
-            conversationSavePort.saveConversation(gameConversation);
-            return gameConversation;
+            return startNewGameConversation(command.userId(), command.gameId(), gameDetails);
         }
 
         Question newQuestion = gameConversation.addFollowUpQuestion(command.question());
@@ -84,6 +61,31 @@ public class GameConversationUseCaseImpl implements GameConversationUseCase {
         gameConversation.update(newQuestion);
         conversationSavePort.saveConversation(gameConversation);
 
+        return gameConversation;
+    }
+
+    private GameConversation startNewGameConversation(UserId userId, GameId gameId, GameDetails gameDetails) {
+        GameConversation gameConversation;
+        gameConversation = new GameConversation(userId, gameId);
+        Question initialQuestion = gameConversation.start();
+
+        // pre-load answer
+        Answer initialAnswer;
+
+        if (!gameDetails.hasSummary()) {
+            initialAnswer = askChatbotForGameSummary(gameDetails);
+            gameDetails.setSummary(initialAnswer.text());
+            gameDetailsSavePort.updateGameDetails(gameDetails);
+        } else {
+            initialAnswer = new Answer(gameDetails.getSummary());
+        }
+
+        // update question & conversation
+        initialQuestion.update(initialAnswer); // answer
+        gameConversation.update(initialQuestion);
+
+        // save conversation
+        conversationSavePort.saveConversation(gameConversation);
         return gameConversation;
     }
 
