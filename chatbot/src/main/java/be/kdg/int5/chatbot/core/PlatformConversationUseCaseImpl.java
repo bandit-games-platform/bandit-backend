@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class PlatformConversationUseCaseImpl implements PlatformConversationUseCase {
@@ -37,18 +38,11 @@ public class PlatformConversationUseCaseImpl implements PlatformConversationUseC
         PlatformConversation platformConversation = conversationLoadPort.loadPlatformConversation(new UserId(command.userId()));
 
         if (platformConversation == null) {
-            platformConversation = new PlatformConversation(new UserId(command.userId()), command.page());
-            Question startQuestion = platformConversation.start();
-            platformConversation.update(startQuestion);
-            conversationSavePort.saveConversation(platformConversation);
-            return platformConversation;
+            return startNewPlatformConversation(command.userId(), command.page());
         }
 
         if (ChronoUnit.HOURS.between(platformConversation.getLastMessageTime(), LocalDateTime.now()) > 6) {
-            platformConversation = new PlatformConversation(new UserId(command.userId()), command.page());
-            platformConversation.start();
-            conversationSavePort.saveConversation(platformConversation);
-            return platformConversation;
+            return startNewPlatformConversation(command.userId(), command.page());
         }
 
         platformConversation.setCurrentPage(command.page());
@@ -68,6 +62,15 @@ public class PlatformConversationUseCaseImpl implements PlatformConversationUseC
         platformConversation.update(newQuestion);
         conversationSavePort.saveConversation(platformConversation);
 
+        return platformConversation;
+    }
+
+    private PlatformConversation startNewPlatformConversation(UUID userId, String page) {
+        PlatformConversation platformConversation;
+        platformConversation = new PlatformConversation(new UserId(userId), page);
+        Question startQuestion = platformConversation.start();
+        platformConversation.update(startQuestion);
+        conversationSavePort.saveConversation(platformConversation);
         return platformConversation;
     }
 }
