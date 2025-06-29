@@ -4,7 +4,7 @@ server:
     context-path: /api
 
 keycloak:
-  host: https://keycloak.victoriousocean-73fa80ad.northeurope.azurecontainerapps.io
+  host: ${KEYCLOAK_URL:https://keycloak.victoriousocean-73fa80ad.northeurope.azurecontainerapps.io}
   realm: bandit-realm
   client:
     id: bandit-backend
@@ -16,13 +16,16 @@ spring:
 
   sql:
     init:
-      mode: always
+      mode: ${DB_INIT_MODE:always}
 
   jpa:
     open-in-view: false
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: ${DDL_PROD:create-drop}
       show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
     defer-datasource-initialization: true
 
   datasource:
@@ -31,17 +34,18 @@ spring:
     password: ${DATASOURCE_PASS:password}
 
   rabbitmq:
-    host: localhost
+    host: ${RABBITMQ_HOST:localhost}
     port: 5672
-    username: myuser
-    password: mypassword
+    username: ${RABBITMQ_USER:myuser}
+    password: ${RABBITMQ_PASS:mypassword}
+    virtual-host: ${RABBITMQ_VHOST:/}
 
   security:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: https://keycloak.victoriousocean-73fa80ad.northeurope.azurecontainerapps.io/realms/bandit-realm
-          jwk-set-uri: https://keycloak.victoriousocean-73fa80ad.northeurope.azurecontainerapps.io/realms/bandit-realm/protocol/openid-connect/certs
+          issuer-uri: ${KEYCLOAK_URL:https://keycloak.victoriousocean-73fa80ad.northeurope.azurecontainerapps.io}/realms/bandit-realm
+          jwk-set-uri: ${KEYCLOAK_URL:https://keycloak.victoriousocean-73fa80ad.northeurope.azurecontainerapps.io}/realms/bandit-realm/protocol/openid-connect/certs
 
 contexts:
   gameRegistry:
